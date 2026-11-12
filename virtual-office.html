@@ -359,16 +359,17 @@
   </div>
 
   <script>
-    const STORAGE_KEY = 'bps_lampung_virtual_office_api';
-    let pollingInterval = null;
+   const DEFAULT_API_URL = 'TEMPEL_URL_EXEC_KAMU_DI_SINI';
+const STORAGE_KEY = 'bps_lampung_virtual_office_api';
+let pollingInterval = null;
 
-    window.addEventListener('DOMContentLoaded', () => {
-      const savedUrl = localStorage.getItem(STORAGE_KEY);
-      if (savedUrl) {
-        document.getElementById('apiUrlInput').value = savedUrl;
-        startLivePolling(savedUrl);
-      }
-    });
+window.addEventListener('DOMContentLoaded', () => {
+  const savedUrl = localStorage.getItem(STORAGE_KEY) || normalizeApiUrl(DEFAULT_API_URL);
+  if (savedUrl && savedUrl.startsWith('http')) {
+    document.getElementById('apiUrlInput').value = savedUrl;
+    startLivePolling(savedUrl);
+  }
+});
 
     function addLog(message, type = 'info') {
       const logBox = document.getElementById('terminalLog');
