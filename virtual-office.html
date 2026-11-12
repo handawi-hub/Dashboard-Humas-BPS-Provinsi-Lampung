@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Gemini Live & Interactive AI Studio — Humas BPS Provinsi Lampung</title>
+  <title>Autonomous Multi-Agent Discussion Studio — Humas BPS Provinsi Lampung</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <!-- Three.js & OrbitControls -->
@@ -21,7 +21,7 @@
     #canvasContainer {
       position: relative;
       width: 100%;
-      height: 480px;
+      height: 450px;
       cursor: grab;
       overflow: hidden;
       background-color: #e6f2e8;
@@ -34,23 +34,23 @@
       backdrop-filter: blur(12px);
       border: 1px solid rgba(226, 232, 240, 0.9);
     }
-    /* Chat Bubble 3D */
+    /* Chat Bubble 3D Interaktif */
     .agent-speech-bubble {
       position: absolute;
       transform: translate(-50%, -100%);
       background: rgba(15, 23, 42, 0.95);
       backdrop-filter: blur(8px);
       color: #f8fafc;
-      padding: 8px 12px;
+      padding: 9px 14px;
       border-radius: 14px;
       font-size: 11px;
       font-weight: 600;
-      max-width: 200px;
+      max-width: 220px;
       text-align: center;
       pointer-events: none;
       box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.4);
       border: 1px solid rgba(255, 255, 255, 0.2);
-      transition: all 0.3s ease;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       z-index: 20;
     }
     .agent-speech-bubble::after {
@@ -69,22 +69,10 @@
       background: rgba(185, 28, 28, 0.97) !important;
       border-color: #fca5a5 !important;
     }
-    /* Animasi Gelombang Audio Live */
-    @keyframes soundWave {
-      0%, 100% { height: 6px; }
-      50% { height: 28px; }
+    .discussion-bubble {
+      background: rgba(13, 148, 136, 0.97) !important;
+      border-color: #99f6e4 !important;
     }
-    .wave-bar {
-      width: 4px;
-      background-color: #14b8a6;
-      border-radius: 99px;
-      animation: soundWave 1.2s infinite ease-in-out;
-    }
-    .wave-bar:nth-child(2) { animation-delay: 0.2s; }
-    .wave-bar:nth-child(3) { animation-delay: 0.4s; }
-    .wave-bar:nth-child(4) { animation-delay: 0.6s; }
-    .wave-bar:nth-child(5) { animation-delay: 0.8s; }
-    
     ::-webkit-scrollbar { width: 6px; height: 6px; }
     ::-webkit-scrollbar-track { background: #f1f5f9; }
     ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 999px; }
@@ -98,22 +86,19 @@
       <div class="flex items-center gap-3">
         <div>
           <div class="flex items-center gap-2">
-            <h1 class="text-sm sm:text-base font-extrabold text-slate-900 tracking-tight">Gemini Live & Virtual Office Studio</h1>
+            <h1 class="text-sm sm:text-base font-extrabold text-slate-900 tracking-tight">Multi-Agent Discussion Studio</h1>
             <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-teal-100 text-teal-800 border border-teal-300">
               <span class="w-1.5 h-1.5 rounded-full bg-teal-500 animate-ping"></span>
-              Live Connected
+              Diskusi & Chat Aktif
             </span>
           </div>
-          <p class="text-[11px] text-slate-500 font-medium">Humas BPS Provinsi Lampung • Interaktif Teks & Real-Time Audio</p>
+          <p class="text-[11px] text-slate-500 font-medium">Humas BPS Provinsi Lampung • Skenario Isu & Studio 3D</p>
         </div>
       </div>
 
       <div class="flex flex-wrap items-center gap-2">
-        <button onclick="toggleGeminiLive()" id="btnLive" class="px-3.5 py-1.5 rounded-xl bg-teal-600 hover:bg-teal-500 text-white text-xs font-bold shadow-md transition flex items-center gap-2">
-          <span id="liveIcon">🎙️</span> <span id="liveText">Mulai Gemini Live Audio</span>
-        </button>
         <button onclick="toggleMusic()" id="btnMusic" class="px-3 py-1.5 rounded-xl bg-red-50 hover:bg-red-100 text-red-800 border border-red-300 text-xs font-bold transition flex items-center gap-1.5">
-          <span id="musicIcon">🤘</span> <span id="musicText">Metalcore BGM</span>
+          <span id="musicIcon">🤘</span> <span id="musicText">Putar Metal Hardcore</span>
         </button>
       </div>
     </div>
@@ -122,63 +107,89 @@
   <!-- MAIN CONTENT -->
   <main class="flex-1 max-w-7xl w-full mx-auto px-4 py-5 grid grid-cols-1 lg:grid-cols-12 gap-5">
 
-    <!-- LEFT: 3D VIEWPORT & CHAT BUBBLES -->
+    <!-- LEFT: 3D VIEWPORT, CONTROLS & STATUS -->
     <section class="lg:col-span-7 flex flex-col gap-4">
       <div class="bg-white border border-stone-200 rounded-3xl overflow-hidden shadow-xl shadow-stone-200/60">
-        <div class="px-4 py-2.5 border-b border-stone-100 flex items-center justify-between bg-stone-50/80">
-          <span class="text-xs font-extrabold text-slate-700">Studio 3D & Pemantauan Agen</span>
-          <span id="activeAgentLabel" class="text-[11px] font-mono-code text-teal-700 font-bold">Status: Siap Berdiskusi</span>
+        <!-- Kamera Controls Navbar -->
+        <div class="px-4 py-2.5 border-b border-stone-100 flex flex-wrap items-center justify-between gap-2 bg-stone-50/80">
+          <div class="flex items-center gap-1.5 flex-wrap">
+            <span class="text-[11px] font-bold text-slate-500 mr-1">Kamera:</span>
+            <button onclick="focusCamera('overview')" id="cam-overview" class="cam-btn px-2.5 py-1 rounded-lg text-[11px] font-bold bg-slate-900 text-white transition">Taman & Studio</button>
+            <button onclick="focusCamera('crawler')" id="cam-crawler" class="cam-btn px-2.5 py-1 rounded-lg text-[11px] font-bold bg-white text-slate-600 border border-stone-200 hover:bg-sky-50 transition">Crawler</button>
+            <button onclick="focusCamera('drafter')" id="cam-drafter" class="cam-btn px-2.5 py-1 rounded-lg text-[11px] font-bold bg-white text-slate-600 border border-stone-200 hover:bg-emerald-50 transition">Penulis BRS</button>
+            <button onclick="focusCamera('auditor')" id="cam-auditor" class="cam-btn px-2.5 py-1 rounded-lg text-[11px] font-bold bg-white text-slate-600 border border-stone-200 hover:bg-purple-50 transition">Auditor</button>
+          </div>
+          <span id="discussionStateText" class="text-[11px] text-teal-700 font-mono-code font-bold">Status: Siap Berdiskusi</span>
         </div>
 
-        <!-- 3D CONTAINER & CHAT BUBBLES -->
+        <!-- 3D WEBGL CONTAINER & DOM CHAT BUBBLES -->
         <div id="canvasContainer">
-          <div id="bubble-crawler" class="agent-speech-bubble hidden">Memindai media...</div>
-          <div id="bubble-drafter" class="agent-speech-bubble hidden">Menulis draf...</div>
-          <div id="bubble-auditor" class="agent-speech-bubble hidden">Siap audit...</div>
+          <div id="bubble-crawler" class="agent-speech-bubble hidden">Memantau isu...</div>
+          <div id="bubble-drafter" class="agent-speech-bubble hidden">Menyiapkan draf...</div>
+          <div id="bubble-auditor" class="agent-speech-bubble hidden">Menunggu arahan...</div>
+        </div>
+
+        <!-- AGENT STATUS CARDS -->
+        <div class="p-3.5 bg-stone-50/70 border-t border-stone-100 grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+          <div onclick="focusCamera('crawler')" id="card-crawler" class="cursor-pointer bg-white hover:border-sky-400 border border-stone-200 rounded-2xl p-3 shadow-sm transition">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-extrabold text-sky-700">1. Media Crawler</span>
+              <span id="badge-crawler" class="px-2 py-0.5 rounded-md text-[10px] font-extrabold bg-stone-100 text-slate-600">IDLE</span>
+            </div>
+            <p id="msg-crawler" class="text-[11px] text-slate-600 leading-snug line-clamp-2">Memantau pemberitaan...</p>
+          </div>
+          <div onclick="focusCamera('drafter')" id="card-drafter" class="cursor-pointer bg-white hover:border-emerald-400 border border-stone-200 rounded-2xl p-3 shadow-sm transition">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-extrabold text-emerald-700">2. Penulis BRS</span>
+              <span id="badge-drafter" class="px-2 py-0.5 rounded-md text-[10px] font-extrabold bg-stone-100 text-slate-600">IDLE</span>
+            </div>
+            <p id="msg-drafter" class="text-[11px] text-slate-600 leading-snug line-clamp-2">Menyusun narasi data...</p>
+          </div>
+          <div onclick="focusCamera('auditor')" id="card-auditor" class="cursor-pointer bg-white hover:border-amber-500 border border-stone-200 rounded-2xl p-3 shadow-sm transition">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-extrabold text-amber-800">3. Auditor & PR</span>
+              <span id="badge-auditor" class="px-2 py-0.5 rounded-md text-[10px] font-extrabold bg-stone-100 text-slate-600">IDLE</span>
+            </div>
+            <p id="msg-auditor" class="text-[11px] text-slate-600 leading-snug line-clamp-2">Evaluasi strategi & mitigasi...</p>
+          </div>
         </div>
       </div>
 
-      <!-- OVERLAY GEMINI LIVE AUDIO WAVEFORM (Hidden secara default) -->
-      <div id="liveAudioPanel" class="hidden bg-teal-900 text-white border border-teal-700 rounded-2xl p-4 shadow-lg flex items-center justify-between">
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-full bg-teal-700 flex items-center justify-center text-lg animate-pulse">🎙️</div>
-          <div>
-            <h4 class="text-xs font-extrabold tracking-wide">Gemini Live Audio Mode Berjalan</h4>
-            <p id="liveStatusSub" class="text-[11px] text-teal-200">Agen mendengarkan suara Anda via mikrofon...</p>
-          </div>
+      <!-- TRANSKRIP DISKUSI TERMINAL -->
+      <div class="bg-white border border-stone-200 rounded-2xl p-3.5 shadow-sm">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-xs font-extrabold text-slate-700 flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-teal-500 animate-ping"></span>
+            Transkrip Debat & Diskusi Antar-Agent
+          </span>
+          <button onclick="clearLogs()" class="text-[11px] font-semibold text-slate-400 hover:text-slate-700">Bersihkan Transkrip</button>
         </div>
-        <!-- Audio Visualizer Waves -->
-        <div class="flex items-center gap-1 h-8 px-3 bg-teal-950/60 rounded-xl border border-teal-800">
-          <div class="wave-bar"></div>
-          <div class="wave-bar"></div>
-          <div class="wave-bar"></div>
-          <div class="wave-bar"></div>
-          <div class="wave-bar"></div>
+        <div id="terminalLog" class="font-mono-code text-[11px] text-slate-700 space-y-1.5 max-h-32 overflow-y-auto bg-stone-50 p-2.5 rounded-xl border border-stone-200/80">
+          <div class="text-slate-500">[STUDIO] Sistem siap memulai diskusi interaktif antar agen.</div>
         </div>
-        <button onclick="toggleGeminiLive()" class="px-3 py-1.5 rounded-lg bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold transition">Akhiri Live</button>
       </div>
     </section>
 
-    <!-- RIGHT: INTERACTIVE CHAT PANEL -->
-    <section class="lg:col-span-5 bg-white border border-stone-200 rounded-3xl flex flex-col overflow-hidden shadow-xl shadow-stone-200/60 h-[550px]">
-      <div class="px-4 py-3.5 border-b border-stone-100 bg-stone-50/70 flex items-center justify-between">
+    <!-- RIGHT: INTERACTIVE CHAT & STRATEGIC INSIGHT PANEL -->
+    <section class="lg:col-span-5 bg-white border border-stone-200 rounded-3xl flex flex-col overflow-hidden shadow-xl shadow-stone-200/60 h-[560px]">
+      <div class="px-4 py-3 border-b border-stone-100 bg-stone-50/70 flex items-center justify-between">
         <div>
-          <h2 class="text-sm font-extrabold text-slate-900">Diskusi Langsung dengan Tim Humas AI</h2>
-          <p class="text-[11px] text-slate-500 font-medium">Ketik pesan atau arahkan tugas secara real-time</p>
+          <h2 class="text-sm font-extrabold text-slate-900">Diskusi & Konsensus Tim AI</h2>
+          <p class="text-[11px] text-slate-500 font-medium">Ketik pesan langsung ke agen secara real-time</p>
         </div>
       </div>
 
       <!-- Chat History Box -->
-      <div id="chatHistory" class="p-4 flex-1 overflow-y-auto space-y-3 bg-[#fdfcfa] text-xs">
+      <div id="chatHistory" class="p-3.5 flex-1 overflow-y-auto space-y-3 bg-[#fdfcfa] text-xs">
         <div class="bg-teal-50 border border-teal-200 rounded-2xl p-3 text-teal-900 space-y-1">
-          <p class="font-extrabold">🤖 Sistem AI Agent Humas BPS Lampung:</p>
-          <p>Halo Bapak Bima! Tim agen (Media Crawler, Penulis BRS, dan Auditor) siap menerima arahan atau berdiskusi mengenai isu pemberitaan terkini.</p>
+          <p class="font-extrabold">🤖 Tim Agen Humas BPS Lampung:</p>
+          <p>Halo Bapak Bima! Studio 3D dengan arsitektur lengkap telah aktif. Silakan berikan arahan atau tanyakan isu strategis.</p>
         </div>
       </div>
 
       <!-- Chat Input Form -->
       <div class="p-3 border-t border-stone-200 bg-white flex items-center gap-2">
-        <input type="text" id="userInput" placeholder="Ketik instruksi atau pertanyaan ke agen..." class="flex-1 px-3.5 py-2 rounded-xl border border-stone-300 text-xs focus:outline-none focus:border-teal-600 font-medium" onkeypress="if(event.key === 'Enter') sendUserMessage()">
+        <input type="text" id="userInput" placeholder="Ketik instruksi atau diskusi ke agen..." class="flex-1 px-3.5 py-2 rounded-xl border border-stone-300 text-xs focus:outline-none focus:border-teal-600 font-medium" onkeypress="if(event.key === 'Enter') sendUserMessage()">
         <button onclick="sendUserMessage()" class="px-4 py-2 rounded-xl bg-teal-600 hover:bg-teal-500 text-white text-xs font-bold transition shadow-md">Kirim</button>
       </div>
     </section>
@@ -188,46 +199,72 @@
 
   <script>
     // =========================================================================
-    // 1. THREE.JS 3D ENVIRONMENT SETUP
+    // 1. THREE.JS 3D FULL ARCHITECTURE SETUP
     // =========================================================================
     let scene, camera, renderer, controls;
     const robloxAvatars = {};
+    let targetCamPos = new THREE.Vector3(9.5, 8.2, 11.8);
+    let targetLookAt = new THREE.Vector3(-0.5, 0.9, 0.2);
+    let isCameraTransitioning = false;
 
     function init3DOffice() {
       const container = document.getElementById('canvasContainer');
       const width = container.clientWidth || 640;
-      const height = container.clientHeight || 480;
+      const height = container.clientHeight || 450;
 
       scene = new THREE.Scene();
       scene.background = new THREE.Color(0xe6f2e8);
       scene.fog = new THREE.FogExp2(0xe6f2e8, 0.015);
 
       camera = new THREE.PerspectiveCamera(42, width / height, 0.1, 120);
-      camera.position.set(9.5, 8.2, 11.8);
+      camera.position.copy(targetCamPos);
 
       renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' });
       renderer.setSize(width, height);
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.shadowMap.enabled = true;
       container.appendChild(renderer.domElement);
 
       controls = new THREE.OrbitControls(camera, renderer.domElement);
       controls.enableDamping = true;
       controls.dampingFactor = 0.07;
       controls.maxPolarAngle = Math.PI / 2 - 0.03;
-      controls.target.set(-0.5, 0.9, 0.2);
+      controls.target.copy(targetLookAt);
+      controls.addEventListener('start', () => { isCameraTransitioning = false; });
 
       scene.add(new THREE.AmbientLight(0xfffaf0, 0.82));
       const sun = new THREE.DirectionalLight(0xfff5e4, 0.98);
       sun.position.set(-9, 14, 8);
+      sun.castShadow = true;
       scene.add(sun);
 
-      // Lantai & Meja Sederhana
-      scene.add(new THREE.Mesh(new THREE.PlaneGeometry(24, 22), new THREE.MeshStandardMaterial({ color: 0x65a30d })).rotateX(-Math.PI/2));
+      // Tanah & Deck Kantor
+      const grassFloor = new THREE.Mesh(new THREE.PlaneGeometry(24, 22), new THREE.MeshStandardMaterial({ color: 0x65a30d }));
+      grassFloor.rotation.x = -Math.PI / 2;
+      scene.add(grassFloor);
 
-      // Bangun 3 Avatar Chibi Agen
-      createAvatar('crawler', -2.2, -2.3, 0x111827);
-      createAvatar('drafter', 1.5, -3.6, 0x10b981);
-      createAvatar('auditor', 4.1, -0.1, 0x1e293b);
+      const deckBase = new THREE.Mesh(new THREE.BoxGeometry(11.5, 0.12, 8.8), new THREE.MeshStandardMaterial({ color: 0xd9b38c }));
+      deckBase.position.set(1.4, 0.06, -2.5);
+      scene.add(deckBase);
+
+      // Meja Kerja
+      const setupDesk = (x, z, rot) => {
+        const desk = new THREE.Group();
+        desk.position.set(x, 0.12, z);
+        desk.rotation.y = rot;
+        const top = new THREE.Mesh(new THREE.BoxGeometry(2.1, 0.08, 1.05), new THREE.MeshStandardMaterial({ color: 0xe6ccb2 }));
+        top.position.y = 0.88;
+        desk.add(top);
+        scene.add(desk);
+      };
+      setupDesk(-2.8, -3.1, Math.PI / 5);
+      setupDesk(1.5, -4.6, 0);
+      setupDesk(4.8, -0.8, -Math.PI / 4);
+
+      // Avatar Chibi Agen
+      createAvatar('crawler', -2.2, -2.3, 0x111827, Math.PI + Math.PI / 5);
+      createAvatar('drafter', 1.5, -3.6, 0x10b981, Math.PI);
+      createAvatar('auditor', 4.1, -0.1, 0x1e293b, Math.PI - Math.PI / 4);
 
       window.addEventListener('resize', () => {
         camera.aspect = container.clientWidth / container.clientHeight;
@@ -238,15 +275,19 @@
       animate3D();
     }
 
-    function createAvatar(id, x, z, shirtColor) {
+    function createAvatar(id, x, z, shirtColor, rotY) {
       const root = new THREE.Group();
       root.position.set(x, 0.12, z);
+      root.rotation.y = rotY;
+
       const torso = new THREE.Mesh(new THREE.CylinderGeometry(0.26, 0.31, 0.64, 18), new THREE.MeshStandardMaterial({ color: shirtColor }));
       torso.position.y = 0.88;
       root.add(torso);
+
       const head = new THREE.Mesh(new THREE.SphereGeometry(0.42, 24, 20), new THREE.MeshStandardMaterial({ color: 0xf5d0b5 }));
       head.position.y = 1.62;
       root.add(head);
+
       scene.add(root);
       robloxAvatars[id] = root;
     }
@@ -275,22 +316,42 @@
 
     function animate3D() {
       requestAnimationFrame(animate3D);
+      if (isCameraTransitioning) {
+        camera.position.lerp(targetCamPos, 0.06);
+        controls.target.lerp(targetLookAt, 0.06);
+        if (camera.position.distanceTo(targetCamPos) < 0.05) isCameraTransitioning = false;
+      }
       controls.update();
       renderer.render(scene, camera);
       updateChatBubbles();
     }
 
     // =========================================================================
-    // 2. INTERACTIVE CHAT SYSTEM & AGENT RESPONSES
+    // 2. INTERACTIVE CHAT & CAMERA CONTROLS
     // =========================================================================
+    function focusCamera(mode) {
+      document.querySelectorAll('.cam-btn').forEach(b => {
+        b.className = "cam-btn px-2.5 py-1 rounded-lg text-[11px] font-bold bg-white text-slate-600 border border-stone-200 hover:bg-slate-50 transition";
+      });
+      document.getElementById(`cam-${mode}`).className = "cam-btn px-2.5 py-1 rounded-lg text-[11px] font-bold bg-slate-900 text-white transition";
+
+      if (mode === 'overview') {
+        targetCamPos.set(9.5, 8.2, 11.8);
+        targetLookAt.set(-0.5, 0.9, 0.2);
+      } else {
+        const posMap = { crawler: [-2.2, 1.5, -2.3], drafter: [1.5, 1.5, -3.6], auditor: [4.1, 1.5, -0.1] };
+        targetCamPos.set(posMap[mode][0], 3.2, posMap[mode][2] + 3.5);
+        targetLookAt.set(posMap[mode][0], 1.2, posMap[mode][2]);
+      }
+      isCameraTransitioning = true;
+    }
+
     function sendUserMessage() {
       const input = document.getElementById('userInput');
       const text = input.value.trim();
       if (!text) return;
 
       const chatHistory = document.getElementById('chatHistory');
-      
-      // Tampilkan pesan user
       chatHistory.innerHTML += `
         <div class="flex justify-end">
           <div class="bg-slate-900 text-white rounded-2xl p-3 max-w-[80%] space-y-1 shadow-sm">
@@ -302,32 +363,27 @@
       input.value = '';
       chatHistory.scrollTop = chatHistory.scrollHeight;
 
-      // Simulasi Agen Merespon Secara Interaktif
-      setTimeout(() => {
-        triggerAgentDiscussion(text);
-      }, 1000);
+      setTimeout(() => { triggerAgentResponse(text); }, 1000);
     }
 
-    function triggerAgentDiscussion(userPrompt) {
+    function triggerAgentResponse(prompt) {
       const chatHistory = document.getElementById('chatHistory');
-      
-      // 1. Media Crawler merespon
-      setAgentBubble('crawler', '🔍 Menganalisis isu dari instruksi Bapak Bima...');
-      
+      setAgentBubble('crawler', '🔍 Menganalisis isu...');
+      addLog(`[CRAWLER] Menerima arahan: "${prompt}"`, 'work');
+
       setTimeout(() => {
-        setAgentBubble('drafter', '✍️ Menyesuaikan draf BRS & narasi penjelas...');
-        setAgentBubble('crawler', 'Selesai memindai parameter topik.');
+        setAgentBubble('drafter', '✍️ Menyusun draf BRS...');
       }, 2000);
 
       setTimeout(() => {
-        setAgentBubble('auditor', '🚀 Siap! Analisis tervalidasi dengan data akurat.');
-        
-        // Jawaban kolektif agen ke box chat
+        setAgentBubble('auditor', '🚀 Mitigasi & Validasi selesai!');
+        addLog(`[AUDITOR] Strategi PR tervalidasi untuk instruksi: "${prompt}"`, 'success');
+
         chatHistory.innerHTML += `
           <div class="flex justify-start">
             <div class="bg-teal-50 border border-teal-200 rounded-2xl p-3 max-w-[80%] space-y-1 text-slate-800 shadow-sm">
-              <p class="font-extrabold text-[10px] text-teal-800">Tim Agen AI Humas BPS Lampung:</p>
-              <p>Arahan "${userPrompt}" telah kami proses. Draf BRS dan Key Message mitigasi krisis telah diselaraskan dengan standar data BPS Provinsi Lampung.</p>
+              <p class="font-extrabold text-[10px] text-teal-800">Tim Agen Humas BPS Lampung:</p>
+              <p>Arahan Anda telah diproses. Draf penjelas dan key message telah diselaraskan dengan standar data BPS.</p>
             </div>
           </div>
         `;
@@ -343,32 +399,18 @@
       if (isWarning) bubble.classList.add('warning-bubble');
     }
 
-    // =========================================================================
-    // 3. GEMINI LIVE AUDIO MODE SIMULATION
-    // =========================================================================
-    let isLiveActive = false;
-    function toggleGeminiLive() {
-      isLiveActive = !isLiveActive;
-      const panel = document.getElementById('liveAudioPanel');
-      const btnText = document.getElementById('liveText');
-      const btnIcon = document.getElementById('liveIcon');
-
-      if (isLiveActive) {
-        panel.classList.remove('hidden');
-        btnText.textContent = 'Akhiri Gemini Live';
-        btnIcon.textContent = '🔴';
-        setAgentBubble('crawler', '🎙️ Gemini Live aktif. Mendengarkan suara Anda...');
-        setAgentBubble('drafter', '🎙️ Siap merespon via audio.');
-        setAgentBubble('auditor', '🎙️ Menunggu instruksi lisan.');
-      } else {
-        panel.classList.add('hidden');
-        btnText.textContent = 'Mulai Gemini Live Audio';
-        btnIcon.textContent = '🎙️';
-        setAgentBubble('crawler', 'Memindai media...');
-        setAgentBubble('drafter', 'Menulis draf...');
-        setAgentBubble('auditor', 'Siap audit...');
-      }
+    function addLog(message, type = 'info') {
+      const logBox = document.getElementById('terminalLog');
+      const now = new Date().toLocaleTimeString('id-ID', { hour12: false });
+      const colorMap = { info: 'text-slate-600', work: 'text-teal-700 font-semibold', success: 'text-emerald-700 font-semibold', warning: 'text-amber-700 font-semibold' };
+      const line = document.createElement('div');
+      line.className = colorMap[type] || 'text-slate-600';
+      line.textContent = `[${now}] ${message}`;
+      logBox.appendChild(line);
+      logBox.scrollTop = logBox.scrollHeight;
     }
+
+    function clearLogs() { document.getElementById('terminalLog').innerHTML = ''; }
 
     function toggleMusic() {
       const audio = document.getElementById('metalMusic');
