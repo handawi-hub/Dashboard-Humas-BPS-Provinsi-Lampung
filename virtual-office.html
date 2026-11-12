@@ -1383,6 +1383,9 @@
     // =========================================================================
     // LOOP ANIMASI 3D REAL-TIME (INTERAKSI OBROLAN IDLE & SALAMAN AUDITOR)
     // =========================================================================
+   // =========================================================================
+    // LOOP ANIMASI 3D REAL-TIME (INTERAKSI OBROLAN IDLE & SALAMAN AUDITOR)
+    // =========================================================================
     const clock = new THREE.Clock();
 
     // Helper: Menggerakkan karakter berjalan mulus menuju titik tujuan
@@ -1436,6 +1439,223 @@
           isCameraTransitioning = false;
         }
       }
+
+      // Jadwal Otomatis Obrolan Santai Saat IDLE (Siklus 22 detik)
+      // Detik 0-9: Stay di meja | Detik 9-16: Mengobrol berdua | Detik 16-22: Kembali ke meja
+      const chatCycle = t % 22;
+      const isChatTime = chatCycle > 9 && chatCycle < 16.5;
+      const chatPairIndex = Math.floor(t / 22) % 3;
+      const chatPairs = [
+        ['crawler', 'drafter'],
+        ['drafter', 'auditor'],
+        ['crawler', 'auditor']
+      ];
+      const activeChatters = chatPairs[chatPairIndex];
+      const chatSpotA = new THREE.Vector3(0.75, 0.12, -1.65);
+      const chatSpotB = new THREE.Vector3(1.65, 0.12, -1.65);
+
+      // Cek apakah ada pekerja (Crawler/Drafter) yang sedang menghampiri Auditor untuk salaman
+      let activeHandshakeVisitor = null;
+      ['crawler', 'drafter'].forEach((id) => {
+        const av = robloxAvatars[id];
+        const st = (AGENT_META[id].status || 'IDLE').toUpperCase();
+        if (st !== av.lastStatus) {
+          av.lastStatus = st;
+          if (st === 'WORKING') av.workStartTime = t;
+        }
+        // Setelah 2.2 detik mengetik saat WORKING, berjalan melapor & salaman ke Auditor
+        if (st === 'WORKING' && (t - av.workStartTime) > 2.2 && !activeHandshakeVisitor) {
+          activeHandshakeVisitor = id;
+        }
+      });
+
+      const auditorHandshakeSpot = new THREE.Vector3(3.95, 0.12, -0.35);
+      const visitorHandshakeSpot = new THREE.Vector3(3.15, 0.12, -0.35);
+
+      // Animasi 3 AI Agent Chibi
+      Object.keys(robloxAvatars).forEach((id) => {
+        const av = robloxAvatars[id];
+        const status = (AGENT_META[id].status || 'IDLE').toUpperCase();
+        const p = t + av.phase;
+
+        // KASUS 1: SEDANG SALAMAN DENGAN AUDITOR SAAT WORKING
+        if (activeHandshakeVisitor === id) {
+          const arrived = moveCharacterTo(av, visitorHandshakeSpot, 0.045, t);
+          if (arrived) {
+            faceToward(av, auditorHandshakeSpot);
+            av.leftLeg.rotation.x = 0;
+            av.rightLeg.rotation.x = 0;
+            av.leftArm.rotation.x = 0;
+            // Ulurkan tangan kanan & berjabat tangan naik-turun
+            av.rightArm.rotation.x = -1.15 + Math.sin(t * 9) * 0.18;
+            av.rightArm.rotation.z = -0.15;
+            av.headGroup.rotation.x = Math.sin(t * 4) * 0.1;
+          }
+          return;
+        }
+
+        if (id === 'auditor' && activeHandshakeVisitor) {
+          const arrived = moveCharacterTo(av, auditorHandshakeSpot, 0.04, t);
+          if (arrived) {
+            faceToward(av, visitorHandshakeSpot);
+            av.leftLeg.rotation.x = 0;
+            av.rightLeg.rotation.x = 0;
+            av.leftArm.rotation.x = 0;
+            // Auditor membalas jabat tangan
+            av.rightArm.rotation.x = -1.15 - Math.sin(t * 9) * 0.18;
+            av.rightArm.rotation.z = -0.15;
+            av.headGroup.rotation.x = -Math.sin(t * 4) * 0.1;
+          }
+          return;
+        }
+
+        // KASUS 2: STATUS WORKING (Mengetik Aktif di Meja Kerja)
+        if (status === 'WORKING') {
+          const arrived = moveCharacterTo(av, av.basePos, 0.05, t);
+          if (arrived) {
+            av.root.rotation.y += (av.baseRotY - av.root.rotation.y) * 0.15;
+            av.root.position.y = 0.12 + Math.abs(Math.sin(p * 8)) * 0.03;
+            av.leftArm.rotation.x = -0.95 + Math.sin(p * 18) * 0.22;
+            av.rightArm.rotation.x = -0.95 - Math.sin(p * 18) * 0.22;
+            av.rightArm.rotation.z = 0;
+            av.leftLeg.rotation.x = 0;
+            av.rightLeg.rotation.x = 0;
+            av.headGroup.rotation.y = Math.sin(p * 3) * 0.15;
+            av.headGroup.rotation.x = 0.12;
+          }
+          return;
+        }
+
+        // KASUS 3: STATUS DONE (Selebrasi Melompat Riang di Meja)
+        if (status === 'DONE') {
+          const arrived = moveCharacterTo(av, av.basePos, 0.05, t);
+          if (arrived) {
+            av.root.rotation.y += (av.baseRotY - av.root.rotation.y) * 0.15;
+            av.root.position.y = 0.12 + Math.abs(Math.sin(p * 5)) * 0.18;
+            av.rightArm.rotation.x = -2.4 + Math.sin(p * 10) * 0.3;
+            av.rightArm.rotation.z = 0;
+            av.leftArm.rotation.x = Math.sin(p * 4) * 0.15;
+            av.leftLeg.rotation.x = 0;
+            av.rightLeg.rotation.x = 0;
+            av.headGroup.rotation.x = -0.05;
+          }
+          return;
+        }
+
+        // KASUS 4: STATUS IDLE (Stay di meja, lalu sesekali berjalan & mengobrol satu sama lain)
+        if (isChatTime && activeChatters.includes(id)) {
+          const isFirst = activeChatters[0] === id;
+          const myChatSpot = isFirst ? chatSpotA : chatSpotB;
+          const partnerSpot = isFirst ? chatSpotB : chatSpotA;
+
+          const arrived = moveCharacterTo(av, myChatSpot, 0.035, t, 9);
+          if (arrived) {
+            faceToward(av, partnerSpot);
+            av.leftLeg.rotation.x = 0;
+            av.rightLeg.rotation.x = 0;
+            av.rightArm.rotation.z = 0;
+            // Gestur tangan & anggukan kepala bergantian saat mengobrol santai
+            const talkWave = isFirst ? Math.sin(t * 4.5) : Math.cos(t * 4.5);
+            av.rightArm.rotation.x = -0.45 + Math.max(0, talkWave) * -0.45;
+            av.leftArm.rotation.x = Math.sin(p * 1.5) * 0.1;
+            av.headGroup.rotation.x = Math.sin(t * 5 + (isFirst ? 0 : 2)) * 0.12;
+            av.headGroup.rotation.y = Math.cos(t * 2.5) * 0.12;
+          }
+        } else {
+          // Kembali ke meja kerja & berdiri santai
+          const arrived = moveCharacterTo(av, av.basePos, 0.035, t, 9);
+          if (arrived) {
+            av.root.rotation.y += (av.baseRotY - av.root.rotation.y) * 0.12;
+            av.root.position.y = 0.12 + Math.sin(p * 2) * 0.02;
+            av.leftArm.rotation.x = Math.sin(p * 1.8) * 0.08;
+            av.rightArm.rotation.x = -Math.sin(p * 1.8) * 0.08;
+            av.rightArm.rotation.z = 0;
+            av.leftLeg.rotation.x = 0;
+            av.rightLeg.rotation.x = 0;
+            av.headGroup.rotation.y = Math.sin(p * 1.1) * 0.25;
+            av.headGroup.rotation.x = 0;
+          }
+        }
+      });
+
+      // Animasi Ikan Koi Berenang di Kolam
+      koiFishes.forEach((f, idx) => {
+        const ang = t * f.speed + f.angle;
+        const nextAng = ang + (f.speed > 0 ? 0.05 : -0.05);
+        const x = f.centerX + Math.cos(ang) * f.orbitRadius;
+        const z = f.centerZ + Math.sin(ang) * (f.orbitRadius * 0.85);
+        const nx = f.centerX + Math.cos(nextAng) * f.orbitRadius;
+        const nz = f.centerZ + Math.sin(nextAng) * (f.orbitRadius * 0.85);
+
+        f.mesh.position.set(x, 0.10 + Math.sin(t * 2 + idx) * 0.015, z);
+        f.mesh.lookAt(nx, f.mesh.position.y, nz);
+        f.tail.rotation.y = Math.sin(t * 10 + idx) * 0.35;
+      });
+
+      // Animasi Kelinci Melompat-lompat di Taman Rumput
+      rabbits.forEach((r, idx) => {
+        const ang = t * r.speed + r.angle;
+        const nextAng = ang + (r.speed > 0 ? 0.05 : -0.05);
+        const x = r.centerX + Math.cos(ang) * r.radius;
+        const z = r.centerZ + Math.sin(ang) * r.radius;
+        const nx = r.centerX + Math.cos(nextAng) * r.radius;
+        const nz = r.centerZ + Math.sin(nextAng) * r.radius;
+
+        const hop = Math.abs(Math.sin(t * 4.5 + idx * 1.7)) * 0.16;
+        r.mesh.position.set(x, hop, z);
+        r.mesh.lookAt(nx, hop, nz);
+      });
+
+      // Animasi Kucing Jalan Santai & Ekor Melambai
+      cats.forEach((c, idx) => {
+        const ang = t * c.speed + c.angle;
+        const nextAng = ang + (c.speed > 0 ? 0.05 : -0.05);
+        const x = c.centerX + Math.cos(ang) * c.radius;
+        const z = c.centerZ + Math.sin(ang) * c.radius;
+        const nx = c.centerX + Math.cos(nextAng) * c.radius;
+        const nz = c.centerZ + Math.sin(nextAng) * c.radius;
+
+        c.group.position.set(x, c.baseY + Math.abs(Math.sin(t * 5 + idx)) * 0.02, z);
+        c.group.lookAt(nx, c.group.position.y, nz);
+        c.tailPivot.rotation.z = Math.sin(t * 3.5 + idx) * 0.35;
+      });
+
+      // Animasi Partikel Hujan
+      if (rainParticles && rainParticles.visible) {
+        const pos = rainParticles.geometry.attributes.position.array;
+        for (let i = 0; i < pos.length; i += 3) {
+          pos[i] -= 0.04;
+          pos[i + 1] -= 0.38;
+          if (pos[i + 1] < 0) {
+            pos[i] = (Math.random() - 0.5) * 24;
+            pos[i + 1] = 13 + Math.random() * 2;
+          }
+        }
+        rainParticles.geometry.attributes.position.needsUpdate = true;
+      }
+
+      // Animasi Partikel Salju
+      if (snowParticles && snowParticles.visible) {
+        const pos = snowParticles.geometry.attributes.position.array;
+        for (let i = 0; i < pos.length; i += 3) {
+          pos[i] += Math.sin(t * 1.5 + i) * 0.012;
+          pos[i + 1] -= 0.045;
+          if (pos[i + 1] < 0) {
+            pos[i] = (Math.random() - 0.5) * 24;
+            pos[i + 1] = 13 + Math.random() * 2;
+          }
+        }
+        snowParticles.geometry.attributes.position.needsUpdate = true;
+      }
+
+      monitorScreens.forEach((m, idx) => {
+        const pulse = 0.85 + Math.sin(t * 3 + idx) * 0.15;
+        m.mesh.material.color.copy(m.baseColor).multiplyScalar(pulse);
+      });
+
+      controls.update();
+      renderer.render(scene, camera);
+    }
 
       // Jadwal Otomatis Obrolan Santai Saat IDLE (Siklus 22 detik)
       // Detik 0-9: Stay di meja | Detik 9-16: Mengobrol berdua | Detik 16-22: Kembali ke meja
