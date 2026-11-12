@@ -1551,19 +1551,19 @@
         const status = (AGENT_META[id].status || 'IDLE').toUpperCase();
         const p = t + av.phase;
 
-        if (activeHandshakeVisitor === id) {
-          const arrived = moveCharacterTo(av, visitorHandshakeSpot, 0.045, t);
-          if (arrived) {
-            faceToward(av, auditorHandshakeSpot);
-            av.leftLeg.rotation.x = 0;
-            av.rightLeg.rotation.x = 0;
-            av.leftArm.rotation.x = 0;
-            av.rightArm.rotation.x = -1.15 + Math.sin(t * 9) * 0.18;
-            av.rightArm.rotation.z = -0.15;
-            av.headGroup.rotation.x = Math.sin(t * 4) * 0.1;
-          }
-          return;
-        }
+       // Jika sedang idle dan musik metal aktif, ubah jadi Mosh Pit / Headbang brutal!
+if (isMoshPitActive) {
+  // Gerakan Headbang cepat menggunakan fungsi Sinusoidal waktu (t)
+  av.headGroup.rotation.x = 0.35 + Math.sin(t * 18) * 0.45; // Anggukan kepala cepat
+  av.headGroup.rotation.y = Math.sin(t * 12) * 0.3;         // Gelengan kepala kekanan-kekiri
+  
+  // Gerakan tangan mengepal / moshing
+  av.leftArm.rotation.x = -1.2 + Math.sin(t * 16) * 0.5;
+  av.rightArm.rotation.x = -1.2 - Math.sin(t * 16) * 0.5;
+  
+  // Sedikit lompat-lompat kecil (pitted bounce)
+  av.root.position.y = av.basePos.y + Math.abs(Math.sin(t * 14)) * 0.18;
+}
 
         if (id === 'auditor' && activeHandshakeVisitor) {
           const arrived = moveCharacterTo(av, auditorHandshakeSpot, 0.04, t);
