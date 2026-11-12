@@ -16,11 +16,7 @@
       font-family: 'JetBrains Mono', monospace;
     }
 
-    /* Animasi Karakter & Kantor Virtual */
-    @keyframes typingBob {
-      0%, 100% { transform: translateY(0px); }
-      50% { transform: translateY(-3px); }
-    }
+    /* Animasi Kantor Virtual & Karakter 3D */
     @keyframes screenPulse {
       0%, 100% { opacity: 0.55; }
       50% { opacity: 1; }
@@ -33,9 +29,65 @@
       to { stroke-dashoffset: -24; }
     }
 
-    .agent-working .avatar-body {
-      animation: typingBob 0.45s infinite ease-in-out;
+    /* Animasi Langkah Kaki, Ayunan Tangan & Pantulan Badan 3D */
+    @keyframes walkBodyBob {
+      0%, 100% { transform: translateY(0px); }
+      25% { transform: translateY(-3.5px); }
+      50% { transform: translateY(0px); }
+      75% { transform: translateY(-3.5px); }
     }
+    @keyframes swingLeft {
+      0%, 100% { transform: rotate(-28deg); }
+      50% { transform: rotate(28deg); }
+    }
+    @keyframes swingRight {
+      0%, 100% { transform: rotate(28deg); }
+      50% { transform: rotate(-28deg); }
+    }
+
+    /* Jalur Berjalan Tiap Agent Saat Status WORKING */
+    @keyframes walkPathCrawler {
+      0%, 100% { transform: translate(-25px, 12px); }
+      50% { transform: translate(115px, 52px); }
+    }
+    @keyframes walkPathDrafter {
+      0%, 100% { transform: translate(-20px, 14px); }
+      50% { transform: translate(-15px, 115px); }
+    }
+    @keyframes walkPathAuditor {
+      0%, 100% { transform: translate(-20px, 14px); }
+      50% { transform: translate(115px, -95px); }
+    }
+
+    /* State Idle (Berdiri di Samping Meja) */
+    #walker-crawler, #walker-drafter, #walker-auditor {
+      transform: translate(-22px, 13px);
+      transition: transform 0.4s ease;
+    }
+
+    /* State Working (Berjalan Mengantar Data/Draf) */
+    .agent-working #walker-crawler {
+      animation: walkPathCrawler 3.2s infinite ease-in-out;
+    }
+    .agent-working #walker-drafter {
+      animation: walkPathDrafter 3.0s infinite ease-in-out;
+    }
+    .agent-working #walker-auditor {
+      animation: walkPathAuditor 3.4s infinite ease-in-out;
+    }
+
+    .agent-working .char-3d-rig {
+      animation: walkBodyBob 0.55s infinite ease-in-out;
+    }
+    .agent-working .leg-left,
+    .agent-working .arm-right {
+      animation: swingLeft 0.55s infinite ease-in-out;
+    }
+    .agent-working .leg-right,
+    .agent-working .arm-left {
+      animation: swingRight 0.55s infinite ease-in-out;
+    }
+
     .agent-working .monitor-glow {
       animation: screenPulse 1s infinite ease-in-out;
     }
@@ -79,8 +131,7 @@
         <button onclick="runDemoSimulation()" id="btnSimulasi" class="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold shadow-lg shadow-emerald-950/50 transition flex items-center gap-1.5">
           <span>▶</span> Tes Simulasi Live
         </button>
-        <button onclick="openApiModal()" class="px-
-          <button onclick="openApiModal()" class="px-3 py-1.5 rounded-lg bg-sky-600 hover:bg-sky-500 text-white text-xs font-semibold shadow-lg shadow-sky-950/50 transition flex items-center gap-1.5">
+        <button onclick="openApiModal()" class="px-3 py-1.5 rounded-lg bg-sky-600 hover:bg-sky-500 text-white text-xs font-semibold shadow-lg shadow-sky-950/50 transition flex items-center gap-1.5">
           <span>🔗</span> Koneksi Apps Script API
         </button>
       </div>
@@ -90,7 +141,7 @@
   <!-- MAIN CONTENT -->
   <main class="flex-1 max-w-7xl w-full mx-auto px-4 py-5 grid grid-cols-1 lg:grid-cols-12 gap-5">
 
-    <!-- LEFT: 2.5D ISOMETRIC VIRTUAL OFFICE CANVAS (7 COLS) -->
+    <!-- LEFT: 3D ISOMETRIC VIRTUAL OFFICE CANVAS (7 COLS) -->
     <section class="lg:col-span-7 flex flex-col gap-4">
       <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-2xl">
         <div class="px-4 py-2.5 border-b border-slate-800 flex items-center justify-between bg-slate-900/60">
@@ -98,7 +149,7 @@
             <span class="w-2.5 h-2.5 rounded-full bg-rose-500"></span>
             <span class="w-2.5 h-2.5 rounded-full bg-amber-400"></span>
             <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
-            <span class="text-xs font-semibold text-slate-300 ml-1">Ruang Kerja Otonom Humas (Live State)</span>
+            <span class="text-xs font-semibold text-slate-300 ml-1">Ruang Kerja Otonom Humas (Live 3D State)</span>
           </div>
           <span id="lastSyncText" class="text-[11px] text-slate-400 font-mono-code">Polling: Siap</span>
         </div>
@@ -119,6 +170,10 @@
                 <stop offset="0%" stop-color="#263349" />
                 <stop offset="100%" stop-color="#162033" />
               </linearGradient>
+              <radialGradient id="charShadow" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#020617" stop-opacity="0.75" />
+                <stop offset="100%" stop-color="#020617" stop-opacity="0" />
+              </radialGradient>
             </defs>
 
             <!-- ISOMETRIC ROOM STRUCTURE -->
@@ -161,56 +216,159 @@
             <path id="pathDrafterToAuditor" d="M 455 255 L 455 365" fill="none" stroke="#10b981" stroke-width="3" opacity="0.35" />
             <path id="pathAuditorToBoard" d="M 495 375 L 625 265" fill="none" stroke="#a855f7" stroke-width="3" opacity="0.35" />
 
+            <!-- WORKSTATION 2: PENULIS BRS (Ditaruh lebih awal agar layer z-index rapi) -->
+            <g id="station-drafter" transform="translate(450, 225)">
+              <polygon points="0,-35 85,8 0,50 -85,8" fill="#059669" fill-opacity="0.2" stroke="#10b981" stroke-width="1" stroke-dasharray="4 3" />
+              <!-- Meja 3D -->
+              <polygon points="-45,-5 15,-35 55,-15 -5,15" fill="#334155" stroke="#475569" stroke-width="1.5" />
+              <polygon points="-45,-5 -5,15 -5,38 -45,18" fill="#1e293b" />
+              <polygon points="-5,15 55,-15 55,8 -5,38" fill="#0f172a" />
+              <!-- Monitor -->
+              <polygon points="5,-24 32,-38 32,-16 5,-2" fill="#020617" stroke="#10b981" stroke-width="1.5" />
+              <polygon class="monitor-glow" points="8,-22 29,-33 29,-19 8,-8" fill="#10b981" opacity="0.5" />
+
+              <!-- KARAKTER 3D PENULIS BRS (KEPALA, BADAN, TANGAN, KAKI) -->
+              <g id="walker-drafter">
+                <ellipse cx="0" cy="18" rx="16" ry="8" fill="url(#charShadow)" />
+                <g class="char-3d-rig">
+                  <!-- Kaki Kiri & Kanan -->
+                  <g class="leg-left" style="transform-origin: -4px 2px;">
+                    <rect x="-7" y="2" width="5" height="14" rx="2" fill="#0f172a" />
+                    <ellipse cx="-4.5" cy="16" rx="4" ry="2.2" fill="#334155" />
+                  </g>
+                  <g class="leg-right" style="transform-origin: 4px 2px;">
+                    <rect x="2" y="2" width="5" height="14" rx="2" fill="#1e293b" />
+                    <ellipse cx="4.5" cy="16" rx="4" ry="2.2" fill="#475569" />
+                  </g>
+                  <!-- Tangan Belakang (Kiri) -->
+                  <g class="arm-left" style="transform-origin: -9px -16px;">
+                    <rect x="-12" y="-16" width="4.5" height="13" rx="2.2" fill="#059669" />
+                    <circle cx="-9.8" cy="-2" r="2.3" fill="#fed7aa" />
+                  </g>
+                  <!-- Badan 3D (Sisi Terang & Sisi Gelap) -->
+                  <polygon points="-9,-18 0,-21 0,3 -9,1" fill="#10b981" />
+                  <polygon points="0,-21 9,-18 9,1 0,3" fill="#047857" />
+                  <!-- Kerah / Dasi -->
+                  <polygon points="-2,-19 2,-19 0,-12" fill="#ecfdf5" />
+                  <!-- Tangan Depan (Kanan) -->
+                  <g class="arm-right" style="transform-origin: 9px -16px;">
+                    <rect x="7.5" y="-16" width="4.5" height="13" rx="2.2" fill="#34d399" />
+                    <circle cx="9.8" cy="-2" r="2.3" fill="#fed7aa" />
+                  </g>
+                  <!-- Kepala & Rambut 3D -->
+                  <circle cx="0" cy="-29" r="9.5" fill="#fed7aa" />
+                  <path d="M -9.5 -29 A 9.5 9.5 0 0 0 9.5 -29 A 9.5 9.5 0 0 1 -9.5 -29 Z" fill="#fdba74" />
+                  <path d="M -10 -30 C -10 -40, 10 -40, 10 -30 C 6 -33, -6 -33, -10 -30 Z" fill="#1e293b" />
+                  <!-- Mata -->
+                  <circle cx="-3" cy="-29" r="1.1" fill="#0f172a" />
+                  <circle cx="3.5" cy="-29" r="1.1" fill="#0f172a" />
+                </g>
+              </g>
+
+              <rect x="-64" y="42" width="128" height="22" rx="6" fill="#0f172a" stroke="#10b981" stroke-width="1.2" />
+              <text x="0" y="56" text-anchor="middle" fill="#34d399" font-size="10" font-weight="700">2. PENULIS BRS</text>
+            </g>
+
             <!-- WORKSTATION 1: MEDIA CRAWLER -->
             <g id="station-crawler" transform="translate(230, 315)">
               <polygon points="0,-35 85,8 0,50 -85,8" fill="#0284c7" fill-opacity="0.2" stroke="#0ea5e9" stroke-width="1" stroke-dasharray="4 3" />
+              <!-- Meja 3D -->
               <polygon points="-45,-5 15,-35 55,-15 -5,15" fill="#334155" stroke="#475569" stroke-width="1.5" />
               <polygon points="-45,-5 -5,15 -5,38 -45,18" fill="#1e293b" />
               <polygon points="-5,15 55,-15 55,8 -5,38" fill="#0f172a" />
+              <!-- Monitor -->
               <polygon points="5,-24 32,-38 32,-16 5,-2" fill="#020617" stroke="#38bdf8" stroke-width="1.5" />
               <polygon class="monitor-glow" points="8,-22 29,-33 29,-19 8,-8" fill="#38bdf8" opacity="0.5" />
-              <g class="avatar-body">
-                <ellipse cx="-18" cy="14" rx="14" ry="8" fill="#0f172a" />
-                <path d="M -26 8 C -26 -8, -8 -8, -8 8 Z" fill="#0ea5e9" />
-                <circle cx="-17" cy="-10" r="9" fill="#fde68a" />
-                <path d="M -26 -12 C -26 -21, -8 -21, -8 -12 Z" fill="#0f172a" />
+
+              <!-- KARAKTER 3D MEDIA CRAWLER (KEPALA, BADAN, TANGAN, KAKI) -->
+              <g id="walker-crawler">
+                <ellipse cx="0" cy="18" rx="16" ry="8" fill="url(#charShadow)" />
+                <g class="char-3d-rig">
+                  <!-- Kaki Kiri & Kanan -->
+                  <g class="leg-left" style="transform-origin: -4px 2px;">
+                    <rect x="-7" y="2" width="5" height="14" rx="2" fill="#0f172a" />
+                    <ellipse cx="-4.5" cy="16" rx="4" ry="2.2" fill="#334155" />
+                  </g>
+                  <g class="leg-right" style="transform-origin: 4px 2px;">
+                    <rect x="2" y="2" width="5" height="14" rx="2" fill="#1e293b" />
+                    <ellipse cx="4.5" cy="16" rx="4" ry="2.2" fill="#475569" />
+                  </g>
+                  <!-- Tangan Belakang (Kiri) -->
+                  <g class="arm-left" style="transform-origin: -9px -16px;">
+                    <rect x="-12" y="-16" width="4.5" height="13" rx="2.2" fill="#0284c7" />
+                    <circle cx="-9.8" cy="-2" r="2.3" fill="#fde68a" />
+                  </g>
+                  <!-- Badan 3D -->
+                  <polygon points="-9,-18 0,-21 0,3 -9,1" fill="#0ea5e9" />
+                  <polygon points="0,-21 9,-18 9,1 0,3" fill="#0369a1" />
+                  <polygon points="-2,-19 2,-19 0,-12" fill="#e0f2fe" />
+                  <!-- Tangan Depan (Kanan) -->
+                  <g class="arm-right" style="transform-origin: 9px -16px;">
+                    <rect x="7.5" y="-16" width="4.5" height="13" rx="2.2" fill="#38bdf8" />
+                    <circle cx="9.8" cy="-2" r="2.3" fill="#fde68a" />
+                  </g>
+                  <!-- Kepala & Rambut 3D -->
+                  <circle cx="0" cy="-29" r="9.5" fill="#fde68a" />
+                  <path d="M -9.5 -29 A 9.5 9.5 0 0 0 9.5 -29 A 9.5 9.5 0 0 1 -9.5 -29 Z" fill="#fcd34d" />
+                  <path d="M -10 -30 C -10 -40, 10 -40, 10 -30 C 6 -33, -6 -33, -10 -30 Z" fill="#0f172a" />
+                  <!-- Mata -->
+                  <circle cx="-3" cy="-29" r="1.1" fill="#0f172a" />
+                  <circle cx="3.5" cy="-29" r="1.1" fill="#0f172a" />
+                </g>
               </g>
+
               <rect x="-64" y="42" width="128" height="22" rx="6" fill="#0f172a" stroke="#0ea5e9" stroke-width="1.2" />
               <text x="0" y="56" text-anchor="middle" fill="#38bdf8" font-size="10" font-weight="700">1. MEDIA CRAWLER</text>
-            </g>
-
-            <!-- WORKSTATION 2: PENULIS BRS -->
-            <g id="station-drafter" transform="translate(450, 225)">
-              <polygon points="0,-35 85,8 0,50 -85,8" fill="#059669" fill-opacity="0.2" stroke="#10b981" stroke-width="1" stroke-dasharray="4 3" />
-              <polygon points="-45,-5 15,-35 55,-15 -5,15" fill="#334155" stroke="#475569" stroke-width="1.5" />
-              <polygon points="-45,-5 -5,15 -5,38 -45,18" fill="#1e293b" />
-              <polygon points="-5,15 55,-15 55,8 -5,38" fill="#0f172a" />
-              <polygon points="5,-24 32,-38 32,-16 5,-2" fill="#020617" stroke="#10b981" stroke-width="1.5" />
-              <polygon class="monitor-glow" points="8,-22 29,-33 29,-19 8,-8" fill="#10b981" opacity="0.5" />
-              <g class="avatar-body">
-                <ellipse cx="-18" cy="14" rx="14" ry="8" fill="#0f172a" />
-                <path d="M -26 8 C -26 -8, -8 -8, -8 8 Z" fill="#10b981" />
-                <circle cx="-17" cy="-10" r="9" fill="#fed7aa" />
-                <path d="M -26 -12 C -26 -21, -8 -21, -8 -12 Z" fill="#1e293b" />
-              </g>
-              <rect x="-64" y="42" width="128" height="22" rx="6" fill="#0f172a" stroke="#10b981" stroke-width="1.2" />
-              <text x="0" y="56" text-anchor="middle" fill="#34d399" font-size="10" font-weight="700">2. PENULIS BRS</text>
             </g>
 
             <!-- WORKSTATION 3: AUDITOR & PR -->
             <g id="station-auditor" transform="translate(475, 395)">
               <polygon points="0,-35 90,10 0,55 -90,10" fill="#7c3aed" fill-opacity="0.22" stroke="#a855f7" stroke-width="1" stroke-dasharray="4 3" />
+              <!-- Meja 3D -->
               <polygon points="-45,-5 15,-35 55,-15 -5,15" fill="#334155" stroke="#475569" stroke-width="1.5" />
               <polygon points="-45,-5 -5,15 -5,38 -45,18" fill="#1e293b" />
               <polygon points="-5,15 55,-15 55,8 -5,38" fill="#0f172a" />
+              <!-- Monitor -->
               <polygon points="5,-24 32,-38 32,-16 5,-2" fill="#020617" stroke="#a855f7" stroke-width="1.5" />
               <polygon class="monitor-glow" points="8,-22 29,-33 29,-19 8,-8" fill="#a855f7" opacity="0.55" />
-              <g class="avatar-body">
-                <ellipse cx="-18" cy="14" rx="14" ry="8" fill="#0f172a" />
-                <path d="M -26 8 C -26 -8, -8 -8, -8 8 Z" fill="#8b5cf6" />
-                <circle cx="-17" cy="-10" r="9" fill="#fde68a" />
-                <path d="M -26 -12 C -26 -21, -8 -21, -8 -12 Z" fill="#0f172a" />
+
+              <!-- KARAKTER 3D AUDITOR & PR (KEPALA, BADAN, TANGAN, KAKI) -->
+              <g id="walker-auditor">
+                <ellipse cx="0" cy="18" rx="16" ry="8" fill="url(#charShadow)" />
+                <g class="char-3d-rig">
+                  <!-- Kaki Kiri & Kanan -->
+                  <g class="leg-left" style="transform-origin: -4px 2px;">
+                    <rect x="-7" y="2" width="5" height="14" rx="2" fill="#0f172a" />
+                    <ellipse cx="-4.5" cy="16" rx="4" ry="2.2" fill="#334155" />
+                  </g>
+                  <g class="leg-right" style="transform-origin: 4px 2px;">
+                    <rect x="2" y="2" width="5" height="14" rx="2" fill="#1e293b" />
+                    <ellipse cx="4.5" cy="16" rx="4" ry="2.2" fill="#475569" />
+                  </g>
+                  <!-- Tangan Belakang (Kiri) -->
+                  <g class="arm-left" style="transform-origin: -9px -16px;">
+                    <rect x="-12" y="-16" width="4.5" height="13" rx="2.2" fill="#7c3aed" />
+                    <circle cx="-9.8" cy="-2" r="2.3" fill="#fde68a" />
+                  </g>
+                  <!-- Badan 3D -->
+                  <polygon points="-9,-18 0,-21 0,3 -9,1" fill="#8b5cf6" />
+                  <polygon points="0,-21 9,-18 9,1 0,3" fill="#6d28d9" />
+                  <polygon points="-2,-19 2,-19 0,-12" fill="#f3e8ff" />
+                  <!-- Tangan Depan (Kanan) -->
+                  <g class="arm-right" style="transform-origin: 9px -16px;">
+                    <rect x="7.5" y="-16" width="4.5" height="13" rx="2.2" fill="#a78bfa" />
+                    <circle cx="9.8" cy="-2" r="2.3" fill="#fde68a" />
+                  </g>
+                  <!-- Kepala & Rambut 3D -->
+                  <circle cx="0" cy="-29" r="9.5" fill="#fde68a" />
+                  <path d="M -9.5 -29 A 9.5 9.5 0 0 0 9.5 -29 A 9.5 9.5 0 0 1 -9.5 -29 Z" fill="#fcd34d" />
+                  <path d="M -10 -30 C -10 -40, 10 -40, 10 -30 C 6 -33, -6 -33, -10 -30 Z" fill="#0f172a" />
+                  <!-- Mata -->
+                  <circle cx="-3" cy="-29" r="1.1" fill="#0f172a" />
+                  <circle cx="3.5" cy="-29" r="1.1" fill="#0f172a" />
+                </g>
               </g>
+
               <rect x="-72" y="45" width="144" height="22" rx="6" fill="#0f172a" stroke="#a855f7" stroke-width="1.2" />
               <text x="0" y="59" text-anchor="middle" fill="#c084fc" font-size="10" font-weight="700">3. AUDITOR & PR</text>
             </g>
@@ -359,17 +517,17 @@
   </div>
 
   <script>
-   const DEFAULT_API_URL = 'https://script.google.com/macros/s/AKfycbzP5bH97KdOciPcj72cyENPHC97Tlcn49cYaW3-ggVSH5NZbrWfXniVNSDeM290sPZ9Xg/exec?mode=agents';
-const STORAGE_KEY = 'bps_lampung_virtual_office_api';
-let pollingInterval = null;
+    const DEFAULT_API_URL = 'https://script.google.com/macros/s/AKfycbzP5bH97KdOciPcj72cyENPHC97Tlcn49cYaW3-ggVSH5NZbrWfXniVNSDeM290sPZ9Xg/exec?mode=agents';
+    const STORAGE_KEY = 'bps_lampung_virtual_office_api';
+    let pollingInterval = null;
 
-window.addEventListener('DOMContentLoaded', () => {
-  const savedUrl = localStorage.getItem(STORAGE_KEY) || normalizeApiUrl(DEFAULT_API_URL);
-  if (savedUrl && savedUrl.startsWith('http')) {
-    document.getElementById('apiUrlInput').value = savedUrl;
-    startLivePolling(savedUrl);
-  }
-});
+    window.addEventListener('DOMContentLoaded', () => {
+      const savedUrl = localStorage.getItem(STORAGE_KEY) || normalizeApiUrl(DEFAULT_API_URL);
+      if (savedUrl && savedUrl.startsWith('http')) {
+        document.getElementById('apiUrlInput').value = savedUrl;
+        startLivePolling(savedUrl);
+      }
+    });
 
     function addLog(message, type = 'info') {
       const logBox = document.getElementById('terminalLog');
@@ -448,20 +606,20 @@ window.addEventListener('DOMContentLoaded', () => {
         addLog('[CRAWLER] 4 berita baru lolos deduplikasi URL, menganalisis sentimen via Gemini...', 'work');
         updateAgentUI('crawler', 'DONE', 'Selesai: 4 berita baru terklasifikasi sentimennya.', 'Baru saja');
         updateAgentUI('drafter', 'WORKING', 'Menulis narasi piramida terbalik & kutipan Kepala BPS...', 'Baru saja');
-      }, 2500);
+      }, 3200);
 
       setTimeout(() => {
         addLog('[DRAFTER] Draf selesai disusun, meneruskan ke Agent Auditor...', 'work');
         updateAgentUI('drafter', 'DONE', 'Draf siaran pers selesai disusun.', 'Baru saja');
         updateAgentUI('auditor', 'WORKING', 'Mengaudit silang angka y-on-y (5,18%), q-to-q (1,42%), c-to-c (5,04%)...', 'Baru saja');
-      }, 5000);
+      }, 6400);
 
       setTimeout(() => {
         addLog('[AUDITOR] Validasi angka lulus (zero margin of error). Hasil tayang di Preview Board.', 'success');
         updateAgentUI('auditor', 'DONE', 'Lolos audit angka & siap publikasi.', 'Baru saja');
         btn.disabled = false;
         btn.classList.remove('opacity-50');
-      }, 7800);
+      }, 9800);
     }
 
     function normalizeApiUrl(rawUrl) {
@@ -525,61 +683,59 @@ window.addEventListener('DOMContentLoaded', () => {
       pollingInterval = setInterval(fetchState, 8000);
     }
 
-   function formatTanggalID(rawDate) {
-  if (!rawDate || rawDate === '-') return '-';
-  const str = String(rawDate).trim();
+    function formatTanggalID(rawDate) {
+      if (!rawDate || rawDate === '-') return '-';
+      const str = String(rawDate).trim();
 
-  // Jika format sudah DD/MM/YYYY (contoh: 11/11/2026), ubah ke nama bulan Indonesia
-  if (/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(str)) {
-    const [dd, mm, yyyy] = str.split('/');
-    const d = new Date(Number(yyyy), Number(mm) - 1, Number(dd));
-    return d.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
-  }
+      if (/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(str)) {
+        const [dd, mm, yyyy] = str.split('/');
+        const d = new Date(Number(yyyy), Number(mm) - 1, Number(dd));
+        return d.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+      }
 
-  // Jika format ISO dari Google Sheets (contoh: 2026-11-10T17:00:00.000Z)
-  const parsed = new Date(str);
-  if (!isNaN(parsed.getTime())) {
-    return parsed.toLocaleDateString('id-ID', {
-      timeZone: 'Asia/Jakarta',
-      day: 'numeric',
-      month: 'long',
-      year: 'numeric'
-    });
-  }
+      const parsed = new Date(str);
+      if (!isNaN(parsed.getTime())) {
+        return parsed.toLocaleDateString('id-ID', {
+          timeZone: 'Asia/Jakarta',
+          day: 'numeric',
+          month: 'long',
+          year: 'numeric'
+        });
+      }
 
-  return str;
-}
-
-function renderNewsList(newsItems) {
-  const container = document.getElementById('newsListContainer');
-  container.innerHTML = newsItems.map(item => {
-    const analisisText = String(item.analisis || '');
-    let sentimen = 'Netral';
-    let badgeStyle = 'bg-slate-800 text-slate-300';
-    if (/positif/i.test(analisisText)) {
-      sentimen = 'Positif';
-      badgeStyle = 'bg-emerald-500/15 text-emerald-300';
-    } else if (/negatif/i.test(analisisText)) {
-      sentimen = 'Negatif';
-      badgeStyle = 'bg-rose-500/15 text-rose-300';
+      return str;
     }
 
-    const tanggalRapi = formatTanggalID(item.tanggal);
+    function renderNewsList(newsItems) {
+      const container = document.getElementById('newsListContainer');
+      container.innerHTML = newsItems.map(item => {
+        const analisisText = String(item.analisis || '');
+        let sentimen = 'Netral';
+        let badgeStyle = 'bg-slate-800 text-slate-300';
+        if (/positif/i.test(analisisText)) {
+          sentimen = 'Positif';
+          badgeStyle = 'bg-emerald-500/15 text-emerald-300';
+        } else if (/negatif/i.test(analisisText)) {
+          sentimen = 'Negatif';
+          badgeStyle = 'bg-rose-500/15 text-rose-300';
+        }
 
-    return `
-      <div class="bg-slate-950 border border-slate-800 rounded-xl p-3 space-y-1.5">
-        <div class="flex items-center justify-between gap-2">
-          <span class="text-[10px] font-mono-code text-slate-400">${tanggalRapi} • ${item.media || 'Media'}</span>
-          <span class="px-2 py-0.5 rounded text-[10px] font-bold ${badgeStyle}">${sentimen}</span>
-        </div>
-        <a href="${item.link || '#'}" target="_blank" class="block text-xs font-bold text-white hover:text-sky-400 leading-snug transition">
-          ${item.judul || '(Tanpa Judul)'} ↗
-        </a>
-        <p class="text-[11px] text-slate-400 whitespace-pre-line leading-relaxed">${analisisText}</p>
-      </div>
-    `;
-  }).join('');
-}
+        const tanggalRapi = formatTanggalID(item.tanggal);
+
+        return `
+          <div class="bg-slate-950 border border-slate-800 rounded-xl p-3 space-y-1.5">
+            <div class="flex items-center justify-between gap-2">
+              <span class="text-[10px] font-mono-code text-slate-400">${tanggalRapi} • ${item.media || 'Media'}</span>
+              <span class="px-2 py-0.5 rounded text-[10px] font-bold ${badgeStyle}">${sentimen}</span>
+            </div>
+            <a href="${item.link || '#'}" target="_blank" class="block text-xs font-bold text-white hover:text-sky-400 leading-snug transition">
+              ${item.judul || '(Tanpa Judul)'} ↗
+            </a>
+            <p class="text-[11px] text-slate-400 whitespace-pre-line leading-relaxed">${analisisText}</p>
+          </div>
+        `;
+      }).join('');
+    }
 
     function switchTab(tab) {
       const isBrs = tab === 'brs';
