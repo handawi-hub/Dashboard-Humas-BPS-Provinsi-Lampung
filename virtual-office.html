@@ -882,22 +882,25 @@
       headMesh.castShadow = true;
       headGroup.add(headMesh);
 
-      // Wajah Roblox Klasik (Mata & Senyum Ramah)
-      const eyeMat = new THREE.MeshBasicMaterial({ color: 0x0f172a });
-      const leftEye = new THREE.Mesh(new THREE.SphereGeometry(0.032, 8, 8), eyeMat);
-      leftEye.position.set(-0.10, 0.04, 0.285);
-      const rightEye = new THREE.Mesh(new THREE.SphereGeometry(0.032, 8, 8), eyeMat);
-      rightEye.position.set(0.10, 0.04, 0.285);
-      headGroup.add(leftEye, rightEye);
+     // Jika ada foto, tempelkan foto ke kepala. Jika tidak ada, pakai wajah kartun biasa
+   if (config.faceImage) {
+     applyPhotoFaceToHead(headGroup, config.faceImage);
+   } else {
+     const eyeMat = new THREE.MeshBasicMaterial({ color: 0x0f172a });
+     const leftEye = new THREE.Mesh(new THREE.SphereGeometry(0.032, 8, 8), eyeMat);
+     leftEye.position.set(-0.10, 0.04, 0.285);
+     const rightEye = new THREE.Mesh(new THREE.SphereGeometry(0.032, 8, 8), eyeMat);
+     rightEye.position.set(0.10, 0.04, 0.285);
+     headGroup.add(leftEye, rightEye);
 
-      // Senyum
-      const smile = new THREE.Mesh(
-        new THREE.TorusGeometry(0.075, 0.014, 6, 12, Math.PI),
-        eyeMat
-      );
-      smile.rotation.z = Math.PI;
-      smile.position.set(0, -0.05, 0.285);
-      headGroup.add(smile);
+     const smile = new THREE.Mesh(
+       new THREE.TorusGeometry(0.075, 0.014, 6, 12, Math.PI),
+       eyeMat
+     );
+     smile.rotation.z = Math.PI;
+     smile.position.set(0, -0.05, 0.285);
+     headGroup.add(smile);
+   }
 
       // Kacamata Baca untuk Ibu Auditor & PR
       if (config.hasGlasses) {
@@ -998,6 +1001,7 @@
       // 1. Media Crawler: Cewek rambut ikal panjang warna merah
       createRobloxCharacter({
         id: 'crawler',
+        faceImage: './assets/crawler.jpg',  // <-- TAMBAHKAN BARIS INI
         x: -3.6,
         z: -1.3,
         rotY: Math.PI + Math.PI / 5,
@@ -1012,6 +1016,7 @@
       // 2. Penulis BRS: Cowok rambut curly bergelombang
       createRobloxCharacter({
         id: 'drafter',
+        faceImage: './assets/drafter.jpg',
         x: 0.2,
         z: -2.6,
         rotY: Math.PI,
@@ -1026,6 +1031,7 @@
       // 3. Auditor & PR: Ibu-ibu rambut putih panjang dengan sweater putih tenun
       createRobloxCharacter({
         id: 'auditor',
+        faceImage: './assets/auditor.webp',
         x: 2.9,
         z: 0.9,
         rotY: Math.PI - Math.PI / 4,
