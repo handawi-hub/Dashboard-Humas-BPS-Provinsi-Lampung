@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>3D Roblox AI Agent Virtual Office — Humas BPS Provinsi Lampung</title>
+  <title>3D Chibi AI Agent Virtual Office — Humas BPS Provinsi Lampung</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-  <!-- Three.js & OrbitControls untuk 3D Roblox Studio Office -->
+  <!-- Three.js & OrbitControls untuk 3D Creative Studio Office -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
   <style>
@@ -24,6 +24,7 @@
       height: 540px;
       cursor: grab;
       overflow: hidden;
+      background-color: #f4efe6;
     }
     #canvasContainer:active {
       cursor: grabbing;
@@ -81,7 +82,7 @@
   <!-- MAIN CONTENT -->
   <main class="flex-1 max-w-7xl w-full mx-auto px-4 py-5 grid grid-cols-1 lg:grid-cols-12 gap-5">
 
-    <!-- LEFT: 3D ROBLOX ARTSY STUDIO CANVAS (7 COLS) -->
+    <!-- LEFT: 3D CHIBI ARTSY STUDIO CANVAS (7 COLS) -->
     <section class="lg:col-span-7 flex flex-col gap-4">
       <div class="bg-white border border-stone-200 rounded-3xl overflow-hidden shadow-xl shadow-stone-200/60">
         <!-- Toolbar Atas Viewport 3D -->
@@ -127,7 +128,7 @@
               <span class="text-xs font-extrabold text-sky-700 group-hover:text-sky-600">1. Media Crawler</span>
               <span id="badge-crawler" class="px-2 py-0.5 rounded-md text-[10px] font-extrabold bg-stone-100 text-slate-600">IDLE</span>
             </div>
-            <p class="text-[10px] text-slate-400 font-semibold mb-1">Cewek • Rambut Merah Ikal</p>
+            <p class="text-[10px] text-slate-400 font-semibold mb-1">Chibi • Rambut Sebahu & Jas Gelap</p>
             <p id="msg-crawler" class="text-[11px] text-slate-600 leading-snug line-clamp-2">Menunggu jadwal pemindaian RSS...</p>
             <span id="time-crawler" class="block text-[10px] text-slate-400 font-mono-code mt-1.5">-</span>
           </div>
@@ -138,7 +139,7 @@
               <span class="text-xs font-extrabold text-emerald-700 group-hover:text-emerald-600">2. Penulis BRS</span>
               <span id="badge-drafter" class="px-2 py-0.5 rounded-md text-[10px] font-extrabold bg-stone-100 text-slate-600">IDLE</span>
             </div>
-            <p class="text-[10px] text-slate-400 font-semibold mb-1">Cowok • Rambut Curly Bergelombang</p>
+            <p class="text-[10px] text-slate-400 font-semibold mb-1">Chibi • Rambut Panjang Bergelombang</p>
             <p id="msg-drafter" class="text-[11px] text-slate-600 leading-snug line-clamp-2">Siap memproses bahan tayang PPTX...</p>
             <span id="time-drafter" class="block text-[10px] text-slate-400 font-mono-code mt-1.5">-</span>
           </div>
@@ -149,7 +150,7 @@
               <span class="text-xs font-extrabold text-amber-800 group-hover:text-amber-700">3. Auditor & PR</span>
               <span id="badge-auditor" class="px-2 py-0.5 rounded-md text-[10px] font-extrabold bg-stone-100 text-slate-600">IDLE</span>
             </div>
-            <p class="text-[10px] text-slate-400 font-semibold mb-1">Ibu Senior • Sweater Putih Tenun</p>
+            <p class="text-[10px] text-slate-400 font-semibold mb-1">Chibi • Platinum Ombre & Sweater Tenun</p>
             <p id="msg-auditor" class="text-[11px] text-slate-600 leading-snug line-clamp-2">Menunggu validasi angka & sentimen...</p>
             <span id="time-auditor" class="block text-[10px] text-slate-400 font-mono-code mt-1.5">-</span>
           </div>
@@ -278,7 +279,7 @@
       crawler: {
         name: 'Agent Media Crawler',
         role: 'Pemantau Berita & RSS',
-        desc: 'Cewek • Rambut ikal panjang merah tembaga & headphone studio',
+        desc: 'Chibi • Rambut hitam sebahu, berewok rapi & setelan jas gelap',
         status: 'IDLE',
         pesan: 'Menunggu jadwal pemindaian RSS...',
         camPos: { x: -3.2, y: 3.2, z: 3.5 },
@@ -287,7 +288,7 @@
       drafter: {
         name: 'Agent Penulis BRS',
         role: 'Data Storyteller & Naskah',
-        desc: 'Cowok • Rambut curly bergelombang & lanyard BPS',
+        desc: 'Chibi • Rambut cokelat panjang bergelombang & senyum ramah',
         status: 'IDLE',
         pesan: 'Siap memproses bahan tayang PPTX...',
         camPos: { x: 0.5, y: 3.2, z: 2.2 },
@@ -296,7 +297,7 @@
       auditor: {
         name: 'Agent Auditor & PR',
         role: 'Quality Control & Wastra Tenun',
-        desc: 'Ibu-ibu Senior • Rambut putih panjang & sweater putih tenun Tapis',
+        desc: 'Chibi • Rambut platinum blonde ombre biru toska & sweater tenun',
         status: 'IDLE',
         pesan: 'Menunggu validasi angka & sentimen...',
         camPos: { x: 4.5, y: 3.3, z: 5.2 },
@@ -305,7 +306,7 @@
     };
 
     // =========================================================================
-    // 2. THREE.JS 3D ARTSY MODERN STUDIO & ROBLOX CHARACTER BUILDER
+    // 2. THREE.JS 3D ARTSY MODERN STUDIO & CHIBI CHARACTER BUILDER
     // =========================================================================
     let scene, camera, renderer, controls;
     let ambientLight, sunLight, warmLampLight;
@@ -319,8 +320,8 @@
 
     function init3DOffice() {
       const container = document.getElementById('canvasContainer');
-      const width = container.clientWidth;
-      const height = container.clientHeight;
+      const width = container.clientWidth || 640;
+      const height = container.clientHeight || 540;
 
       scene = new THREE.Scene();
       scene.background = new THREE.Color(0xf4efe6);
@@ -439,11 +440,9 @@
       const c = document.createElement('canvas');
       c.width = 256; c.height = 256;
       const ctx = c.getContext('2d');
-      // Dasar Sweater Rajut Putih Krem Hangat
       ctx.fillStyle = '#f8f6f0';
       ctx.fillRect(0, 0, 256, 256);
 
-      // Tekstur rajutan halus
       ctx.fillStyle = 'rgba(203, 213, 225, 0.25)';
       for (let y = 0; y < 256; y += 6) {
         for (let x = 0; x < 256; x += 6) {
@@ -451,15 +450,13 @@
         }
       }
 
-      // Motif Tenun Etnik / Tapis Geometris di Dada & Pinggiran Bawah
       const drawWovenBand = (yStart, height) => {
-        ctx.fillStyle = '#991b1b'; // Merah marun tapis
+        ctx.fillStyle = '#991b1b';
         ctx.fillRect(0, yStart, 256, height);
-        ctx.fillStyle = '#d97706'; // Benang emas
+        ctx.fillStyle = '#d97706';
         ctx.fillRect(0, yStart + 3, 256, 3);
         ctx.fillRect(0, yStart + height - 6, 256, 3);
 
-        // Motif belah ketupat tenun
         ctx.fillStyle = '#fbbf24';
         for (let x = 8; x < 256; x += 24) {
           ctx.beginPath();
@@ -486,7 +483,6 @@
       ctx.fillRect(0, 0, 256, 320);
 
       if (variant === 1) {
-        // Lukisan Abstrak Terracotta & Sage
         ctx.fillStyle = '#d97757';
         ctx.beginPath(); ctx.arc(128, 130, 72, 0, Math.PI * 2); ctx.fill();
         ctx.fillStyle = '#52796f';
@@ -494,7 +490,6 @@
         ctx.fillStyle = '#1e293b';
         ctx.beginPath(); ctx.arc(165, 110, 24, 0, Math.PI * 2); ctx.fill();
       } else {
-        // Poster Tipografi Data Statistik BPS Artsy
         ctx.fillStyle = '#0284c7';
         ctx.fillRect(28, 36, 200, 12);
         ctx.fillStyle = '#10b981';
@@ -509,13 +504,11 @@
       return new THREE.CanvasTexture(c);
     }
 
-    // Pembuat Tanaman Pot Nyata (Monstera & Lidah Mertua)
     function createPottedPlant(type, x, z, scale = 1) {
       const group = new THREE.Group();
       group.position.set(x, 0, z);
       group.scale.setScalar(scale);
 
-      // Pot Terakota / Keramik Putih
       const potColor = type === 'monstera' ? 0xc86d51 : 0xf8fafc;
       const potGeo = new THREE.CylinderGeometry(0.36, 0.26, 0.52, 16);
       const potMat = new THREE.MeshStandardMaterial({ color: potColor, roughness: 0.7 });
@@ -525,7 +518,6 @@
       pot.receiveShadow = true;
       group.add(pot);
 
-      // Media Tanah
       const soil = new THREE.Mesh(
         new THREE.CylinderGeometry(0.33, 0.33, 0.05, 16),
         new THREE.MeshStandardMaterial({ color: 0x3e2723 })
@@ -554,7 +546,6 @@
           group.add(leaf);
         }
       } else {
-        // Lidah Mertua (Sansevieria)
         const bladeMat = new THREE.MeshStandardMaterial({ color: 0x52796f, roughness: 0.4 });
         for (let i = 0; i < 9; i++) {
           const angle = (i / 9) * Math.PI * 2;
@@ -573,7 +564,6 @@
     }
 
     function buildArchitectureAndDecor() {
-      // 1. Lantai Parket Kayu Hangat
       const floorGeo = new THREE.PlaneGeometry(13, 11);
       const floorMat = new THREE.MeshStandardMaterial({ map: createWoodFloorTexture(), roughness: 0.65 });
       const floor = new THREE.Mesh(floorGeo, floorMat);
@@ -581,7 +571,6 @@
       floor.receiveShadow = true;
       scene.add(floor);
 
-      // Karpet Zonasi Artsy (Terracotta, Sage, Lavender)
       const addRug = (w, d, color, x, z) => {
         const rug = new THREE.Mesh(
           new THREE.BoxGeometry(w, 0.025, d),
@@ -591,18 +580,16 @@
         rug.receiveShadow = true;
         scene.add(rug);
       };
-      addRug(3.6, 3.2, 0xe0f2fe, -4.0, -1.6); // Area Crawler
-      addRug(3.8, 3.2, 0xdcfce7, 0.3, -3.0);  // Area Drafter
-      addRug(3.8, 3.4, 0xfef3c7, 3.5, 0.6);   // Area Auditor
+      addRug(3.6, 3.2, 0xe0f2fe, -4.0, -1.6);
+      addRug(3.8, 3.2, 0xdcfce7, 0.3, -3.0);
+      addRug(3.8, 3.4, 0xfef3c7, 3.5, 0.6);
 
-      // 2. Dinding Studio Modern (Krem Hangat & Aksen Sage)
       const wallMat = new THREE.MeshStandardMaterial({ color: 0xfbf9f5, roughness: 0.85 });
       const backWall = new THREE.Mesh(new THREE.BoxGeometry(13, 4.4, 0.25), wallMat);
       backWall.position.set(0, 2.2, -5.5);
       backWall.receiveShadow = true;
       scene.add(backWall);
 
-      // Dinding Kiri dengan Jendela Kaca Besar Industrial
       const leftWallLower = new THREE.Mesh(new THREE.BoxGeometry(0.25, 1.1, 11), wallMat);
       leftWallLower.position.set(-6.5, 0.55, 0);
       leftWallLower.receiveShadow = true;
@@ -612,7 +599,6 @@
       leftWallTop.position.set(-6.5, 4.05, 0);
       scene.add(leftWallTop);
 
-      // Bingkai Jendela Hitam Tipis & Kaca Cerah
       const frameMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, metalness: 0.5, roughness: 0.4 });
       for (let z = -4.5; z <= 4.5; z += 2.25) {
         const mullion = new THREE.Mesh(new THREE.BoxGeometry(0.14, 2.6, 0.08), frameMat);
@@ -627,7 +613,6 @@
       glassPane.position.set(-6.45, 2.4, 0);
       scene.add(glassPane);
 
-      // 3. Galeri Lukisan Artsy di Dinding Belakang
       const addWallArt = (variant, x, y, w, h) => {
         const frame = new THREE.Mesh(
           new THREE.BoxGeometry(w + 0.14, h + 0.14, 0.08),
@@ -646,7 +631,6 @@
       addWallArt(1, -2.5, 2.55, 1.3, 1.65);
       addWallArt(2, 2.8, 2.55, 1.3, 1.65);
 
-      // 4. Rak Buku & Dekorasi Kayu di Sudut Kanan Belakang
       const shelfGroup = new THREE.Group();
       shelfGroup.position.set(5.3, 0, -4.7);
       const woodMat = new THREE.MeshStandardMaterial({ color: 0xb07d4f, roughness: 0.6 });
@@ -661,7 +645,6 @@
         side.position.set(x, 1.5, 0);
         shelfGroup.add(side);
       }
-      // Buku warna-warni di rak
       const bookColors = [0xef4444, 0x3b82f6, 0x10b981, 0xf59e0b, 0x8b5cf6];
       for (let i = 0; i < 8; i++) {
         const book = new THREE.Mesh(
@@ -673,7 +656,6 @@
       }
       scene.add(shelfGroup);
 
-      // 5. Tanaman Pot Nyata di Berbagai Sudut Kantor
       createPottedPlant('monstera', -5.6, -4.5, 1.15);
       createPottedPlant('sansevieria', -5.7, 3.6, 1.0);
       createPottedPlant('monstera', 5.7, -3.5, 1.05);
@@ -703,7 +685,6 @@
         }
       }
 
-      // Dual Monitor Modern
       const stand = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.25, 0.1), legMat);
       stand.position.set(0, 1.02, -0.25);
       desk.add(stand);
@@ -719,7 +700,6 @@
       desk.add(screen);
       monitorScreens.push({ mesh: screen, baseColor: new THREE.Color(accentColor) });
 
-      // Sukulen Mini & Mug Kopi di Meja
       const miniPot = new THREE.Mesh(
         new THREE.CylinderGeometry(0.08, 0.06, 0.11, 10),
         new THREE.MeshStandardMaterial({ color: 0xd97757 })
@@ -745,13 +725,13 @@
     }
 
     function buildAllWorkstations() {
-      buildDeskSetup(-4.2, -2.1, Math.PI / 5, 0x38bdf8); // Meja Crawler
-      buildDeskSetup(0.2, -3.6, 0, 0x34d399);            // Meja Drafter
-      buildDeskSetup(3.6, 0.2, -Math.PI / 4, 0xfbbf24);  // Meja Auditor
+      buildDeskSetup(-4.2, -2.1, Math.PI / 5, 0x38bdf8);
+      buildDeskSetup(0.2, -3.6, 0, 0x34d399);
+      buildDeskSetup(3.6, 0.2, -Math.PI / 4, 0xfbbf24);
     }
 
-   // =========================================================================
-    // PEMBUAT KARAKTER CHIBI 3D STYLIZED (SESUAI KARAKTER CRAWLER, DRAFTER, AUDITOR)
+    // =========================================================================
+    // PEMBUAT KARAKTER CHIBI 3D STYLIZED
     // =========================================================================
     function createRobloxCharacter(config) {
       const root = new THREE.Group();
@@ -789,13 +769,13 @@
       rightLeg.add(rLegMesh, rShoe);
       root.add(rightLeg);
 
-      // Badan Chibi Mungil (Rounded Torso)
+      // Badan Chibi Mungil
       const torso = new THREE.Mesh(new THREE.CylinderGeometry(0.26, 0.31, 0.64, 18), torsoMat);
       torso.position.y = 0.88;
       torso.castShadow = true;
       root.add(torso);
 
-      // Aksen Dasi Gelap untuk Crawler (Gaya Setelan Gelap)
+      // Aksen Dasi Gelap untuk Crawler
       if (config.hasDarkTie) {
         const tie = new THREE.Mesh(
           new THREE.BoxGeometry(0.08, 0.36, 0.04),
@@ -866,7 +846,7 @@
         headGroup.add(eyeBase, pupil, highlight, brow);
       }
 
-      // Perona Pipi Halus & Lesung Pipi (Chibi Blush)
+      // Perona Pipi Halus
       if (config.hasBlush) {
         const blushMat = new THREE.MeshBasicMaterial({ color: 0xf472b6, transparent: true, opacity: 0.45 });
         for (let side of [-1, 1]) {
@@ -886,16 +866,14 @@
       smile.position.set(0, -0.09, 0.39);
       headGroup.add(smile);
 
-      // GAYA RAMBUT & CIRI KHAS SESUAI MASING-MASING FILE ASSET
+      // Gaya Rambut & Ciri Khas
       const hairMat = new THREE.MeshStandardMaterial({ color: config.hairColor, roughness: 0.65 });
 
       if (config.hairStyle === 'crawler-beard-bob') {
-        // CRAWLER: Rambut hitam lurus belah tengah sebahu + berewok/jenggot rapi
         const hairCap = new THREE.Mesh(new THREE.SphereGeometry(0.445, 22, 18, 0, Math.PI * 2, 0, Math.PI * 0.62), hairMat);
         hairCap.position.set(0, 0.03, -0.02);
         headGroup.add(hairCap);
 
-        // Belahan rambut kiri & kanan sebahu
         for (let side of [-1, 1]) {
           const sideHair = new THREE.Mesh(new THREE.BoxGeometry(0.14, 0.68, 0.34), hairMat);
           sideHair.position.set(side * 0.39, -0.18, -0.03);
@@ -907,7 +885,6 @@
         backHair.position.set(0, -0.18, -0.35);
         headGroup.add(backHair);
 
-        // Berewok & Kumis Rapi
         const beardMat = new THREE.MeshStandardMaterial({ color: 0x1f242d, roughness: 0.85 });
         const jawBeard = new THREE.Mesh(new THREE.CylinderGeometry(0.36, 0.32, 0.22, 18, 1, false, -Math.PI * 0.42, Math.PI * 0.84), beardMat);
         jawBeard.position.set(0, -0.22, 0.06);
@@ -916,7 +893,6 @@
         headGroup.add(jawBeard, mustache);
 
       } else if (config.hairStyle === 'drafter-long-wavy') {
-        // DRAFTER: Rambut cokelat gelap panjang bergelombang lembut
         const hairCap = new THREE.Mesh(new THREE.SphereGeometry(0.45, 22, 18, 0, Math.PI * 2, 0, Math.PI * 0.65), hairMat);
         hairCap.position.set(0, 0.03, -0.02);
         headGroup.add(hairCap);
@@ -934,19 +910,16 @@
         headGroup.add(longBack);
 
       } else if (config.hairStyle === 'auditor-blonde-teal') {
-        // AUDITOR: Rambut platinum blonde berponi menyamping dengan ujung biru toska (teal ombre)
         const tealMat = new THREE.MeshStandardMaterial({ color: 0x06b6d4, roughness: 0.55 });
         const blondeCrown = new THREE.Mesh(new THREE.SphereGeometry(0.45, 22, 18, 0, Math.PI * 2, 0, Math.PI * 0.64), hairMat);
         blondeCrown.position.set(0, 0.03, -0.02);
         headGroup.add(blondeCrown);
 
-        // Poni menyamping khas
         const sideBangs = new THREE.Mesh(new THREE.BoxGeometry(0.42, 0.26, 0.14), hairMat);
         sideBangs.position.set(-0.14, 0.24, 0.35);
         sideBangs.rotation.z = 0.35;
         headGroup.add(sideBangs);
 
-        // Rambut panjang sisi kiri & kanan + ujung gradasi biru toska
         for (let side of [-1, 1]) {
           const upperBlonde = new THREE.Mesh(new THREE.CylinderGeometry(0.11, 0.12, 0.52, 12), hairMat);
           upperBlonde.position.set(side * 0.39, -0.14, -0.04);
@@ -983,7 +956,6 @@
     }
 
     function buildAllRobloxCharacters() {
-      // 1. Media Crawler (Sesuai crawler.jpg: Pria rambut hitam sebahu, berewok & jas gelap)
       createRobloxCharacter({
         id: 'crawler',
         x: -3.6,
@@ -999,7 +971,6 @@
         hasDarkTie: true
       });
 
-      // 2. Penulis BRS (Sesuai drafter.jpg: Wanita rambut cokelat panjang bergelombang & senyum lesung pipi)
       createRobloxCharacter({
         id: 'drafter',
         x: 0.2,
@@ -1016,7 +987,6 @@
         hasLanyard: true
       });
 
-      // 3. Auditor & PR (Sesuai auditor.jpg: Rambut platinum blonde ombre biru toska + sweater tenun)
       createRobloxCharacter({
         id: 'auditor',
         x: 2.9,
@@ -1033,6 +1003,63 @@
         hasBlush: true
       });
     }
+
+    // Loop Animasi 3D Real-Time (Wajib ada untuk merender kanvas WebGL)
+    const clock = new THREE.Clock();
+    function animate3D() {
+      requestAnimationFrame(animate3D);
+      const t = clock.getElapsedTime();
+
+      if (isCameraTransitioning) {
+        camera.position.lerp(targetCamPos, 0.06);
+        controls.target.lerp(targetLookAt, 0.06);
+        if (camera.position.distanceTo(targetCamPos) < 0.05) {
+          isCameraTransitioning = false;
+        }
+      }
+
+      Object.keys(robloxAvatars).forEach((id) => {
+        const av = robloxAvatars[id];
+        const status = (AGENT_META[id].status || 'IDLE').toUpperCase();
+        const p = t + av.phase;
+
+        if (status === 'WORKING') {
+          av.root.position.lerp(av.basePos, 0.1);
+          av.root.position.y = Math.abs(Math.sin(p * 8)) * 0.03;
+          av.leftArm.rotation.x = -0.95 + Math.sin(p * 18) * 0.22;
+          av.rightArm.rotation.x = -0.95 - Math.sin(p * 18) * 0.22;
+          av.leftLeg.rotation.x = 0;
+          av.rightLeg.rotation.x = 0;
+          av.headGroup.rotation.y = Math.sin(p * 3) * 0.15;
+          av.headGroup.rotation.x = 0.12;
+        } else if (status === 'DONE') {
+          av.root.position.y = Math.abs(Math.sin(p * 5)) * 0.18;
+          av.rightArm.rotation.x = -2.4 + Math.sin(p * 10) * 0.3;
+          av.leftArm.rotation.x = Math.sin(p * 4) * 0.15;
+          av.leftLeg.rotation.x = 0;
+          av.rightLeg.rotation.x = 0;
+          av.headGroup.rotation.x = -0.05;
+        } else {
+          av.root.position.lerp(av.basePos, 0.1);
+          av.root.position.y = Math.sin(p * 2) * 0.02;
+          av.leftArm.rotation.x = Math.sin(p * 1.8) * 0.08;
+          av.rightArm.rotation.x = -Math.sin(p * 1.8) * 0.08;
+          av.leftLeg.rotation.x = 0;
+          av.rightLeg.rotation.x = 0;
+          av.headGroup.rotation.y = Math.sin(p * 1.1) * 0.22;
+          av.headGroup.rotation.x = 0;
+        }
+      });
+
+      monitorScreens.forEach((m, idx) => {
+        const pulse = 0.85 + Math.sin(t * 3 + idx) * 0.15;
+        m.mesh.material.color.copy(m.baseColor).multiplyScalar(pulse);
+      });
+
+      controls.update();
+      renderer.render(scene, camera);
+    }
+
     // =========================================================================
     // 3. KONTROL MENU, KAMERA, PENCAHAYAAN & POLLING LIVE DATA
     // =========================================================================
@@ -1173,7 +1200,7 @@
       setTimeout(() => {
         addLog('[DRAFTER] Draf Siaran Pers selesai disusun ke templat resmi.', 'work');
         updateAgentUI('drafter', 'DONE', 'Draf siaran pers selesai disusun.', 'Baru saja');
-        updateAgentUI('auditor', 'WORKING', 'Ibu Auditor memeriksa presisi angka y-on-y & q-to-q...', 'Baru saja');
+        updateAgentUI('auditor', 'WORKING', 'Auditor memeriksa presisi angka y-on-y & q-to-q...', 'Baru saja');
       }, 6400);
 
       setTimeout(() => {
