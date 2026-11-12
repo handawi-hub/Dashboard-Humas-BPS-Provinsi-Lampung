@@ -21,7 +21,7 @@
     #canvasContainer {
       position: relative;
       width: 100%;
-      height: 520px;
+      height: 550px;
       cursor: grab;
       overflow: hidden;
       background-color: #e6f2e8;
@@ -31,7 +31,7 @@
     }
     @media (max-width: 640px) {
       #canvasContainer {
-        height: 400px;
+        height: 420px;
       }
     }
     .glass-panel {
@@ -39,57 +39,6 @@
       backdrop-filter: blur(12px);
       border: 1px solid rgba(226, 232, 240, 0.9);
     }
-    /* 3D Chat Bubble di atas kepala agen */
-    .agent-speech-bubble {
-      position: absolute;
-      transform: translate(-50%, -100%);
-      background: rgba(15, 23, 42, 0.94);
-      backdrop-filter: blur(8px);
-      color: #f8fafc;
-      padding: 7px 12px;
-      border-radius: 12px;
-      font-size: 11px;
-      font-weight: 600;
-      max-width: 190px;
-      text-align: center;
-      pointer-events: none;
-      box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.4);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      transition: all 0.3s ease;
-      z-index: 25;
-    }
-    .agent-speech-bubble::after {
-      content: '';
-      position: absolute;
-      bottom: -6px;
-      left: 50%;
-      transform: translateX(-50%);
-      border-width: 6px 6px 0;
-      border-style: solid;
-      border-color: rgba(15, 23, 42, 0.94) transparent;
-      display: block;
-      width: 0;
-    }
-    .intuition-bubble {
-      background: rgba(13, 148, 136, 0.96) !important;
-      border-color: #99f6e4 !important;
-    }
-    /* Animasi Gelombang Audio Gemini Live */
-    @keyframes soundWave {
-      0%, 100% { height: 4px; }
-      50% { height: 24px; }
-    }
-    .wave-bar {
-      width: 3px;
-      background-color: #2dd4bf;
-      border-radius: 99px;
-      animation: soundWave 1.2s infinite ease-in-out;
-    }
-    .wave-bar:nth-child(2) { animation-delay: 0.2s; }
-    .wave-bar:nth-child(3) { animation-delay: 0.4s; }
-    .wave-bar:nth-child(4) { animation-delay: 0.6s; }
-    .wave-bar:nth-child(5) { animation-delay: 0.8s; }
-
     ::-webkit-scrollbar { width: 6px; height: 6px; }
     ::-webkit-scrollbar-track { background: #f1f5f9; }
     ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 999px; }
@@ -106,7 +55,7 @@
         </a>
         <div>
           <div class="flex items-center gap-2">
-            <h1 class="text-sm sm:text-base font-extrabold text-slate-900 tracking-tight">HUMAS Studio & Autonomous Hub</h1>
+            <h1 class="text-sm sm:text-base font-extrabold text-slate-900 tracking-tight">HUMAS Studio</h1>
             <span id="connectionBadge" class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-100 text-amber-800 border border-amber-300">
               <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
               Mode Simulasi
@@ -117,11 +66,6 @@
       </div>
 
       <div class="flex flex-wrap items-center gap-2">
-        <!-- TOMBOL GEMINI LIVE AUDIO -->
-        <button onclick="toggleGeminiLive()" id="btnLive" class="px-3 py-1.5 rounded-xl bg-teal-600 hover:bg-teal-500 text-white text-xs font-bold transition shadow-sm flex items-center gap-1.5">
-          <span id="liveIcon">🎙️</span> <span id="liveText">Gemini Live Audio</span>
-        </button>
-
         <!-- TOMBOL MUSIK LATAR SYMPHONIC METALCORE -->
         <button onclick="toggleMusic()" id="btnMusic" class="px-3 py-1.5 rounded-xl bg-red-50 hover:bg-red-100 text-red-800 border border-red-300 text-xs font-bold transition flex items-center gap-1.5">
           <span id="musicIcon">🤘</span> <span id="musicText">Putar Metal Hardcore</span>
@@ -150,7 +94,7 @@
   <!-- MAIN CONTENT -->
   <main class="flex-1 max-w-7xl w-full mx-auto px-4 py-5 grid grid-cols-1 lg:grid-cols-12 gap-5">
 
-    <!-- LEFT: 3D SEMI-OUTDOOR STUDIO CANVAS & CHAT BUBBLES (7 COLS) -->
+    <!-- LEFT: 3D SEMI-OUTDOOR STUDIO CANVAS (7 COLS) -->
     <section class="lg:col-span-7 flex flex-col gap-4">
       <div class="bg-white border border-stone-200 rounded-3xl overflow-hidden shadow-xl shadow-stone-200/60">
         <!-- Toolbar Atas Viewport 3D -->
@@ -166,13 +110,8 @@
           <span id="lastSyncText" class="text-[11px] text-slate-500 font-mono-code font-semibold">Polling: Siap</span>
         </div>
 
-        <!-- 3D WEBGL VIEWPORT & 3D CHAT BUBBLES CONTAINER -->
+        <!-- 3D WEBGL VIEWPORT -->
         <div id="canvasContainer">
-          <!-- DOM Chat Bubbles 3D yang mengikuti posisi karakter secara real-time -->
-          <div id="bubble-crawler" class="agent-speech-bubble hidden">Memantau RSS...</div>
-          <div id="bubble-drafter" class="agent-speech-bubble hidden">Menyiapkan draf BRS...</div>
-          <div id="bubble-auditor" class="agent-speech-bubble hidden">Validasi data & PR...</div>
-
           <div class="absolute top-3 left-3 z-10 glass-panel px-3 py-1.5 rounded-xl text-[11px] font-semibold text-slate-700 shadow-sm pointer-events-none flex items-center gap-2">
             <span>🖱️ Geser putar • Scroll zoom • Klik karakter untuk inspeksi</span>
           </div>
@@ -227,82 +166,44 @@
         </div>
       </div>
 
-      <!-- OVERLAY PANEL GEMINI LIVE AUDIO -->
-      <div id="liveAudioPanel" class="hidden bg-teal-900 text-white border border-teal-700 rounded-2xl p-4 shadow-xl flex items-center justify-between">
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-full bg-teal-700 flex items-center justify-center text-lg animate-pulse">🎙️</div>
-          <div>
-            <h4 class="text-xs font-extrabold tracking-wide">Gemini Live Audio & Intusi Humas Aktif</h4>
-            <p id="liveStatusSub" class="text-[11px] text-teal-200">Agen mendengarkan suara Anda via mikrofon...</p>
-          </div>
-        </div>
-        <div class="flex items-center gap-1 h-8 px-3 bg-teal-950/60 rounded-xl border border-teal-800">
-          <div class="wave-bar"></div>
-          <div class="wave-bar"></div>
-          <div class="wave-bar"></div>
-          <div class="wave-bar"></div>
-          <div class="wave-bar"></div>
-        </div>
-        <button onclick="toggleGeminiLive()" class="px-3 py-1.5 rounded-lg bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold transition">Akhiri Live</button>
-      </div>
-
       <!-- TERMINAL LOG -->
       <div class="bg-white border border-stone-200 rounded-2xl p-3.5 shadow-sm">
         <div class="flex items-center justify-between mb-2">
           <span class="text-xs font-extrabold text-slate-700 flex items-center gap-2">
             <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
-            Aktivitas Orkestrasi & Chat Interaktif
+            Aktivitas Orkestrasi Apps Script
           </span>
           <button onclick="clearLogs()" class="text-[11px] font-semibold text-slate-400 hover:text-slate-700">Bersihkan Log</button>
         </div>
         <div id="terminalLog" class="font-mono-code text-[11px] text-slate-700 space-y-1 max-h-32 overflow-y-auto bg-stone-50 p-2.5 rounded-xl border border-stone-200/80">
-          <div class="text-slate-500">[SYSTEM] Studio Industrial siap. Ketik perintah di bawah atau klik agen untuk berdiskusi.</div>
+          <div class="text-slate-500">[SYSTEM] Studio Industrial siap. Klik "Putar Metal Hardcore" untuk BGM Symphonic Metalcore.</div>
         </div>
       </div>
     </section>
 
-    <!-- RIGHT: INTERACTIVE CHAT & WALL PREVIEW BOARD (5 COLS) -->
-    <section class="lg:col-span-5 bg-white border border-stone-200 rounded-3xl flex flex-col overflow-hidden shadow-xl shadow-stone-200/60 h-[640px]">
-      <div class="px-4 py-3 border-b border-stone-100 bg-stone-50/70 flex items-center justify-between">
+    <!-- RIGHT: WALL PREVIEW BOARD INSPECTOR (5 COLS) -->
+    <section id="previewBoardSection" class="lg:col-span-5 bg-white border border-stone-200 rounded-3xl flex flex-col overflow-hidden shadow-xl shadow-stone-200/60">
+      <div class="px-4 py-3.5 border-b border-stone-100 bg-stone-50/70 flex items-center justify-between">
         <div>
-          <h2 class="text-sm font-extrabold text-slate-900">Diskusi Langsung & Output Hub</h2>
-          <p class="text-[11px] text-slate-500 font-medium">Chat interaktif dengan Agen AI & Wall Preview</p>
+          <h2 class="text-sm font-extrabold text-slate-900">Wall Preview Board</h2>
+          <p class="text-[11px] text-slate-500 font-medium">Inspeksi Output Draf BRS & Hasil Crawling Media</p>
         </div>
         <a id="btnOpenOutputDoc" href="#" target="_blank" class="hidden px-3 py-1.5 rounded-xl bg-emerald-600 text-white text-[11px] font-bold hover:bg-emerald-500 shadow-sm transition">
           Buka Dokumen ↗
         </a>
       </div>
 
-      <!-- TAB NAVIGASI KANAN -->
-      <div class="grid grid-cols-3 border-b border-stone-200 bg-stone-50 text-xs font-bold">
-        <button onclick="switchTab('chat')" id="tab-chat" class="py-2.5 text-center border-b-2 border-teal-600 text-teal-700 bg-white">
-          💬 Chat AI
-        </button>
-        <button onclick="switchTab('brs')" id="tab-brs" class="py-2.5 text-center border-b-2 border-transparent text-slate-500 hover:text-slate-800">
-          📄 Draf BRS
+      <div class="grid grid-cols-2 border-b border-stone-200 bg-stone-50 text-xs font-bold">
+        <button onclick="switchTab('brs')" id="tab-brs" class="py-2.5 text-center border-b-2 border-emerald-600 text-emerald-700 bg-white">
+          📄 Draf Siaran Pers BRS
         </button>
         <button onclick="switchTab('news')" id="tab-news" class="py-2.5 text-center border-b-2 border-transparent text-slate-500 hover:text-slate-800">
-          📰 Crawling Media
+          📰 Hasil Crawling Media
         </button>
       </div>
 
-      <!-- TAB 0: CHAT INTERAKTIF REAL-TIME DENGAN AGEN -->
-      <div id="panel-chat" class="flex-1 flex flex-col justify-between overflow-hidden p-3 bg-[#fdfcfa]">
-        <div id="chatHistory" class="flex-1 overflow-y-auto space-y-3 p-2 text-xs">
-          <div class="bg-teal-50 border border-teal-200 rounded-2xl p-3 text-teal-900 space-y-1">
-            <p class="font-extrabold">🤖 Tim AI Humas BPS Lampung:</p>
-            <p>Halo Bapak Bima! Studio 3D dengan kecerdasan otonom dan sistem intuisi PR aktif. Silakan ketik perintah atau ajukan pertanyaan strategis ke tim agen.</p>
-          </div>
-        </div>
-
-        <div class="pt-2 border-t border-stone-200 flex items-center gap-2">
-          <input type="text" id="userInput" placeholder="Ketik arahan atau diskusi dengan agen..." class="flex-1 px-3.5 py-2.5 rounded-xl border border-stone-300 text-xs focus:outline-none focus:border-teal-600 font-medium" onkeypress="if(event.key === 'Enter') sendUserMessage()" />
-          <button onclick="sendUserMessage()" class="px-4 py-2.5 rounded-xl bg-teal-600 hover:bg-teal-500 text-white text-xs font-bold shadow-md transition">Kirim</button>
-        </div>
-      </div>
-
-      <!-- TAB 1: DRAF SIARAN PERS BRS -->
-      <div id="panel-brs" class="hidden p-4 flex-1 flex flex-col justify-between gap-4 overflow-y-auto">
+      <!-- TAB 1: DRAF SIARAN PERS -->
+      <div id="panel-brs" class="p-4 flex-1 flex flex-col justify-between gap-4 overflow-y-auto">
         <div class="bg-[#fdfcfa] border border-stone-200 rounded-2xl p-4 space-y-3 text-xs leading-relaxed text-slate-700 shadow-inner">
           <div class="border-b border-stone-200 pb-2.5 flex items-center justify-between">
             <div>
@@ -375,8 +276,8 @@
     </div>
   </div>
 
-  <!-- AUDIO PLAYER KHUSUS HARDCORE_BGM.MP3 (LOOPING) -->
-  <audio id="metalMusic" src="hardcore_bgm.mp3" loop preload="auto"></audio>
+<!-- AUDIO PLAYER KHUSUS HARDCORE_BGM.MP3 (LOOPING) -->
+<audio id="metalMusic" src="hardcore_bgm.mp3" loop preload="auto"></audio>
 
   <script>
     // =========================================================================
@@ -387,7 +288,6 @@
     let pollingInterval = null;
     let isMusicPlaying = false;
     let isMoshPitActive = false;
-    let isLiveActive = false;
 
     const AGENT_META = {
       crawler: {
@@ -396,7 +296,6 @@
         desc: 'Chibi • Rambut hitam sebahu, berewok rapi & setelan jas gelap',
         status: 'IDLE',
         pesan: 'Menunggu jadwal pemindaian RSS...',
-        intuisi: 'Menganalisis sentimen media & tren isu aktual secara real-time.',
         camPos: { x: -1.8, y: 3.1, z: 3.2 },
         targetPos: { x: -2.8, y: 1.3, z: -2.2 }
       },
@@ -406,17 +305,15 @@
         desc: 'Chibi • Rambut cokelat panjang bergelombang & senyum ramah',
         status: 'IDLE',
         pesan: 'Siap memproses bahan tayang PPTX...',
-        intuisi: 'Menyusun narasi data statistik agar mudah dicerna publik dan media.',
         camPos: { x: 1.8, y: 3.1, z: 1.8 },
         targetPos: { x: 1.5, y: 1.3, z: -3.5 }
       },
       auditor: {
         name: 'Agent Auditor & PR',
         role: 'Quality Control & Wastra Tenun',
-        desc: 'Chibi • Platinum Ombre & Sweater Tenun Aksara Lampung',
+        desc: 'Chibi • Rambut platinum blonde ombre biru toska & sweater tenun',
         status: 'IDLE',
         pesan: 'Menunggu validasi angka & sentimen...',
-        intuisi: 'Memastikan presisi angka statistik dan mitigasi krisis reputasi.',
         camPos: { x: 5.5, y: 3.2, z: 4.5 },
         targetPos: { x: 4.5, y: 1.3, z: -0.2 }
       }
@@ -437,36 +334,35 @@
       }
     }
 
-    function toggleMusic() {
-      const audio = document.getElementById('metalMusic');
-      audio.volume = 0.42;
+   function toggleMusic() {
+  const audio = document.getElementById('metalMusic');
+  audio.volume = 0.42;
 
-      if (!isMusicPlaying) {
-        audio.play().then(() => {
-          isMusicPlaying = true;
-          isMoshPitActive = true;
-          updateMusicButtonUI(true);
-          addLog('🔥 MOSH PIT MODE ON! Para agent mulai headbang & moshing mengikuti irama hardcore!', 'work');
-        }).catch((err) => {
-          console.warn("Gagal memutar audio:", err);
-          addLog('⚠️ Gagal memutar musik: Pastikan file hardcore_bgm.mp3 ada.', 'error');
-        });
-      } else {
-        audio.pause();
-        isMusicPlaying = false;
-        isMoshPitActive = false;
-        updateMusicButtonUI(false);
-        addLog('⏸️ Musik latar dijeda. Agent kembali santai.', 'info');
-      }
-    }
-
+  if (!isMusicPlaying) {
+    audio.play().then(() => {
+      isMusicPlaying = true;
+      isMoshPitActive = true; // Aktifkan Mosh Pit saat musik nyala!
+      updateMusicButtonUI(true);
+      addLog('🔥 MOSH PIT MODE ON! Para agent mulai headbang & moshing mengikuti irama hardcore!', 'work');
+    }).catch((err) => {
+      console.warn("Gagal memutar audio:", err);
+      addLog('⚠️ Gagal memutar musik: Pastikan file hardcore_bgm.mp3 ada.', 'error');
+    });
+  } else {
+    audio.pause();
+    isMusicPlaying = false;
+    isMoshPitActive = false; // Matikan Mosh Pit saat musik dijeda
+    updateMusicButtonUI(false);
+    addLog('⏸️ Musik latar dijeda. Agent kembali santai.', 'info');
+  }
+}
     // =========================================================================
-    // 2. THREE.JS 3D SEMI-OUTDOOR STUDIO, TAMAN, KOLAM & CHAT BUBBLES
+    // 2. THREE.JS 3D SEMI-OUTDOOR STUDIO, TAMAN, KOLAM, HEWAN & CUACA MUSIM
     // =========================================================================
     let scene, camera, renderer, controls;
     let ambientLight, sunLight, warmLampLight, pondLight;
-    let lightingModeIndex = 0;
-    let seasonModeIndex = 0;
+    let lightingModeIndex = 0; // 0: Pagi Cerah, 1: Golden Hour Sore, 2: Malam
+    let seasonModeIndex = 0;   // 0: Panas, 1: Hujan, 2: Salju
 
     const robloxAvatars = {};
     const clickableObjects = [];
@@ -490,7 +386,7 @@
     function init3DOffice() {
       const container = document.getElementById('canvasContainer');
       const width = container.clientWidth || 640;
-      const height = container.clientHeight || 520;
+      const height = container.clientHeight || 550;
 
       scene = new THREE.Scene();
       scene.background = new THREE.Color(0xe6f2e8);
@@ -613,8 +509,10 @@
       const c = document.createElement('canvas');
       c.width = 512; c.height = 512;
       const ctx = c.getContext('2d');
+
       ctx.fillStyle = '#3f444c';
       ctx.fillRect(0, 0, 512, 512);
+
       const tones = ['rgba(30, 34, 40, 0.14)', 'rgba(95, 102, 112, 0.12)', 'rgba(24, 27, 32, 0.10)'];
       for (let i = 0; i < 2800; i++) {
         ctx.fillStyle = tones[i % tones.length];
@@ -622,6 +520,16 @@
         ctx.arc(Math.random() * 512, Math.random() * 512, 2 + Math.random() * 14, 0, Math.PI * 2);
         ctx.fill();
       }
+
+      ctx.strokeStyle = 'rgba(20, 23, 28, 0.32)';
+      ctx.lineWidth = 2;
+      for (let y = 128; y < 512; y += 128) {
+        ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(512, y); ctx.stroke();
+      }
+      for (let x = 170; x < 512; x += 170) {
+        ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, 512); ctx.stroke();
+      }
+
       const tex = new THREE.CanvasTexture(c);
       tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
       tex.repeat.set(3, 2);
@@ -670,18 +578,21 @@
       const ctx = c.getContext('2d');
       ctx.fillStyle = '#f8f6f0';
       ctx.fillRect(0, 0, 256, 256);
+
       ctx.fillStyle = 'rgba(203, 213, 225, 0.25)';
       for (let y = 0; y < 256; y += 6) {
         for (let x = 0; x < 256; x += 6) {
           ctx.fillRect(x, y, 3, 2);
         }
       }
+
       const drawWovenBand = (yStart, height) => {
         ctx.fillStyle = '#991b1b';
         ctx.fillRect(0, yStart, 256, height);
         ctx.fillStyle = '#d97706';
         ctx.fillRect(0, yStart + 3, 256, 3);
         ctx.fillRect(0, yStart + height - 6, 256, 3);
+
         ctx.fillStyle = '#fbbf24';
         for (let x = 8; x < 256; x += 24) {
           ctx.beginPath();
@@ -693,6 +604,7 @@
           ctx.fill();
         }
       };
+
       drawWovenBand(54, 34);
       drawWovenBand(186, 28);
       return new THREE.CanvasTexture(c);
@@ -770,6 +682,9 @@
       scene.add(group);
     }
 
+    // =========================================================================
+    // ARSITEKTUR SEMI-OUTDOOR: DINDING BETON INDUSTRIAL & 2 POSTER BAND
+    // =========================================================================
     function buildSemiOutdoorArchitecture() {
       summerGrassTex = createGrassTexture();
       winterSnowTex = createSnowGroundTexture();
@@ -821,7 +736,9 @@
       scene.add(rightWall);
 
       const pillarMat = new THREE.MeshStandardMaterial({ color: 0x78350f, roughness: 0.6 });
-      const pillarCoords = [[-4.2, -6.6], [-4.2, 1.7], [6.9, 1.7]];
+      const pillarCoords = [
+        [-4.2, -6.6], [-4.2, 1.7], [6.9, 1.7]
+      ];
       pillarCoords.forEach(([px, pz]) => {
         const pillar = new THREE.Mesh(new THREE.BoxGeometry(0.20, 4.1, 0.20), pillarMat);
         pillar.position.set(px, 2.05, pz);
@@ -843,6 +760,22 @@
       glassRoof.position.set(1.35, 4.12, -2.45);
       scene.add(glassRoof);
 
+      const roofRimGeo = new THREE.EdgesGeometry(new THREE.BoxGeometry(11.35, 0.05, 8.55));
+      const roofRim = new THREE.LineSegments(
+        roofRimGeo,
+        new THREE.LineBasicMaterial({ color: 0x94a3b8, transparent: true, opacity: 0.45 })
+      );
+      roofRim.position.copy(glassRoof.position);
+      scene.add(roofRim);
+
+      const stoneMat = new THREE.MeshStandardMaterial({ color: 0xd6d3d1, roughness: 0.85 });
+      [[-2.2, 2.4], [-3.1, 3.0], [-4.1, 3.4]].forEach(([sx, sz]) => {
+        const step = new THREE.Mesh(new THREE.CylinderGeometry(0.45, 0.48, 0.08, 12), stoneMat);
+        step.position.set(sx, 0.04, sz);
+        step.receiveShadow = true;
+        scene.add(step);
+      });
+
       const addCustomPoster = (candidateFiles, xPos, fallbackTex) => {
         const frame = new THREE.Mesh(
           new THREE.BoxGeometry(1.48, 2.02, 0.06),
@@ -852,7 +785,10 @@
         scene.add(frame);
 
         const posterMat = new THREE.MeshBasicMaterial({ map: fallbackTex });
-        const canvasMesh = new THREE.Mesh(new THREE.PlaneGeometry(1.36, 1.90), posterMat);
+        const canvasMesh = new THREE.Mesh(
+          new THREE.PlaneGeometry(1.36, 1.90),
+          posterMat
+        );
         canvasMesh.position.set(xPos, 2.55, -6.59);
         scene.add(canvasMesh);
 
@@ -872,13 +808,26 @@
         tryLoad(0);
       };
 
-      addCustomPoster(['adtr_poster.webp', 'a Day To Remember.webp'], -1.2, createFallbackBandPoster('A DAY TO', 'REMEMBER', 'WHAT SEPARATES ME FROM YOU', '#2dd4bf'));
-      addCustomPoster(['suicide_silence_poster.jpg'], 4.2, createFallbackBandPoster('SUICIDE', 'SILENCE', 'THE CLEANSING', '#a3a380'));
+      addCustomPoster(
+        ['adtr_poster.webp', 'a Day To Remember.webp'],
+        -1.2,
+        createFallbackBandPoster('A DAY TO', 'REMEMBER', 'WHAT SEPARATES ME FROM YOU', '#2dd4bf')
+      );
+
+      addCustomPoster(
+        ['suicide_silence_poster.jpg', 'suicide_silence_poster.jpg.jpg'],
+        4.2,
+        createFallbackBandPoster('SUICIDE', 'SILENCE', 'THE CLEANSING', '#a3a380')
+      );
 
       createPottedPlant('monstera', -3.7, -6.0, 1.1);
       createPottedPlant('sansevieria', 6.3, -6.0, 1.0);
+      createPottedPlant('monstera', 6.4, 1.2, 1.05);
     }
 
+    // =========================================================================
+    // TAMAN POHON RINDANG & KOLAM IKAN HIDUP (KOI POND)
+    // =========================================================================
     function createGardenTree(x, z, scale = 1) {
       const tree = new THREE.Group();
       tree.position.set(x, 0, z);
@@ -906,9 +855,11 @@
         const crown = new THREE.Mesh(new THREE.DodecahedronGeometry(r, 1), mat);
         crown.position.set(px, py, pz);
         crown.castShadow = true;
+        crown.receiveShadow = true;
         tree.add(crown);
         treeFoliageMeshes.push({ mesh: crown, summerColor: new THREE.Color(baseHex) });
       });
+
       scene.add(tree);
     }
 
@@ -916,8 +867,32 @@
       createGardenTree(-8.5, -5.2, 1.25);
       createGardenTree(-9.2, 0.5, 1.05);
       createGardenTree(-8.4, 6.8, 1.3);
+      createGardenTree(-1.8, 7.8, 1.1);
+      createGardenTree(5.8, 7.2, 1.15);
+
+      const flowerColors = [0xf43f5e, 0xfbbf24, 0xc084fc, 0xfb923c];
+      for (let i = 0; i < 16; i++) {
+        const fx = -7.8 + (i % 5) * 1.4 + Math.sin(i) * 0.4;
+        const fz = -3.8 + Math.floor(i / 5) * 2.2;
+        const bush = new THREE.Mesh(
+          new THREE.DodecahedronGeometry(0.32, 1),
+          new THREE.MeshStandardMaterial({ color: 0x3f6212 })
+        );
+        bush.position.set(fx, 0.22, fz);
+        bush.castShadow = true;
+        scene.add(bush);
+        treeFoliageMeshes.push({ mesh: bush, summerColor: new THREE.Color(0x3f6212) });
+
+        const blossom = new THREE.Mesh(
+          new THREE.SphereGeometry(0.11, 8, 8),
+          new THREE.MeshBasicMaterial({ color: flowerColors[i % flowerColors.length] })
+        );
+        blossom.position.set(fx, 0.48, fz);
+        scene.add(blossom);
+      }
 
       const pondX = -5.5, pondZ = 4.2, pondRadius = 2.15;
+
       const pondBed = new THREE.Mesh(
         new THREE.CircleGeometry(pondRadius, 32),
         new THREE.MeshStandardMaterial({ color: 0x0f293a, roughness: 0.9 })
@@ -940,80 +915,283 @@
       pondWaterMesh.position.set(pondX, 0.18, pondZ);
       scene.add(pondWaterMesh);
 
-      const koiColors = [0xf97316, 0xffffff, 0xef4444, 0xfacc15];
-      for (let i = 0; i < 4; i++) {
+      const rockMat = new THREE.MeshStandardMaterial({ color: 0x78716c, roughness: 0.85 });
+      const rockCount = 22;
+      for (let i = 0; i < rockCount; i++) {
+        const ang = (i / rockCount) * Math.PI * 2;
+        const rSize = 0.24 + (i % 3) * 0.07;
+        const rock = new THREE.Mesh(new THREE.DodecahedronGeometry(rSize, 1), rockMat);
+        rock.scale.set(1.2, 0.75, 1.0);
+        rock.position.set(
+          pondX + Math.cos(ang) * (pondRadius + 0.05),
+          0.14,
+          pondZ + Math.sin(ang) * (pondRadius + 0.05)
+        );
+        rock.rotation.y = ang;
+        rock.castShadow = true;
+        rock.receiveShadow = true;
+        scene.add(rock);
+      }
+
+      const padMat = new THREE.MeshStandardMaterial({ color: 0x16a34a, side: THREE.DoubleSide });
+      [[-4.7, 3.6], [-6.1, 4.7], [-5.2, 5.1]].forEach(([lx, lz]) => {
+        const pad = new THREE.Mesh(new THREE.CircleGeometry(0.24, 14, 0, Math.PI * 1.75), padMat);
+        pad.rotation.x = -Math.PI / 2;
+        pad.position.set(lx, 0.19, lz);
+        scene.add(pad);
+      });
+
+      const koiColors = [0xf97316, 0xffffff, 0xef4444, 0xfacc15, 0xfb923c];
+      for (let i = 0; i < 5; i++) {
         const fishGroup = new THREE.Group();
         const bodyMat = new THREE.MeshStandardMaterial({ color: koiColors[i], roughness: 0.3 });
+
         const body = new THREE.Mesh(new THREE.SphereGeometry(0.11, 10, 8), bodyMat);
         body.scale.set(0.65, 0.55, 1.85);
         fishGroup.add(body);
+
+        const tail = new THREE.Mesh(new THREE.ConeGeometry(0.08, 0.18, 4), bodyMat);
+        tail.rotation.x = -Math.PI / 2;
+        tail.position.z = -0.22;
+        fishGroup.add(tail);
+
         fishGroup.position.set(pondX, 0.11, pondZ);
         scene.add(fishGroup);
 
         koiFishes.push({
           mesh: fishGroup,
+          tail,
           centerX: pondX,
           centerZ: pondZ,
           orbitRadius: 0.55 + i * 0.25,
           speed: (i % 2 === 0 ? 1 : -1) * (0.55 + i * 0.12),
-          angle: (i / 4) * Math.PI * 2
+          angle: (i / 5) * Math.PI * 2
         });
       }
     }
 
+    // =========================================================================
+    // SISTEM CUACA 3D: PARTIKEL HUJAN & SALJU
+    // =========================================================================
     function buildWeatherSystems() {
+      const rainCount = 1200;
       const rainGeo = new THREE.BufferGeometry();
-      const rainPos = new Float32Array(1200 * 3);
-      for (let i = 0; i < 1200; i++) {
-        rainPos[i * 3] = (Math.random() - 0.5) * 24;
-        rainPos[i * 3 + 1] = Math.random() * 14;
-        rainPos[i * 3 + 2] = (Math.random() - 0.5) * 22;
+      const rainPositions = new Float32Array(rainCount * 3);
+      for (let i = 0; i < rainCount; i++) {
+        rainPositions[i * 3] = (Math.random() - 0.5) * 24;
+        rainPositions[i * 3 + 1] = Math.random() * 14;
+        rainPositions[i * 3 + 2] = (Math.random() - 0.5) * 22;
       }
-      rainGeo.setAttribute('position', new THREE.BufferAttribute(rainPos, 3));
-      rainParticles = new THREE.Points(rainGeo, new THREE.PointsMaterial({ color: 0xbae6fd, size: 0.14, transparent: true, opacity: 0.75 }));
+      rainGeo.setAttribute('position', new THREE.BufferAttribute(rainPositions, 3));
+      const rainMat = new THREE.PointsMaterial({
+        color: 0xbae6fd,
+        size: 0.14,
+        transparent: true,
+        opacity: 0.75
+      });
+      rainParticles = new THREE.Points(rainGeo, rainMat);
       rainParticles.visible = false;
       scene.add(rainParticles);
 
+      const snowCount = 950;
       const snowGeo = new THREE.BufferGeometry();
-      const snowPos = new Float32Array(950 * 3);
-      for (let i = 0; i < 950; i++) {
-        snowPos[i * 3] = (Math.random() - 0.5) * 24;
-        snowPos[i * 3 + 1] = Math.random() * 14;
-        snowPos[i * 3 + 2] = (Math.random() - 0.5) * 22;
+      const snowPositions = new Float32Array(snowCount * 3);
+      for (let i = 0; i < snowCount; i++) {
+        snowPositions[i * 3] = (Math.random() - 0.5) * 24;
+        snowPositions[i * 3 + 1] = Math.random() * 14;
+        snowPositions[i * 3 + 2] = (Math.random() - 0.5) * 22;
       }
-      snowGeo.setAttribute('position', new THREE.BufferAttribute(snowPos, 3));
-      snowParticles = new THREE.Points(snowGeo, new THREE.PointsMaterial({ color: 0xffffff, size: 0.22, transparent: true, opacity: 0.92 }));
+      snowGeo.setAttribute('position', new THREE.BufferAttribute(snowPositions, 3));
+      const snowMat = new THREE.PointsMaterial({
+        color: 0xffffff,
+        size: 0.22,
+        transparent: true,
+        opacity: 0.92
+      });
+      snowParticles = new THREE.Points(snowGeo, snowMat);
       snowParticles.visible = false;
       scene.add(snowParticles);
     }
 
-    function buildLivingAnimals() {
-      const r1 = new THREE.Mesh(new THREE.SphereGeometry(0.2, 10, 10), new THREE.MeshStandardMaterial({ color: 0xffffff }));
-      r1.position.set(-2.2, 0.2, 4.8);
-      scene.add(r1);
-      rabbits.push({ mesh: r1, centerX: -2.2, centerZ: 4.8, radius: 1.1, speed: 0.6, angle: 0 });
+    // =========================================================================
+    // HEWAN PELIHARAAN HIDUP: KELINCI MELOMPAT & KUCING JALAN-JALAN
+    // =========================================================================
+    function createRabbit(x, z, furColor) {
+      const group = new THREE.Group();
+      group.position.set(x, 0, z);
 
-      const c1 = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.12, 0.35, 10), new THREE.MeshStandardMaterial({ color: 0xf97316 }));
-      c1.rotation.x = Math.PI / 2;
-      c1.position.set(1.2, 0.2, 3.2);
-      scene.add(c1);
-      cats.push({ group: c1, centerX: 1.2, centerZ: 3.4, radius: 1.3, speed: 0.4, angle: 0.5 });
+      const furMat = new THREE.MeshStandardMaterial({ color: furColor, roughness: 0.8 });
+      const innerEarMat = new THREE.MeshBasicMaterial({ color: 0xfbcfe8 });
+
+      const body = new THREE.Mesh(new THREE.SphereGeometry(0.20, 14, 12), furMat);
+      body.scale.set(0.95, 0.9, 1.25);
+      body.position.y = 0.20;
+      body.castShadow = true;
+      group.add(body);
+
+      const head = new THREE.Mesh(new THREE.SphereGeometry(0.15, 14, 12), furMat);
+      head.position.set(0, 0.34, 0.18);
+      head.castShadow = true;
+      group.add(head);
+
+      for (let side of [-1, 1]) {
+        const ear = new THREE.Mesh(new THREE.CylinderGeometry(0.032, 0.04, 0.24, 8), furMat);
+        ear.position.set(side * 0.055, 0.51, 0.15);
+        ear.rotation.z = side * -0.14;
+        ear.rotation.x = -0.1;
+        ear.castShadow = true;
+
+        const inner = new THREE.Mesh(new THREE.PlaneGeometry(0.035, 0.17), innerEarMat);
+        inner.position.set(side * 0.055, 0.51, 0.188);
+        inner.rotation.z = side * -0.14;
+        group.add(ear, inner);
+      }
+
+      const tail = new THREE.Mesh(new THREE.SphereGeometry(0.065, 8, 8), new THREE.MeshStandardMaterial({ color: 0xffffff }));
+      tail.position.set(0, 0.20, -0.24);
+      group.add(tail);
+
+      const eyeMat = new THREE.MeshBasicMaterial({ color: 0x0f172a });
+      for (let side of [-1, 1]) {
+        const eye = new THREE.Mesh(new THREE.SphereGeometry(0.022, 8, 8), eyeMat);
+        eye.position.set(side * 0.09, 0.36, 0.29);
+        group.add(eye);
+      }
+
+      scene.add(group);
+      return group;
     }
 
+    function createCat(x, z, furColor, stripeColor) {
+      const group = new THREE.Group();
+      group.position.set(x, 0, z);
+
+      const furMat = new THREE.MeshStandardMaterial({ color: furColor, roughness: 0.7 });
+      const accentMat = new THREE.MeshStandardMaterial({ color: stripeColor, roughness: 0.7 });
+
+      const body = new THREE.Mesh(new THREE.CylinderGeometry(0.14, 0.15, 0.44, 12), furMat);
+      body.rotation.x = Math.PI / 2;
+      body.position.y = 0.24;
+      body.castShadow = true;
+      group.add(body);
+
+      [[-0.08, 0.14], [0.08, 0.14], [-0.08, -0.14], [0.08, -0.14]].forEach(([lx, lz]) => {
+        const leg = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.03, 0.18, 8), furMat);
+        leg.position.set(lx, 0.09, lz);
+        leg.castShadow = true;
+        group.add(leg);
+      });
+
+      const head = new THREE.Mesh(new THREE.SphereGeometry(0.16, 14, 12), furMat);
+      head.position.set(0, 0.36, 0.24);
+      head.castShadow = true;
+      group.add(head);
+
+      for (let side of [-1, 1]) {
+        const ear = new THREE.Mesh(new THREE.ConeGeometry(0.055, 0.11, 4), accentMat);
+        ear.position.set(side * 0.09, 0.50, 0.23);
+        ear.rotation.z = side * -0.2;
+        group.add(ear);
+      }
+
+      const eyeMat = new THREE.MeshBasicMaterial({ color: 0x10b981 });
+      for (let side of [-1, 1]) {
+        const eye = new THREE.Mesh(new THREE.SphereGeometry(0.024, 8, 8), eyeMat);
+        eye.position.set(side * 0.075, 0.38, 0.37);
+        group.add(eye);
+      }
+      const nose = new THREE.Mesh(new THREE.SphereGeometry(0.02, 6, 6), new THREE.MeshBasicMaterial({ color: 0xf472b6 }));
+      nose.position.set(0, 0.34, 0.395);
+      group.add(nose);
+
+      const tailPivot = new THREE.Group();
+      tailPivot.position.set(0, 0.28, -0.20);
+      const tailMesh = new THREE.Mesh(new THREE.CylinderGeometry(0.025, 0.032, 0.34, 8), accentMat);
+      tailMesh.position.set(0, 0.15, -0.06);
+      tailMesh.rotation.x = -0.45;
+      tailPivot.add(tailMesh);
+      group.add(tailPivot);
+
+      scene.add(group);
+      return { group, tailPivot };
+    }
+
+    function buildLivingAnimals() {
+      const r1 = createRabbit(-2.2, 4.8, 0xffffff);
+      rabbits.push({ mesh: r1, centerX: -2.2, centerZ: 4.8, radius: 1.15, speed: 0.75, angle: 0 });
+
+      const r2 = createRabbit(-6.8, 1.2, 0xd6b899);
+      rabbits.push({ mesh: r2, centerX: -6.8, centerZ: 1.2, radius: 1.05, speed: -0.65, angle: 2.1 });
+
+      const c1 = createCat(1.2, 3.2, 0xf97316, 0xc2410c);
+      cats.push({ ...c1, centerX: 1.2, centerZ: 3.4, radius: 1.5, speed: 0.42, angle: 0.5, baseY: 0 });
+
+      const c2 = createCat(3.2, 1.2, 0xf8fafc, 0x334155);
+      cats.push({ ...c2, centerX: 3.2, centerZ: 0.8, radius: 1.1, speed: -0.38, angle: 3.0, baseY: 0.12 });
+    }
+
+    // =========================================================================
+    // MEJA KERJA & 3 KARAKTER CHIBI INTERAKTIF
+    // =========================================================================
     function buildDeskSetup(x, z, rotY, accentColor) {
       const desk = new THREE.Group();
       desk.position.set(x, 0.12, z);
       desk.rotation.y = rotY;
 
-      const top = new THREE.Mesh(new THREE.BoxGeometry(2.1, 0.08, 1.05), new THREE.MeshStandardMaterial({ color: 0xe6ccb2 }));
-      top.position.y = 0.88;
-      top.castShadow = true;
-      desk.add(top);
+      const topMat = new THREE.MeshStandardMaterial({ color: 0xe6ccb2, roughness: 0.5 });
+      const legMat = new THREE.MeshStandardMaterial({ color: 0x334155, metalness: 0.4, roughness: 0.5 });
 
-      const screen = new THREE.Mesh(new THREE.PlaneGeometry(1.07, 0.50), new THREE.MeshBasicMaterial({ color: accentColor }));
+      const tableTop = new THREE.Mesh(new THREE.BoxGeometry(2.1, 0.08, 1.05), topMat);
+      tableTop.position.y = 0.88;
+      tableTop.castShadow = true;
+      tableTop.receiveShadow = true;
+      desk.add(tableTop);
+
+      for (let lx of [-0.92, 0.92]) {
+        for (let lz of [-0.42, 0.42]) {
+          const leg = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.035, 0.88, 8), legMat);
+          leg.position.set(lx, 0.44, lz);
+          leg.castShadow = true;
+          desk.add(leg);
+        }
+      }
+
+      const stand = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.25, 0.1), legMat);
+      stand.position.set(0, 1.02, -0.25);
+      desk.add(stand);
+
+      const frame = new THREE.Mesh(new THREE.BoxGeometry(1.15, 0.58, 0.05), new THREE.MeshStandardMaterial({ color: 0x1e293b }));
+      frame.position.set(0, 1.32, -0.24);
+      frame.castShadow = true;
+      desk.add(frame);
+
+      const screenMat = new THREE.MeshBasicMaterial({ color: accentColor });
+      const screen = new THREE.Mesh(new THREE.PlaneGeometry(1.07, 0.50), screenMat);
       screen.position.set(0, 1.32, -0.21);
       desk.add(screen);
       monitorScreens.push({ mesh: screen, baseColor: new THREE.Color(accentColor) });
+
+      const miniPot = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.08, 0.06, 0.11, 10),
+        new THREE.MeshStandardMaterial({ color: 0xd97757 })
+      );
+      miniPot.position.set(0.78, 0.97, 0.18);
+      desk.add(miniPot);
+
+      const succulent = new THREE.Mesh(
+        new THREE.DodecahedronGeometry(0.085),
+        new THREE.MeshStandardMaterial({ color: 0x40916c })
+      );
+      succulent.position.set(0.78, 1.06, 0.18);
+      desk.add(succulent);
+
+      const mug = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.055, 0.055, 0.11, 12),
+        new THREE.MeshStandardMaterial({ color: 0xffffff })
+      );
+      mug.position.set(-0.75, 0.97, 0.22);
+      desk.add(mug);
+
       scene.add(desk);
     }
 
@@ -1036,20 +1214,187 @@
         : new THREE.MeshStandardMaterial({ color: config.shirtColor, roughness: 0.58 });
       const sleeveMat = new THREE.MeshStandardMaterial({ color: config.sleeveColor || config.shirtColor, roughness: 0.58 });
 
+      const leftLeg = new THREE.Group();
+      leftLeg.position.set(-0.14, 0.56, 0);
+      const lLegMesh = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.11, 0.52, 14), pantsMat);
+      lLegMesh.position.y = -0.26;
+      lLegMesh.castShadow = true;
+      const lShoe = new THREE.Mesh(new THREE.SphereGeometry(0.13, 12, 10), new THREE.MeshStandardMaterial({ color: 0x1e293b }));
+      lShoe.scale.set(1, 0.65, 1.35);
+      lShoe.position.set(0, -0.52, 0.04);
+      leftLeg.add(lLegMesh, lShoe);
+      root.add(leftLeg);
+
+      const rightLeg = new THREE.Group();
+      rightLeg.position.set(0.14, 0.56, 0);
+      const rLegMesh = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.11, 0.52, 14), pantsMat);
+      rLegMesh.position.y = -0.26;
+      rLegMesh.castShadow = true;
+      const rShoe = new THREE.Mesh(new THREE.SphereGeometry(0.13, 12, 10), new THREE.MeshStandardMaterial({ color: 0x1e293b }));
+      rShoe.scale.set(1, 0.65, 1.35);
+      rShoe.position.set(0, -0.52, 0.04);
+      rightLeg.add(rLegMesh, rShoe);
+      root.add(rightLeg);
+
       const torso = new THREE.Mesh(new THREE.CylinderGeometry(0.26, 0.31, 0.64, 18), torsoMat);
       torso.position.y = 0.88;
       torso.castShadow = true;
       root.add(torso);
 
+      if (config.hasDarkTie) {
+        const tie = new THREE.Mesh(
+          new THREE.BoxGeometry(0.08, 0.36, 0.04),
+          new THREE.MeshStandardMaterial({ color: 0x090d16, roughness: 0.4 })
+        );
+        tie.position.set(0, 0.94, 0.27);
+        root.add(tie);
+      }
+
+      if (config.hasLanyard) {
+        const card = new THREE.Mesh(
+          new THREE.BoxGeometry(0.14, 0.20, 0.03),
+          new THREE.MeshStandardMaterial({ color: 0xffffff })
+        );
+        card.position.set(0, 0.88, 0.29);
+        root.add(card);
+      }
+
+      const createArm = (xPos) => {
+        const armPivot = new THREE.Group();
+        armPivot.position.set(xPos, 1.14, 0);
+        const upper = new THREE.Mesh(new THREE.CylinderGeometry(0.095, 0.09, 0.34, 12), sleeveMat);
+        upper.position.y = -0.17;
+        upper.castShadow = true;
+        armPivot.add(upper);
+
+        const hand = new THREE.Mesh(new THREE.SphereGeometry(0.10, 12, 12), skinMat);
+        hand.position.y = -0.38;
+        hand.castShadow = true;
+        armPivot.add(hand);
+        root.add(armPivot);
+        return armPivot;
+      };
+      const leftArm = createArm(-0.36);
+      const rightArm = createArm(0.36);
+
       const headGroup = new THREE.Group();
       headGroup.position.y = 1.62;
       const headMesh = new THREE.Mesh(new THREE.SphereGeometry(0.42, 24, 20), skinMat);
+      headMesh.scale.set(1.04, 0.96, 0.98);
       headMesh.castShadow = true;
       headGroup.add(headMesh);
 
+      const eyeWhiteMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
+      const pupilMat = new THREE.MeshBasicMaterial({ color: config.eyeColor || 0x1e1b18 });
+      const browMat = new THREE.MeshStandardMaterial({ color: config.browColor || config.hairColor });
+
+      for (let side of [-1, 1]) {
+        const eyeBase = new THREE.Mesh(new THREE.SphereGeometry(0.068, 12, 12), eyeWhiteMat);
+        eyeBase.scale.set(1, 1.15, 0.5);
+        eyeBase.position.set(side * 0.14, 0.02, 0.37);
+
+        const pupil = new THREE.Mesh(new THREE.SphereGeometry(0.048, 12, 12), pupilMat);
+        pupil.scale.set(1, 1.15, 0.5);
+        pupil.position.set(side * 0.14, 0.02, 0.395);
+
+        const highlight = new THREE.Mesh(new THREE.SphereGeometry(0.016, 8, 8), eyeWhiteMat);
+        highlight.position.set(side * 0.155, 0.045, 0.415);
+
+        const brow = new THREE.Mesh(new THREE.BoxGeometry(0.11, 0.022, 0.02), browMat);
+        brow.position.set(side * 0.14, 0.11, 0.38);
+        brow.rotation.z = side * -0.06;
+
+        headGroup.add(eyeBase, pupil, highlight, brow);
+      }
+
+      if (config.hasBlush) {
+        const blushMat = new THREE.MeshBasicMaterial({ color: 0xf472b6, transparent: true, opacity: 0.45 });
+        for (let side of [-1, 1]) {
+          const blush = new THREE.Mesh(new THREE.CircleGeometry(0.055, 12), blushMat);
+          blush.position.set(side * 0.22, -0.06, 0.36);
+          blush.rotation.y = side * 0.45;
+          headGroup.add(blush);
+        }
+      }
+
+      const smile = new THREE.Mesh(
+        new THREE.TorusGeometry(0.065, 0.014, 8, 16, Math.PI),
+        new THREE.MeshBasicMaterial({ color: config.lipColor || 0x9f1239 })
+      );
+      smile.rotation.z = Math.PI;
+      smile.position.set(0, -0.09, 0.39);
+      headGroup.add(smile);
+
       const hairMat = new THREE.MeshStandardMaterial({ color: config.hairColor, roughness: 0.65 });
-      const hairCap = new THREE.Mesh(new THREE.SphereGeometry(0.445, 22, 18, 0, Math.PI * 2, 0, Math.PI * 0.62), hairMat);
-      headGroup.add(hairCap);
+
+      if (config.hairStyle === 'crawler-beard-bob') {
+        const hairCap = new THREE.Mesh(new THREE.SphereGeometry(0.445, 22, 18, 0, Math.PI * 2, 0, Math.PI * 0.62), hairMat);
+        hairCap.position.set(0, 0.03, -0.02);
+        headGroup.add(hairCap);
+
+        for (let side of [-1, 1]) {
+          const sideHair = new THREE.Mesh(new THREE.BoxGeometry(0.14, 0.68, 0.34), hairMat);
+          sideHair.position.set(side * 0.39, -0.18, -0.03);
+          sideHair.rotation.z = side * -0.08;
+          sideHair.castShadow = true;
+          headGroup.add(sideHair);
+        }
+        const backHair = new THREE.Mesh(new THREE.BoxGeometry(0.76, 0.66, 0.18), hairMat);
+        backHair.position.set(0, -0.18, -0.35);
+        headGroup.add(backHair);
+
+        const beardMat = new THREE.MeshStandardMaterial({ color: 0x1f242d, roughness: 0.85 });
+        const jawBeard = new THREE.Mesh(new THREE.CylinderGeometry(0.36, 0.32, 0.22, 18, 1, false, -Math.PI * 0.42, Math.PI * 0.84), beardMat);
+        jawBeard.position.set(0, -0.22, 0.06);
+        const mustache = new THREE.Mesh(new THREE.BoxGeometry(0.20, 0.045, 0.05), beardMat);
+        mustache.position.set(0, -0.05, 0.40);
+        headGroup.add(jawBeard, mustache);
+
+      } else if (config.hairStyle === 'drafter-long-wavy') {
+        const hairCap = new THREE.Mesh(new THREE.SphereGeometry(0.45, 22, 18, 0, Math.PI * 2, 0, Math.PI * 0.65), hairMat);
+        hairCap.position.set(0, 0.03, -0.02);
+        headGroup.add(hairCap);
+
+        for (let side of [-1, 1]) {
+          const waveStrand = new THREE.Mesh(new THREE.CylinderGeometry(0.11, 0.13, 0.85, 12), hairMat);
+          waveStrand.position.set(side * 0.39, -0.26, -0.04);
+          waveStrand.rotation.z = side * -0.07;
+          waveStrand.castShadow = true;
+          headGroup.add(waveStrand);
+        }
+        const longBack = new THREE.Mesh(new THREE.BoxGeometry(0.82, 0.88, 0.20), hairMat);
+        longBack.position.set(0, -0.28, -0.35);
+        longBack.castShadow = true;
+        headGroup.add(longBack);
+
+      } else if (config.hairStyle === 'auditor-blonde-teal') {
+        const tealMat = new THREE.MeshStandardMaterial({ color: 0x06b6d4, roughness: 0.55 });
+        const blondeCrown = new THREE.Mesh(new THREE.SphereGeometry(0.45, 22, 18, 0, Math.PI * 2, 0, Math.PI * 0.64), hairMat);
+        blondeCrown.position.set(0, 0.03, -0.02);
+        headGroup.add(blondeCrown);
+
+        const sideBangs = new THREE.Mesh(new THREE.BoxGeometry(0.42, 0.26, 0.14), hairMat);
+        sideBangs.position.set(-0.14, 0.24, 0.35);
+        sideBangs.rotation.z = 0.35;
+        headGroup.add(sideBangs);
+
+        for (let side of [-1, 1]) {
+          const upperBlonde = new THREE.Mesh(new THREE.CylinderGeometry(0.11, 0.12, 0.52, 12), hairMat);
+          upperBlonde.position.set(side * 0.39, -0.14, -0.04);
+          upperBlonde.castShadow = true;
+
+          const lowerTeal = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.10, 0.32, 12), tealMat);
+          lowerTeal.position.set(side * 0.40, -0.52, -0.04);
+          lowerTeal.castShadow = true;
+
+          headGroup.add(upperBlonde, lowerTeal);
+        }
+        const backBlonde = new THREE.Mesh(new THREE.BoxGeometry(0.80, 0.55, 0.18), hairMat);
+        backBlonde.position.set(0, -0.15, -0.35);
+        const backTeal = new THREE.Mesh(new THREE.BoxGeometry(0.80, 0.30, 0.18), tealMat);
+        backTeal.position.set(0, -0.55, -0.35);
+        headGroup.add(backBlonde, backTeal);
+      }
 
       root.add(headGroup);
       scene.add(root);
@@ -1057,57 +1402,108 @@
 
       robloxAvatars[config.id] = {
         root,
+        leftLeg,
+        rightLeg,
+        leftArm,
+        rightArm,
         headGroup,
         basePos: new THREE.Vector3(config.x, 0.12, config.z),
         baseRotY: config.rotY,
-        phase: Math.random() * Math.PI * 2
+        phase: Math.random() * Math.PI * 2,
+        workStartTime: 0,
+        lastStatus: 'IDLE'
       };
     }
 
     function buildAllRobloxCharacters() {
       createRobloxCharacter({
         id: 'crawler',
-        x: -2.2, z: -2.3, rotY: Math.PI + Math.PI / 5,
-        skinColor: 0xf5d0b5, shirtColor: 0x111827, pantsColor: 0x0f172a, hairColor: 0x141414
+        x: -2.2,
+        z: -2.3,
+        rotY: Math.PI + Math.PI / 5,
+        skinColor: 0xf5d0b5,
+        shirtColor: 0x111827,
+        pantsColor: 0x0f172a,
+        hairColor: 0x141414,
+        browColor: 0x141414,
+        lipColor: 0x7f1d1d,
+        hairStyle: 'crawler-beard-bob',
+        hasDarkTie: true
       });
+
       createRobloxCharacter({
         id: 'drafter',
-        x: 1.5, z: -3.6, rotY: Math.PI,
-        skinColor: 0xfde2cf, shirtColor: 0x10b981, pantsColor: 0x334155, hairColor: 0x2c1e16
+        x: 1.5,
+        z: -3.6,
+        rotY: Math.PI,
+        skinColor: 0xfde2cf,
+        shirtColor: 0x10b981,
+        pantsColor: 0x334155,
+        hairColor: 0x2c1e16,
+        browColor: 0x3b281e,
+        lipColor: 0xe11d48,
+        hairStyle: 'drafter-long-wavy',
+        hasBlush: true,
+        hasLanyard: true
       });
+
       createRobloxCharacter({
         id: 'auditor',
-        x: 4.1, z: -0.1, rotY: Math.PI - Math.PI / 4,
-        skinColor: 0xfce7d6, torsoTexture: createTenunSweaterTexture(), pantsColor: 0x1e293b, hairColor: 0xf3f4f6
+        x: 4.1,
+        z: -0.1,
+        rotY: Math.PI - Math.PI / 4,
+        skinColor: 0xfce7d6,
+        torsoTexture: createTenunSweaterTexture(),
+        sleeveColor: 0xf8f6f0,
+        pantsColor: 0x1e293b,
+        hairColor: 0xf3f4f6,
+        browColor: 0x9ca3af,
+        lipColor: 0xf43f5e,
+        hairStyle: 'auditor-blonde-teal',
+        hasBlush: true
       });
     }
 
     // =========================================================================
-    // 3. LOGIKA ANIMASI, KECERDASAN OTONOM, CHAT BUBBLE & INTUSI PR
+    // LOOP ANIMASI 3D REAL-TIME (OBROLAN IDLE, SALAMAN & HEADBANG MUSIK)
     // =========================================================================
     const clock = new THREE.Clock();
 
-    function updateChatBubbles3D() {
-      const container = document.getElementById('canvasContainer');
-      if (!container) return;
-      const width = container.clientWidth;
-      const height = container.clientHeight;
-      const tempVector = new THREE.Vector3();
+    function moveCharacterTo(av, targetVec, speed, t, walkFreq = 11) {
+      const dx = targetVec.x - av.root.position.x;
+      const dz = targetVec.z - av.root.position.z;
+      const dist = Math.hypot(dx, dz);
 
-      ['crawler', 'drafter', 'auditor'].forEach(id => {
-        const av = robloxAvatars[id];
-        const bubble = document.getElementById(`bubble-${id}`);
-        if (!av || !bubble) return;
+      if (dist > 0.08) {
+        const step = Math.min(dist, speed);
+        av.root.position.x += (dx / dist) * step;
+        av.root.position.z += (dz / dist) * step;
 
-        tempVector.copy(av.root.position).add(new THREE.Vector3(0, 2.35, 0)).project(camera);
-        if (tempVector.z < 1) {
-          bubble.style.left = `${(tempVector.x * 0.5 + 0.5) * width}px`;
-          bubble.style.top = `${(tempVector.y * -0.5 + 0.5) * height}px`;
-          bubble.classList.remove('hidden');
-        } else {
-          bubble.classList.add('hidden');
-        }
-      });
+        const desiredRot = Math.atan2(dx, dz);
+        let diff = desiredRot - av.root.rotation.y;
+        while (diff > Math.PI) diff -= Math.PI * 2;
+        while (diff < -Math.PI) diff += Math.PI * 2;
+        av.root.rotation.y += diff * 0.15;
+
+        const swing = Math.sin(t * walkFreq) * 0.55;
+        av.leftLeg.rotation.x = swing;
+        av.rightLeg.rotation.x = -swing;
+        av.leftArm.rotation.x = -swing * 0.65;
+        av.rightArm.rotation.x = swing * 0.65;
+        av.rightArm.rotation.z = 0;
+        av.root.position.y = 0.12 + Math.abs(Math.cos(t * walkFreq)) * 0.035;
+        av.headGroup.rotation.set(0, 0, 0);
+        return false;
+      }
+      return true;
+    }
+
+    function faceToward(av, targetVec) {
+      const desiredRot = Math.atan2(targetVec.x - av.root.position.x, targetVec.z - av.root.position.z);
+      let diff = desiredRot - av.root.rotation.y;
+      while (diff > Math.PI) diff -= Math.PI * 2;
+      while (diff < -Math.PI) diff += Math.PI * 2;
+      av.root.rotation.y += diff * 0.15;
     }
 
     function animate3D() {
@@ -1117,148 +1513,213 @@
       if (isCameraTransitioning) {
         camera.position.lerp(targetCamPos, 0.06);
         controls.target.lerp(targetLookAt, 0.06);
-        if (camera.position.distanceTo(targetCamPos) < 0.05) isCameraTransitioning = false;
+        if (camera.position.distanceTo(targetCamPos) < 0.05) {
+          isCameraTransitioning = false;
+        }
       }
+
+      const chatCycle = t % 22;
+      const isChatTime = chatCycle > 9 && chatCycle < 16.5;
+      const chatPairIndex = Math.floor(t / 22) % 3;
+      const chatPairs = [
+        ['crawler', 'drafter'],
+        ['drafter', 'auditor'],
+        ['crawler', 'auditor']
+      ];
+      const activeChatters = chatPairs[chatPairIndex];
+      const chatSpotA = new THREE.Vector3(0.75, 0.12, -1.65);
+      const chatSpotB = new THREE.Vector3(1.65, 0.12, -1.65);
+
+      let activeHandshakeVisitor = null;
+      ['crawler', 'drafter'].forEach((id) => {
+        const av = robloxAvatars[id];
+        const st = (AGENT_META[id].status || 'IDLE').toUpperCase();
+        if (st !== av.lastStatus) {
+          av.lastStatus = st;
+          if (st === 'WORKING') av.workStartTime = t;
+        }
+        if (st === 'WORKING' && (t - av.workStartTime) > 2.2 && !activeHandshakeVisitor) {
+          activeHandshakeVisitor = id;
+        }
+      });
+
+      const auditorHandshakeSpot = new THREE.Vector3(3.95, 0.12, -0.35);
+      const visitorHandshakeSpot = new THREE.Vector3(3.15, 0.12, -0.35);
 
       Object.keys(robloxAvatars).forEach((id) => {
         const av = robloxAvatars[id];
+        const status = (AGENT_META[id].status || 'IDLE').toUpperCase();
         const p = t + av.phase;
 
-        if (isMoshPitActive) {
-          av.headGroup.rotation.x = 0.35 + Math.sin(t * 18) * 0.45;
-          av.root.position.y = av.basePos.y + Math.abs(Math.sin(t * 14)) * 0.18;
+       // Jika sedang idle dan musik metal aktif, ubah jadi Mosh Pit / Headbang brutal!
+if (isMoshPitActive) {
+  // Gerakan Headbang cepat menggunakan fungsi Sinusoidal waktu (t)
+  av.headGroup.rotation.x = 0.35 + Math.sin(t * 18) * 0.45; // Anggukan kepala cepat
+  av.headGroup.rotation.y = Math.sin(t * 12) * 0.3;         // Gelengan kepala kekanan-kekiri
+  
+  // Gerakan tangan mengepal / moshing
+  av.leftArm.rotation.x = -1.2 + Math.sin(t * 16) * 0.5;
+  av.rightArm.rotation.x = -1.2 - Math.sin(t * 16) * 0.5;
+  
+  // Sedikit lompat-lompat kecil (pitted bounce)
+  av.root.position.y = av.basePos.y + Math.abs(Math.sin(t * 14)) * 0.18;
+}
+
+        if (id === 'auditor' && activeHandshakeVisitor) {
+          const arrived = moveCharacterTo(av, auditorHandshakeSpot, 0.04, t);
+          if (arrived) {
+            faceToward(av, visitorHandshakeSpot);
+            av.leftLeg.rotation.x = 0;
+            av.rightLeg.rotation.x = 0;
+            av.leftArm.rotation.x = 0;
+            av.rightArm.rotation.x = -1.15 - Math.sin(t * 9) * 0.18;
+            av.rightArm.rotation.z = -0.15;
+            av.headGroup.rotation.x = -Math.sin(t * 4) * 0.1;
+          }
+          return;
+        }
+
+        if (status === 'WORKING') {
+          const arrived = moveCharacterTo(av, av.basePos, 0.05, t);
+          if (arrived) {
+            av.root.rotation.y += (av.baseRotY - av.root.rotation.y) * 0.15;
+            av.root.position.y = 0.12 + Math.abs(Math.sin(p * 8)) * 0.03;
+            av.leftArm.rotation.x = -0.95 + Math.sin(p * 18) * 0.22;
+            av.rightArm.rotation.x = -0.95 - Math.sin(p * 18) * 0.22;
+            av.rightArm.rotation.z = 0;
+            av.leftLeg.rotation.x = 0;
+            av.rightLeg.rotation.x = 0;
+            av.headGroup.rotation.y = Math.sin(p * 3) * 0.15;
+            av.headGroup.rotation.x = isMusicPlaying ? 0.12 + Math.sin(t * 14) * 0.16 : 0.12;
+          }
+          return;
+        }
+
+        if (status === 'DONE') {
+          const arrived = moveCharacterTo(av, av.basePos, 0.05, t);
+          if (arrived) {
+            av.root.rotation.y += (av.baseRotY - av.root.rotation.y) * 0.15;
+            av.root.position.y = 0.12 + Math.abs(Math.sin(p * 5)) * 0.18;
+            av.rightArm.rotation.x = -2.4 + Math.sin(p * 10) * 0.3;
+            av.rightArm.rotation.z = 0;
+            av.leftArm.rotation.x = Math.sin(p * 4) * 0.15;
+            av.leftLeg.rotation.x = 0;
+            av.rightLeg.rotation.x = 0;
+            av.headGroup.rotation.x = -0.05;
+          }
+          return;
+        }
+
+        if (isChatTime && activeChatters.includes(id)) {
+          const isFirst = activeChatters[0] === id;
+          const myChatSpot = isFirst ? chatSpotA : chatSpotB;
+          const partnerSpot = isFirst ? chatSpotB : chatSpotA;
+
+          const arrived = moveCharacterTo(av, myChatSpot, 0.035, t, 9);
+          if (arrived) {
+            faceToward(av, partnerSpot);
+            av.leftLeg.rotation.x = 0;
+            av.rightLeg.rotation.x = 0;
+            av.rightArm.rotation.z = 0;
+            const talkWave = isFirst ? Math.sin(t * 4.5) : Math.cos(t * 4.5);
+            av.rightArm.rotation.x = -0.45 + Math.max(0, talkWave) * -0.45;
+            av.leftArm.rotation.x = Math.sin(p * 1.5) * 0.1;
+            av.headGroup.rotation.x = Math.sin(t * 5 + (isFirst ? 0 : 2)) * 0.12;
+            av.headGroup.rotation.y = Math.cos(t * 2.5) * 0.12;
+          }
         } else {
-          av.root.position.y = av.basePos.y + Math.sin(p * 2) * 0.02;
-          av.headGroup.rotation.x = 0;
+          const arrived = moveCharacterTo(av, av.basePos, 0.035, t, 9);
+          if (arrived) {
+            av.root.rotation.y += (av.baseRotY - av.root.rotation.y) * 0.12;
+            av.root.position.y = 0.12 + Math.sin(p * 2) * 0.02;
+            av.leftArm.rotation.x = Math.sin(p * 1.8) * 0.08;
+            av.rightArm.rotation.x = -Math.sin(p * 1.8) * 0.08;
+            av.rightArm.rotation.z = 0;
+            av.leftLeg.rotation.x = 0;
+            av.rightLeg.rotation.x = 0;
+            av.headGroup.rotation.y = Math.sin(p * 1.1) * 0.25;
+            av.headGroup.rotation.x = isMusicPlaying ? Math.sin(t * 14) * 0.20 : 0;
+          }
         }
       });
 
       koiFishes.forEach((f, idx) => {
         const ang = t * f.speed + f.angle;
-        f.mesh.position.set(f.centerX + Math.cos(ang) * f.orbitRadius, 0.10, f.centerZ + Math.sin(ang) * (f.orbitRadius * 0.85));
+        const nextAng = ang + (f.speed > 0 ? 0.05 : -0.05);
+        const x = f.centerX + Math.cos(ang) * f.orbitRadius;
+        const z = f.centerZ + Math.sin(ang) * (f.orbitRadius * 0.85);
+        const nx = f.centerX + Math.cos(nextAng) * f.orbitRadius;
+        const nz = f.centerZ + Math.sin(nextAng) * (f.orbitRadius * 0.85);
+
+        f.mesh.position.set(x, 0.10 + Math.sin(t * 2 + idx) * 0.015, z);
+        f.mesh.lookAt(nx, f.mesh.position.y, nz);
+        f.tail.rotation.y = Math.sin(t * 10 + idx) * 0.35;
       });
 
       rabbits.forEach((r, idx) => {
         const ang = t * r.speed + r.angle;
-        r.mesh.position.set(r.centerX + Math.cos(ang) * r.radius, Math.abs(Math.sin(t * 4 + idx)) * 0.14, r.centerZ + Math.sin(ang) * r.radius);
+        const nextAng = ang + (r.speed > 0 ? 0.05 : -0.05);
+        const x = r.centerX + Math.cos(ang) * r.radius;
+        const z = r.centerZ + Math.sin(ang) * r.radius;
+        const nx = r.centerX + Math.cos(nextAng) * r.radius;
+        const nz = r.centerZ + Math.sin(nextAng) * r.radius;
+
+        const hop = Math.abs(Math.sin(t * 4.5 + idx * 1.7)) * 0.16;
+        r.mesh.position.set(x, hop, z);
+        r.mesh.lookAt(nx, hop, nz);
       });
 
       cats.forEach((c, idx) => {
         const ang = t * c.speed + c.angle;
-        c.group.position.set(c.centerX + Math.cos(ang) * c.radius, 0.15, c.centerZ + Math.sin(ang) * c.radius);
+        const nextAng = ang + (c.speed > 0 ? 0.05 : -0.05);
+        const x = c.centerX + Math.cos(ang) * c.radius;
+        const z = c.centerZ + Math.sin(ang) * c.radius;
+        const nx = c.centerX + Math.cos(nextAng) * c.radius;
+        const nz = c.centerZ + Math.sin(nextAng) * c.radius;
+
+        c.group.position.set(x, c.baseY + Math.abs(Math.sin(t * 5 + idx)) * 0.02, z);
+        c.group.lookAt(nx, c.group.position.y, nz);
+        c.tailPivot.rotation.z = Math.sin(t * 3.5 + idx) * 0.35;
       });
 
       if (rainParticles && rainParticles.visible) {
         const pos = rainParticles.geometry.attributes.position.array;
-        for (let i = 1; i < pos.length; i += 3) {
-          pos[i] -= 0.38;
-          if (pos[i] < 0) pos[i] = 14;
+        for (let i = 0; i < pos.length; i += 3) {
+          pos[i] -= 0.04;
+          pos[i + 1] -= 0.38;
+          if (pos[i + 1] < 0) {
+            pos[i] = (Math.random() - 0.5) * 24;
+            pos[i + 1] = 13 + Math.random() * 2;
+          }
         }
         rainParticles.geometry.attributes.position.needsUpdate = true;
       }
 
+      if (snowParticles && snowParticles.visible) {
+        const pos = snowParticles.geometry.attributes.position.array;
+        for (let i = 0; i < pos.length; i += 3) {
+          pos[i] += Math.sin(t * 1.5 + i) * 0.012;
+          pos[i + 1] -= 0.045;
+          if (pos[i + 1] < 0) {
+            pos[i] = (Math.random() - 0.5) * 24;
+            pos[i + 1] = 13 + Math.random() * 2;
+          }
+        }
+        snowParticles.geometry.attributes.position.needsUpdate = true;
+      }
+
+      monitorScreens.forEach((m, idx) => {
+        const pulse = 0.85 + Math.sin(t * 3 + idx) * 0.15;
+        m.mesh.material.color.copy(m.baseColor).multiplyScalar(pulse);
+      });
+
       controls.update();
       renderer.render(scene, camera);
-      updateChatBubbles3D();
     }
 
     // =========================================================================
-    // 4. CHAT INTERAKTIF, INTUSI HUMAS & GEMINI LIVE
+    // 3. KONTROL MENU, KAMERA, 3 MUSIM, 3 MODE WAKTU & POLLING LIVE DATA
     // =========================================================================
-    function switchTab(tab) {
-      const isChat = tab === 'chat';
-      const isBrs = tab === 'brs';
-      const isNews = tab === 'news';
-
-      document.getElementById('panel-chat').classList.toggle('hidden', !isChat);
-      document.getElementById('panel-brs').classList.toggle('hidden', !isBrs);
-      document.getElementById('panel-news').classList.toggle('hidden', !isNews);
-
-      document.getElementById('tab-chat').className = isChat ? 'py-2.5 text-center border-b-2 border-teal-600 text-teal-700 bg-white' : 'py-2.5 text-center border-b-2 border-transparent text-slate-500 hover:text-slate-800';
-      document.getElementById('tab-brs').className = isBrs ? 'py-2.5 text-center border-b-2 border-emerald-600 text-emerald-700 bg-white' : 'py-2.5 text-center border-b-2 border-transparent text-slate-500 hover:text-slate-800';
-      document.getElementById('tab-news').className = isNews ? 'py-2.5 text-center border-b-2 border-sky-600 text-sky-700 bg-white' : 'py-2.5 text-center border-b-2 border-transparent text-slate-500 hover:text-slate-800';
-    }
-
-    function sendUserMessage() {
-      const input = document.getElementById('userInput');
-      const text = input.value.trim();
-      if (!text) return;
-
-      const chatHistory = document.getElementById('chatHistory');
-      chatHistory.innerHTML += `
-        <div class="flex justify-end">
-          <div class="bg-slate-900 text-white rounded-2xl p-3 max-w-[85%] space-y-1 shadow-sm">
-            <p class="font-extrabold text-[10px] text-teal-400">Anda (Pranata Humas):</p>
-            <p>${text}</p>
-          </div>
-        </div>
-      `;
-      input.value = '';
-      chatHistory.scrollTop = chatHistory.scrollHeight;
-
-      addLog(`[USER CHAT] Mengirim instruksi ke agen otonom: "${text}"`, 'work');
-      setTimeout(() => { triggerAutonomousAgentResponse(text); }, 1200);
-    }
-
-    function triggerAutonomousAgentResponse(userQuery) {
-      const chatHistory = document.getElementById('chatHistory');
-
-      // Set chat bubble 3D otonom
-      setAgentSpeechBubble('crawler', '🔍 Menganalisis isu & sentimen...');
-      setAgentSpeechBubble('drafter', '✍️ Menyiapkan format draf BRS...');
-      setAgentSpeechBubble('auditor', '🛡️ Memvalidasi intuisi PR...');
-
-      setTimeout(() => {
-        setAgentSpeechBubble('crawler', '✓ Isu tervalidasi di RSS');
-        setAgentSpeechBubble('drafter', '✓ Naskah disesuaikan data');
-        setAgentSpeechBubble('auditor', '★ Intuisi Humas: Aman & Kredibel', true);
-
-        chatHistory.innerHTML += `
-          <div class="flex justify-start">
-            <div class="bg-teal-50 border border-teal-200 rounded-2xl p-3 max-w-[85%] space-y-1 text-slate-800 shadow-sm">
-              <p class="font-extrabold text-[10px] text-teal-800">🤖 Tim Agen Otonom Humas BPS Lampung:</p>
-              <p>Arahan "${userQuery}" telah dianalisis dengan <strong>Intuisi Humas</strong>. Draf penjelas, sentimen media, dan key message publik telah diselaraskan dengan standar BPS.</p>
-            </div>
-          </div>
-        `;
-        chatHistory.scrollTop = chatHistory.scrollHeight;
-        addLog('[AUTONOMOUS] Konsensus agen otonom selesai & tervalidasi.', 'success');
-      }, 3500);
-    }
-
-    function setAgentSpeechBubble(id, text, isIntuition = false) {
-      const bubble = document.getElementById(`bubble-${id}`);
-      if (!bubble) return;
-      bubble.textContent = text;
-      bubble.classList.remove('hidden', 'intuition-bubble');
-      if (isIntuition) bubble.classList.add('intuition-bubble');
-    }
-
-    function toggleGeminiLive() {
-      isLiveActive = !isLiveActive;
-      const panel = document.getElementById('liveAudioPanel');
-      const btnText = document.getElementById('liveText');
-      const btnIcon = document.getElementById('liveIcon');
-
-      if (isLiveActive) {
-        panel.classList.remove('hidden');
-        btnText.textContent = 'Akhiri Gemini Live';
-        btnIcon.textContent = '🔴';
-        setAgentSpeechBubble('crawler', '🎙️ Live: Mendengarkan...');
-        setAgentSpeechBubble('drafter', '🎙️ Live: Siap merespon...');
-        setAgentSpeechBubble('auditor', '🎙️ Intuisi Suara Aktif', true);
-        addLog('🎙️ Gemini Live Audio & Sistem Intuisi Humas aktif via mikrofon.', 'work');
-      } else {
-        panel.classList.add('hidden');
-        btnText.textContent = 'Gemini Live Audio';
-        btnIcon.textContent = '🎙️';
-        setAgentSpeechBubble('crawler', 'Memantau RSS...');
-        setAgentSpeechBubble('drafter', 'Menyiapkan draf BRS...');
-        setAgentSpeechBubble('auditor', 'Validasi data & PR...');
-        addLog('⏹️ Sesi Gemini Live Audio diakhiri.', 'info');
-      }
-    }
-
     function toggleSeasonMode() {
       seasonModeIndex = (seasonModeIndex + 1) % 3;
       const btn = document.getElementById('btnSeason');
@@ -1268,19 +1729,50 @@
       if (seasonModeIndex === 0) {
         rainParticles.visible = false;
         snowParticles.visible = false;
+        grassFloorMesh.material.map = summerGrassTex;
+        grassFloorMesh.material.needsUpdate = true;
+        pondWaterMesh.material.color.setHex(0x0ea5e9);
+
+        treeFoliageMeshes.forEach(item => {
+          item.mesh.material.color.copy(item.summerColor);
+        });
+
         btn.className = 'px-3 py-1.5 rounded-xl bg-lime-50 hover:bg-lime-100 text-lime-800 border border-lime-300 text-xs font-bold transition flex items-center gap-1.5';
-        icon.textContent = '🌤️'; text.textContent = 'Musim Panas';
+        icon.textContent = '🌤️';
+        text.textContent = 'Musim Panas';
+        addLog('Cuaca diubah ke Musim Panas: Taman hijau cerah & langit hangat.', 'info');
       } else if (seasonModeIndex === 1) {
         rainParticles.visible = true;
         snowParticles.visible = false;
-        btn.className = 'px-3 py-1.5 rounded-xl bg-sky-100 text-sky-900 border border-sky-300 text-xs font-bold transition flex items-center gap-1.5';
-        icon.textContent = '🌧️'; text.textContent = 'Musim Hujan';
+        grassFloorMesh.material.map = summerGrassTex;
+        grassFloorMesh.material.needsUpdate = true;
+        pondWaterMesh.material.color.setHex(0x0284c7);
+
+        treeFoliageMeshes.forEach(item => {
+          item.mesh.material.color.copy(item.summerColor).multiplyScalar(0.82);
+        });
+
+        btn.className = 'px-3 py-1.5 rounded-xl bg-sky-100 hover:bg-sky-200 text-sky-900 border border-sky-300 text-xs font-bold transition flex items-center gap-1.5';
+        icon.textContent = '🌧️';
+        text.textContent = 'Musim Hujan';
+        addLog('Cuaca diubah ke Musim Hujan: Rintik hujan turun di taman studio.', 'work');
       } else {
         rainParticles.visible = false;
         snowParticles.visible = true;
-        btn.className = 'px-3 py-1.5 rounded-xl bg-cyan-50 text-cyan-900 border border-cyan-300 text-xs font-bold transition flex items-center gap-1.5';
-        icon.textContent = '❄️'; text.textContent = 'Musim Salju';
+        grassFloorMesh.material.map = winterSnowTex;
+        grassFloorMesh.material.needsUpdate = true;
+        pondWaterMesh.material.color.setHex(0x7dd3fc);
+
+        treeFoliageMeshes.forEach(item => {
+          item.mesh.material.color.setHex(0xf1f5f9);
+        });
+
+        btn.className = 'px-3 py-1.5 rounded-xl bg-cyan-50 hover:bg-cyan-100 text-cyan-900 border border-cyan-300 text-xs font-bold transition flex items-center gap-1.5';
+        icon.textContent = '❄️';
+        text.textContent = 'Musim Salju';
+        addLog('Cuaca diubah ke Musim Salju: Salju turun menyelimuti taman & pepohonan.', 'info');
       }
+      applyCurrentSkyAndLighting();
     }
 
     function toggleLightingMode() {
@@ -1290,11 +1782,55 @@
       const btnText = document.getElementById('lightingText');
 
       if (lightingModeIndex === 0) {
-        btnIcon.textContent = '☀️'; btnText.textContent = 'Pagi Cerah';
+        btn.className = 'px-3 py-1.5 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 text-xs font-bold transition flex items-center gap-1.5';
+        btnIcon.textContent = '☀️';
+        btnText.textContent = 'Pagi Cerah';
       } else if (lightingModeIndex === 1) {
-        btnIcon.textContent = '🌇'; btnText.textContent = 'Golden Hour Sore';
+        btn.className = 'px-3 py-1.5 rounded-xl bg-orange-100 hover:bg-orange-200 text-orange-900 border border-orange-300 text-xs font-bold transition flex items-center gap-1.5';
+        btnIcon.textContent = '🌇';
+        btnText.textContent = 'Golden Hour Sore';
       } else {
-        btnIcon.textContent = '🌙'; btnText.textContent = 'Malam Studio';
+        btn.className = 'px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-amber-300 border border-slate-700 text-xs font-bold transition flex items-center gap-1.5';
+        btnIcon.textContent = '🌙';
+        btnText.textContent = 'Malam Studio';
+      }
+      applyCurrentSkyAndLighting();
+    }
+
+    function applyCurrentSkyAndLighting() {
+      if (lightingModeIndex === 0) {
+        let skyHex = 0xe6f2e8;
+        if (seasonModeIndex === 1) skyHex = 0xcbd5e1;
+        if (seasonModeIndex === 2) skyHex = 0xe0f2fe;
+        scene.background = new THREE.Color(skyHex);
+        scene.fog.color = new THREE.Color(skyHex);
+        ambientLight.color.setHex(0xfffaf0);
+        ambientLight.intensity = seasonModeIndex === 1 ? 0.68 : 0.85;
+        sunLight.color.setHex(0xfff5e4);
+        sunLight.intensity = seasonModeIndex === 1 ? 0.55 : 0.98;
+        warmLampLight.intensity = seasonModeIndex === 1 ? 0.85 : 0.45;
+        pondLight.intensity = 0.35;
+      } else if (lightingModeIndex === 1) {
+        let skyHex = 0xfde8d0;
+        if (seasonModeIndex === 1) skyHex = 0x94a3b8;
+        if (seasonModeIndex === 2) skyHex = 0xfce7f3;
+        scene.background = new THREE.Color(skyHex);
+        scene.fog.color = new THREE.Color(skyHex);
+        ambientLight.color.setHex(0xfff0db);
+        ambientLight.intensity = 0.72;
+        sunLight.color.setHex(0xffb36b);
+        sunLight.intensity = seasonModeIndex === 1 ? 0.55 : 1.05;
+        warmLampLight.intensity = 0.95;
+        pondLight.intensity = 0.55;
+      } else {
+        scene.background = new THREE.Color(0x0f172a);
+        scene.fog.color = new THREE.Color(0x0f172a);
+        ambientLight.color.setHex(0x334155);
+        ambientLight.intensity = 0.46;
+        sunLight.color.setHex(0x60a5fa);
+        sunLight.intensity = 0.35;
+        warmLampLight.intensity = 1.75;
+        pondLight.intensity = 1.35;
       }
     }
 
@@ -1303,7 +1839,9 @@
         btn.className = 'cam-btn px-2.5 py-1 rounded-lg text-[11px] font-bold bg-white text-slate-600 border border-stone-200 hover:bg-stone-100 transition';
       });
       const activeBtn = document.getElementById(`cam-${mode}`);
-      if (activeBtn) activeBtn.className = 'cam-btn px-2.5 py-1 rounded-lg text-[11px] font-bold bg-slate-900 text-white transition';
+      if (activeBtn) {
+        activeBtn.className = 'cam-btn px-2.5 py-1 rounded-lg text-[11px] font-bold bg-slate-900 text-white transition';
+      }
 
       if (mode === 'overview') {
         targetCamPos.set(9.5, 8.2, 11.8);
@@ -1329,7 +1867,7 @@
       document.getElementById('selRoleBadge').textContent = `${meta.role} • ${meta.status}`;
       document.getElementById('selAgentName').textContent = meta.name;
       document.getElementById('selAgentDesc').textContent = meta.desc;
-      document.getElementById('selAgentStatusMsg').textContent = `${meta.pesan} | Intuisi: ${meta.intuisi}`;
+      document.getElementById('selAgentStatusMsg').textContent = meta.pesan;
     }
 
     function closeAgentOverlay() {
@@ -1361,7 +1899,9 @@
       logBox.scrollTop = logBox.scrollHeight;
     }
 
-    function clearLogs() { document.getElementById('terminalLog').innerHTML = ''; }
+    function clearLogs() {
+      document.getElementById('terminalLog').innerHTML = '';
+    }
 
     function updateAgentUI(agentId, status, pesan, updatedAt, outputUrl) {
       const cleanStatus = (status || 'IDLE').toUpperCase();
@@ -1380,9 +1920,15 @@
       if (badge) {
         badge.textContent = cleanStatus;
         badge.className = 'px-2 py-0.5 rounded-md text-[10px] font-extrabold ';
-        if (cleanStatus === 'WORKING') badge.className += 'bg-sky-100 text-sky-800 border border-sky-300 animate-pulse';
-        else if (cleanStatus === 'DONE') badge.className += 'bg-emerald-100 text-emerald-800 border border-emerald-300';
-        else badge.className += 'bg-stone-100 text-slate-600';
+        if (cleanStatus === 'WORKING') {
+          badge.className += 'bg-sky-100 text-sky-800 border border-sky-300 animate-pulse';
+        } else if (cleanStatus === 'DONE') {
+          badge.className += 'bg-emerald-100 text-emerald-800 border border-emerald-300';
+        } else if (cleanStatus === 'ERROR') {
+          badge.className += 'bg-rose-100 text-rose-800 border border-rose-300';
+        } else {
+          badge.className += 'bg-stone-100 text-slate-600';
+        }
       }
 
       if (outputUrl && outputUrl.startsWith('http')) {
@@ -1396,25 +1942,25 @@
       const btn = document.getElementById('btnSimulasi');
       btn.disabled = true;
       btn.classList.add('opacity-50');
-      addLog('Memulai simulasi otonom 3 AI Agent & Intuisi PR...', 'work');
+      addLog('Memulai simulasi kerja 3 AI Agent (termasuk salaman dengan Auditor)...', 'work');
 
       updateAgentUI('crawler', 'WORKING', 'Memindai Google News RSS ("BPS Provinsi Lampung")...', 'Baru saja');
-      updateAgentUI('drafter', 'WORKING', 'Menyusun draf siaran pers & key message...', 'Baru saja');
+      updateAgentUI('drafter', 'WORKING', 'Mengekstrak bahan tayang PPTX & menyusun narasi BRS...', 'Baru saja');
 
       setTimeout(() => {
-        addLog('[CRAWLER] Analisis sentimen media selesai. Isu positif teridentifikasi.', 'work');
-        updateAgentUI('crawler', 'DONE', 'Selesai memindai media.', 'Baru saja');
+        addLog('[CRAWLER] 4 berita baru terklasifikasi sentimennya & dilaporkan ke Auditor.', 'work');
+        updateAgentUI('crawler', 'DONE', 'Selesai: 4 berita baru terklasifikasi.', 'Baru saja');
       }, 4500);
 
       setTimeout(() => {
-        addLog('[DRAFTER] Naskah BRS tervalidasi dengan data storytelling.', 'work');
-        updateAgentUI('drafter', 'DONE', 'Draf siaran pers selesai.', 'Baru saja');
-        updateAgentUI('auditor', 'WORKING', 'Auditor & PR menguji intuisi krisis & presisi angka...', 'Baru saja');
+        addLog('[DRAFTER] Draf Siaran Pers selesai disusun & diserahkan ke Auditor.', 'work');
+        updateAgentUI('drafter', 'DONE', 'Draf siaran pers selesai disusun.', 'Baru saja');
+        updateAgentUI('auditor', 'WORKING', 'Auditor memeriksa presisi angka y-on-y & q-to-q...', 'Baru saja');
       }, 8200);
 
       setTimeout(() => {
-        addLog('[AUDITOR] Validasi intuisi & presisi angka sukses. Siap rilis publik!', 'success');
-        updateAgentUI('auditor', 'DONE', 'Lolos audit & intuisi PR.', 'Baru saja');
+        addLog('[AUDITOR] Validasi angka lulus (zero margin of error). Siap rilis!', 'success');
+        updateAgentUI('auditor', 'DONE', 'Lolos audit angka & siap publikasi.', 'Baru saja');
         btn.disabled = false;
         btn.classList.remove('opacity-50');
       }, 11500);
@@ -1423,7 +1969,9 @@
     function normalizeApiUrl(rawUrl) {
       let url = rawUrl.trim();
       if (!url) return '';
-      if (!url.includes('mode=agents')) url += (url.includes('?') ? '&' : '?') + 'mode=agents';
+      if (!url.includes('mode=agents')) {
+        url += (url.includes('?') ? '&' : '?') + 'mode=agents';
+      }
       return url;
     }
 
@@ -1461,7 +2009,12 @@
           const res = await fetch(url);
           const data = await res.json();
           if (data.status === 'ok' && Array.isArray(data.agents)) {
-            data.agents.forEach(ag => { updateAgentUI(ag.id, ag.status, ag.pesan, ag.updated_at, ag.output_url); });
+            data.agents.forEach(ag => {
+              updateAgentUI(ag.id, ag.status, ag.pesan, ag.updated_at, ag.output_url);
+            });
+            if (Array.isArray(data.news) && data.news.length > 0) {
+              renderNewsList(data.news);
+            }
             const nowStr = new Date().toLocaleTimeString('id-ID', { hour12: false });
             document.getElementById('lastSyncText').textContent = `Live Sync: ${nowStr}`;
           }
@@ -1472,6 +2025,69 @@
 
       fetchState();
       pollingInterval = setInterval(fetchState, 8000);
+    }
+
+    function formatTanggalID(rawDate) {
+      if (!rawDate || rawDate === '-') return '-';
+      const str = String(rawDate).trim();
+      if (/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(str)) {
+        const [dd, mm, yyyy] = str.split('/');
+        const d = new Date(Number(yyyy), Number(mm) - 1, Number(dd));
+        return d.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+      }
+      const parsed = new Date(str);
+      if (!isNaN(parsed.getTime())) {
+        return parsed.toLocaleDateString('id-ID', {
+          timeZone: 'Asia/Jakarta',
+          day: 'numeric',
+          month: 'long',
+          year: 'numeric'
+        });
+      }
+      return str;
+    }
+
+    function renderNewsList(newsItems) {
+      const container = document.getElementById('newsListContainer');
+      container.innerHTML = newsItems.map(item => {
+        const analisisText = String(item.analisis || '');
+        let sentimen = 'Netral';
+        let badgeStyle = 'bg-stone-100 text-slate-700';
+        if (/positif/i.test(analisisText)) {
+          sentimen = 'Positif';
+          badgeStyle = 'bg-emerald-100 text-emerald-800';
+        } else if (/negatif/i.test(analisisText)) {
+          sentimen = 'Negatif';
+          badgeStyle = 'bg-rose-100 text-rose-800';
+        }
+        const tanggalRapi = formatTanggalID(item.tanggal);
+        return `
+          <div class="bg-stone-50 border border-stone-200 rounded-2xl p-3 space-y-1.5 hover:border-sky-300 transition">
+            <div class="flex items-center justify-between gap-2">
+              <span class="text-[10px] font-mono-code text-slate-500">${tanggalRapi} • ${item.media || 'Media'}</span>
+              <span class="px-2 py-0.5 rounded-md text-[10px] font-bold ${badgeStyle}">${sentimen}</span>
+            </div>
+            <a href="${item.link || '#'}" target="_blank" class="block text-xs font-extrabold text-slate-900 hover:text-sky-600 leading-snug transition">
+              ${item.judul || '(Tanpa Judul)'} ↗
+            </a>
+            <p class="text-[11px] text-slate-600 whitespace-pre-line leading-relaxed">${analisisText}</p>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function switchTab(tab) {
+      const isBrs = tab === 'brs';
+      document.getElementById('panel-brs').classList.toggle('hidden', !isBrs);
+      document.getElementById('panel-news').classList.toggle('hidden', isBrs);
+
+      document.getElementById('tab-brs').className = isBrs
+        ? 'py-2.5 text-center border-b-2 border-emerald-600 text-emerald-700 bg-white'
+        : 'py-2.5 text-center border-b-2 border-transparent text-slate-500 hover:text-slate-800';
+
+      document.getElementById('tab-news').className = !isBrs
+        ? 'py-2.5 text-center border-b-2 border-sky-600 text-sky-700 bg-white'
+        : 'py-2.5 text-center border-b-2 border-transparent text-slate-500 hover:text-slate-800';
     }
 
     function copyPressRelease() {
