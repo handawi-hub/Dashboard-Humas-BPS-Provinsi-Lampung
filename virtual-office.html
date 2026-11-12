@@ -175,7 +175,7 @@
           <button onclick="clearLogs()" class="text-[11px] font-semibold text-slate-400 hover:text-slate-700">Bersihkan Log</button>
         </div>
         <div id="terminalLog" class="font-mono-code text-[11px] text-slate-700 space-y-1 max-h-32 overflow-y-auto bg-stone-50 p-2.5 rounded-xl border border-stone-200/80">
-          <div class="text-slate-500">[SYSTEM] Studio Semi-Outdoor siap. Kolam ikan, kelinci, kucing & pengatur musim aktif.</div>
+          <div class="text-slate-500">[SYSTEM] Studio Semi-Outdoor atap kaca siap. Interaksi obrolan & salaman aktif.</div>
         </div>
       </div>
     </section>
@@ -328,7 +328,6 @@
     const rabbits = [];
     const cats = [];
 
-    // Objek lingkungan yang berubah sesuai musim
     let grassFloorMesh = null;
     let summerGrassTex = null;
     let winterSnowTex = null;
@@ -370,7 +369,6 @@
       controls.target.copy(targetLookAt);
       controls.addEventListener('start', () => { isCameraTransitioning = false; });
 
-      // Pencahayaan Alami Studio & Taman
       ambientLight = new THREE.AmbientLight(0xfffaf0, 0.82);
       scene.add(ambientLight);
 
@@ -404,7 +402,6 @@
       buildAllWorkstations();
       buildAllRobloxCharacters();
 
-      // Raycaster klik pada karakter
       const raycaster = new THREE.Raycaster();
       const mouse = new THREE.Vector2();
       let downX = 0, downY = 0;
@@ -444,7 +441,6 @@
       renderer.setSize(container.clientWidth, container.clientHeight);
     }
 
-    // Tekstur Prosedural (Parket Kayu, Rumput Hijau, Salju Putih, Sweater Tenun, Lukisan)
     function createWoodFloorTexture() {
       const c = document.createElement('canvas');
       c.width = 512; c.height = 512;
@@ -621,13 +617,12 @@
     }
 
     // =========================================================================
-    // ARSITEKTUR SEMI-OUTDOOR & TAMAN RUMPUT HIJAU LUAS
+    // ARSITEKTUR SEMI-OUTDOOR DENGAN ATAP KACA POLOS TRANSPARAN
     // =========================================================================
     function buildSemiOutdoorArchitecture() {
       summerGrassTex = createGrassTexture();
       winterSnowTex = createSnowGroundTexture();
 
-      // 1. Hamparan Tanah Taman (Bisa berubah rumput hijau / salju putih)
       grassFloorMesh = new THREE.Mesh(
         new THREE.PlaneGeometry(24, 22),
         new THREE.MeshStandardMaterial({ map: summerGrassTex, roughness: 0.9 })
@@ -636,7 +631,6 @@
       grassFloorMesh.receiveShadow = true;
       scene.add(grassFloorMesh);
 
-      // 2. Dek Lantai Kayu Studio Semi-Outdoor (Posisi Kanan-Belakang)
       const deckBase = new THREE.Mesh(
         new THREE.BoxGeometry(11.5, 0.12, 8.8),
         new THREE.MeshStandardMaterial({ map: createWoodFloorTexture(), roughness: 0.6 })
@@ -645,7 +639,6 @@
       deckBase.receiveShadow = true;
       scene.add(deckBase);
 
-      // Karpet Zonasi Tiap Agent di Atas Dek
       const addRug = (w, d, color, x, z) => {
         const rug = new THREE.Mesh(
           new THREE.BoxGeometry(w, 0.025, d),
@@ -659,7 +652,6 @@
       addRug(3.6, 3.0, 0xdcfce7, 1.5, -3.9);
       addRug(3.6, 3.2, 0xfef3c7, 4.6, -0.3);
 
-      // 3. Dinding Belakang Studio & Tiang Pergola Kayu Terbuka
       const wallMat = new THREE.MeshStandardMaterial({ color: 0xfbf9f5, roughness: 0.85 });
       const backWall = new THREE.Mesh(new THREE.BoxGeometry(11.5, 4.2, 0.25), wallMat);
       backWall.position.set(1.4, 2.1, -6.8);
@@ -671,24 +663,25 @@
       rightWall.receiveShadow = true;
       scene.add(rightWall);
 
+      // Pilar Kayu Sudut Studio
       const pillarMat = new THREE.MeshStandardMaterial({ color: 0x78350f, roughness: 0.6 });
       const pillarCoords = [
-        [-4.2, -6.6], [-4.2, -2.4], [-4.2, 1.7],
-        [1.4, 1.7], [6.9, 1.7]
+        [-4.2, -6.6], [-4.2, 1.7], [6.9, 1.7]
       ];
       pillarCoords.forEach(([px, pz]) => {
-        const pillar = new THREE.Mesh(new THREE.BoxGeometry(0.22, 4.1, 0.22), pillarMat);
+        const pillar = new THREE.Mesh(new THREE.BoxGeometry(0.20, 4.1, 0.20), pillarMat);
         pillar.position.set(px, 2.05, pz);
         pillar.castShadow = true;
         scene.add(pillar);
       });
-// Atap Kanopi Kaca Polos Transparan Penuh (Skylight)
+
+      // ATAP KACA POLOS TRANSPARAN PENUH (SKYLIGHT TANPA BALOK PENGHALANG)
       const glassRoof = new THREE.Mesh(
         new THREE.BoxGeometry(11.35, 0.05, 8.55),
         new THREE.MeshPhysicalMaterial({
           color: 0xe0f2fe,
           transparent: true,
-          opacity: 0.22,
+          opacity: 0.20,
           roughness: 0.08,
           metalness: 0.05,
           depthWrite: false
@@ -803,7 +796,6 @@
         scene.add(blossom);
       }
 
-      // KOLAM IKAN KOI HIDUP
       const pondX = -5.5, pondZ = 4.2, pondRadius = 2.15;
 
       const pondBed = new THREE.Mesh(
@@ -887,7 +879,6 @@
     // SISTEM CUACA 3D: PARTIKEL HUJAN & SALJU
     // =========================================================================
     function buildWeatherSystems() {
-      // 1. SISTEM PARTIKEL HUJAN (Tetesan air jatuh cepat)
       const rainCount = 1200;
       const rainGeo = new THREE.BufferGeometry();
       const rainPositions = new Float32Array(rainCount * 3);
@@ -907,7 +898,6 @@
       rainParticles.visible = false;
       scene.add(rainParticles);
 
-      // 2. SISTEM PARTIKEL SALJU (Kepingan salju melayang lembut)
       const snowCount = 950;
       const snowGeo = new THREE.BufferGeometry();
       const snowPositions = new Float32Array(snowCount * 3);
@@ -1046,7 +1036,7 @@
     }
 
     // =========================================================================
-    // MEJA KERJA & 3 KARAKTER CHIBI
+    // MEJA KERJA & 3 KARAKTER CHIBI INTERAKTIF
     // =========================================================================
     function buildDeskSetup(x, z, rotY, accentColor) {
       const desk = new THREE.Group();
@@ -1315,7 +1305,7 @@
       scene.add(root);
       clickableObjects.push(root);
 
-    robloxAvatars[config.id] = {
+      robloxAvatars[config.id] = {
         root,
         leftLeg,
         rightLeg,
@@ -1328,6 +1318,7 @@
         workStartTime: 0,
         lastStatus: 'IDLE'
       };
+    }
 
     function buildAllRobloxCharacters() {
       createRobloxCharacter({
@@ -1341,7 +1332,7 @@
         hairColor: 0x141414,
         browColor: 0x141414,
         lipColor: 0x7f1d1d,
-        hairStyle: 'crawler-curly',
+        hairStyle: 'crawler-beard-bob',
         hasDarkTie: true
       });
 
@@ -1379,17 +1370,10 @@
     }
 
     // =========================================================================
-    // LOOP ANIMASI 3D REAL-TIME (AGENT, IKAN, KELINCI, KUCING & CUACA MUSIM)
-    // =========================================================================
-    // =========================================================================
-    // LOOP ANIMASI 3D REAL-TIME (INTERAKSI OBROLAN IDLE & SALAMAN AUDITOR)
-    // =========================================================================
-   // =========================================================================
     // LOOP ANIMASI 3D REAL-TIME (INTERAKSI OBROLAN IDLE & SALAMAN AUDITOR)
     // =========================================================================
     const clock = new THREE.Clock();
 
-    // Helper: Menggerakkan karakter berjalan mulus menuju titik tujuan
     function moveCharacterTo(av, targetVec, speed, t, walkFreq = 11) {
       const dx = targetVec.x - av.root.position.x;
       const dz = targetVec.z - av.root.position.z;
@@ -1400,27 +1384,25 @@
         av.root.position.x += (dx / dist) * step;
         av.root.position.z += (dz / dist) * step;
 
-        // Putar badan menghadap arah jalan secara mulus
         const desiredRot = Math.atan2(dx, dz);
         let diff = desiredRot - av.root.rotation.y;
         while (diff > Math.PI) diff -= Math.PI * 2;
         while (diff < -Math.PI) diff += Math.PI * 2;
         av.root.rotation.y += diff * 0.15;
 
-        // Animasi ayunan kaki & tangan saat berjalan
         const swing = Math.sin(t * walkFreq) * 0.55;
         av.leftLeg.rotation.x = swing;
         av.rightLeg.rotation.x = -swing;
         av.leftArm.rotation.x = -swing * 0.65;
         av.rightArm.rotation.x = swing * 0.65;
+        av.rightArm.rotation.z = 0;
         av.root.position.y = 0.12 + Math.abs(Math.cos(t * walkFreq)) * 0.035;
         av.headGroup.rotation.set(0, 0, 0);
-        return false; // Masih berjalan
+        return false;
       }
-      return true; // Sudah sampai di titik tujuan
+      return true;
     }
 
-    // Helper: Memutar tubuh karakter menghadap lawan bicara/salaman
     function faceToward(av, targetVec) {
       const desiredRot = Math.atan2(targetVec.x - av.root.position.x, targetVec.z - av.root.position.z);
       let diff = desiredRot - av.root.rotation.y;
@@ -1442,7 +1424,6 @@
       }
 
       // Jadwal Otomatis Obrolan Santai Saat IDLE (Siklus 22 detik)
-      // Detik 0-9: Stay di meja | Detik 9-16: Mengobrol berdua | Detik 16-22: Kembali ke meja
       const chatCycle = t % 22;
       const isChatTime = chatCycle > 9 && chatCycle < 16.5;
       const chatPairIndex = Math.floor(t / 22) % 3;
@@ -1455,7 +1436,7 @@
       const chatSpotA = new THREE.Vector3(0.75, 0.12, -1.65);
       const chatSpotB = new THREE.Vector3(1.65, 0.12, -1.65);
 
-      // Cek apakah ada pekerja (Crawler/Drafter) yang sedang menghampiri Auditor untuk salaman
+      // Cek apakah pekerja berjalan melapor & salaman dengan Auditor saat WORKING
       let activeHandshakeVisitor = null;
       ['crawler', 'drafter'].forEach((id) => {
         const av = robloxAvatars[id];
@@ -1464,7 +1445,6 @@
           av.lastStatus = st;
           if (st === 'WORKING') av.workStartTime = t;
         }
-        // Setelah 2.2 detik mengetik saat WORKING, berjalan melapor & salaman ke Auditor
         if (st === 'WORKING' && (t - av.workStartTime) > 2.2 && !activeHandshakeVisitor) {
           activeHandshakeVisitor = id;
         }
@@ -1473,13 +1453,11 @@
       const auditorHandshakeSpot = new THREE.Vector3(3.95, 0.12, -0.35);
       const visitorHandshakeSpot = new THREE.Vector3(3.15, 0.12, -0.35);
 
-      // Animasi 3 AI Agent Chibi
       Object.keys(robloxAvatars).forEach((id) => {
         const av = robloxAvatars[id];
         const status = (AGENT_META[id].status || 'IDLE').toUpperCase();
         const p = t + av.phase;
 
-        // KASUS 1: SEDANG SALAMAN DENGAN AUDITOR SAAT WORKING
         if (activeHandshakeVisitor === id) {
           const arrived = moveCharacterTo(av, visitorHandshakeSpot, 0.045, t);
           if (arrived) {
@@ -1487,7 +1465,6 @@
             av.leftLeg.rotation.x = 0;
             av.rightLeg.rotation.x = 0;
             av.leftArm.rotation.x = 0;
-            // Ulurkan tangan kanan & berjabat tangan naik-turun
             av.rightArm.rotation.x = -1.15 + Math.sin(t * 9) * 0.18;
             av.rightArm.rotation.z = -0.15;
             av.headGroup.rotation.x = Math.sin(t * 4) * 0.1;
@@ -1502,7 +1479,6 @@
             av.leftLeg.rotation.x = 0;
             av.rightLeg.rotation.x = 0;
             av.leftArm.rotation.x = 0;
-            // Auditor membalas jabat tangan
             av.rightArm.rotation.x = -1.15 - Math.sin(t * 9) * 0.18;
             av.rightArm.rotation.z = -0.15;
             av.headGroup.rotation.x = -Math.sin(t * 4) * 0.1;
@@ -1510,7 +1486,6 @@
           return;
         }
 
-        // KASUS 2: STATUS WORKING (Mengetik Aktif di Meja Kerja)
         if (status === 'WORKING') {
           const arrived = moveCharacterTo(av, av.basePos, 0.05, t);
           if (arrived) {
@@ -1527,7 +1502,6 @@
           return;
         }
 
-        // KASUS 3: STATUS DONE (Selebrasi Melompat Riang di Meja)
         if (status === 'DONE') {
           const arrived = moveCharacterTo(av, av.basePos, 0.05, t);
           if (arrived) {
@@ -1543,7 +1517,6 @@
           return;
         }
 
-        // KASUS 4: STATUS IDLE (Stay di meja, lalu sesekali berjalan & mengobrol satu sama lain)
         if (isChatTime && activeChatters.includes(id)) {
           const isFirst = activeChatters[0] === id;
           const myChatSpot = isFirst ? chatSpotA : chatSpotB;
@@ -1555,7 +1528,6 @@
             av.leftLeg.rotation.x = 0;
             av.rightLeg.rotation.x = 0;
             av.rightArm.rotation.z = 0;
-            // Gestur tangan & anggukan kepala bergantian saat mengobrol santai
             const talkWave = isFirst ? Math.sin(t * 4.5) : Math.cos(t * 4.5);
             av.rightArm.rotation.x = -0.45 + Math.max(0, talkWave) * -0.45;
             av.leftArm.rotation.x = Math.sin(p * 1.5) * 0.1;
@@ -1563,7 +1535,6 @@
             av.headGroup.rotation.y = Math.cos(t * 2.5) * 0.12;
           }
         } else {
-          // Kembali ke meja kerja & berdiri santai
           const arrived = moveCharacterTo(av, av.basePos, 0.035, t, 9);
           if (arrived) {
             av.root.rotation.y += (av.baseRotY - av.root.rotation.y) * 0.12;
@@ -1579,7 +1550,6 @@
         }
       });
 
-      // Animasi Ikan Koi Berenang di Kolam
       koiFishes.forEach((f, idx) => {
         const ang = t * f.speed + f.angle;
         const nextAng = ang + (f.speed > 0 ? 0.05 : -0.05);
@@ -1593,7 +1563,6 @@
         f.tail.rotation.y = Math.sin(t * 10 + idx) * 0.35;
       });
 
-      // Animasi Kelinci Melompat-lompat di Taman Rumput
       rabbits.forEach((r, idx) => {
         const ang = t * r.speed + r.angle;
         const nextAng = ang + (r.speed > 0 ? 0.05 : -0.05);
@@ -1607,7 +1576,6 @@
         r.mesh.lookAt(nx, hop, nz);
       });
 
-      // Animasi Kucing Jalan Santai & Ekor Melambai
       cats.forEach((c, idx) => {
         const ang = t * c.speed + c.angle;
         const nextAng = ang + (c.speed > 0 ? 0.05 : -0.05);
@@ -1621,7 +1589,6 @@
         c.tailPivot.rotation.z = Math.sin(t * 3.5 + idx) * 0.35;
       });
 
-      // Animasi Partikel Hujan
       if (rainParticles && rainParticles.visible) {
         const pos = rainParticles.geometry.attributes.position.array;
         for (let i = 0; i < pos.length; i += 3) {
@@ -1635,308 +1602,11 @@
         rainParticles.geometry.attributes.position.needsUpdate = true;
       }
 
-      // Animasi Partikel Salju
       if (snowParticles && snowParticles.visible) {
         const pos = snowParticles.geometry.attributes.position.array;
         for (let i = 0; i < pos.length; i += 3) {
           pos[i] += Math.sin(t * 1.5 + i) * 0.012;
           pos[i + 1] -= 0.045;
-          if (pos[i + 1] < 0) {
-            pos[i] = (Math.random() - 0.5) * 24;
-            pos[i + 1] = 13 + Math.random() * 2;
-          }
-        }
-        snowParticles.geometry.attributes.position.needsUpdate = true;
-      }
-
-      monitorScreens.forEach((m, idx) => {
-        const pulse = 0.85 + Math.sin(t * 3 + idx) * 0.15;
-        m.mesh.material.color.copy(m.baseColor).multiplyScalar(pulse);
-      });
-
-      controls.update();
-      renderer.render(scene, camera);
-    }
-
-      // Jadwal Otomatis Obrolan Santai Saat IDLE (Siklus 22 detik)
-      // Detik 0-9: Stay di meja | Detik 9-16: Mengobrol berdua | Detik 16-22: Kembali ke meja
-      const chatCycle = t % 22;
-      const isChatTime = chatCycle > 9 && chatCycle < 16.5;
-      const chatPairIndex = Math.floor(t / 22) % 3;
-      const chatPairs = [
-        ['crawler', 'drafter'],
-        ['drafter', 'auditor'],
-        ['crawler', 'auditor']
-      ];
-      const activeChatters = chatPairs[chatPairIndex];
-      const chatSpotA = new THREE.Vector3(0.75, 0.12, -1.65);
-      const chatSpotB = new THREE.Vector3(1.65, 0.12, -1.65);
-
-      // Cek apakah ada pekerja (Crawler/Drafter) yang sedang menghampiri Auditor untuk salaman
-      let activeHandshakeVisitor = null;
-      ['crawler', 'drafter'].forEach((id) => {
-        const av = robloxAvatars[id];
-        const st = (AGENT_META[id].status || 'IDLE').toUpperCase();
-        if (st !== av.lastStatus) {
-          av.lastStatus = st;
-          if (st === 'WORKING') av.workStartTime = t;
-        }
-        // Setelah 2.2 detik mengetik saat WORKING, berjalan melapor & salaman ke Auditor
-        if (st === 'WORKING' && (t - av.workStartTime) > 2.2 && !activeHandshakeVisitor) {
-          activeHandshakeVisitor = id;
-        }
-      });
-
-      const auditorHandshakeSpot = new THREE.Vector3(3.95, 0.12, -0.35);
-      const visitorHandshakeSpot = new THREE.Vector3(3.15, 0.12, -0.35);
-
-      // Animasi 3 AI Agent Chibi
-      Object.keys(robloxAvatars).forEach((id) => {
-        const av = robloxAvatars[id];
-        const status = (AGENT_META[id].status || 'IDLE').toUpperCase();
-        const p = t + av.phase;
-
-        // KASUS 1: SEDANG SALAMAN DENGAN AUDITOR SAAT WORKING
-        if (activeHandshakeVisitor === id) {
-          const arrived = moveCharacterTo(av, visitorHandshakeSpot, 0.045, t);
-          if (arrived) {
-            faceToward(av, auditorHandshakeSpot);
-            av.leftLeg.rotation.x = 0;
-            av.rightLeg.rotation.x = 0;
-            av.leftArm.rotation.x = 0;
-            // Ulurkan tangan kanan & berjabat tangan naik-turun
-            av.rightArm.rotation.x = -1.15 + Math.sin(t * 9) * 0.18;
-            av.rightArm.rotation.z = -0.15;
-            av.headGroup.rotation.x = Math.sin(t * 4) * 0.1;
-          }
-          return;
-        }
-
-        if (id === 'auditor' && activeHandshakeVisitor) {
-          const arrived = moveCharacterTo(av, auditorHandshakeSpot, 0.04, t);
-          if (arrived) {
-            faceToward(av, visitorHandshakeSpot);
-            av.leftLeg.rotation.x = 0;
-            av.rightLeg.rotation.x = 0;
-            av.leftArm.rotation.x = 0;
-            // Auditor membalas jabat tangan
-            av.rightArm.rotation.x = -1.15 - Math.sin(t * 9) * 0.18;
-            av.rightArm.rotation.z = -0.15;
-            av.headGroup.rotation.x = -Math.sin(t * 4) * 0.1;
-          }
-          return;
-        }
-
-        // KASUS 2: STATUS WORKING (Mengetik Aktif di Meja Kerja)
-        if (status === 'WORKING') {
-          const arrived = moveCharacterTo(av, av.basePos, 0.05, t);
-          if (arrived) {
-            av.root.rotation.y += (av.baseRotY - av.root.rotation.y) * 0.15;
-            av.root.position.y = 0.12 + Math.abs(Math.sin(p * 8)) * 0.03;
-            av.leftArm.rotation.x = -0.95 + Math.sin(p * 18) * 0.22;
-            av.rightArm.rotation.x = -0.95 - Math.sin(p * 18) * 0.22;
-            av.rightArm.rotation.z = 0;
-            av.leftLeg.rotation.x = 0;
-            av.rightLeg.rotation.x = 0;
-            av.headGroup.rotation.y = Math.sin(p * 3) * 0.15;
-            av.headGroup.rotation.x = 0.12;
-          }
-          return;
-        }
-
-        // KASUS 3: STATUS DONE (Selebrasi Melompat Riang di Meja)
-        if (status === 'DONE') {
-          const arrived = moveCharacterTo(av, av.basePos, 0.05, t);
-          if (arrived) {
-            av.root.rotation.y += (av.baseRotY - av.root.rotation.y) * 0.15;
-            av.root.position.y = 0.12 + Math.abs(Math.sin(p * 5)) * 0.18;
-            av.rightArm.rotation.x = -2.4 + Math.sin(p * 10) * 0.3;
-            av.rightArm.rotation.z = 0;
-            av.leftArm.rotation.x = Math.sin(p * 4) * 0.15;
-            av.leftLeg.rotation.x = 0;
-            av.rightLeg.rotation.x = 0;
-            av.headGroup.rotation.x = -0.05;
-          }
-          return;
-        }
-
-        // KASUS 4: STATUS IDLE (Stay di meja, lalu sesekali berjalan & mengobrol satu sama lain)
-        if (isChatTime && activeChatters.includes(id)) {
-          const isFirst = activeChatters[0] === id;
-          const myChatSpot = isFirst ? chatSpotA : chatSpotB;
-          const partnerSpot = isFirst ? chatSpotB : chatSpotA;
-
-          const arrived = moveCharacterTo(av, myChatSpot, 0.035, t, 9);
-          if (arrived) {
-            faceToward(av, partnerSpot);
-            av.leftLeg.rotation.x = 0;
-            av.rightLeg.rotation.x = 0;
-            av.rightArm.rotation.z = 0;
-            // Gestur tangan & anggukan kepala bergantian saat mengobrol santai
-            const talkWave = isFirst ? Math.sin(t * 4.5) : Math.cos(t * 4.5);
-            av.rightArm.rotation.x = -0.45 + Math.max(0, talkWave) * -0.45;
-            av.leftArm.rotation.x = Math.sin(p * 1.5) * 0.1;
-            av.headGroup.rotation.x = Math.sin(t * 5 + (isFirst ? 0 : 2)) * 0.12;
-            av.headGroup.rotation.y = Math.cos(t * 2.5) * 0.12;
-          }
-        } else {
-          // Kembali ke meja kerja & berdiri santai
-          const arrived = moveCharacterTo(av, av.basePos, 0.035, t, 9);
-          if (arrived) {
-            av.root.rotation.y += (av.baseRotY - av.root.rotation.y) * 0.12;
-            av.root.position.y = 0.12 + Math.sin(p * 2) * 0.02;
-            av.leftArm.rotation.x = Math.sin(p * 1.8) * 0.08;
-            av.rightArm.rotation.x = -Math.sin(p * 1.8) * 0.08;
-            av.rightArm.rotation.z = 0;
-            av.leftLeg.rotation.x = 0;
-            av.rightLeg.rotation.x = 0;
-            av.headGroup.rotation.y = Math.sin(p * 1.1) * 0.25;
-            av.headGroup.rotation.x = 0;
-          }
-        }
-      });
-
-      // Animasi Ikan Koi Berenang di Kolam
-      koiFishes.forEach((f, idx) => {
-        const ang = t * f.speed + f.angle;
-        const nextAng = ang + (f.speed > 0 ? 0.05 : -0.05);
-        const x = f.centerX + Math.cos(ang) * f.orbitRadius;
-        const z = f.centerZ + Math.sin(ang) * (f.orbitRadius * 0.85);
-        const nx = f.centerX + Math.cos(nextAng) * f.orbitRadius;
-        const nz = f.centerZ + Math.sin(nextAng) * (f.orbitRadius * 0.85);
-
-        f.mesh.position.set(x, 0.10 + Math.sin(t * 2 + idx) * 0.015, z);
-        f.mesh.lookAt(nx, f.mesh.position.y, nz);
-        f.tail.rotation.y = Math.sin(t * 10 + idx) * 0.35;
-      });
-
-      // Animasi Kelinci Melompat-lompat di Taman Rumput
-      rabbits.forEach((r, idx) => {
-        const ang = t * r.speed + r.angle;
-        const nextAng = ang + (r.speed > 0 ? 0.05 : -0.05);
-        const x = r.centerX + Math.cos(ang) * r.radius;
-        const z = r.centerZ + Math.sin(ang) * r.radius;
-        const nx = r.centerX + Math.cos(nextAng) * r.radius;
-        const nz = r.centerZ + Math.sin(nextAng) * r.radius;
-
-        const hop = Math.abs(Math.sin(t * 4.5 + idx * 1.7)) * 0.16;
-        r.mesh.position.set(x, hop, z);
-        r.mesh.lookAt(nx, hop, nz);
-      });
-
-      // Animasi Kucing Jalan Santai & Ekor Melambai
-      cats.forEach((c, idx) => {
-        const ang = t * c.speed + c.angle;
-        const nextAng = ang + (c.speed > 0 ? 0.05 : -0.05);
-        const x = c.centerX + Math.cos(ang) * c.radius;
-        const z = c.centerZ + Math.sin(ang) * c.radius;
-        const nx = c.centerX + Math.cos(nextAng) * c.radius;
-        const nz = c.centerZ + Math.sin(nextAng) * c.radius;
-
-        c.group.position.set(x, c.baseY + Math.abs(Math.sin(t * 5 + idx)) * 0.02, z);
-        c.group.lookAt(nx, c.group.position.y, nz);
-        c.tailPivot.rotation.z = Math.sin(t * 3.5 + idx) * 0.35;
-      });
-
-      // Animasi Partikel Hujan
-      if (rainParticles && rainParticles.visible) {
-        const pos = rainParticles.geometry.attributes.position.array;
-        for (let i = 0; i < pos.length; i += 3) {
-          pos[i] -= 0.04;
-          pos[i + 1] -= 0.38;
-          if (pos[i + 1] < 0) {
-            pos[i] = (Math.random() - 0.5) * 24;
-            pos[i + 1] = 13 + Math.random() * 2;
-          }
-        }
-        rainParticles.geometry.attributes.position.needsUpdate = true;
-      }
-
-      // Animasi Partikel Salju
-      if (snowParticles && snowParticles.visible) {
-        const pos = snowParticles.geometry.attributes.position.array;
-        for (let i = 0; i < pos.length; i += 3) {
-          pos[i] += Math.sin(t * 1.5 + i) * 0.012;
-          pos[i + 1] -= 0.045;
-          if (pos[i + 1] < 0) {
-            pos[i] = (Math.random() - 0.5) * 24;
-            pos[i + 1] = 13 + Math.random() * 2;
-          }
-        }
-        snowParticles.geometry.attributes.position.needsUpdate = true;
-      }
-
-      monitorScreens.forEach((m, idx) => {
-        const pulse = 0.85 + Math.sin(t * 3 + idx) * 0.15;
-        m.mesh.material.color.copy(m.baseColor).multiplyScalar(pulse);
-      });
-
-      controls.update();
-      renderer.render(scene, camera);
-    }
-
-      // 2. Animasi Ikan Koi Berenang di Kolam
-      koiFishes.forEach((f, idx) => {
-        const ang = t * f.speed + f.angle;
-        const nextAng = ang + (f.speed > 0 ? 0.05 : -0.05);
-        const x = f.centerX + Math.cos(ang) * f.orbitRadius;
-        const z = f.centerZ + Math.sin(ang) * (f.orbitRadius * 0.85);
-        const nx = f.centerX + Math.cos(nextAng) * f.orbitRadius;
-        const nz = f.centerZ + Math.sin(nextAng) * (f.orbitRadius * 0.85);
-
-        f.mesh.position.set(x, 0.10 + Math.sin(t * 2 + idx) * 0.015, z);
-        f.mesh.lookAt(nx, f.mesh.position.y, nz);
-        f.tail.rotation.y = Math.sin(t * 10 + idx) * 0.35;
-      });
-
-      // 3. Animasi Kelinci Melompat-lompat di Taman
-      rabbits.forEach((r, idx) => {
-        const ang = t * r.speed + r.angle;
-        const nextAng = ang + (r.speed > 0 ? 0.05 : -0.05);
-        const x = r.centerX + Math.cos(ang) * r.radius;
-        const z = r.centerZ + Math.sin(ang) * r.radius;
-        const nx = r.centerX + Math.cos(nextAng) * r.radius;
-        const nz = r.centerZ + Math.sin(nextAng) * r.radius;
-
-        const hop = Math.abs(Math.sin(t * 4.5 + idx * 1.7)) * 0.16;
-        r.mesh.position.set(x, hop, z);
-        r.mesh.lookAt(nx, hop, nz);
-      });
-
-      // 4. Animasi Kucing Jalan Santai & Ekor Melambai
-      cats.forEach((c, idx) => {
-        const ang = t * c.speed + c.angle;
-        const nextAng = ang + (c.speed > 0 ? 0.05 : -0.05);
-        const x = c.centerX + Math.cos(ang) * c.radius;
-        const z = c.centerZ + Math.sin(ang) * c.radius;
-        const nx = c.centerX + Math.cos(nextAng) * c.radius;
-        const nz = c.centerZ + Math.sin(nextAng) * c.radius;
-
-        c.group.position.set(x, c.baseY + Math.abs(Math.sin(t * 5 + idx)) * 0.02, z);
-        c.group.lookAt(nx, c.group.position.y, nz);
-        c.tailPivot.rotation.z = Math.sin(t * 3.5 + idx) * 0.35;
-      });
-
-      // 5. Animasi Partikel Hujan (Jika Musim Hujan Aktif)
-      if (rainParticles && rainParticles.visible) {
-        const pos = rainParticles.geometry.attributes.position.array;
-        for (let i = 0; i < pos.length; i += 3) {
-          pos[i] -= 0.04;     // Angin miring halus
-          pos[i + 1] -= 0.38; // Kecepatan jatuh rintik hujan
-          if (pos[i + 1] < 0) {
-            pos[i] = (Math.random() - 0.5) * 24;
-            pos[i + 1] = 13 + Math.random() * 2;
-          }
-        }
-        rainParticles.geometry.attributes.position.needsUpdate = true;
-      }
-
-      // 6. Animasi Partikel Salju (Jika Musim Salju Aktif)
-      if (snowParticles && snowParticles.visible) {
-        const pos = snowParticles.geometry.attributes.position.array;
-        for (let i = 0; i < pos.length; i += 3) {
-          pos[i] += Math.sin(t * 1.5 + i) * 0.012; // Melayang berayun lembut
-          pos[i + 1] -= 0.045;                   // Jatuh perlahan
           if (pos[i + 1] < 0) {
             pos[i] = (Math.random() - 0.5) * 24;
             pos[i + 1] = 13 + Math.random() * 2;
@@ -1964,7 +1634,6 @@
       const text = document.getElementById('seasonText');
 
       if (seasonModeIndex === 0) {
-        // 1. MUSIM PANAS (CERAH TROPIS)
         rainParticles.visible = false;
         snowParticles.visible = false;
         grassFloorMesh.material.map = summerGrassTex;
@@ -1980,7 +1649,6 @@
         text.textContent = 'Musim Panas';
         addLog('Cuaca diubah ke Musim Panas: Taman hijau cerah & langit hangat.', 'info');
       } else if (seasonModeIndex === 1) {
-        // 2. MUSIM HUJAN
         rainParticles.visible = true;
         snowParticles.visible = false;
         grassFloorMesh.material.map = summerGrassTex;
@@ -1988,7 +1656,7 @@
         pondWaterMesh.material.color.setHex(0x0284c7);
 
         treeFoliageMeshes.forEach(item => {
-          item.mesh.material.color.copy(item.summerColor).multiplyScalar(0.82); // Hijau basah lebih pekat
+          item.mesh.material.color.copy(item.summerColor).multiplyScalar(0.82);
         });
 
         btn.className = 'px-3 py-1.5 rounded-xl bg-sky-100 hover:bg-sky-200 text-sky-900 border border-sky-300 text-xs font-bold transition flex items-center gap-1.5';
@@ -1996,7 +1664,6 @@
         text.textContent = 'Musim Hujan';
         addLog('Cuaca diubah ke Musim Hujan: Rintik hujan turun di taman studio.', 'work');
       } else {
-        // 3. MUSIM SALJU
         rainParticles.visible = false;
         snowParticles.visible = true;
         grassFloorMesh.material.map = winterSnowTex;
@@ -2004,7 +1671,7 @@
         pondWaterMesh.material.color.setHex(0x7dd3fc);
 
         treeFoliageMeshes.forEach(item => {
-          item.mesh.material.color.setHex(0xf1f5f9); // Tajuk pohon berselimut salju
+          item.mesh.material.color.setHex(0xf1f5f9);
         });
 
         btn.className = 'px-3 py-1.5 rounded-xl bg-cyan-50 hover:bg-cyan-100 text-cyan-900 border border-cyan-300 text-xs font-bold transition flex items-center gap-1.5';
@@ -2037,13 +1704,11 @@
       applyCurrentSkyAndLighting();
     }
 
-    // Menyelaraskan warna langit & pencahayaan antara Waktu (Pagi/Sore/Malam) & Musim (Panas/Hujan/Salju)
     function applyCurrentSkyAndLighting() {
       if (lightingModeIndex === 0) {
-        // PAGI CERAH
         let skyHex = 0xe6f2e8;
-        if (seasonModeIndex === 1) skyHex = 0xcbd5e1; // Mendung hujan
-        if (seasonModeIndex === 2) skyHex = 0xe0f2fe; // Langit dingin salju
+        if (seasonModeIndex === 1) skyHex = 0xcbd5e1;
+        if (seasonModeIndex === 2) skyHex = 0xe0f2fe;
         scene.background = new THREE.Color(skyHex);
         scene.fog.color = new THREE.Color(skyHex);
         ambientLight.color.setHex(0xfffaf0);
@@ -2053,7 +1718,6 @@
         warmLampLight.intensity = seasonModeIndex === 1 ? 0.85 : 0.45;
         pondLight.intensity = 0.35;
       } else if (lightingModeIndex === 1) {
-        // GOLDEN HOUR SORE
         let skyHex = 0xfde8d0;
         if (seasonModeIndex === 1) skyHex = 0x94a3b8;
         if (seasonModeIndex === 2) skyHex = 0xfce7f3;
@@ -2066,7 +1730,6 @@
         warmLampLight.intensity = 0.95;
         pondLight.intensity = 0.55;
       } else {
-        // MALAM STUDIO
         scene.background = new THREE.Color(0x0f172a);
         scene.fog.color = new THREE.Color(0x0f172a);
         ambientLight.color.setHex(0x334155);
@@ -2186,28 +1849,28 @@
       const btn = document.getElementById('btnSimulasi');
       btn.disabled = true;
       btn.classList.add('opacity-50');
-      addLog('Memulai simulasi kerja 3 AI Agent di Studio Semi-Outdoor...', 'work');
+      addLog('Memulai simulasi kerja 3 AI Agent (termasuk salaman dengan Auditor)...', 'work');
 
       updateAgentUI('crawler', 'WORKING', 'Memindai Google News RSS ("BPS Provinsi Lampung")...', 'Baru saja');
       updateAgentUI('drafter', 'WORKING', 'Mengekstrak bahan tayang PPTX & menyusun narasi BRS...', 'Baru saja');
 
       setTimeout(() => {
-        addLog('[CRAWLER] 4 berita baru terklasifikasi sentimennya.', 'work');
+        addLog('[CRAWLER] 4 berita baru terklasifikasi sentimennya & dilaporkan ke Auditor.', 'work');
         updateAgentUI('crawler', 'DONE', 'Selesai: 4 berita baru terklasifikasi.', 'Baru saja');
-      }, 3200);
+      }, 4500);
 
       setTimeout(() => {
-        addLog('[DRAFTER] Draf Siaran Pers selesai disusun ke templat resmi.', 'work');
+        addLog('[DRAFTER] Draf Siaran Pers selesai disusun & diserahkan ke Auditor.', 'work');
         updateAgentUI('drafter', 'DONE', 'Draf siaran pers selesai disusun.', 'Baru saja');
         updateAgentUI('auditor', 'WORKING', 'Auditor memeriksa presisi angka y-on-y & q-to-q...', 'Baru saja');
-      }, 6400);
+      }, 8200);
 
       setTimeout(() => {
         addLog('[AUDITOR] Validasi angka lulus (zero margin of error). Siap rilis!', 'success');
         updateAgentUI('auditor', 'DONE', 'Lolos audit angka & siap publikasi.', 'Baru saja');
         btn.disabled = false;
         btn.classList.remove('opacity-50');
-      }, 9800);
+      }, 11500);
     }
 
     function normalizeApiUrl(rawUrl) {
