@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BPS Provinsi Lampung- Media & PR Intelligence Hub</title>
+    <title>BPS Provinsi Lampung - Media & PR Intelligence Hub</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Chart.js -->
@@ -40,7 +40,6 @@
             backdrop-filter: blur(8px);
             border: 1px solid rgba(226, 232, 240, 0.8);
         }
-        /* Custom scrollbar for clean UI */
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: #f1f5f9; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
@@ -60,31 +59,32 @@
                     </div>
                     <div>
                         <div class="flex items-center space-x-2">
-                            <span class="font-bold text-lg tracking-tight text-white">BPS PROVINSI LAMPUNG</span>
-                            <span class="bg-sky-500/20 text-sky-300 text-xs px-2 py-0.5 rounded-full font-medium border border-sky-400/30">PR Intelligence</span>
+                            <span class="font-bold text-base sm:text-lg tracking-tight text-white">BPS PROVINSI LAMPUNG</span>
+                            <span class="hidden sm:inline-block bg-sky-500/20 text-sky-300 text-xs px-2 py-0.5 rounded-full font-medium border border-sky-400/30">PR Intelligence</span>
                         </div>
-                        <p class="text-xs text-slate-400">Automated Media Monitoring & BRS Analytics</p>
+                        <p class="text-[11px] sm:text-xs text-slate-400">Automated Media Monitoring & BRS Analytics</p>
                     </div>
                 </div>
 
-                <!-- API Gateway Connection Status -->
-                <div class="hidden md:flex items-center space-x-4">
-                    <div class="bg-slate-800/80 px-3 py-1.5 rounded-full border border-slate-700 flex items-center space-x-2 text-xs">
+                <!-- API Gateway Connection Status & Actions -->
+                <div class="flex items-center space-x-2 sm:space-x-3">
+                    <div id="apiStatusBadge" class="hidden lg:flex bg-slate-800/80 px-3 py-1.5 rounded-full border border-slate-700 items-center space-x-2 text-xs">
                         <span class="relative flex h-2.5 w-2.5">
-                          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                          <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+                            <span id="apiPingDot" class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+                            <span id="apiSolidDot" class="relative inline-flex rounded-full h-2.5 w-2.5 bg-amber-500"></span>
                         </span>
-                        <span class="text-slate-300">Sheets API Bridge: <strong class="text-emerald-400 font-medium">Terhubung (Secure)</strong></span>
+                        <span class="text-slate-300">Sheets API: <strong id="apiStatusText" class="text-amber-400 font-medium">Menghubungkan...</strong></span>
                     </div>
 
-                    <!-- Quick Sync Button -->
-                   <a href="virtual-office.html" class="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg bg-sky-600 hover:bg-sky-500 text-white text-xs font-semibold shadow-sm transition">
-  <i data-lucide="bot" class="w-4 h-4"></i>
-  <span>AI Agent Virtual Office</span>
-</a>
-                    <button onclick="triggerDataSync()" id="syncBtn" class="flex items-center space-x-1.5 bg-sky-600 hover:bg-sky-500 text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition-all shadow duration-200">
+                    <a href="virtual-office.html" class="inline-flex items-center gap-1.5 px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold shadow-sm transition">
+                        <i data-lucide="bot" class="w-4 h-4"></i>
+                        <span class="hidden sm:inline">AI Agent Virtual Office</span>
+                        <span class="sm:hidden">Virtual Office</span>
+                    </a>
+
+                    <button onclick="fetchLiveMonitoringData(true)" id="syncBtn" class="flex items-center space-x-1.5 bg-sky-600 hover:bg-sky-500 text-white text-xs font-semibold px-3 py-1.5 sm:py-2 rounded-lg transition-all shadow duration-200">
                         <i data-lucide="refresh-cw" id="syncIcon" class="w-3.5 h-3.5"></i>
-                        <span>Sinkron Data</span>
+                        <span class="hidden sm:inline">Sinkron Data</span>
                     </button>
                 </div>
             </div>
@@ -96,28 +96,30 @@
 
         <!-- Navigation Tabs / Section Selectors -->
         <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 pb-3">
-            <nav class="flex space-x-2 sm:space-x-4 overflow-x-auto pb-1" id="navTabs">
-                <button onclick="switchTab('dashboard')" id="tab-dashboard" class="tab-btn active font-semibold text-sm px-4 py-2 rounded-lg bg-bps-blue text-white shadow-sm flex items-center space-x-2 transition">
+            <nav class="flex space-x-2 sm:space-x-3 overflow-x-auto pb-1" id="navTabs">
+                <button onclick="switchTab('dashboard')" id="tab-dashboard" class="tab-btn active font-semibold text-xs sm:text-sm px-3.5 py-2 rounded-lg bg-bps-blue text-white shadow-sm flex items-center space-x-2 transition shrink-0">
                     <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
                     <span>Ringkasan Eksekutif</span>
                 </button>
-                <button onclick="switchTab('news')" id="tab-news" class="tab-btn font-semibold text-sm px-4 py-2 rounded-lg text-slate-600 hover:bg-slate-200/60 flex items-center space-x-2 transition">
+                <button onclick="switchTab('news')" id="tab-news" class="tab-btn font-semibold text-xs sm:text-sm px-3.5 py-2 rounded-lg text-slate-600 hover:bg-slate-200/60 flex items-center space-x-2 transition shrink-0">
                     <i data-lucide="newspaper" class="w-4 h-4"></i>
                     <span>Monitoring Media</span>
                 </button>
-                <button onclick="switchTab('brs')" id="tab-brs" class="tab-btn font-semibold text-sm px-4 py-2 rounded-lg text-slate-600 hover:bg-slate-200/60 flex items-center space-x-2 transition">
+                <button onclick="switchTab('brs')" id="tab-brs" class="tab-btn font-semibold text-xs sm:text-sm px-3.5 py-2 rounded-lg text-slate-600 hover:bg-slate-200/60 flex items-center space-x-2 transition shrink-0">
                     <i data-lucide="file-text" class="w-4 h-4"></i>
                     <span>Automasi BRS (Pers)</span>
                 </button>
-                <button onclick="switchTab('bridge')" id="tab-bridge" class="tab-btn font-semibold text-sm px-4 py-2 rounded-lg text-slate-600 hover:bg-slate-200/60 flex items-center space-x-2 transition">
+                <button onclick="switchTab('bridge')" id="tab-bridge" class="tab-btn font-semibold text-xs sm:text-sm px-3.5 py-2 rounded-lg text-slate-600 hover:bg-slate-200/60 flex items-center space-x-2 transition shrink-0">
                     <i data-lucide="shield-check" class="w-4 h-4"></i>
                     <span>Arsitektur API Bridge</span>
                 </button>
             </nav>
 
-            <div class="text-xs text-slate-500 flex items-center space-x-1">
-                <i data-lucide="clock" class="w-3.5 h-3.5 text-slate-400"></i>
-                <span>Terakhir diperbarui: <strong id="lastUpdateText">Hari ini, 09:00 WIB</strong></span>
+            <div class="text-xs text-slate-500 flex items-center space-x-1.5">
+                <i data-lucide="database" class="w-3.5 h-3.5 text-sky-600"></i>
+                <span>Periode Data: <strong id="dateRangeText" class="text-slate-700">Memuat...</strong></span>
+                <span class="mx-1">•</span>
+                <span>Update: <strong id="lastUpdateText" class="text-slate-700">-</strong></span>
             </div>
         </div>
 
@@ -131,15 +133,15 @@
                     <div class="flex justify-between items-start">
                         <div>
                             <p class="text-xs font-semibold uppercase tracking-wider text-slate-500">Total Liputan Media</p>
-                            <h3 class="text-3xl font-extrabold text-slate-900 mt-1" id="kpiTotal">184</h3>
+                            <h3 class="text-3xl font-extrabold text-slate-900 mt-1" id="kpiTotal">-</h3>
                         </div>
                         <div class="p-2.5 bg-blue-50 text-blue-600 rounded-lg">
                             <i data-lucide="globe" class="w-6 h-6"></i>
                         </div>
                     </div>
-                    <div class="mt-3 flex items-center text-xs text-emerald-600 font-medium">
-                        <i data-lucide="trending-up" class="w-4 h-4 mr-1"></i>
-                        <span>+14.2% dari bulan lalu</span>
+                    <div class="mt-3 flex items-center text-xs text-slate-500 font-medium">
+                        <i data-lucide="newspaper" class="w-3.5 h-3.5 mr-1 text-blue-600"></i>
+                        <span id="kpiMediaCount">Dari 0 media daring terpantau</span>
                     </div>
                 </div>
 
@@ -148,14 +150,14 @@
                     <div class="flex justify-between items-start">
                         <div>
                             <p class="text-xs font-semibold uppercase tracking-wider text-slate-500">Sentimen Positif</p>
-                            <h3 class="text-3xl font-extrabold text-emerald-600 mt-1" id="kpiPositive">86.4%</h3>
+                            <h3 class="text-3xl font-extrabold text-emerald-600 mt-1" id="kpiPositivePct">-</h3>
                         </div>
                         <div class="p-2.5 bg-emerald-50 text-emerald-600 rounded-lg">
                             <i data-lucide="smile" class="w-6 h-6"></i>
                         </div>
                     </div>
                     <div class="mt-3 flex items-center text-xs text-slate-500">
-                        <span class="text-slate-600 font-medium">159 Berita Bernada Positif</span>
+                        <span id="kpiSentimentBreakdown" class="text-slate-600 font-medium">0 Positif • 0 Netral • 0 Negatif</span>
                     </div>
                 </div>
 
@@ -164,7 +166,7 @@
                     <div class="flex justify-between items-start">
                         <div>
                             <p class="text-xs font-semibold uppercase tracking-wider text-slate-500">Indeks Reputasi PR</p>
-                            <h3 class="text-3xl font-extrabold text-bps-blue mt-1">9.2<span class="text-base text-slate-400 font-normal">/10</span></h3>
+                            <h3 class="text-3xl font-extrabold text-bps-blue mt-1"><span id="kpiReputationScore">-</span><span class="text-base text-slate-400 font-normal">/10</span></h3>
                         </div>
                         <div class="p-2.5 bg-sky-50 text-sky-600 rounded-lg">
                             <i data-lucide="award" class="w-6 h-6"></i>
@@ -172,23 +174,23 @@
                     </div>
                     <div class="mt-3 flex items-center text-xs text-emerald-600 font-medium">
                         <i data-lucide="check-circle2" class="w-3.5 h-3.5 mr-1"></i>
-                        <span>Kategori: Sangat Baik</span>
+                        <span id="kpiReputationLabel">Menghitung skor sentimen...</span>
                     </div>
                 </div>
 
-                <!-- Card 4: Siaran Pers (BRS) Ready -->
+                <!-- Card 4: Perlu Mitigasi / Netral-Negatif -->
                 <div class="glass-card p-5 rounded-xl shadow-sm border border-slate-200 hover:shadow-md transition">
                     <div class="flex justify-between items-start">
                         <div>
-                            <p class="text-xs font-semibold uppercase tracking-wider text-slate-500">BRS Automasi (Bulan Ini)</p>
-                            <h3 class="text-3xl font-extrabold text-orange-600 mt-1" id="kpiBRS">8 Draf</h3>
+                            <p class="text-xs font-semibold uppercase tracking-wider text-slate-500">Atensi & Mitigasi Isu</p>
+                            <h3 class="text-3xl font-extrabold text-orange-600 mt-1" id="kpiAttentionCount">-</h3>
                         </div>
                         <div class="p-2.5 bg-orange-50 text-orange-600 rounded-lg">
-                            <i data-lucide="file-check" class="w-6 h-6"></i>
+                            <i data-lucide="alert-circle" class="w-6 h-6"></i>
                         </div>
                     </div>
                     <div class="mt-3 flex items-center text-xs text-slate-500">
-                        <span class="text-emerald-600 font-semibold mr-1">100% Zero-Prompt</span> Google Apps Script
+                        <span id="kpiAttentionDetail">Berita bernada Netral / Negatif</span>
                     </div>
                 </div>
             </div>
@@ -199,10 +201,10 @@
                 <div class="glass-card p-5 rounded-xl shadow-sm border border-slate-200 lg:col-span-2">
                     <div class="flex items-center justify-between mb-4">
                         <div>
-                            <h3 class="font-bold text-slate-800 text-base">Tren Sentimen Pemberitaan (2026)</h3>
-                            <p class="text-xs text-slate-500">Perkembangan tone media terhadap indikator BPS Provinsi Lampung</p>
+                            <h3 class="font-bold text-slate-800 text-base">Tren Sentimen Pemberitaan Harian</h3>
+                            <p class="text-xs text-slate-500">Pergerakan volume & tone media sesuai linimasa database Google Sheets</p>
                         </div>
-                        <span class="text-xs bg-slate-100 text-slate-600 px-2.5 py-1 rounded-md font-medium border border-slate-200">Bulanan</span>
+                        <span class="text-xs bg-sky-50 text-sky-700 px-2.5 py-1 rounded-md font-semibold border border-sky-200">Live Database</span>
                     </div>
                     <div class="h-64 relative">
                         <canvas id="sentimentTrendChart"></canvas>
@@ -214,7 +216,7 @@
                     <div class="flex items-center justify-between mb-4">
                         <div>
                             <h3 class="font-bold text-slate-800 text-base">Media Partner Teraktif</h3>
-                            <p class="text-xs text-slate-500">Proporsi publikasi berdasarkan media</p>
+                            <p class="text-xs text-slate-500">Distribusi publikasi berdasarkan media outlet</p>
                         </div>
                     </div>
                     <div class="h-64 relative flex items-center justify-center">
@@ -227,8 +229,8 @@
             <div class="glass-card p-5 rounded-xl shadow-sm border border-slate-200">
                 <div class="flex items-center justify-between mb-4">
                     <div>
-                        <h3 class="font-bold text-slate-800 text-base">Sebaran Topik Indikator Statistik</h3>
-                        <p class="text-xs text-slate-500">Fokus pemberitaan media lokal & nasional terkait rilis BPS Lampung</p>
+                        <h3 class="font-bold text-slate-800 text-base">Sebaran Topik Indikator & Isu Strategis</h3>
+                        <p class="text-xs text-slate-500">Klasifikasi otomatis berdasarkan judul dan ringkasan berita di database</p>
                     </div>
                 </div>
                 <div class="h-56 relative">
@@ -244,18 +246,16 @@
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                     <div>
                         <h3 class="font-bold text-slate-800 text-lg">Direktori & Kliping Media</h3>
-                        <p class="text-xs text-slate-500">Pencarian dan pemantauan realtime berita yang terpublikasi</p>
+                        <p class="text-xs text-slate-500">Data langsung dari Google Sheets Monitoring (dilengkapi Analisis & Rekomendasi Gemini AI)</p>
                     </div>
 
                     <!-- Search & Filter Controls -->
                     <div class="flex flex-wrap items-center gap-2">
-                        <!-- Search Bar -->
                         <div class="relative min-w-[220px]">
                             <i data-lucide="search" class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                            <input type="text" id="searchInput" onkeyup="filterNewsTable()" placeholder="Cari kata kunci / judul..." class="w-full pl-9 pr-3 py-1.5 text-xs bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-bps-blue">
+                            <input type="text" id="searchInput" onkeyup="filterNewsTable()" placeholder="Cari judul atau media..." class="w-full pl-9 pr-3 py-1.5 text-xs bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-bps-blue">
                         </div>
 
-                        <!-- Sentiment Filter -->
                         <select id="sentimentFilter" onchange="filterNewsTable()" class="bg-white border border-slate-300 text-xs rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-bps-blue">
                             <option value="ALL">Semua Sentimen</option>
                             <option value="Positif">Positif</option>
@@ -263,15 +263,14 @@
                             <option value="Negatif">Negatif</option>
                         </select>
 
-                        <!-- Topic Filter -->
                         <select id="topicFilter" onchange="filterNewsTable()" class="bg-white border border-slate-300 text-xs rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-bps-blue">
                             <option value="ALL">Semua Topik</option>
-                            <option value="Inflasi">Inflasi</option>
-                            <option value="Pertumbuhan Ekonomi">Pertumbuhan Ekonomi (PDRB)</option>
-                            <option value="Kemiskinan">Kemiskinan & Gini</option>
-                            <option value="Ekspor-Impor">Ekspor & Impor</option>
-                            <option value="NTP">NTP / Pertanian</option>
-                            <option value="Pariwisata">Pariwisata & Transportasi</option>
+                            <option value="Pertumbuhan Ekonomi">Pertumbuhan Ekonomi</option>
+                            <option value="Ketenagakerjaan & Kemiskinan">Ketenagakerjaan & Kemiskinan</option>
+                            <option value="Pertanian & NTP">Pertanian & NTP</option>
+                            <option value="IPM & Pendidikan">IPM & Pendidikan</option>
+                            <option value="Inflasi & Harga">Inflasi & Harga</option>
+                            <option value="Isu Daerah & Umum">Isu Daerah & Umum</option>
                         </select>
                     </div>
                 </div>
@@ -284,46 +283,43 @@
                                 <th class="px-4 py-3">Tanggal</th>
                                 <th class="px-4 py-3">Judul Artikel Berita</th>
                                 <th class="px-4 py-3">Media Outlet</th>
-                                <th class="px-4 py-3">Topik Indikator</th>
-                                <th class="px-4 py-3 text-center">Sentimen Tone</th>
+                                <th class="px-4 py-3">Topik</th>
+                                <th class="px-4 py-3 text-center">Sentimen</th>
                                 <th class="px-4 py-3 text-right">Aksi</th>
                             </tr>
                         </thead>
                         <tbody id="newsTableBody" class="divide-y divide-slate-200 bg-white">
-                            <!-- Dynamic Content Inserted by JS -->
+                            <tr>
+                                <td colspan="6" class="px-4 py-8 text-center text-slate-400">Memuat data berita dari Google Sheets...</td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
 
-                <!-- Table Footer Pagination Info -->
+                <!-- Table Footer Info -->
                 <div class="flex items-center justify-between text-xs text-slate-500 pt-2">
                     <span id="showingCount">Menampilkan 0 dari 0 berita</span>
-                    <div class="flex space-x-1">
-                        <button class="px-3 py-1 border border-slate-300 rounded bg-white hover:bg-slate-50 disabled:opacity-50">Sebelumnya</button>
-                        <button class="px-3 py-1 border border-slate-300 rounded bg-white hover:bg-slate-50">Selanjutnya</button>
-                    </div>
+                    <span class="text-[11px] text-slate-400">Urutan: Terbaru di atas</span>
                 </div>
             </div>
         </div>
 
         <!-- ================= SECTION 3: AUTOMATED BRS PIPELINE TRACKER ================= -->
         <div id="section-brs" class="space-y-6 hidden">
-            <!-- Header Explainer -->
             <div class="bg-gradient-to-r from-bps-blue to-slate-900 text-white p-6 rounded-xl shadow-md flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
                 <div>
                     <span class="bg-orange-500/30 text-orange-200 text-xs px-2.5 py-1 rounded-full font-semibold border border-orange-400/30 mb-2 inline-block">Integrasi Gemini AI & Google Apps Script</span>
                     <h2 class="text-xl font-bold">Pipelines Automasi Berita Resmi Statistik (BRS)</h2>
                     <p class="text-xs text-slate-300 mt-1 max-w-2xl">
-                        Sistem mengonversi materi paparan PPTX Kepala BPS menjadi draf narasi BRS lengkap di Google Docs secara otomatis tanpa perlu entri manual dari awal.
+                        Sistem mengonversi materi paparan PPTX Kepala BPS menjadi draf narasi BRS lengkap di Google Docs secara otomatis dan terpantau langsung di AI Agent Virtual Office.
                     </p>
                 </div>
-                <button onclick="simulateBrsGeneration()" class="bg-orange-500 hover:bg-orange-600 text-white font-semibold text-xs px-4 py-2.5 rounded-lg shadow flex items-center space-x-2 transition shrink-0">
-                    <i data-lucide="sparkles" class="w-4 h-4"></i>
-                    <span>Simulasi Automasi BRS Baru</span>
-                </button>
+                <a href="virtual-office.html" class="bg-orange-500 hover:bg-orange-600 text-white font-semibold text-xs px-4 py-2.5 rounded-lg shadow flex items-center space-x-2 transition shrink-0">
+                    <i data-lucide="bot" class="w-4 h-4"></i>
+                    <span>Pantau di Virtual Office</span>
+                </a>
             </div>
 
-            <!-- BRS Pipeline Steps -->
             <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <div class="glass-card p-4 rounded-xl border-l-4 border-l-blue-500">
                     <div class="text-xs font-bold text-blue-600 uppercase">Langkah 1</div>
@@ -333,32 +329,23 @@
                 <div class="glass-card p-4 rounded-xl border-l-4 border-l-sky-500">
                     <div class="text-xs font-bold text-sky-600 uppercase">Langkah 2</div>
                     <div class="font-semibold text-sm text-slate-800 mt-1">Ekstraksi & Gemini AI</div>
-                    <p class="text-xs text-slate-500 mt-1">Gemini menyusun narasi statistik & quote resmi Kepala BPS.</p>
+                    <p class="text-xs text-slate-500 mt-1">Gemini menyusun narasi data storytelling & kutipan resmi Kepala BPS.</p>
                 </div>
                 <div class="glass-card p-4 rounded-xl border-l-4 border-l-orange-500">
                     <div class="text-xs font-bold text-orange-600 uppercase">Langkah 3</div>
                     <div class="font-semibold text-sm text-slate-800 mt-1">Populasi Google Docs</div>
-                    <p class="text-xs text-slate-500 mt-1">Apps Script mengisi templat BRS secara otomatis (Zero Prompt).</p>
+                    <p class="text-xs text-slate-500 mt-1">Apps Script menduplikasi templat BRS resmi secara otomatis.</p>
                 </div>
                 <div class="glass-card p-4 rounded-xl border-l-4 border-l-emerald-500">
                     <div class="text-xs font-bold text-emerald-600 uppercase">Langkah 4</div>
                     <div class="font-semibold text-sm text-slate-800 mt-1">Notifikasi Telegram</div>
-                    <p class="text-xs text-slate-500 mt-1">Bot mengirim link draf dokumen BRS ke grup Humas BPS Lampung.</p>
-                </div>
-            </div>
-
-            <!-- Recent Auto-Generated BRS Items Table -->
-            <div class="glass-card p-5 rounded-xl shadow-sm border border-slate-200">
-                <h3 class="font-bold text-slate-800 text-base mb-4">Daftar Hasil Generasi BRS Otomatis</h3>
-                <div class="space-y-3" id="brsListContainer">
-                    <!-- BRS Items Populated via JS -->
+                    <p class="text-xs text-slate-500 mt-1">Bot mengirim tautan draf dokumen BRS ke grup Humas BPS Lampung.</p>
                 </div>
             </div>
         </div>
 
         <!-- ================= SECTION 4: GOOGLE SHEETS API BRIDGE ARCHITECTURE ================= -->
         <div id="section-bridge" class="space-y-6 hidden">
-            <!-- Architecture Overview Card -->
             <div class="glass-card p-6 rounded-xl border border-slate-200 space-y-4">
                 <div class="flex items-center space-x-3">
                     <div class="p-3 bg-emerald-100 text-emerald-700 rounded-xl">
@@ -366,84 +353,89 @@
                     </div>
                     <div>
                         <h3 class="text-lg font-bold text-slate-900">Arsitektur Keamanan: Google Sheets API Bridge</h3>
-                        <p class="text-xs text-slate-500">Solusi akses publik aman tanpa perlu membagikan link Spreadsheet mentah ke eksternal</p>
+                        <p class="text-xs text-slate-500">Dual-route API Gateway yang melayani Dashboard Utama dan AI Agent Virtual Office secara bersamaan</p>
                     </div>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4 border-t border-slate-200">
-                    <!-- Step A -->
                     <div class="space-y-2">
                         <div class="flex items-center space-x-2 text-slate-800 font-semibold text-sm">
                             <span class="w-6 h-6 rounded-full bg-slate-200 text-slate-700 flex items-center justify-center text-xs">1</span>
                             <span>Spreadsheet Internal (Protected)</span>
                         </div>
                         <p class="text-xs text-slate-500 leading-relaxed">
-                            Google Sheets disimpan di Google Drive internal BPS dengan akses tertutup (Private). Tidak ada pihak eksternal yang di-share link spreadsheet ini.
+                            Database monitoring dan status agent disimpan secara tertutup di Google Drive BPS Provinsi Lampung.
                         </p>
                         <div class="bg-slate-100 p-2.5 rounded border border-slate-200 font-mono text-[11px] text-slate-600">
-                            🔒 Access: Restricted to Humas BPS
+                            🔒 Tab: Monitoring & Agent_State
                         </div>
                     </div>
 
-                    <!-- Step B -->
                     <div class="space-y-2">
                         <div class="flex items-center space-x-2 text-slate-800 font-semibold text-sm">
                             <span class="w-6 h-6 rounded-full bg-blue-100 text-bps-blue flex items-center justify-center text-xs">2</span>
-                            <span>Google Apps Script (Web App Endpoint)</span>
+                            <span>Apps Script Dual-Route Web App</span>
                         </div>
                         <p class="text-xs text-slate-500 leading-relaxed">
-                            Script bertindak sebagai API Proxy (Gateway). Mengubah data baris sheet menjadi format JSON, memvalidasi API Key, dan menyaring kolom sensitif.
+                            Jalur default menyuplai data lengkap untuk grafik dashboard ini, sementara jalur <code>?mode=agents</code> menyuplai status 3 AI Agent ke Virtual Office.
                         </p>
                         <div class="bg-blue-50 p-2.5 rounded border border-blue-200 font-mono text-[11px] text-bps-blue">
-                            ⚡ GET script.google.com/macros/s/.../exec
+                            ⚡ GET .../exec (Default & ?mode=agents)
                         </div>
                     </div>
 
-                    <!-- Step C -->
                     <div class="space-y-2">
                         <div class="flex items-center space-x-2 text-slate-800 font-semibold text-sm">
                             <span class="w-6 h-6 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center text-xs">3</span>
-                            <span>Dashboard Frontend (Aplikasi Ini)</span>
+                            <span>Visualisasi Frontend Real-Time</span>
                         </div>
                         <p class="text-xs text-slate-500 leading-relaxed">
-                            Aplikasi web membaca payload JSON secara aman melalui metode `fetch()`. User luar hanya melihat visualisasi grafik tanpa bisa mengedit sheet.
+                            Dashboard menghitung metrik, sentimen, dan rentang tanggal grafik langsung dari payload JSON terbaru.
                         </p>
                         <div class="bg-emerald-50 p-2.5 rounded border border-emerald-200 font-mono text-[11px] text-emerald-700">
-                            🌐 Render HTML5 + Chart.js Dashboard
+                            🌐 Chart.js + TailwindCSS
                         </div>
                     </div>
-                </div>
-            </div>
-
-            <!-- Interactive API Gateway Console Simulator -->
-            <div class="glass-card p-5 rounded-xl border border-slate-200">
-                <div class="flex items-center justify-between mb-3">
-                    <h4 class="font-bold text-slate-800 text-sm flex items-center space-x-2">
-                        <i data-lucide="terminal" class="w-4 h-4 text-sky-600"></i>
-                        <span>Simulasi Respon Payload API (Google Apps Script Web App)</span>
-                    </h4>
-                    <button onclick="runApiSimulation()" class="bg-bps-blue hover:bg-slate-800 text-white text-xs px-3 py-1.5 rounded font-medium flex items-center space-x-1 transition">
-                        <i data-lucide="play" class="w-3.5 h-3.5"></i>
-                        <span>Uji Endpoint GET</span>
-                    </button>
-                </div>
-
-                <!-- Simulated Console Window -->
-                <div class="bg-slate-950 text-slate-200 p-4 rounded-lg font-mono text-xs overflow-x-auto border border-slate-800 shadow-inner">
-                    <div class="flex items-center space-x-2 border-b border-slate-800 pb-2 mb-2 text-slate-500 text-[11px]">
-                        <span class="w-2.5 h-2.5 rounded-full bg-red-500 inline-block"></span>
-                        <span class="w-2.5 h-2.5 rounded-full bg-yellow-500 inline-block"></span>
-                        <span class="w-2.5 h-2.5 rounded-full bg-green-500 inline-block"></span>
-                        <span class="ml-2">HTTPS Request GET /exec?action=getMediaSummary&token=bps_lampung_sec_2026</span>
-                    </div>
-                    <pre id="apiConsoleOutput" class="text-emerald-400">
-// Klik tombol "Uji Endpoint GET" untuk mensimulasikan penarikan JSON realtime dari Apps Script Gateway...
-                    </pre>
                 </div>
             </div>
         </div>
 
     </main>
+
+    <!-- Modal Detail Analisis AI -->
+    <div id="analysisModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 hidden items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-xl w-full shadow-2xl border border-slate-200 overflow-hidden">
+            <div class="bg-bps-dark text-white px-5 py-4 flex items-center justify-between">
+                <div class="flex items-center space-x-2">
+                    <i data-lucide="sparkles" class="w-4 h-4 text-sky-400"></i>
+                    <span class="font-bold text-sm">Analisis & Rekomendasi Gemini AI</span>
+                </div>
+                <button onclick="closeAnalysisModal()" class="text-slate-400 hover:text-white">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            <div class="p-5 space-y-4 max-h-[75vh] overflow-y-auto">
+                <div>
+                    <div class="flex items-center gap-2 mb-1">
+                        <span id="modalDate" class="text-xs text-slate-500"></span>
+                        <span>•</span>
+                        <span id="modalMedia" class="text-xs font-semibold text-bps-blue"></span>
+                        <span id="modalSentimentBadge" class="text-[11px] px-2 py-0.5 rounded-full font-semibold"></span>
+                    </div>
+                    <h4 id="modalTitle" class="font-bold text-slate-900 text-base leading-snug"></h4>
+                </div>
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 text-xs text-slate-700 whitespace-pre-line leading-relaxed" id="modalBody">
+                </div>
+                <div class="flex justify-end gap-2 pt-2">
+                    <button onclick="closeAnalysisModal()" class="px-4 py-2 text-xs font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-lg">Tutup</button>
+                    <a id="modalExternalLink" href="#" target="_blank" rel="noopener noreferrer" class="px-4 py-2 text-xs font-semibold text-white bg-bps-blue hover:bg-slate-800 rounded-lg inline-flex items-center gap-1.5">
+                        <span>Buka Berita Asli</span>
+                        <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Footer -->
     <footer class="bg-white border-t border-slate-200 py-4 mt-auto">
@@ -451,10 +443,10 @@
             <div>
                 &copy; 2026 <strong>BPS Provinsi Lampung</strong> - Tim Diseminasi & Humas
             </div>
-            <div class="flex items-center space-x-4">
-                <span class="hover:text-bps-blue transition cursor-pointer">SOP Automasi BRS</span>
+            <div class="flex items-center space-x-3">
+                <span>Sumber Data: Google Sheets Media Monitoring</span>
                 <span>•</span>
-                <span class="hover:text-bps-blue transition cursor-pointer">Dokumentasi API Proxy</span>
+                <a href="virtual-office.html" class="text-bps-blue font-semibold hover:underline">AI Agent Virtual Office</a>
             </div>
         </div>
     </footer>
@@ -467,41 +459,23 @@
 
     <!-- Application Script -->
     <script>
-        // Initialize Lucide Icons
         lucide.createIcons();
 
-        // Sample Data Store (Simulated Data from Google Sheets API)
-        const mockNewsData = [
-            { id: 1, date: "2026-11-02", title: "BPS Lampung Catat Inflasi Oktober 2026 Terkendali Sebesar 2,1% (y-on-y)", media: "Lampung Post", topic: "Inflasi", sentiment: "Positif", reach: "12,400" },
-            { id: 2, date: "2026-11-02", title: "Komoditas Beras dan Cabai Rawit Jadi Penyumbang Main Inflasi di Bandar Lampung", media: "Radar Lampung", topic: "Inflasi", sentiment: "Netral", reach: "9,800" },
-            { id: 3, date: "2026-11-03", title: "Pertumbuhan Ekonomi Lampung Kuartal III-2026 Capai 5.12%, Sektor Pertanian Dominan", media: "Antara Lampung", topic: "Pertumbuhan Ekonomi", sentiment: "Positif", reach: "18,200" },
-            { id: 4, date: "2026-11-03", title: "Nilai Tukar Petani (NTP) Lampung Naik 1,45% Pada Bulan Oktober 2026", media: "Tribun Lampung", topic: "NTP", sentiment: "Positif", reach: "8,100" },
-            { id: 5, date: "2026-11-04", title: "Ekspor Kopi Robusta Lampung Meningkat Melejit 18% ke Pasar Eropa", media: "Lampung Post", topic: "Ekspor-Impor", sentiment: "Positif", reach: "15,600" },
-            { id: 6, date: "2026-11-05", title: "Tingkat Pengangguran Terbuka (TPT) Lampung Turun Menjadi 4,15%", media: "Kupas Tuntas", topic: "Pertumbuhan Ekonomi", sentiment: "Positif", reach: "7,300" },
-            { id: 7, date: "2026-11-06", title: "Fluktuasi Harga Bahan Pokok Diwaspadai Jelang Akhir Tahun Menurut Data BPS", media: "RRI Lampung", topic: "Inflasi", sentiment: "Netral", reach: "5,400" },
-            { id: 8, date: "2026-11-07", title: "BPS: Angka Kemiskinan Provinsi Lampung Alami Penurunan Berturut-turut", media: "Radar Lampung", topic: "Kemiskinan", sentiment: "Positif", reach: "11,000" },
-            { id: 9, date: "2026-11-08", title: "Kunjungan Wisatawan ke Lampung Naik 12% Didorong Okupansi Hotel Bintang", media: "Antara Lampung", topic: "Pariwisata", sentiment: "Positif", reach: "6,900" },
-            { id: 10, date: "2026-11-09", title: "Tantangan Distribusi Pupuk Masih Mengemuka di Kalangan Petani Daerah", media: "Lampung Newspaper", topic: "NTP", sentiment: "Negatif", reach: "4,200" }
-        ];
+        // =========================================================================
+        // WAJIB DIISI: Tempelkan URL Web App Apps Script (/exec) Anda di bawah ini
+        // =========================================================================
+        const API_URL = 'https://script.google.com/macros/s/AKfycbzP5bH97KdOciPcj72cyENPHC97Tlcn49cYaW3-ggVSH5NZbrWfXniVNSDeM290sPZ9Xg/exec';
 
-        const mockBrsList = [
-            { id: "BRS-2026-11-01", title: "BRS Perkembangan Indeks Harga Konsumen (Inflasi) Oktober 2026", status: "Dipublikasikan", date: "01 Nov 2026", author: "Gemini AI + Humas", docsUrl: "#" },
-            { id: "BRS-2026-11-02", title: "BRS Nilai Tukar Petani (NTP) & Harga Produsen Oktober 2026", status: "Dipublikasikan", date: "01 Nov 2026", author: "Gemini AI + Humas", docsUrl: "#" },
-            { id: "BRS-2026-11-03", title: "BRS Pertumbuhan Ekonomi Lampung Triwulan III-2026", status: "Draf Siap Review", date: "05 Nov 2026", author: "Auto Generated", docsUrl: "#" },
-            { id: "BRS-2026-11-04", title: "BRS Perkembangan Ekspor dan Impor Provinsi Lampung", status: "Proses Gemini AI", date: "Hari ini", author: "In Pipeline", docsUrl: "#" }
-        ];
+        let allNewsData = [];
+        let sentimentChart = null;
+        let mediaChart = null;
+        let topicsChart = null;
 
-        // Global Chart Instances
-        let sentimentChart, mediaChart, topicsChart;
-
-        // Initialize App on Load
         window.onload = function() {
-            initCharts();
-            renderNewsTable(mockNewsData);
-            renderBrsList();
+            fetchLiveMonitoringData(false);
         };
 
-        // Tab Switching Logic
+        // Navigasi Tab
         function switchTab(tabName) {
             document.querySelectorAll('.tab-btn').forEach(btn => {
                 btn.classList.remove('bg-bps-blue', 'text-white', 'shadow-sm');
@@ -512,72 +486,330 @@
             activeBtn.classList.add('bg-bps-blue', 'text-white', 'shadow-sm');
             activeBtn.classList.remove('text-slate-600');
 
-            // Hide all sections
             ['dashboard', 'news', 'brs', 'bridge'].forEach(sec => {
                 document.getElementById(`section-${sec}`).classList.add('hidden');
             });
 
-            // Show target section
             document.getElementById(`section-${tabName}`).classList.remove('hidden');
         }
 
-        // Initialize Chart.js
-        function initCharts() {
-            // 1. Sentiment Line Chart
+        // Normalisasi Tanggal dari Sheets (ISO UTC atau DD/MM/YYYY) -> { display: 'DD/MM/YYYY', sortKey: timestamp }
+        function parseSheetDate(rawVal) {
+            if (!rawVal) return { display: '-', sortKey: 0 };
+            const str = String(rawVal).trim();
+
+            // Jika format ISO dari JSON Apps Script (contoh: 2026-11-10T17:00:00.000Z)
+            if (str.includes('T')) {
+                const d = new Date(str);
+                if (!isNaN(d.getTime())) {
+                    const jakartaDate = new Date(d.toLocaleString('en-US', { timeZone: 'Asia/Jakarta' }));
+                    const dd = String(jakartaDate.getDate()).padStart(2, '0');
+                    const mm = String(jakartaDate.getMonth() + 1).padStart(2, '0');
+                    const yyyy = jakartaDate.getFullYear();
+                    return {
+                        display: `${dd}/${mm}/${yyyy}`,
+                        sortKey: new Date(yyyy, jakartaDate.getMonth(), jakartaDate.getDate()).getTime()
+                    };
+                }
+            }
+
+            // Jika format DD/MM/YYYY
+            const parts = str.split('/');
+            if (parts.length === 3) {
+                const dd = parseInt(parts[0], 10);
+                const mm = parseInt(parts[1], 10);
+                const yyyy = parseInt(parts[2], 10);
+                return {
+                    display: `${String(dd).padStart(2, '0')}/${String(mm).padStart(2, '0')}/${yyyy}`,
+                    sortKey: new Date(yyyy, mm - 1, dd).getTime()
+                };
+            }
+
+            return { display: str, sortKey: 0 };
+        }
+
+        // Ekstrak Sentimen dari kolom Analisis
+        function extractSentiment(analisisText) {
+            const match = (analisisText || '').match(/SENTIMEN:\s*(Positif|Netral|Negatif)/i);
+            if (!match) return 'Netral';
+            const val = match[1].toLowerCase();
+            if (val === 'positif') return 'Positif';
+            if (val === 'negatif') return 'Negatif';
+            return 'Netral';
+        }
+
+        // Klasifikasi Topik Otomatis dari Judul & Analisis
+        function detectTopic(judul, analisis) {
+            const text = `${judul} ${analisis}`.toLowerCase();
+            if (text.includes('inflasi') || text.includes('ihk') || text.includes('harga') || text.includes('beras') || text.includes('cabai')) {
+                return 'Inflasi & Harga';
+            }
+            if (text.includes('ekonomi') || text.includes('pdrb') || text.includes('tumbuh') || text.includes('pertumbuhan') || text.includes('ekspor') || text.includes('impor')) {
+                return 'Pertumbuhan Ekonomi';
+            }
+            if (text.includes('pengangguran') || text.includes('tenaga kerja') || text.includes('kemiskinan') || text.includes('miskin') || text.includes('tpt') || text.includes('bpjstk')) {
+                return 'Ketenagakerjaan & Kemiskinan';
+            }
+            if (text.includes('pertanian') || text.includes('padi') || text.includes('jagung') || text.includes('ntp') || text.includes('petani') || text.includes('panen')) {
+                return 'Pertanian & NTP';
+            }
+            if (text.includes('ipm') || text.includes('pendidikan') || text.includes('sekolah') || text.includes('beasiswa') || text.includes('pembangunan manusia')) {
+                return 'IPM & Pendidikan';
+            }
+            return 'Isu Daerah & Umum';
+        }
+
+        // Set Status Indikator Koneksi di Header
+        function setConnectionStatus(state, text) {
+            const pingDot = document.getElementById('apiPingDot');
+            const solidDot = document.getElementById('apiSolidDot');
+            const statusText = document.getElementById('apiStatusText');
+
+            if (state === 'ok') {
+                pingDot.className = 'animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75';
+                solidDot.className = 'relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500';
+                statusText.className = 'text-emerald-400 font-medium';
+            } else if (state === 'error') {
+                pingDot.className = 'hidden';
+                solidDot.className = 'relative inline-flex rounded-full h-2.5 w-2.5 bg-rose-500';
+                statusText.className = 'text-rose-400 font-medium';
+            } else {
+                pingDot.className = 'animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75';
+                solidDot.className = 'relative inline-flex rounded-full h-2.5 w-2.5 bg-amber-500';
+                statusText.className = 'text-amber-400 font-medium';
+            }
+            statusText.innerText = text;
+        }
+
+        // Tarik Data Real-Time dari Google Apps Script
+        async function fetchLiveMonitoringData(isManual = false) {
+            const icon = document.getElementById('syncIcon');
+            icon.classList.add('animate-spin');
+            setConnectionStatus('loading', 'Menarik data...');
+
+            if (!API_URL || API_URL.includes('GANTI_DENGAN_URL')) {
+                icon.classList.remove('animate-spin');
+                setConnectionStatus('error', 'URL API Belum Diisi');
+                showToast('Harap isi konstanta API_URL dengan URL /exec Apps Script Anda.');
+                return;
+            }
+
+            try {
+                const response = await fetch(API_URL);
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                const rawData = await response.json();
+
+                if (!Array.isArray(rawData)) {
+                    throw new Error(rawData.error || 'Format JSON bukan array berita');
+                }
+
+                // Mapping seluruh baris database
+                allNewsData = rawData.map((row, idx) => {
+                    const parsedDate = parseSheetDate(row.tanggal);
+                    const sentiment = extractSentiment(row.analisis);
+                    const topic = detectTopic(row.judul, row.analisis);
+
+                    return {
+                        id: idx + 1,
+                        date: parsedDate.display,
+                        sortKey: parsedDate.sortKey,
+                        title: row.judul || '(Tanpa Judul)',
+                        media: row.media || 'Media Daring',
+                        link: row.link || '#',
+                        analisis: row.analisis || 'Belum ada analisis AI.',
+                        sentiment: sentiment,
+                        topic: topic
+                    };
+                });
+
+                // Urutkan terbaru di atas untuk tabel
+                allNewsData.sort((a, b) => b.sortKey - a.sortKey);
+
+                updateDashboardMetricsAndCharts(allNewsData);
+                renderNewsTable(allNewsData);
+
+                const now = new Date();
+                document.getElementById('lastUpdateText').innerText = `${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')} WIB`;
+                setConnectionStatus('ok', `Terhubung (${allNewsData.length} Berita)`);
+
+                if (isManual) showToast(`Sinkronisasi berhasil: ${allNewsData.length} berita dimuat dari database.`);
+
+            } catch (err) {
+                console.error('Error fetch sheets:', err);
+                setConnectionStatus('error', 'Gagal Terhubung');
+                showToast(`Gagal menarik data: ${err.message}`);
+            } finally {
+                icon.classList.remove('animate-spin');
+            }
+        }
+
+        // Hitung KPI & Render Grafik Berdasarkan Database Asli
+        function updateDashboardMetricsAndCharts(data) {
+            const total = data.length;
+            const positif = data.filter(d => d.sentiment === 'Positif').length;
+            const netral = data.filter(d => d.sentiment === 'Netral').length;
+            const negatif = data.filter(d => d.sentiment === 'Negatif').length;
+
+            const uniqueMedia = new Set(data.map(d => d.media.toLowerCase().trim())).size;
+            const posPct = total > 0 ? ((positif / total) * 100).toFixed(1) : '0.0';
+
+            // Hitung Skor Reputasi PR (Skala 10 berdasarkan bobot Positif=10, Netral=7.5, Negatif=2)
+            const repScore = total > 0
+                ? (((positif * 10) + (netral * 7.5) + (negatif * 2)) / total).toFixed(1)
+                : '0.0';
+
+            // Update KPI Cards
+            document.getElementById('kpiTotal').innerText = total;
+            document.getElementById('kpiMediaCount').innerText = `Dari ${uniqueMedia} media daring terpantau`;
+            document.getElementById('kpiPositivePct').innerText = `${posPct}%`;
+            document.getElementById('kpiSentimentBreakdown').innerText = `${positif} Positif • ${netral} Netral • ${negatif} Negatif`;
+            document.getElementById('kpiReputationScore').innerText = repScore;
+
+            const repLabel = document.getElementById('kpiReputationLabel');
+            if (parseFloat(repScore) >= 8.5) repLabel.innerText = 'Kategori: Sangat Baik';
+            else if (parseFloat(repScore) >= 7.0) repLabel.innerText = 'Kategori: Baik / Kondusif';
+            else repLabel.innerText = 'Kategori: Perlu Atensi Humas';
+
+            document.getElementById('kpiAttentionCount').innerText = `${netral + negatif} Berita`;
+            document.getElementById('kpiAttentionDetail').innerText = `${netral} Netral & ${negatif} Negatif perlu pantauan`;
+
+            // 1. Agregasi Tren Harian (Urut kronologis dari tanggal terlama di sheet ke terbaru)
+            const chronological = [...data].sort((a, b) => a.sortKey - b.sortKey);
+            const validDates = chronological.filter(d => d.sortKey > 0);
+            if (validDates.length > 0) {
+                const startDate = validDates[0].date;
+                const endDate = validDates[validDates.length - 1].date;
+                document.getElementById('dateRangeText').innerText = startDate === endDate ? startDate : `${startDate} – ${endDate}`;
+            } else {
+                document.getElementById('dateRangeText').innerText = 'Semua Data';
+            }
+
+            const dateGroups = {};
+            chronological.forEach(item => {
+                const key = item.date;
+                if (!dateGroups[key]) {
+                    dateGroups[key] = { Positif: 0, Netral: 0, Negatif: 0 };
+                }
+                dateGroups[key][item.sentiment]++;
+            });
+
+            const trendLabels = Object.keys(dateGroups);
+            const trendPos = trendLabels.map(d => dateGroups[d].Positif);
+            const trendNet = trendLabels.map(d => dateGroups[d].Netral);
+            const trendNeg = trendLabels.map(d => dateGroups[d].Negatif);
+
+            // 2. Agregasi Media Partner Teraktif
+            const mediaCounts = {};
+            data.forEach(item => {
+                const m = item.media.trim();
+                mediaCounts[m] = (mediaCounts[m] || 0) + 1;
+            });
+            const sortedMedia = Object.entries(mediaCounts).sort((a, b) => b[1] - a[1]);
+            const topMedia = sortedMedia.slice(0, 5);
+            const otherMediaCount = sortedMedia.slice(5).reduce((sum, curr) => sum + curr[1], 0);
+
+            const mediaLabels = topMedia.map(m => m[0]);
+            const mediaValues = topMedia.map(m => m[1]);
+            if (otherMediaCount > 0) {
+                mediaLabels.push('Media Lainnya');
+                mediaValues.push(otherMediaCount);
+            }
+
+            // 3. Agregasi Topik Indikator
+            const topicCounts = {
+                'Pertumbuhan Ekonomi': 0,
+                'Ketenagakerjaan & Kemiskinan': 0,
+                'Pertanian & NTP': 0,
+                'IPM & Pendidikan': 0,
+                'Inflasi & Harga': 0,
+                'Isu Daerah & Umum': 0
+            };
+            data.forEach(item => {
+                if (topicCounts[item.topic] !== undefined) {
+                    topicCounts[item.topic]++;
+                }
+            });
+
+            renderCharts(
+                trendLabels, trendPos, trendNet, trendNeg,
+                mediaLabels, mediaValues,
+                Object.keys(topicCounts), Object.values(topicCounts)
+            );
+        }
+
+        // Render Ulang Chart.js
+        function renderCharts(trendLabels, trendPos, trendNet, trendNeg, mediaLabels, mediaValues, topicLabels, topicValues) {
+            if (sentimentChart) sentimentChart.destroy();
+            if (mediaChart) mediaChart.destroy();
+            if (topicsChart) topicsChart.destroy();
+
+            // Chart 1: Tren Sentimen
             const ctx1 = document.getElementById('sentimentTrendChart').getContext('2d');
             sentimentChart = new Chart(ctx1, {
                 type: 'line',
                 data: {
-                    labels: ['Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov (Aktif)'],
+                    labels: trendLabels,
                     datasets: [
                         {
                             label: 'Positif',
-                            data: [120, 135, 142, 150, 168, 159],
+                            data: trendPos,
                             borderColor: '#10B981',
-                            backgroundColor: 'rgba(16, 185, 129, 0.08)',
+                            backgroundColor: 'rgba(16, 185, 129, 0.12)',
                             fill: true,
-                            tension: 0.35,
-                            borderWidth: 2.5
+                            tension: 0.3,
+                            borderWidth: 2.5,
+                            pointRadius: 4
                         },
                         {
                             label: 'Netral',
-                            data: [25, 30, 22, 28, 20, 19],
+                            data: trendNet,
                             borderColor: '#64748B',
                             backgroundColor: 'transparent',
-                            tension: 0.35,
+                            tension: 0.3,
                             borderWidth: 2,
-                            borderDash: [4, 4]
+                            borderDash: [4, 4],
+                            pointRadius: 4
                         },
                         {
                             label: 'Negatif',
-                            data: [8, 5, 10, 7, 4, 6],
+                            data: trendNeg,
                             borderColor: '#EF4444',
                             backgroundColor: 'transparent',
-                            tension: 0.35,
-                            borderWidth: 2
+                            tension: 0.3,
+                            borderWidth: 2,
+                            pointRadius: 4
                         }
                     ]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    plugins: { legend: { position: 'top', labels: { boxWidth: 12, font: { size: 11 } } } },
+                    plugins: {
+                        legend: { position: 'top', labels: { boxWidth: 12, font: { size: 11 } } }
+                    },
                     scales: {
-                        y: { grid: { borderDash: [2, 2] }, ticks: { font: { size: 11 } } },
-                        x: { grid: { display: false }, ticks: { font: { size: 11 } } }
+                        y: {
+                            beginAtZero: true,
+                            ticks: { stepSize: 1, precision: 0, font: { size: 11 } },
+                            grid: { borderDash: [2, 2] }
+                        },
+                        x: {
+                            grid: { display: false },
+                            ticks: { font: { size: 11 } }
+                        }
                     }
                 }
             });
 
-            // 2. Media Outlets Doughnut Chart
+            // Chart 2: Top Media Partner
             const ctx2 = document.getElementById('mediaShareChart').getContext('2d');
             mediaChart = new Chart(ctx2, {
                 type: 'doughnut',
                 data: {
-                    labels: ['Lampung Post', 'Radar Lampung', 'Antara News', 'Tribun Lampung', 'Lainnya'],
+                    labels: mediaLabels,
                     datasets: [{
-                        data: [35, 28, 18, 12, 7],
-                        backgroundColor: ['#0F2C59', '#0284C7', '#38BDF8', '#F97316', '#CBD5E1'],
+                        data: mediaValues,
+                        backgroundColor: ['#0F2C59', '#0284C7', '#38BDF8', '#F97316', '#10B981', '#CBD5E1'],
                         borderWidth: 2,
                         borderColor: '#ffffff'
                     }]
@@ -585,20 +817,22 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 10 } } } },
-                    cutout: '65%'
+                    plugins: {
+                        legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 10 } } }
+                    },
+                    cutout: '62%'
                 }
             });
 
-            // 3. Topics Bar Chart
+            // Chart 3: Sebaran Topik Indikator
             const ctx3 = document.getElementById('topicsChart').getContext('2d');
             topicsChart = new Chart(ctx3, {
                 type: 'bar',
                 data: {
-                    labels: ['Inflasi (IHK)', 'Pertumbuhan Ekonomi', 'NTP / Pertanian', 'Kemiskinan', 'Ekspor-Impor', 'Pariwisata'],
+                    labels: topicLabels,
                     datasets: [{
-                        label: 'Jumlah Publikasi Artikel',
-                        data: [54, 42, 31, 25, 20, 12],
+                        label: 'Jumlah Artikel',
+                        data: topicValues,
                         backgroundColor: '#0284C7',
                         borderRadius: 6
                     }]
@@ -608,29 +842,45 @@
                     maintainAspectRatio: false,
                     plugins: { legend: { display: false } },
                     scales: {
-                        y: { grid: { borderDash: [2, 2] } },
-                        x: { grid: { display: false } }
+                        y: {
+                            beginAtZero: true,
+                            ticks: { stepSize: 1, precision: 0, font: { size: 11 } },
+                            grid: { borderDash: [2, 2] }
+                        },
+                        x: {
+                            grid: { display: false },
+                            ticks: { font: { size: 11 } }
+                        }
                     }
                 }
             });
         }
 
-        // Render News Table
+        // Render Tabel Berita
         function renderNewsTable(data) {
             const tbody = document.getElementById('newsTableBody');
             tbody.innerHTML = '';
 
+            if (data.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" class="px-4 py-8 text-center text-slate-400">Tidak ada berita yang sesuai dengan filter.</td></tr>`;
+                document.getElementById('showingCount').innerText = `Menampilkan 0 dari ${allNewsData.length} berita`;
+                return;
+            }
+
             data.forEach(item => {
-                let badgeColor = 'bg-slate-100 text-slate-700';
+                let badgeColor = 'bg-slate-100 text-slate-700 border border-slate-200';
                 if (item.sentiment === 'Positif') badgeColor = 'bg-emerald-50 text-emerald-700 border border-emerald-200';
-                if (item.sentiment === 'Netral') badgeColor = 'bg-slate-100 text-slate-700 border border-slate-200';
                 if (item.sentiment === 'Negatif') badgeColor = 'bg-rose-50 text-rose-700 border border-rose-200';
 
                 const tr = document.createElement('tr');
                 tr.className = 'hover:bg-slate-50 transition';
                 tr.innerHTML = `
-                    <td class="px-4 py-3 whitespace-nowrap text-slate-500">${item.date}</td>
-                    <td class="px-4 py-3 font-medium text-slate-900 max-w-md">${item.title}</td>
+                    <td class="px-4 py-3 whitespace-nowrap text-slate-500 font-medium">${item.date}</td>
+                    <td class="px-4 py-3 font-medium text-slate-900 max-w-md">
+                        <a href="${item.link}" target="_blank" rel="noopener noreferrer" class="hover:text-sky-600 hover:underline transition">
+                            ${item.title}
+                        </a>
+                    </td>
                     <td class="px-4 py-3 whitespace-nowrap"><span class="font-semibold text-slate-700">${item.media}</span></td>
                     <td class="px-4 py-3 whitespace-nowrap"><span class="bg-blue-50 text-blue-700 px-2 py-0.5 rounded text-[11px] font-medium">${item.topic}</span></td>
                     <td class="px-4 py-3 whitespace-nowrap text-center">
@@ -639,26 +889,31 @@
                         </span>
                     </td>
                     <td class="px-4 py-3 whitespace-nowrap text-right">
-                        <button onclick="showToast('Membuka tautan liputan media...')" class="text-bps-blue hover:text-sky-700 font-semibold text-xs flex items-center justify-end space-x-1">
-                            <span>Kliping</span>
-                            <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
-                        </button>
+                        <div class="inline-flex items-center gap-2">
+                            <button onclick="openAnalysisModal(${item.id})" class="px-2.5 py-1 rounded bg-sky-50 text-sky-700 hover:bg-sky-100 font-semibold text-xs inline-flex items-center gap-1 transition">
+                                <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+                                <span>Analisis AI</span>
+                            </button>
+                            <a href="${item.link}" target="_blank" rel="noopener noreferrer" class="text-slate-500 hover:text-bps-blue p-1" title="Buka Tautan Berita">
+                                <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                            </a>
+                        </div>
                     </td>
                 `;
                 tbody.appendChild(tr);
             });
 
-            document.getElementById('showingCount').innerText = `Menampilkan ${data.length} dari ${mockNewsData.length} berita`;
+            document.getElementById('showingCount').innerText = `Menampilkan ${data.length} dari ${allNewsData.length} berita`;
             lucide.createIcons();
         }
 
-        // Filter Table Logic
+        // Filter Tabel Berita
         function filterNewsTable() {
             const searchVal = document.getElementById('searchInput').value.toLowerCase();
             const sentimentVal = document.getElementById('sentimentFilter').value;
             const topicVal = document.getElementById('topicFilter').value;
 
-            const filtered = mockNewsData.filter(item => {
+            const filtered = allNewsData.filter(item => {
                 const matchesSearch = item.title.toLowerCase().includes(searchVal) || item.media.toLowerCase().includes(searchVal);
                 const matchesSentiment = sentimentVal === 'ALL' || item.sentiment === sentimentVal;
                 const matchesTopic = topicVal === 'ALL' || item.topic === topicVal;
@@ -668,106 +923,34 @@
             renderNewsTable(filtered);
         }
 
-        // Render Automated BRS List
-        function renderBrsList() {
-            const container = document.getElementById('brsListContainer');
-            container.innerHTML = '';
+        // Modal Detail Analisis AI
+        function openAnalysisModal(id) {
+            const item = allNewsData.find(d => d.id === id);
+            if (!item) return;
 
-            mockBrsList.forEach(brs => {
-                let statusBadge = 'bg-emerald-100 text-emerald-800 border-emerald-300';
-                if (brs.status === 'Draf Siap Review') statusBadge = 'bg-amber-100 text-amber-800 border-amber-300';
-                if (brs.status === 'Proses Gemini AI') statusBadge = 'bg-sky-100 text-sky-800 border-sky-300 animate-pulse';
+            document.getElementById('modalDate').innerText = item.date;
+            document.getElementById('modalMedia').innerText = item.media;
+            document.getElementById('modalTitle').innerText = item.title;
+            document.getElementById('modalBody').innerText = item.analisis;
+            document.getElementById('modalExternalLink').href = item.link;
 
-                const card = document.createElement('div');
-                card.className = 'p-4 rounded-lg bg-slate-50 border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:bg-white hover:shadow-sm transition';
-                card.innerHTML = `
-                    <div class="space-y-1">
-                        <div class="flex items-center space-x-2">
-                            <span class="text-xs font-mono text-slate-400">${brs.id}</span>
-                            <span class="text-xs px-2 py-0.5 rounded font-semibold border ${statusBadge}">${brs.status}</span>
-                        </div>
-                        <h4 class="font-bold text-slate-800 text-sm">${brs.title}</h4>
-                        <div class="text-xs text-slate-500 flex items-center space-x-3">
-                            <span>📅 ${brs.date}</span>
-                            <span>•</span>
-                            <span>🤖 Engine: ${brs.author}</span>
-                        </div>
-                    </div>
-                    <div class="flex items-center space-x-2 shrink-0">
-                        <button onclick="showToast('Membaca draf Google Docs...')" class="px-3 py-1.5 border border-slate-300 rounded-lg text-xs font-semibold text-slate-700 bg-white hover:bg-slate-100 flex items-center space-x-1">
-                            <i data-lucide="file-edit" class="w-3.5 h-3.5"></i>
-                            <span>Buka Draf Docs</span>
-                        </button>
-                        <button onclick="showToast('Notifikasi dikirim ke Bot Telegram Humas')" class="px-3 py-1.5 bg-sky-600 text-white rounded-lg text-xs font-semibold hover:bg-sky-500 flex items-center space-x-1">
-                            <i data-lucide="send" class="w-3.5 h-3.5"></i>
-                            <span>Telegram Alert</span>
-                        </button>
-                    </div>
-                `;
-                container.appendChild(card);
-            });
+            const badge = document.getElementById('modalSentimentBadge');
+            badge.innerText = item.sentiment;
+            badge.className = 'text-[11px] px-2 py-0.5 rounded-full font-semibold ';
+            if (item.sentiment === 'Positif') badge.className += 'bg-emerald-100 text-emerald-800';
+            else if (item.sentiment === 'Negatif') badge.className += 'bg-rose-100 text-rose-800';
+            else badge.className += 'bg-slate-200 text-slate-800';
+
+            const modal = document.getElementById('analysisModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
             lucide.createIcons();
         }
 
-        // Trigger Simulated Sync
-        function triggerDataSync() {
-            const btn = document.getElementById('syncBtn');
-            const icon = document.getElementById('syncIcon');
-            icon.classList.add('animate-spin');
-
-            showToast("Menghubungkan ke Google Sheets API Gateway...");
-
-            setTimeout(() => {
-                icon.classList.remove('animate-spin');
-                const now = new Date();
-                document.getElementById('lastUpdateText').innerText = `Hari ini, ${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')} WIB`;
-                showToast("Data Liputan & BRS Berhasil Diperbarui!");
-            }, 1200);
-        }
-
-        // Run Interactive API Console Simulation
-        function runApiSimulation() {
-            const consoleBox = document.getElementById('apiConsoleOutput');
-            consoleBox.innerHTML = `<span class="text-sky-400">> Initiating GET request to Apps Script Web App Endpoint...</span>\n<span class="text-slate-500">Connecting via SSL/TLS secure bridge...</span>`;
-
-            setTimeout(() => {
-                const samplePayload = {
-                    status: 200,
-                    success: true,
-                    data_source: "Protected Google Sheets (BPS_Media_2026.xlsx)",
-                    security_mode: "API_Bridge_No_Raw_Access",
-                    timestamp: new Date().toISOString(),
-                    summary: {
-                        total_coverage: 184,
-                        sentiment_positive_pct: 86.4,
-                        reputation_index: 9.2,
-                        active_brs_drafts: 8
-                    },
-                    recent_articles: mockNewsData.slice(0, 2)
-                };
-
-                consoleBox.innerHTML = `<span class="text-emerald-400">HTTP/1.1 200 OK</span>\n<span class="text-sky-300">Content-Type: application/json</span>\n\n` + JSON.stringify(samplePayload, null, 2);
-                showToast("Response Payload JSON Berhasil Diterima!");
-            }, 900);
-        }
-
-        // Trigger New BRS Automate Simulation
-        function simulateBrsGeneration() {
-            showToast("Mulai memproses PPTX Paparan dengan Gemini AI API...");
-
-            setTimeout(() => {
-                const newBrs = {
-                    id: `BRS-2026-11-05`,
-                    title: `BRS Pariwisata & Transportasi Lampung Bulan Oktober 2026`,
-                    status: `Draf Siap Review`,
-                    date: `Hari ini`,
-                    author: `Gemini AI + Apps Script`,
-                    docsUrl: `#`
-                };
-                mockBrsList.unshift(newBrs);
-                renderBrsList();
-                showToast("BRS Baru Berhasil Digenerasi ke Google Docs!");
-            }, 1500);
+        function closeAnalysisModal() {
+            const modal = document.getElementById('analysisModal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
         }
 
         // Toast Helper
@@ -779,7 +962,7 @@
 
             setTimeout(() => {
                 toast.classList.add('opacity-0', 'translate-y-4', 'pointer-events-none');
-            }, 3000);
+            }, 3500);
         }
     </script>
 </body>
