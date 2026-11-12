@@ -728,28 +728,23 @@
         scene.add(canvasArt);
       };
       addWallArt(1, -1.2, 2.55, 1.3, 1.65);
-      addWallArt(2, 4.2, 2.55, 1.3, 1.65);
-      // Menambahkan Poster Metal Band di Sisi Kanan Dinding Kantor
-     // Muat poster langsung dari folder yang sama dengan virtual-office.html
-      const posterTex = new THREE.TextureLoader().load('./suicide_silence_poster.jpg');
+      const posterTex = new THREE.TextureLoader().load('suicide_silence_poster.jpg');
+   posterTex.encoding = THREE.sRGBEncoding;
 
-      const posterFrame = new THREE.Mesh(
-        new THREE.BoxGeometry(1.4, 2.0, 0.04),
-        new THREE.MeshStandardMaterial({ color: 0x111111, roughness: 0.8 })
-      );
-      posterFrame.position.set(5.8, 2.2, -6.65);
-      scene.add(posterFrame);
+   const posterFrame = new THREE.Mesh(
+     new THREE.BoxGeometry(1.48, 2.02, 0.06),
+     new THREE.MeshStandardMaterial({ color: 0x111111, roughness: 0.8 })
+   );
+   posterFrame.position.set(4.2, 2.55, -6.64);
+   scene.add(posterFrame);
 
-      const posterCanvas = new THREE.Mesh(
-        new THREE.PlaneGeometry(1.32, 1.92),
-        new THREE.MeshStandardMaterial({
-          map: posterTex,
-          roughness: 0.5,
-          color: 0xffffff
-        })
-      );
-      posterCanvas.position.set(5.8, 2.2, -6.61);
-      scene.add(posterCanvas);
+   const posterCanvas = new THREE.Mesh(
+     new THREE.PlaneGeometry(1.36, 1.90),
+     new THREE.MeshBasicMaterial({ map: posterTex })
+   );
+   posterCanvas.position.set(4.2, 2.55, -6.605);
+   scene.add(posterCanvas);
+     
       createPottedPlant('monstera', -3.7, -6.0, 1.1);
       createPottedPlant('sansevieria', 6.3, -6.0, 1.0);
       createPottedPlant('monstera', 6.4, 1.2, 1.05);
