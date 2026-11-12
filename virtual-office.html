@@ -753,6 +753,56 @@
     // =========================================================================
     // PEMBUAT KARAKTER ROBLOX BLOCKY AVATAR (R15 STYLE)
     // =========================================================================
+   // Memuat foto lokal & memproyeksikannya ke lapisan depan wajah kepala Roblox
+    function applyPhotoFaceToHead(headGroup, imagePath) {
+      const loader = new THREE.TextureLoader();
+      loader.load(
+        imagePath,
+        (texture) => {
+          texture.encoding = THREE.sRGBEncoding;
+
+          // Buat masker oval lembut di kanvas agar tepi foto menyatu halus dengan kulit kepala 3D
+          const canvas = document.createElement('canvas');
+          canvas.width = 256;
+          canvas.height = 256;
+          const ctx = canvas.getContext('2d');
+
+          const img = texture.image;
+          // Crop otomatis bagian tengah foto (center square crop)
+          const minSide = Math.min(img.width, img.height);
+          const sx = (img.width - minSide) / 2;
+          const sy = (img.height - minSide) / 2;
+
+          ctx.save();
+          ctx.beginPath();
+          ctx.ellipse(128, 128, 108, 120, 0, 0, Math.PI * 2);
+          ctx.clip();
+          ctx.drawImage(img, sx, sy, minSide, minSide, 0, 0, 256, 256);
+          ctx.restore();
+
+          const maskedTexture = new THREE.CanvasTexture(canvas);
+          maskedTexture.encoding = THREE.sRGBEncoding;
+
+          // Geometri silinder lengkung tipis yang menempel persis di permukaan depan kepala (r = 0.293)
+          const faceGeo = new THREE.CylinderGeometry(
+            0.293, 0.293, 0.42, 24, 1, true,
+            -Math.PI * 0.32, // sudut mulai (kiri wajah)
+            Math.PI * 0.64   // lebar lengkungan (kanan wajah)
+          );
+          const faceMat = new THREE.MeshBasicMaterial({
+            map: maskedTexture,
+            transparent: true
+          });
+          const faceMesh = new THREE.Mesh(faceGeo, faceMat);
+          faceMesh.position.y = -0.01;
+          headGroup.add(faceMesh);
+        },
+        undefined,
+        (err) => {
+          console.warn('Foto wajah gagal dimuat, menggunakan wajah default Roblox:', imagePath);
+        }
+      );
+    }
     function createRobloxCharacter(config) {
       const root = new THREE.Group();
       root.position.set(config.x, 0, config.z);
