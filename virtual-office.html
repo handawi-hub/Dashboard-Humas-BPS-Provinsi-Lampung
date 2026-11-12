@@ -287,6 +287,7 @@
     const STORAGE_KEY = 'bps_lampung_virtual_office_api';
     let pollingInterval = null;
     let isMusicPlaying = false;
+    let isMoshPitActive = false;
 
     const AGENT_META = {
       crawler: {
@@ -333,27 +334,28 @@
       }
     }
 
-    function toggleMusic() {
-      const audio = document.getElementById('metalMusic');
-      audio.volume = 0.42;
+   function toggleMusic() {
+  const audio = document.getElementById('metalMusic');
+  audio.volume = 0.42;
 
-      if (!isMusicPlaying) {
-        audio.play().then(() => {
-          isMusicPlaying = true;
-          updateMusicButtonUI(true);
-          addLog('🤘 Memutar musik latar Symphonic Metalcore (hardcore_bgm.mp3)!', 'work');
-        }).catch((err) => {
-          console.warn("Gagal memutar audio:", err);
-          addLog('⚠️ Gagal memutar musik: Pastikan file hardcore_bgm.mp3 ada di folder repo atau klik sekali lagi.', 'error');
-        });
-      } else {
-        audio.pause();
-        isMusicPlaying = false;
-        updateMusicButtonUI(false);
-        addLog('⏸️ Musik latar dijeda.', 'info');
-      }
-    }
-
+  if (!isMusicPlaying) {
+    audio.play().then(() => {
+      isMusicPlaying = true;
+      isMoshPitActive = true; // Aktifkan Mosh Pit saat musik nyala!
+      updateMusicButtonUI(true);
+      addLog('🔥 MOSH PIT MODE ON! Para agent mulai headbang & moshing mengikuti irama hardcore!', 'work');
+    }).catch((err) => {
+      console.warn("Gagal memutar audio:", err);
+      addLog('⚠️ Gagal memutar musik: Pastikan file hardcore_bgm.mp3 ada.', 'error');
+    });
+  } else {
+    audio.pause();
+    isMusicPlaying = false;
+    isMoshPitActive = false; // Matikan Mosh Pit saat musik dijeda
+    updateMusicButtonUI(false);
+    addLog('⏸️ Musik latar dijeda. Agent kembali santai.', 'info');
+  }
+}
     // =========================================================================
     // 2. THREE.JS 3D SEMI-OUTDOOR STUDIO, TAMAN, KOLAM, HEWAN & CUACA MUSIM
     // =========================================================================
