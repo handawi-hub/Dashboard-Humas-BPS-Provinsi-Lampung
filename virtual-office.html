@@ -525,34 +525,61 @@ window.addEventListener('DOMContentLoaded', () => {
       pollingInterval = setInterval(fetchState, 8000);
     }
 
-    function renderNewsList(newsItems) {
-      const container = document.getElementById('newsListContainer');
-      container.innerHTML = newsItems.map(item => {
-        const analisisText = String(item.analisis || '');
-        let sentimen = 'Netral';
-        let badgeStyle = 'bg-slate-800 text-slate-300';
-        if (/positif/i.test(analisisText)) {
-          sentimen = 'Positif';
-          badgeStyle = 'bg-emerald-500/15 text-emerald-300';
-        } else if (/negatif/i.test(analisisText)) {
-          sentimen = 'Negatif';
-          badgeStyle = 'bg-rose-500/15 text-rose-300';
-        }
+   function formatTanggalID(rawDate) {
+  if (!rawDate || rawDate === '-') return '-';
+  const str = String(rawDate).trim();
 
-        return `
-          <div class="bg-slate-950 border border-slate-800 rounded-xl p-3 space-y-1.5">
-            <div class="flex items-center justify-between gap-2">
-              <span class="text-[10px] font-mono-code text-slate-400">${item.tanggal || '-'} • ${item.media || 'Media'}</span>
-              <span class="px-2 py-0.5 rounded text-[10px] font-bold ${badgeStyle}">${sentimen}</span>
-            </div>
-            <a href="${item.link || '#'}" target="_blank" class="block text-xs font-bold text-white hover:text-sky-400 leading-snug transition">
-              ${item.judul || '(Tanpa Judul)'} ↗
-            </a>
-            <p class="text-[11px] text-slate-400 whitespace-pre-line leading-relaxed">${analisisText}</p>
-          </div>
-        `;
-      }).join('');
+  // Jika format sudah DD/MM/YYYY (contoh: 11/11/2026), ubah ke nama bulan Indonesia
+  if (/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(str)) {
+    const [dd, mm, yyyy] = str.split('/');
+    const d = new Date(Number(yyyy), Number(mm) - 1, Number(dd));
+    return d.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+  }
+
+  // Jika format ISO dari Google Sheets (contoh: 2026-11-10T17:00:00.000Z)
+  const parsed = new Date(str);
+  if (!isNaN(parsed.getTime())) {
+    return parsed.toLocaleDateString('id-ID', {
+      timeZone: 'Asia/Jakarta',
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
+    });
+  }
+
+  return str;
+}
+
+function renderNewsList(newsItems) {
+  const container = document.getElementById('newsListContainer');
+  container.innerHTML = newsItems.map(item => {
+    const analisisText = String(item.analisis || '');
+    let sentimen = 'Netral';
+    let badgeStyle = 'bg-slate-800 text-slate-300';
+    if (/positif/i.test(analisisText)) {
+      sentimen = 'Positif';
+      badgeStyle = 'bg-emerald-500/15 text-emerald-300';
+    } else if (/negatif/i.test(analisisText)) {
+      sentimen = 'Negatif';
+      badgeStyle = 'bg-rose-500/15 text-rose-300';
     }
+
+    const tanggalRapi = formatTanggalID(item.tanggal);
+
+    return `
+      <div class="bg-slate-950 border border-slate-800 rounded-xl p-3 space-y-1.5">
+        <div class="flex items-center justify-between gap-2">
+          <span class="text-[10px] font-mono-code text-slate-400">${tanggalRapi} • ${item.media || 'Media'}</span>
+          <span class="px-2 py-0.5 rounded text-[10px] font-bold ${badgeStyle}">${sentimen}</span>
+        </div>
+        <a href="${item.link || '#'}" target="_blank" class="block text-xs font-bold text-white hover:text-sky-400 leading-snug transition">
+          ${item.judul || '(Tanpa Judul)'} ↗
+        </a>
+        <p class="text-[11px] text-slate-400 whitespace-pre-line leading-relaxed">${analisisText}</p>
+      </div>
+    `;
+  }).join('');
+}
 
     function switchTab(tab) {
       const isBrs = tab === 'brs';
