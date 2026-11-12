@@ -1315,7 +1315,7 @@
       scene.add(root);
       clickableObjects.push(root);
 
-      robloxAvatars[config.id] = {
+    robloxAvatars[config.id] = {
         root,
         leftLeg,
         rightLeg,
@@ -1324,9 +1324,10 @@
         headGroup,
         basePos: new THREE.Vector3(config.x, 0.12, config.z),
         baseRotY: config.rotY,
-        phase: Math.random() * Math.PI * 2
+        phase: Math.random() * Math.PI * 2,
+        workStartTime: 0,
+        lastStatus: 'IDLE'
       };
-    }
 
     function buildAllRobloxCharacters() {
       createRobloxCharacter({
@@ -1340,7 +1341,7 @@
         hairColor: 0x141414,
         browColor: 0x141414,
         lipColor: 0x7f1d1d,
-        hairStyle: 'crawler-beard-bob',
+        hairStyle: 'crawler-curly',
         hasDarkTie: true
       });
 
