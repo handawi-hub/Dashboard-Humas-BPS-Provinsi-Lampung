@@ -276,53 +276,13 @@
     </div>
   </div>
 
-<!-- AUDIO PLAYER UNTUK MUSIK METAL HARDCORE -->
-<audio id="metalMusic" loop>
-  <source src="https://assets.mixkit.co/active_storage/sfx/2568/2568-84.wav" type="audio/wav">
-  <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3" type="audio/mp3">
-</audio>
+  <!-- AUDIO PLAYER UTAMA (MEN DUKUNG HARDCORE_BGM.MP3 LOKAL & CADANGAN) -->
+  <audio id="metalMusic" loop>
+    <source src="hardcore_bgm.mp3" type="audio/mp3">
+    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3" type="audio/mp3">
+  </audio>
 
-<script>
-  let isMusicPlaying = false;
-  const audio = document.getElementById('metalMusic');
-  
-  // Atur volume sedang agar tidak mengejutkan
-  audio.volume = 0.35; 
-
-  function toggleMusic() {
-    const btn = document.getElementById('btnMusic');
-    const icon = document.getElementById('musicIcon');
-    const text = document.getElementById('musicText');
-
-    if (!isMusicPlaying) {
-      // Panggil play dan tangani Promise dengan benar
-      audio.play().then(() => {
-        isMusicPlaying = true;
-        btn.className = 'px-3 py-1.5 rounded-xl bg-red-600 text-white border border-red-700 text-xs font-bold transition flex items-center gap-1.5 animate-pulse';
-        icon.textContent = '🔥';
-        text.textContent = 'Moshpit Mode On! (Hardcore)';
-        if (typeof addLog === 'function') {
-          addLog('🤘 Memutar musik latar Metal Hardcore! Kepala mulai headbang!', 'error');
-        }
-      }).catch(error => {
-        console.warn("Pemutaran audio dicegah atau gagal:", error);
-        if (typeof addLog === 'function') {
-          addLog('⚠️ Gagal memutar musik: Interaksi browser diperlukan.', 'warning');
-        }
-      });
-    } else {
-      audio.pause();
-      isMusicPlaying = false;
-      // Kembalikan ke styling tombol mati/pause di sini
-      btn.className = 'px-3 py-1.5 rounded-xl bg-gray-800 text-gray-300 border border-gray-700 text-xs font-bold transition flex items-center gap-1.5';
-      icon.textContent = '🎵';
-      text.textContent = 'Play Metal BGM';
-      if (typeof addLog === 'function') {
-        addLog('⏸️ Musik dihentikan.', 'info');
-      }
-    }
-  }
-</script>
+  <script>
     // =========================================================================
     // 1. KONFIGURASI API BRIDGE, AUDIO PLAYER & STATE AGENT
     // =========================================================================
@@ -385,14 +345,15 @@
           isMusicPlaying = true;
           updateMusicButtonUI(true);
           addLog('🤘 Memutar musik latar Symphonic Metalcore (hardcore_bgm.mp3)!', 'work');
-        }).catch(() => {
-          addLog('File hardcore_bgm.mp3 belum terbaca di repo. Pastikan sudah upload hardcore_bgm.mp3 ke GitHub.', 'error');
+        }).catch((err) => {
+          console.warn("Gagal memutar audio:", err);
+          addLog('⚠️ Gagal memutar musik: Pastikan file hardcore_bgm.mp3 ada di folder repo atau klik sekali lagi.', 'error');
         });
       } else {
         audio.pause();
         isMusicPlaying = false;
         updateMusicButtonUI(false);
-        addLog('Musik latar dijeda.', 'info');
+        addLog('⏸️ Musik latar dijeda.', 'info');
       }
     }
 
@@ -758,7 +719,6 @@
       addRug(3.6, 3.0, 0xdcfce7, 1.5, -3.9);
       addRug(3.6, 3.2, 0xfef3c7, 4.6, -0.3);
 
-      // Dinding Abu-Abu Gelap Semen Industrial
       const wallMat = new THREE.MeshStandardMaterial({
         map: createIndustrialConcreteTexture(),
         color: 0xd1d5db,
@@ -787,7 +747,6 @@
         scene.add(pillar);
       });
 
-      // Atap Kanopi Kaca Polos Transparan Penuh
       const glassRoof = new THREE.Mesh(
         new THREE.BoxGeometry(11.35, 0.05, 8.55),
         new THREE.MeshPhysicalMaterial({
@@ -818,7 +777,6 @@
         scene.add(step);
       });
 
-      // Fungsi Pemasangan Poster Band dengan Fallback Otomatis
       const addCustomPoster = (candidateFiles, xPos, fallbackTex) => {
         const frame = new THREE.Mesh(
           new THREE.BoxGeometry(1.48, 2.02, 0.06),
@@ -851,14 +809,12 @@
         tryLoad(0);
       };
 
-      // 1. Poster A Day To Remember di sisi kiri (x = -1.2)
       addCustomPoster(
         ['adtr_poster.webp', 'a Day To Remember.webp'],
         -1.2,
         createFallbackBandPoster('A DAY TO', 'REMEMBER', 'WHAT SEPARATES ME FROM YOU', '#2dd4bf')
       );
 
-      // 2. Poster Suicide Silence di sisi kanan (x = 4.2)
       addCustomPoster(
         ['suicide_silence_poster.jpg', 'suicide_silence_poster.jpg.jpg'],
         4.2,
