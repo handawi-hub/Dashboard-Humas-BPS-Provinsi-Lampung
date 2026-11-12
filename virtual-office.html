@@ -730,36 +730,26 @@
       addWallArt(1, -1.2, 2.55, 1.3, 1.65);
       addWallArt(2, 4.2, 2.55, 1.3, 1.65);
       // Menambahkan Poster Metal Band di Sisi Kanan Dinding Kantor
-      const posterTex = new THREE.TextureLoader().load('https://raw.githubusercontent.com/handawi-hub/bps-lampung-assets/main/suicide_silence_poster.jpg', 
-        () => {
-          // Callback jika berhasil load
-        }, 
-        undefined, 
-        () => {
-          // Fallback menggunakan representasi artwork jika tidak load dari internet
-        }
-      );
+     // Muat poster langsung dari folder yang sama dengan virtual-office.html
+      const posterTex = new THREE.TextureLoader().load('./suicide_silence_poster.jpg');
 
-      // Detail poster Suicide Silence - "The Cleansing" (image_9.png)
       const posterFrame = new THREE.Mesh(
         new THREE.BoxGeometry(1.4, 2.0, 0.04),
-        new THREE.MeshStandardMaterial({ color: 0x111111, roughness: 0.8 }) // Bingkai hitam tipis moshpit
+        new THREE.MeshStandardMaterial({ color: 0x111111, roughness: 0.8 })
       );
-      posterFrame.position.set(5.8, 2.2, -6.65); // Dipasang di sebelah kanan berdampingan dengan workspace
+      posterFrame.position.set(5.8, 2.2, -6.65);
       scene.add(posterFrame);
 
       const posterCanvas = new THREE.Mesh(
         new THREE.PlaneGeometry(1.32, 1.92),
-        new THREE.MeshStandardMaterial({ 
-          map: posterTex, 
+        new THREE.MeshStandardMaterial({
+          map: posterTex,
           roughness: 0.5,
-          // Gunakan warna dasar gelap jika tekstur belum ter-load
-          color: 0x33352e 
+          color: 0xffffff
         })
       );
       posterCanvas.position.set(5.8, 2.2, -6.61);
       scene.add(posterCanvas);
-
       createPottedPlant('monstera', -3.7, -6.0, 1.1);
       createPottedPlant('sansevieria', 6.3, -6.0, 1.0);
       createPottedPlant('monstera', 6.4, 1.2, 1.05);
