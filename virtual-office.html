@@ -447,6 +447,39 @@
     }
 
     function createWoodFloorTexture() {
+      function createIndustrialConcreteTexture() {
+      const c = document.createElement('canvas');
+      c.width = 512; c.height = 512;
+      const ctx = c.getContext('2d');
+
+      // Warna dasar abu-abu gelap semen industrial
+      ctx.fillStyle = '#3f444c';
+      ctx.fillRect(0, 0, 512, 512);
+
+      // Tekstur bercak acian semen alami
+      const tones = ['rgba(30, 34, 40, 0.14)', 'rgba(95, 102, 112, 0.12)', 'rgba(24, 27, 32, 0.10)'];
+      for (let i = 0; i < 2800; i++) {
+        ctx.fillStyle = tones[i % tones.length];
+        ctx.beginPath();
+        ctx.arc(Math.random() * 512, Math.random() * 512, 2 + Math.random() * 14, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      // Garis nat panel beton industrial tipis
+      ctx.strokeStyle = 'rgba(20, 23, 28, 0.32)';
+      ctx.lineWidth = 2;
+      for (let y = 128; y < 512; y += 128) {
+        ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(512, y); ctx.stroke();
+      }
+      for (let x = 170; x < 512; x += 170) {
+        ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, 512); ctx.stroke();
+      }
+
+      const tex = new THREE.CanvasTexture(c);
+      tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
+      tex.repeat.set(3, 2);
+      return tex;
+    }
       const c = document.createElement('canvas');
       c.width = 512; c.height = 512;
       const ctx = c.getContext('2d');
@@ -657,7 +690,12 @@
       addRug(3.6, 3.0, 0xdcfce7, 1.5, -3.9);
       addRug(3.6, 3.2, 0xfef3c7, 4.6, -0.3);
 
-      const wallMat = new THREE.MeshStandardMaterial({ color: 0xfbf9f5, roughness: 0.85 });
+     const wallMat = new THREE.MeshStandardMaterial({
+        map: createIndustrialConcreteTexture(),
+        color: 0xd1d5db,
+        roughness: 0.88,
+        metalness: 0.08
+      });
       const backWall = new THREE.Mesh(new THREE.BoxGeometry(11.5, 4.2, 0.25), wallMat);
       backWall.position.set(1.4, 2.1, -6.8);
       backWall.receiveShadow = true;
