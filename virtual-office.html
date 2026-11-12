@@ -682,13 +682,28 @@
         pillar.castShadow = true;
         scene.add(pillar);
       });
+// Atap Kanopi Kaca Polos Transparan Penuh (Skylight)
+      const glassRoof = new THREE.Mesh(
+        new THREE.BoxGeometry(11.35, 0.05, 8.55),
+        new THREE.MeshPhysicalMaterial({
+          color: 0xe0f2fe,
+          transparent: true,
+          opacity: 0.22,
+          roughness: 0.08,
+          metalness: 0.05,
+          depthWrite: false
+        })
+      );
+      glassRoof.position.set(1.35, 4.12, -2.45);
+      scene.add(glassRoof);
 
-      for (let z = -6.4; z <= 1.7; z += 1.35) {
-        const beam = new THREE.Mesh(new THREE.BoxGeometry(11.4, 0.14, 0.12), pillarMat);
-        beam.position.set(1.4, 4.12, z);
-        beam.castShadow = true;
-        scene.add(beam);
-      }
+      const roofRimGeo = new THREE.EdgesGeometry(new THREE.BoxGeometry(11.35, 0.05, 8.55));
+      const roofRim = new THREE.LineSegments(
+        roofRimGeo,
+        new THREE.LineBasicMaterial({ color: 0x94a3b8, transparent: true, opacity: 0.45 })
+      );
+      roofRim.position.copy(glassRoof.position);
+      scene.add(roofRim);
 
       // Batu Pijakan Taman
       const stoneMat = new THREE.MeshStandardMaterial({ color: 0xd6d3d1, roughness: 0.85 });
