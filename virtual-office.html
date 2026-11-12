@@ -276,12 +276,53 @@
     </div>
   </div>
 
-  <!-- AUDIO PLAYER UNTUK MUSIK SYMPHONIC METALCORE (hardcore_bgm.mp3) -->
-  <audio id="metalMusic" loop preload="auto">
-    <source src="hardcore_bgm.mp3" type="audio/mpeg">
-  </audio>
+<!-- AUDIO PLAYER UNTUK MUSIK METAL HARDCORE -->
+<audio id="metalMusic" loop>
+  <source src="https://assets.mixkit.co/active_storage/sfx/2568/2568-84.wav" type="audio/wav">
+  <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3" type="audio/mp3">
+</audio>
 
-  <script>
+<script>
+  let isMusicPlaying = false;
+  const audio = document.getElementById('metalMusic');
+  
+  // Atur volume sedang agar tidak mengejutkan
+  audio.volume = 0.35; 
+
+  function toggleMusic() {
+    const btn = document.getElementById('btnMusic');
+    const icon = document.getElementById('musicIcon');
+    const text = document.getElementById('musicText');
+
+    if (!isMusicPlaying) {
+      // Panggil play dan tangani Promise dengan benar
+      audio.play().then(() => {
+        isMusicPlaying = true;
+        btn.className = 'px-3 py-1.5 rounded-xl bg-red-600 text-white border border-red-700 text-xs font-bold transition flex items-center gap-1.5 animate-pulse';
+        icon.textContent = '🔥';
+        text.textContent = 'Moshpit Mode On! (Hardcore)';
+        if (typeof addLog === 'function') {
+          addLog('🤘 Memutar musik latar Metal Hardcore! Kepala mulai headbang!', 'error');
+        }
+      }).catch(error => {
+        console.warn("Pemutaran audio dicegah atau gagal:", error);
+        if (typeof addLog === 'function') {
+          addLog('⚠️ Gagal memutar musik: Interaksi browser diperlukan.', 'warning');
+        }
+      });
+    } else {
+      audio.pause();
+      isMusicPlaying = false;
+      // Kembalikan ke styling tombol mati/pause di sini
+      btn.className = 'px-3 py-1.5 rounded-xl bg-gray-800 text-gray-300 border border-gray-700 text-xs font-bold transition flex items-center gap-1.5';
+      icon.textContent = '🎵';
+      text.textContent = 'Play Metal BGM';
+      if (typeof addLog === 'function') {
+        addLog('⏸️ Musik dihentikan.', 'info');
+      }
+    }
+  }
+</script>
     // =========================================================================
     // 1. KONFIGURASI API BRIDGE, AUDIO PLAYER & STATE AGENT
     // =========================================================================
