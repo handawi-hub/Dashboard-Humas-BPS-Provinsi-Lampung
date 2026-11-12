@@ -66,11 +66,11 @@
       </div>
 
       <div class="flex flex-wrap items-center gap-2">
-        <!-- TOMBOL MUSIK LATAR -->
-        <button onclick="toggleMusic()" id="btnMusic" class="px-3 py-1.5 rounded-xl bg-red-50 hover:bg-red-100 text-red-800 border border-red-300 text-xs font-bold transition flex items-center gap-1.5 animate-bounce-subtle">
+        <!-- TOMBOL MUSIK LATAR SYMPHONIC METALCORE -->
+        <button onclick="toggleMusic()" id="btnMusic" class="px-3 py-1.5 rounded-xl bg-red-50 hover:bg-red-100 text-red-800 border border-red-300 text-xs font-bold transition flex items-center gap-1.5">
           <span id="musicIcon">🤘</span> <span id="musicText">Putar Metal Hardcore</span>
         </button>
-        
+
         <!-- TOMBOL PENGATUR MUSIM -->
         <button onclick="toggleSeasonMode()" id="btnSeason" class="px-3 py-1.5 rounded-xl bg-lime-50 hover:bg-lime-100 text-lime-800 border border-lime-300 text-xs font-bold transition flex items-center gap-1.5">
           <span id="seasonIcon">🌤️</span> <span id="seasonText">Musim Panas</span>
@@ -112,7 +112,6 @@
 
         <!-- 3D WEBGL VIEWPORT -->
         <div id="canvasContainer">
-          <!-- Floating Hint -->
           <div class="absolute top-3 left-3 z-10 glass-panel px-3 py-1.5 rounded-xl text-[11px] font-semibold text-slate-700 shadow-sm pointer-events-none flex items-center gap-2">
             <span>🖱️ Geser putar • Scroll zoom • Klik karakter untuk inspeksi</span>
           </div>
@@ -135,7 +134,6 @@
 
         <!-- 3 AGENT STATUS CARDS -->
         <div class="p-3.5 bg-stone-50/70 border-t border-stone-100 grid grid-cols-1 sm:grid-cols-3 gap-2.5">
-          <!-- Card 1: Crawler -->
           <div onclick="focusCamera('crawler')" id="card-crawler" class="cursor-pointer bg-white hover:border-sky-400 border border-stone-200 rounded-2xl p-3 shadow-sm transition group">
             <div class="flex items-center justify-between mb-1">
               <span class="text-xs font-extrabold text-sky-700 group-hover:text-sky-600">1. Media Crawler</span>
@@ -146,7 +144,6 @@
             <span id="time-crawler" class="block text-[10px] text-slate-400 font-mono-code mt-1.5">-</span>
           </div>
 
-          <!-- Card 2: Drafter -->
           <div onclick="focusCamera('drafter')" id="card-drafter" class="cursor-pointer bg-white hover:border-emerald-400 border border-stone-200 rounded-2xl p-3 shadow-sm transition group">
             <div class="flex items-center justify-between mb-1">
               <span class="text-xs font-extrabold text-emerald-700 group-hover:text-emerald-600">2. Penulis BRS</span>
@@ -157,7 +154,6 @@
             <span id="time-drafter" class="block text-[10px] text-slate-400 font-mono-code mt-1.5">-</span>
           </div>
 
-          <!-- Card 3: Auditor -->
           <div onclick="focusCamera('auditor')" id="card-auditor" class="cursor-pointer bg-white hover:border-amber-500 border border-stone-200 rounded-2xl p-3 shadow-sm transition group">
             <div class="flex items-center justify-between mb-1">
               <span class="text-xs font-extrabold text-amber-800 group-hover:text-amber-700">3. Auditor & PR</span>
@@ -180,7 +176,7 @@
           <button onclick="clearLogs()" class="text-[11px] font-semibold text-slate-400 hover:text-slate-700">Bersihkan Log</button>
         </div>
         <div id="terminalLog" class="font-mono-code text-[11px] text-slate-700 space-y-1 max-h-32 overflow-y-auto bg-stone-50 p-2.5 rounded-xl border border-stone-200/80">
-          <div class="text-slate-500">[SYSTEM] Studio Semi-Outdoor atap kaca siap. Interaksi obrolan & salaman aktif.</div>
+          <div class="text-slate-500">[SYSTEM] Studio Industrial siap. Klik "Putar Metal Hardcore" untuk BGM Symphonic Metalcore.</div>
         </div>
       </div>
     </section>
@@ -280,13 +276,19 @@
     </div>
   </div>
 
+  <!-- AUDIO PLAYER UNTUK MUSIK SYMPHONIC METALCORE (hardcore_bgm.mp3) -->
+  <audio id="metalMusic" loop preload="auto">
+    <source src="hardcore_bgm.mp3" type="audio/mpeg">
+  </audio>
+
   <script>
     // =========================================================================
-    // 1. KONFIGURASI API BRIDGE & STATE AGENT
+    // 1. KONFIGURASI API BRIDGE, AUDIO PLAYER & STATE AGENT
     // =========================================================================
     const DEFAULT_API_URL = 'https://script.google.com/macros/s/AKfycbzP5bH97KdOciPcj72cyENPHC97Tlcn49cYaW3-ggVSH5NZbrWfXniVNSDeM290sPZ9Xg/exec?mode=agents';
     const STORAGE_KEY = 'bps_lampung_virtual_office_api';
     let pollingInterval = null;
+    let isMusicPlaying = false;
 
     const AGENT_META = {
       crawler: {
@@ -317,6 +319,41 @@
         targetPos: { x: 4.5, y: 1.3, z: -0.2 }
       }
     };
+
+    function updateMusicButtonUI(playing) {
+      const btn = document.getElementById('btnMusic');
+      const icon = document.getElementById('musicIcon');
+      const text = document.getElementById('musicText');
+      if (playing) {
+        btn.className = 'px-3 py-1.5 rounded-xl bg-red-600 text-white border border-red-700 text-xs font-bold transition flex items-center gap-1.5 animate-pulse';
+        icon.textContent = '🔥';
+        text.textContent = 'Metalcore On! (Pause)';
+      } else {
+        btn.className = 'px-3 py-1.5 rounded-xl bg-red-50 hover:bg-red-100 text-red-800 border border-red-300 text-xs font-bold transition flex items-center gap-1.5';
+        icon.textContent = '🤘';
+        text.textContent = 'Putar Metal Hardcore';
+      }
+    }
+
+    function toggleMusic() {
+      const audio = document.getElementById('metalMusic');
+      audio.volume = 0.42;
+
+      if (!isMusicPlaying) {
+        audio.play().then(() => {
+          isMusicPlaying = true;
+          updateMusicButtonUI(true);
+          addLog('🤘 Memutar musik latar Symphonic Metalcore (hardcore_bgm.mp3)!', 'work');
+        }).catch(() => {
+          addLog('File hardcore_bgm.mp3 belum terbaca di repo. Pastikan sudah upload hardcore_bgm.mp3 ke GitHub.', 'error');
+        });
+      } else {
+        audio.pause();
+        isMusicPlaying = false;
+        updateMusicButtonUI(false);
+        addLog('Musik latar dijeda.', 'info');
+      }
+    }
 
     // =========================================================================
     // 2. THREE.JS 3D SEMI-OUTDOOR STUDIO, TAMAN, KOLAM, HEWAN & CUACA MUSIM
@@ -447,39 +484,6 @@
     }
 
     function createWoodFloorTexture() {
-      function createIndustrialConcreteTexture() {
-      const c = document.createElement('canvas');
-      c.width = 512; c.height = 512;
-      const ctx = c.getContext('2d');
-
-      // Warna dasar abu-abu gelap semen industrial
-      ctx.fillStyle = '#3f444c';
-      ctx.fillRect(0, 0, 512, 512);
-
-      // Tekstur bercak acian semen alami
-      const tones = ['rgba(30, 34, 40, 0.14)', 'rgba(95, 102, 112, 0.12)', 'rgba(24, 27, 32, 0.10)'];
-      for (let i = 0; i < 2800; i++) {
-        ctx.fillStyle = tones[i % tones.length];
-        ctx.beginPath();
-        ctx.arc(Math.random() * 512, Math.random() * 512, 2 + Math.random() * 14, 0, Math.PI * 2);
-        ctx.fill();
-      }
-
-      // Garis nat panel beton industrial tipis
-      ctx.strokeStyle = 'rgba(20, 23, 28, 0.32)';
-      ctx.lineWidth = 2;
-      for (let y = 128; y < 512; y += 128) {
-        ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(512, y); ctx.stroke();
-      }
-      for (let x = 170; x < 512; x += 170) {
-        ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, 512); ctx.stroke();
-      }
-
-      const tex = new THREE.CanvasTexture(c);
-      tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
-      tex.repeat.set(3, 2);
-      return tex;
-    }
       const c = document.createElement('canvas');
       c.width = 512; c.height = 512;
       const ctx = c.getContext('2d');
@@ -497,6 +501,37 @@
       const tex = new THREE.CanvasTexture(c);
       tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
       tex.repeat.set(4, 4);
+      return tex;
+    }
+
+    function createIndustrialConcreteTexture() {
+      const c = document.createElement('canvas');
+      c.width = 512; c.height = 512;
+      const ctx = c.getContext('2d');
+
+      ctx.fillStyle = '#3f444c';
+      ctx.fillRect(0, 0, 512, 512);
+
+      const tones = ['rgba(30, 34, 40, 0.14)', 'rgba(95, 102, 112, 0.12)', 'rgba(24, 27, 32, 0.10)'];
+      for (let i = 0; i < 2800; i++) {
+        ctx.fillStyle = tones[i % tones.length];
+        ctx.beginPath();
+        ctx.arc(Math.random() * 512, Math.random() * 512, 2 + Math.random() * 14, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      ctx.strokeStyle = 'rgba(20, 23, 28, 0.32)';
+      ctx.lineWidth = 2;
+      for (let y = 128; y < 512; y += 128) {
+        ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(512, y); ctx.stroke();
+      }
+      for (let x = 170; x < 512; x += 170) {
+        ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, 512); ctx.stroke();
+      }
+
+      const tex = new THREE.CanvasTexture(c);
+      tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
+      tex.repeat.set(3, 2);
       return tex;
     }
 
@@ -574,33 +609,25 @@
       return new THREE.CanvasTexture(c);
     }
 
-    function createArtsyPaintingTexture(variant) {
+    function createFallbackBandPoster(title1, title2, subtitle, accentColor) {
       const c = document.createElement('canvas');
-      c.width = 256; c.height = 320;
+      c.width = 256; c.height = 360;
       const ctx = c.getContext('2d');
-      ctx.fillStyle = variant === 1 ? '#fef3c7' : '#e0f2fe';
-      ctx.fillRect(0, 0, 256, 320);
-
-      if (variant === 1) {
-        ctx.fillStyle = '#d97757';
-        ctx.beginPath(); ctx.arc(128, 130, 72, 0, Math.PI * 2); ctx.fill();
-        ctx.fillStyle = '#52796f';
-        ctx.fillRect(45, 175, 166, 95);
-        ctx.fillStyle = '#1e293b';
-        ctx.beginPath(); ctx.arc(165, 110, 24, 0, Math.PI * 2); ctx.fill();
-      } else {
-        ctx.fillStyle = '#0284c7';
-        ctx.fillRect(28, 36, 200, 12);
-        ctx.fillStyle = '#10b981';
-        ctx.fillRect(28, 170, 38, 100);
-        ctx.fillStyle = '#f59e0b';
-        ctx.fillRect(82, 125, 38, 145);
-        ctx.fillStyle = '#6366f1';
-        ctx.fillRect(136, 90, 38, 180);
-        ctx.fillStyle = '#ec4899';
-        ctx.fillRect(190, 65, 38, 205);
-      }
-      return new THREE.CanvasTexture(c);
+      ctx.fillStyle = '#181a1f';
+      ctx.fillRect(0, 0, 256, 360);
+      ctx.fillStyle = accentColor;
+      ctx.font = 'bold 26px Impact, sans-serif';
+      ctx.fillText(title1, 20, 48);
+      ctx.fillText(title2, 20, 78);
+      ctx.strokeStyle = accentColor;
+      ctx.lineWidth = 4;
+      ctx.strokeRect(18, 96, 220, 210);
+      ctx.fillStyle = '#e2e8f0';
+      ctx.font = 'bold 13px monospace';
+      ctx.fillText(subtitle, 24, 336);
+      const tex = new THREE.CanvasTexture(c);
+      tex.encoding = THREE.sRGBEncoding;
+      return tex;
     }
 
     function createPottedPlant(type, x, z, scale = 1) {
@@ -655,7 +682,7 @@
     }
 
     // =========================================================================
-    // ARSITEKTUR SEMI-OUTDOOR DENGAN ATAP KACA POLOS TRANSPARAN
+    // ARSITEKTUR SEMI-OUTDOOR: DINDING BETON INDUSTRIAL & 2 POSTER BAND
     // =========================================================================
     function buildSemiOutdoorArchitecture() {
       summerGrassTex = createGrassTexture();
@@ -690,12 +717,14 @@
       addRug(3.6, 3.0, 0xdcfce7, 1.5, -3.9);
       addRug(3.6, 3.2, 0xfef3c7, 4.6, -0.3);
 
-     const wallMat = new THREE.MeshStandardMaterial({
+      // Dinding Abu-Abu Gelap Semen Industrial
+      const wallMat = new THREE.MeshStandardMaterial({
         map: createIndustrialConcreteTexture(),
         color: 0xd1d5db,
         roughness: 0.88,
         metalness: 0.08
       });
+
       const backWall = new THREE.Mesh(new THREE.BoxGeometry(11.5, 4.2, 0.25), wallMat);
       backWall.position.set(1.4, 2.1, -6.8);
       backWall.receiveShadow = true;
@@ -706,7 +735,6 @@
       rightWall.receiveShadow = true;
       scene.add(rightWall);
 
-      // Pilar Kayu Sudut Studio
       const pillarMat = new THREE.MeshStandardMaterial({ color: 0x78350f, roughness: 0.6 });
       const pillarCoords = [
         [-4.2, -6.6], [-4.2, 1.7], [6.9, 1.7]
@@ -718,7 +746,7 @@
         scene.add(pillar);
       });
 
-      // ATAP KACA POLOS TRANSPARAN PENUH (SKYLIGHT TANPA BALOK PENGHALANG)
+      // Atap Kanopi Kaca Polos Transparan Penuh
       const glassRoof = new THREE.Mesh(
         new THREE.BoxGeometry(11.35, 0.05, 8.55),
         new THREE.MeshPhysicalMaterial({
@@ -741,7 +769,6 @@
       roofRim.position.copy(glassRoof.position);
       scene.add(roofRim);
 
-      // Batu Pijakan Taman
       const stoneMat = new THREE.MeshStandardMaterial({ color: 0xd6d3d1, roughness: 0.85 });
       [[-2.2, 2.4], [-3.1, 3.0], [-4.1, 3.4]].forEach(([sx, sz]) => {
         const step = new THREE.Mesh(new THREE.CylinderGeometry(0.45, 0.48, 0.08, 12), stoneMat);
@@ -750,47 +777,53 @@
         scene.add(step);
       });
 
-      const addWallArt = (variant, x, y, w, h) => {
-        const frame = new THREE.Mesh(
-          new THREE.BoxGeometry(w + 0.14, h + 0.14, 0.08),
-          new THREE.MeshStandardMaterial({ color: 0x92400e, roughness: 0.5 })
-        );
-        frame.position.set(x, y, -6.64);
-        scene.add(frame);
-
-        const canvasArt = new THREE.Mesh(
-          new THREE.PlaneGeometry(w, h),
-          new THREE.MeshStandardMaterial({ map: createArtsyPaintingTexture(variant) })
-        );
-        canvasArt.position.set(x, y, -6.59);
-        scene.add(canvasArt);
-      };
-   // Fungsi pembantu untuk memasang poster dengan bingkai hitam elegan
-      const addCustomPoster = (fileName, xPos) => {
-        const tex = new THREE.TextureLoader().load(fileName);
-        tex.encoding = THREE.sRGBEncoding;
-
+      // Fungsi Pemasangan Poster Band dengan Fallback Otomatis
+      const addCustomPoster = (candidateFiles, xPos, fallbackTex) => {
         const frame = new THREE.Mesh(
           new THREE.BoxGeometry(1.48, 2.02, 0.06),
-          new THREE.MeshStandardMaterial({ color: 0x111111, roughness: 0.8 })
+          new THREE.MeshStandardMaterial({ color: 0x0f1115, roughness: 0.7 })
         );
         frame.position.set(xPos, 2.55, -6.64);
         scene.add(frame);
 
+        const posterMat = new THREE.MeshBasicMaterial({ map: fallbackTex });
         const canvasMesh = new THREE.Mesh(
           new THREE.PlaneGeometry(1.36, 1.90),
-          new THREE.MeshBasicMaterial({ map: tex })
+          posterMat
         );
         canvasMesh.position.set(xPos, 2.55, -6.59);
         scene.add(canvasMesh);
+
+        const tryLoad = (idx) => {
+          if (idx >= candidateFiles.length) return;
+          new THREE.TextureLoader().load(
+            candidateFiles[idx],
+            (tex) => {
+              tex.encoding = THREE.sRGBEncoding;
+              posterMat.map = tex;
+              posterMat.needsUpdate = true;
+            },
+            undefined,
+            () => tryLoad(idx + 1)
+          );
+        };
+        tryLoad(0);
       };
 
-      // 1. Poster A Day To Remember menggantikan lukisan abstrak di sisi kiri (x = -1.2)
-      addCustomPoster('adtr_poster.webp', -1.2);
+      // 1. Poster A Day To Remember di sisi kiri (x = -1.2)
+      addCustomPoster(
+        ['adtr_poster.webp', 'a Day To Remember.webp'],
+        -1.2,
+        createFallbackBandPoster('A DAY TO', 'REMEMBER', 'WHAT SEPARATES ME FROM YOU', '#2dd4bf')
+      );
 
-      // 2. Poster Suicide Silence tetap di sisi kanan (x = 4.2)
-      addCustomPoster('suicide_silence_poster.jpg', 4.2);
-     
+      // 2. Poster Suicide Silence di sisi kanan (x = 4.2)
+      addCustomPoster(
+        ['suicide_silence_poster.jpg', 'suicide_silence_poster.jpg.jpg'],
+        4.2,
+        createFallbackBandPoster('SUICIDE', 'SILENCE', 'THE CLEANSING', '#a3a380')
+      );
+
       createPottedPlant('monstera', -3.7, -6.0, 1.1);
       createPottedPlant('sansevieria', 6.3, -6.0, 1.0);
       createPottedPlant('monstera', 6.4, 1.2, 1.05);
@@ -1436,7 +1469,7 @@
     }
 
     // =========================================================================
-    // LOOP ANIMASI 3D REAL-TIME (INTERAKSI OBROLAN IDLE & SALAMAN AUDITOR)
+    // LOOP ANIMASI 3D REAL-TIME (OBROLAN IDLE, SALAMAN & HEADBANG MUSIK)
     // =========================================================================
     const clock = new THREE.Clock();
 
@@ -1489,7 +1522,6 @@
         }
       }
 
-      // Jadwal Otomatis Obrolan Santai Saat IDLE (Siklus 22 detik)
       const chatCycle = t % 22;
       const isChatTime = chatCycle > 9 && chatCycle < 16.5;
       const chatPairIndex = Math.floor(t / 22) % 3;
@@ -1502,7 +1534,6 @@
       const chatSpotA = new THREE.Vector3(0.75, 0.12, -1.65);
       const chatSpotB = new THREE.Vector3(1.65, 0.12, -1.65);
 
-      // Cek apakah pekerja berjalan melapor & salaman dengan Auditor saat WORKING
       let activeHandshakeVisitor = null;
       ['crawler', 'drafter'].forEach((id) => {
         const av = robloxAvatars[id];
@@ -1563,7 +1594,7 @@
             av.leftLeg.rotation.x = 0;
             av.rightLeg.rotation.x = 0;
             av.headGroup.rotation.y = Math.sin(p * 3) * 0.15;
-            av.headGroup.rotation.x = 0.12;
+            av.headGroup.rotation.x = isMusicPlaying ? 0.12 + Math.sin(t * 14) * 0.16 : 0.12;
           }
           return;
         }
@@ -1611,7 +1642,7 @@
             av.leftLeg.rotation.x = 0;
             av.rightLeg.rotation.x = 0;
             av.headGroup.rotation.y = Math.sin(p * 1.1) * 0.25;
-            av.headGroup.rotation.x = 0;
+            av.headGroup.rotation.x = isMusicPlaying ? Math.sin(t * 14) * 0.20 : 0;
           }
         }
       });
@@ -2070,49 +2101,6 @@
       const btnText = document.getElementById('copyBtnText');
       btnText.textContent = 'Naskah Tersalin ke Clipboard!';
       setTimeout(() => { btnText.textContent = 'Salin Naskah Siaran Pers'; }, 2500);
-    }
-  </script>
-  <!-- AUDIO PLAYER UNTUK MUSIK METAL HARDCORE -->
-  <audio id="metalMusic" loop>
-    <source src="https://assets.mixkit.co/active_storage/sfx/2568/2568-84.wav" type="audio/wav"> <!-- Loop beat distorsi/metal atau gunakan url custom Anda -->
-    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3" type="audio/mp3"> <!-- Backup track progresif cepat -->
-  </audio>
-
-  <script>
-    let isMusicPlaying = false;
-    const audio = document.getElementById('metalMusic');
-    // Atur volume sedang agar tidak mengejutkan
-    audio.volume = 0.35; 
-
-    function toggleMusic() {
-      const btn = document.getElementById('btnMusic');
-      const icon = document.getElementById('musicIcon');
-      const text = document.getElementById('musicText');
-
-      if (!isMusicPlaying) {
-        // Karena kebijakan browser, audio harus dipicu interaksi user
-        audio.play().then(() => {
-          isMusicPlaying = true;
-          btn.className = 'px-3 py-1.5 rounded-xl bg-red-600 text-white border border-red-700 text-xs font-bold transition flex items-center gap-1.5 animate-pulse';
-          icon.textContent = '🔥';
-          text.textContent = 'Moshpit Mode On! (Hardcore)';
-          addLog('🤘 Memutar musik latar Metal Hardcore - Suicide Silence Tribute! Kepala mulai headbang!', 'error');
-          
-          // Membuat gerakan karakter lebih cepat & agresif saat musik menyala
-          Object.keys(robloxAvatars).forEach(id => {
-            robloxAvatars[id].phase = Math.random() * 50; // acak ulang gerakan
-          });
-        }).catch(err => {
-          addLog('Gagal memutar musik: ' + err.message, 'error');
-        });
-      } else {
-        audio.pause();
-        isMusicPlaying = false;
-        btn.className = 'px-3 py-1.5 rounded-xl bg-red-50 hover:bg-red-100 text-red-800 border border-red-300 text-xs font-bold transition flex items-center gap-1.5';
-        icon.textContent = '🤘';
-        text.textContent = 'Putar Metal Hardcore';
-        addLog('Musik dimatikan. Kembali ke suasana tenang studio.', 'info');
-      }
     }
   </script>
 </body>
