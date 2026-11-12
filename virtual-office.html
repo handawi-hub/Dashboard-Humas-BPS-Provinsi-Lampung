@@ -3,136 +3,76 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Live AI Agent Virtual Office — Humas BPS Provinsi Lampung</title>
+  <title>3D Roblox AI Agent Virtual Office — Humas BPS Provinsi Lampung</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <!-- Three.js & OrbitControls untuk 3D Roblox Studio Office -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
   <style>
     body {
       font-family: 'Plus Jakarta Sans', sans-serif;
-      background-color: #0b1120;
-      color: #f8fafc;
+      background-color: #faf8f5;
+      color: #1e293b;
     }
     .font-mono-code {
       font-family: 'JetBrains Mono', monospace;
     }
-
-    /* Animasi Kantor Virtual & Karakter 3D */
-    @keyframes screenPulse {
-      0%, 100% { opacity: 0.55; }
-      50% { opacity: 1; }
+    #canvasContainer {
+      position: relative;
+      width: 100%;
+      height: 540px;
+      cursor: grab;
+      overflow: hidden;
     }
-    @keyframes floatBubble {
-      0%, 100% { transform: translateY(0px); }
-      50% { transform: translateY(-4px); }
+    #canvasContainer:active {
+      cursor: grabbing;
     }
-    @keyframes dashFlow {
-      to { stroke-dashoffset: -24; }
+    @media (max-width: 640px) {
+      #canvasContainer {
+        height: 410px;
+      }
     }
-
-    /* Animasi Langkah Kaki, Ayunan Tangan & Pantulan Badan 3D */
-    @keyframes walkBodyBob {
-      0%, 100% { transform: translateY(0px); }
-      25% { transform: translateY(-3.5px); }
-      50% { transform: translateY(0px); }
-      75% { transform: translateY(-3.5px); }
+    .glass-panel {
+      background: rgba(255, 255, 255, 0.88);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(226, 232, 240, 0.9);
     }
-    @keyframes swingLeft {
-      0%, 100% { transform: rotate(-28deg); }
-      50% { transform: rotate(28deg); }
-    }
-    @keyframes swingRight {
-      0%, 100% { transform: rotate(28deg); }
-      50% { transform: rotate(-28deg); }
-    }
-
-    /* Jalur Berjalan Tiap Agent Saat Status WORKING */
-    @keyframes walkPathCrawler {
-      0%, 100% { transform: translate(-25px, 12px); }
-      50% { transform: translate(115px, 52px); }
-    }
-    @keyframes walkPathDrafter {
-      0%, 100% { transform: translate(-20px, 14px); }
-      50% { transform: translate(-15px, 115px); }
-    }
-    @keyframes walkPathAuditor {
-      0%, 100% { transform: translate(-20px, 14px); }
-      50% { transform: translate(115px, -95px); }
-    }
-
-    /* State Idle (Berdiri di Samping Meja) */
-    #walker-crawler, #walker-drafter, #walker-auditor {
-      transform: translate(-22px, 13px);
-      transition: transform 0.4s ease;
-    }
-
-    /* State Working (Berjalan Mengantar Data/Draf) */
-    .agent-working #walker-crawler {
-      animation: walkPathCrawler 3.2s infinite ease-in-out;
-    }
-    .agent-working #walker-drafter {
-      animation: walkPathDrafter 3.0s infinite ease-in-out;
-    }
-    .agent-working #walker-auditor {
-      animation: walkPathAuditor 3.4s infinite ease-in-out;
-    }
-
-    .agent-working .char-3d-rig {
-      animation: walkBodyBob 0.55s infinite ease-in-out;
-    }
-    .agent-working .leg-left,
-    .agent-working .arm-right {
-      animation: swingLeft 0.55s infinite ease-in-out;
-    }
-    .agent-working .leg-right,
-    .agent-working .arm-left {
-      animation: swingRight 0.55s infinite ease-in-out;
-    }
-
-    .agent-working .monitor-glow {
-      animation: screenPulse 1s infinite ease-in-out;
-    }
-    .status-bubble {
-      animation: floatBubble 3s infinite ease-in-out;
-      transition: all 0.3s ease;
-    }
-    .flow-line-active {
-      stroke-dasharray: 6 6;
-      animation: dashFlow 0.8s linear infinite;
-    }
-
-    /* Custom Scrollbar */
     ::-webkit-scrollbar { width: 6px; height: 6px; }
-    ::-webkit-scrollbar-track { background: #0f172a; }
-    ::-webkit-scrollbar-thumb { background: #334155; border-radius: 999px; }
+    ::-webkit-scrollbar-track { background: #f1f5f9; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 999px; }
   </style>
 </head>
-<body class="min-h-screen flex flex-col">
+<body class="min-h-screen flex flex-col selection:bg-amber-200 selection:text-slate-900">
 
-  <!-- TOP NAVBAR -->
-  <header class="border-b border-slate-800 bg-slate-900/90 backdrop-blur sticky top-0 z-30">
+  <!-- TOP NAVBAR CERAH & MODERN -->
+  <header class="border-b border-stone-200 bg-white/90 backdrop-blur sticky top-0 z-30 shadow-sm">
     <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-3">
       <div class="flex items-center gap-3">
-        <a href="index.html" class="px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold transition flex items-center gap-1.5">
+        <a href="index.html" class="px-3 py-1.5 rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-700 text-xs font-bold transition flex items-center gap-1.5 border border-stone-200">
           <span>←</span> Dashboard Utama
         </a>
         <div>
           <div class="flex items-center gap-2">
-            <h1 class="text-sm sm:text-base font-bold text-white tracking-tight">AI Agent Virtual Office</h1>
-            <span id="connectionBadge" class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-amber-500/15 text-amber-300 border border-amber-500/30">
-              <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span>
+            <h1 class="text-sm sm:text-base font-extrabold text-slate-900 tracking-tight">Creative Studio Virtual Office</h1>
+            <span id="connectionBadge" class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-100 text-amber-800 border border-amber-300">
+              <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
               Mode Simulasi
             </span>
           </div>
-          <p class="text-[11px] text-slate-400">Humas BPS Provinsi Lampung • Orkestrasi Crawler RSS, Drafter BRS & Auditor</p>
+          <p class="text-[11px] text-slate-500 font-medium">Humas BPS Provinsi Lampung • Live 3D AI Agent Workspace</p>
         </div>
       </div>
 
-      <div class="flex items-center gap-2">
-        <button onclick="runDemoSimulation()" id="btnSimulasi" class="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold shadow-lg shadow-emerald-950/50 transition flex items-center gap-1.5">
+      <div class="flex flex-wrap items-center gap-2">
+        <button onclick="toggleLightingMode()" id="btnLighting" class="px-3 py-1.5 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 text-xs font-bold transition flex items-center gap-1.5">
+          <span>☀️</span> <span id="lightingText">Pagi Cerah</span>
+        </button>
+        <button onclick="runDemoSimulation()" id="btnSimulasi" class="px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold shadow-md shadow-emerald-600/20 transition flex items-center gap-1.5">
           <span>▶</span> Tes Simulasi Live
         </button>
-        <button onclick="openApiModal()" class="px-3 py-1.5 rounded-lg bg-sky-600 hover:bg-sky-500 text-white text-xs font-semibold shadow-lg shadow-sky-950/50 transition flex items-center gap-1.5">
-          <span>🔗</span> Koneksi Apps Script API
+        <button onclick="openApiModal()" class="px-3.5 py-1.5 rounded-xl bg-sky-600 hover:bg-sky-500 text-white text-xs font-bold shadow-md shadow-sky-600/20 transition flex items-center gap-1.5">
+          <span>🔗</span> API Bridge
         </button>
       </div>
     </div>
@@ -141,336 +81,146 @@
   <!-- MAIN CONTENT -->
   <main class="flex-1 max-w-7xl w-full mx-auto px-4 py-5 grid grid-cols-1 lg:grid-cols-12 gap-5">
 
-    <!-- LEFT: 3D ISOMETRIC VIRTUAL OFFICE CANVAS (7 COLS) -->
+    <!-- LEFT: 3D ROBLOX ARTSY STUDIO CANVAS (7 COLS) -->
     <section class="lg:col-span-7 flex flex-col gap-4">
-      <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-2xl">
-        <div class="px-4 py-2.5 border-b border-slate-800 flex items-center justify-between bg-slate-900/60">
-          <div class="flex items-center gap-2">
-            <span class="w-2.5 h-2.5 rounded-full bg-rose-500"></span>
-            <span class="w-2.5 h-2.5 rounded-full bg-amber-400"></span>
-            <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
-            <span class="text-xs font-semibold text-slate-300 ml-1">Ruang Kerja Otonom Humas (Live 3D State)</span>
+      <div class="bg-white border border-stone-200 rounded-3xl overflow-hidden shadow-xl shadow-stone-200/60">
+        <!-- Toolbar Atas Viewport 3D -->
+        <div class="px-4 py-2.5 border-b border-stone-100 flex flex-wrap items-center justify-between gap-2 bg-stone-50/80">
+          <div class="flex items-center gap-1.5 flex-wrap">
+            <span class="text-[11px] font-bold text-slate-500 mr-1">Kamera:</span>
+            <button onclick="focusCamera('overview')" id="cam-overview" class="cam-btn px-2.5 py-1 rounded-lg text-[11px] font-bold bg-slate-900 text-white transition">Studio Penuh</button>
+            <button onclick="focusCamera('crawler')" id="cam-crawler" class="cam-btn px-2.5 py-1 rounded-lg text-[11px] font-bold bg-white text-slate-600 border border-stone-200 hover:bg-sky-50 transition">Media Crawler</button>
+            <button onclick="focusCamera('drafter')" id="cam-drafter" class="cam-btn px-2.5 py-1 rounded-lg text-[11px] font-bold bg-white text-slate-600 border border-stone-200 hover:bg-emerald-50 transition">Penulis BRS</button>
+            <button onclick="focusCamera('auditor')" id="cam-auditor" class="cam-btn px-2.5 py-1 rounded-lg text-[11px] font-bold bg-white text-slate-600 border border-stone-200 hover:bg-purple-50 transition">Auditor & PR</button>
           </div>
-          <span id="lastSyncText" class="text-[11px] text-slate-400 font-mono-code">Polling: Siap</span>
+          <span id="lastSyncText" class="text-[11px] text-slate-500 font-mono-code font-semibold">Polling: Siap</span>
         </div>
 
-        <!-- ISOMETRIC OFFICE SVG -->
-        <div class="relative w-full bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 p-2 sm:p-4">
-          <svg viewBox="0 0 900 540" class="w-full h-auto select-none" id="officeSvg">
-            <defs>
-              <linearGradient id="floorGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stop-color="#1e293b" />
-                <stop offset="100%" stop-color="#0f172a" />
-              </linearGradient>
-              <linearGradient id="wallLeftGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                <stop offset="0%" stop-color="#1e293b" />
-                <stop offset="100%" stop-color="#111827" />
-              </linearGradient>
-              <linearGradient id="wallRightGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                <stop offset="0%" stop-color="#263349" />
-                <stop offset="100%" stop-color="#162033" />
-              </linearGradient>
-              <radialGradient id="charShadow" cx="50%" cy="50%" r="50%">
-                <stop offset="0%" stop-color="#020617" stop-opacity="0.75" />
-                <stop offset="100%" stop-color="#020617" stop-opacity="0" />
-              </radialGradient>
-            </defs>
+        <!-- 3D WEBGL VIEWPORT -->
+        <div id="canvasContainer">
+          <!-- Floating Hint -->
+          <div class="absolute top-3 left-3 z-10 glass-panel px-3 py-1.5 rounded-xl text-[11px] font-semibold text-slate-700 shadow-sm pointer-events-none flex items-center gap-2">
+            <span>🖱️ Geser untuk putar • Scroll zoom • Klik karakter untuk inspeksi</span>
+          </div>
 
-            <!-- ISOMETRIC ROOM STRUCTURE -->
-            <polygon points="450,45 90,225 90,345 450,165" fill="url(#wallLeftGrad)" stroke="#334155" stroke-width="2" />
-            <polygon points="450,45 810,225 810,345 450,165" fill="url(#wallRightGrad)" stroke="#334155" stroke-width="2" />
-            <polygon points="450,165 810,345 450,525 90,345" fill="url(#floorGrad)" stroke="#334155" stroke-width="2.5" />
-
-            <!-- Floor Grid Lines -->
-            <g stroke="#334155" stroke-width="0.7" opacity="0.45">
-              <line x1="360" y1="210" x2="720" y2="390" />
-              <line x1="270" y1="255" x2="630" y2="435" />
-              <line x1="180" y1="300" x2="540" y2="480" />
-              <line x1="540" y1="210" x2="180" y2="390" />
-              <line x1="630" y1="255" x2="270" y2="435" />
-              <line x1="720" y1="300" x2="360" y2="480" />
-            </g>
-
-            <!-- Windows on Left Wall -->
-            <g opacity="0.85">
-              <polygon points="150,215 230,175 230,245 150,285" fill="#0ea5e9" fill-opacity="0.18" stroke="#38bdf8" stroke-width="1.5" />
-              <line x1="190" y1="195" x2="190" y2="265" stroke="#38bdf8" stroke-width="1" />
-              <polygon points="260,160 340,120 340,190 260,230" fill="#0ea5e9" fill-opacity="0.18" stroke="#38bdf8" stroke-width="1.5" />
-              <line x1="300" y1="140" x2="300" y2="210" stroke="#38bdf8" stroke-width="1" />
-            </g>
-
-            <!-- WALL PREVIEW BOARD -->
-            <g onclick="focusPreviewBoard()" class="cursor-pointer">
-              <polygon points="535,105 715,195 715,275 535,185" fill="#0f172a" stroke="#38bdf8" stroke-width="2.5" />
-              <polygon points="543,115 707,197 707,265 543,183" fill="#1e293b" />
-              <line x1="555" y1="138" x2="625" y2="173" stroke="#38bdf8" stroke-width="3" stroke-linecap="round" />
-              <line x1="555" y1="152" x2="685" y2="217" stroke="#94a3b8" stroke-width="2" stroke-linecap="round" />
-              <line x1="555" y1="164" x2="665" y2="219" stroke="#64748b" stroke-width="2" stroke-linecap="round" />
-              <circle cx="675" cy="193" r="10" fill="#10b981" opacity="0.85" />
-              <rect x="572" y="74" width="116" height="22" rx="6" fill="#0284c7" />
-              <text x="630" y="89" text-anchor="middle" fill="#ffffff" font-size="10" font-weight="700">PREVIEW BOARD</text>
-            </g>
-
-            <!-- DATA PIPELINE PATHS -->
-            <path id="pathCrawlerToAuditor" d="M 275 335 L 450 385" fill="none" stroke="#38bdf8" stroke-width="3" opacity="0.35" />
-            <path id="pathDrafterToAuditor" d="M 455 255 L 455 365" fill="none" stroke="#10b981" stroke-width="3" opacity="0.35" />
-            <path id="pathAuditorToBoard" d="M 495 375 L 625 265" fill="none" stroke="#a855f7" stroke-width="3" opacity="0.35" />
-
-            <!-- WORKSTATION 2: PENULIS BRS (Ditaruh lebih awal agar layer z-index rapi) -->
-            <g id="station-drafter" transform="translate(450, 225)">
-              <polygon points="0,-35 85,8 0,50 -85,8" fill="#059669" fill-opacity="0.2" stroke="#10b981" stroke-width="1" stroke-dasharray="4 3" />
-              <!-- Meja 3D -->
-              <polygon points="-45,-5 15,-35 55,-15 -5,15" fill="#334155" stroke="#475569" stroke-width="1.5" />
-              <polygon points="-45,-5 -5,15 -5,38 -45,18" fill="#1e293b" />
-              <polygon points="-5,15 55,-15 55,8 -5,38" fill="#0f172a" />
-              <!-- Monitor -->
-              <polygon points="5,-24 32,-38 32,-16 5,-2" fill="#020617" stroke="#10b981" stroke-width="1.5" />
-              <polygon class="monitor-glow" points="8,-22 29,-33 29,-19 8,-8" fill="#10b981" opacity="0.5" />
-
-              <!-- KARAKTER 3D PENULIS BRS (KEPALA, BADAN, TANGAN, KAKI) -->
-              <g id="walker-drafter">
-                <ellipse cx="0" cy="18" rx="16" ry="8" fill="url(#charShadow)" />
-                <g class="char-3d-rig">
-                  <!-- Kaki Kiri & Kanan -->
-                  <g class="leg-left" style="transform-origin: -4px 2px;">
-                    <rect x="-7" y="2" width="5" height="14" rx="2" fill="#0f172a" />
-                    <ellipse cx="-4.5" cy="16" rx="4" ry="2.2" fill="#334155" />
-                  </g>
-                  <g class="leg-right" style="transform-origin: 4px 2px;">
-                    <rect x="2" y="2" width="5" height="14" rx="2" fill="#1e293b" />
-                    <ellipse cx="4.5" cy="16" rx="4" ry="2.2" fill="#475569" />
-                  </g>
-                  <!-- Tangan Belakang (Kiri) -->
-                  <g class="arm-left" style="transform-origin: -9px -16px;">
-                    <rect x="-12" y="-16" width="4.5" height="13" rx="2.2" fill="#059669" />
-                    <circle cx="-9.8" cy="-2" r="2.3" fill="#fed7aa" />
-                  </g>
-                  <!-- Badan 3D (Sisi Terang & Sisi Gelap) -->
-                  <polygon points="-9,-18 0,-21 0,3 -9,1" fill="#10b981" />
-                  <polygon points="0,-21 9,-18 9,1 0,3" fill="#047857" />
-                  <!-- Kerah / Dasi -->
-                  <polygon points="-2,-19 2,-19 0,-12" fill="#ecfdf5" />
-                  <!-- Tangan Depan (Kanan) -->
-                  <g class="arm-right" style="transform-origin: 9px -16px;">
-                    <rect x="7.5" y="-16" width="4.5" height="13" rx="2.2" fill="#34d399" />
-                    <circle cx="9.8" cy="-2" r="2.3" fill="#fed7aa" />
-                  </g>
-                  <!-- Kepala & Rambut 3D -->
-                  <circle cx="0" cy="-29" r="9.5" fill="#fed7aa" />
-                  <path d="M -9.5 -29 A 9.5 9.5 0 0 0 9.5 -29 A 9.5 9.5 0 0 1 -9.5 -29 Z" fill="#fdba74" />
-                  <path d="M -10 -30 C -10 -40, 10 -40, 10 -30 C 6 -33, -6 -33, -10 -30 Z" fill="#1e293b" />
-                  <!-- Mata -->
-                  <circle cx="-3" cy="-29" r="1.1" fill="#0f172a" />
-                  <circle cx="3.5" cy="-29" r="1.1" fill="#0f172a" />
-                </g>
-              </g>
-
-              <rect x="-64" y="42" width="128" height="22" rx="6" fill="#0f172a" stroke="#10b981" stroke-width="1.2" />
-              <text x="0" y="56" text-anchor="middle" fill="#34d399" font-size="10" font-weight="700">2. PENULIS BRS</text>
-            </g>
-
-            <!-- WORKSTATION 1: MEDIA CRAWLER -->
-            <g id="station-crawler" transform="translate(230, 315)">
-              <polygon points="0,-35 85,8 0,50 -85,8" fill="#0284c7" fill-opacity="0.2" stroke="#0ea5e9" stroke-width="1" stroke-dasharray="4 3" />
-              <!-- Meja 3D -->
-              <polygon points="-45,-5 15,-35 55,-15 -5,15" fill="#334155" stroke="#475569" stroke-width="1.5" />
-              <polygon points="-45,-5 -5,15 -5,38 -45,18" fill="#1e293b" />
-              <polygon points="-5,15 55,-15 55,8 -5,38" fill="#0f172a" />
-              <!-- Monitor -->
-              <polygon points="5,-24 32,-38 32,-16 5,-2" fill="#020617" stroke="#38bdf8" stroke-width="1.5" />
-              <polygon class="monitor-glow" points="8,-22 29,-33 29,-19 8,-8" fill="#38bdf8" opacity="0.5" />
-
-              <!-- KARAKTER 3D MEDIA CRAWLER (KEPALA, BADAN, TANGAN, KAKI) -->
-              <g id="walker-crawler">
-                <ellipse cx="0" cy="18" rx="16" ry="8" fill="url(#charShadow)" />
-                <g class="char-3d-rig">
-                  <!-- Kaki Kiri & Kanan -->
-                  <g class="leg-left" style="transform-origin: -4px 2px;">
-                    <rect x="-7" y="2" width="5" height="14" rx="2" fill="#0f172a" />
-                    <ellipse cx="-4.5" cy="16" rx="4" ry="2.2" fill="#334155" />
-                  </g>
-                  <g class="leg-right" style="transform-origin: 4px 2px;">
-                    <rect x="2" y="2" width="5" height="14" rx="2" fill="#1e293b" />
-                    <ellipse cx="4.5" cy="16" rx="4" ry="2.2" fill="#475569" />
-                  </g>
-                  <!-- Tangan Belakang (Kiri) -->
-                  <g class="arm-left" style="transform-origin: -9px -16px;">
-                    <rect x="-12" y="-16" width="4.5" height="13" rx="2.2" fill="#0284c7" />
-                    <circle cx="-9.8" cy="-2" r="2.3" fill="#fde68a" />
-                  </g>
-                  <!-- Badan 3D -->
-                  <polygon points="-9,-18 0,-21 0,3 -9,1" fill="#0ea5e9" />
-                  <polygon points="0,-21 9,-18 9,1 0,3" fill="#0369a1" />
-                  <polygon points="-2,-19 2,-19 0,-12" fill="#e0f2fe" />
-                  <!-- Tangan Depan (Kanan) -->
-                  <g class="arm-right" style="transform-origin: 9px -16px;">
-                    <rect x="7.5" y="-16" width="4.5" height="13" rx="2.2" fill="#38bdf8" />
-                    <circle cx="9.8" cy="-2" r="2.3" fill="#fde68a" />
-                  </g>
-                  <!-- Kepala & Rambut 3D -->
-                  <circle cx="0" cy="-29" r="9.5" fill="#fde68a" />
-                  <path d="M -9.5 -29 A 9.5 9.5 0 0 0 9.5 -29 A 9.5 9.5 0 0 1 -9.5 -29 Z" fill="#fcd34d" />
-                  <path d="M -10 -30 C -10 -40, 10 -40, 10 -30 C 6 -33, -6 -33, -10 -30 Z" fill="#0f172a" />
-                  <!-- Mata -->
-                  <circle cx="-3" cy="-29" r="1.1" fill="#0f172a" />
-                  <circle cx="3.5" cy="-29" r="1.1" fill="#0f172a" />
-                </g>
-              </g>
-
-              <rect x="-64" y="42" width="128" height="22" rx="6" fill="#0f172a" stroke="#0ea5e9" stroke-width="1.2" />
-              <text x="0" y="56" text-anchor="middle" fill="#38bdf8" font-size="10" font-weight="700">1. MEDIA CRAWLER</text>
-            </g>
-
-            <!-- WORKSTATION 3: AUDITOR & PR -->
-            <g id="station-auditor" transform="translate(475, 395)">
-              <polygon points="0,-35 90,10 0,55 -90,10" fill="#7c3aed" fill-opacity="0.22" stroke="#a855f7" stroke-width="1" stroke-dasharray="4 3" />
-              <!-- Meja 3D -->
-              <polygon points="-45,-5 15,-35 55,-15 -5,15" fill="#334155" stroke="#475569" stroke-width="1.5" />
-              <polygon points="-45,-5 -5,15 -5,38 -45,18" fill="#1e293b" />
-              <polygon points="-5,15 55,-15 55,8 -5,38" fill="#0f172a" />
-              <!-- Monitor -->
-              <polygon points="5,-24 32,-38 32,-16 5,-2" fill="#020617" stroke="#a855f7" stroke-width="1.5" />
-              <polygon class="monitor-glow" points="8,-22 29,-33 29,-19 8,-8" fill="#a855f7" opacity="0.55" />
-
-              <!-- KARAKTER 3D AUDITOR & PR (KEPALA, BADAN, TANGAN, KAKI) -->
-              <g id="walker-auditor">
-                <ellipse cx="0" cy="18" rx="16" ry="8" fill="url(#charShadow)" />
-                <g class="char-3d-rig">
-                  <!-- Kaki Kiri & Kanan -->
-                  <g class="leg-left" style="transform-origin: -4px 2px;">
-                    <rect x="-7" y="2" width="5" height="14" rx="2" fill="#0f172a" />
-                    <ellipse cx="-4.5" cy="16" rx="4" ry="2.2" fill="#334155" />
-                  </g>
-                  <g class="leg-right" style="transform-origin: 4px 2px;">
-                    <rect x="2" y="2" width="5" height="14" rx="2" fill="#1e293b" />
-                    <ellipse cx="4.5" cy="16" rx="4" ry="2.2" fill="#475569" />
-                  </g>
-                  <!-- Tangan Belakang (Kiri) -->
-                  <g class="arm-left" style="transform-origin: -9px -16px;">
-                    <rect x="-12" y="-16" width="4.5" height="13" rx="2.2" fill="#7c3aed" />
-                    <circle cx="-9.8" cy="-2" r="2.3" fill="#fde68a" />
-                  </g>
-                  <!-- Badan 3D -->
-                  <polygon points="-9,-18 0,-21 0,3 -9,1" fill="#8b5cf6" />
-                  <polygon points="0,-21 9,-18 9,1 0,3" fill="#6d28d9" />
-                  <polygon points="-2,-19 2,-19 0,-12" fill="#f3e8ff" />
-                  <!-- Tangan Depan (Kanan) -->
-                  <g class="arm-right" style="transform-origin: 9px -16px;">
-                    <rect x="7.5" y="-16" width="4.5" height="13" rx="2.2" fill="#a78bfa" />
-                    <circle cx="9.8" cy="-2" r="2.3" fill="#fde68a" />
-                  </g>
-                  <!-- Kepala & Rambut 3D -->
-                  <circle cx="0" cy="-29" r="9.5" fill="#fde68a" />
-                  <path d="M -9.5 -29 A 9.5 9.5 0 0 0 9.5 -29 A 9.5 9.5 0 0 1 -9.5 -29 Z" fill="#fcd34d" />
-                  <path d="M -10 -30 C -10 -40, 10 -40, 10 -30 C 6 -33, -6 -33, -10 -30 Z" fill="#0f172a" />
-                  <!-- Mata -->
-                  <circle cx="-3" cy="-29" r="1.1" fill="#0f172a" />
-                  <circle cx="3.5" cy="-29" r="1.1" fill="#0f172a" />
-                </g>
-              </g>
-
-              <rect x="-72" y="45" width="144" height="22" rx="6" fill="#0f172a" stroke="#a855f7" stroke-width="1.2" />
-              <text x="0" y="59" text-anchor="middle" fill="#c084fc" font-size="10" font-weight="700">3. AUDITOR & PR</text>
-            </g>
-          </svg>
-
-          <!-- FLOATING LIVE STATUS BUBBLES -->
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 mt-2">
-            <div id="card-crawler" class="status-bubble bg-slate-950/90 border border-sky-500/40 rounded-xl p-3">
-              <div class="flex items-center justify-between mb-1">
-                <span class="text-[11px] font-bold text-sky-400">Agent Media Crawler</span>
-                <span id="badge-crawler" class="px-2 py-0.5 rounded text-[10px] font-bold bg-slate-800 text-slate-300">IDLE</span>
+          <!-- Floating Selected Agent Card -->
+          <div id="selectedAgentOverlay" class="hidden absolute bottom-3 left-3 right-3 sm:right-auto sm:w-80 z-10 glass-panel p-3.5 rounded-2xl shadow-lg border border-stone-200">
+            <div class="flex items-start justify-between gap-2">
+              <div>
+                <span id="selRoleBadge" class="inline-block px-2 py-0.5 rounded-md text-[10px] font-extrabold uppercase tracking-wider bg-emerald-100 text-emerald-800 mb-1">Agent</span>
+                <h3 id="selAgentName" class="text-sm font-extrabold text-slate-900">Nama Agent</h3>
+                <p id="selAgentDesc" class="text-[11px] text-slate-500 font-medium">Deskripsi karakter</p>
               </div>
-              <p id="msg-crawler" class="text-xs text-slate-300 leading-snug">Menunggu jadwal pemindaian RSS...</p>
-              <span id="time-crawler" class="block text-[10px] text-slate-500 font-mono-code mt-1.5">-</span>
+              <button onclick="closeAgentOverlay()" class="text-slate-400 hover:text-slate-700 font-bold text-sm px-1">✕</button>
             </div>
+            <div class="mt-2.5 pt-2.5 border-t border-stone-200/80 text-xs text-slate-700">
+              <p id="selAgentStatusMsg" class="font-medium leading-snug">Status saat ini...</p>
+            </div>
+          </div>
+        </div>
 
-            <div id="card-drafter" class="status-bubble bg-slate-950/90 border border-emerald-500/40 rounded-xl p-3">
-              <div class="flex items-center justify-between mb-1">
-                <span class="text-[11px] font-bold text-emerald-400">Agent Penulis BRS</span>
-                <span id="badge-drafter" class="px-2 py-0.5 rounded text-[10px] font-bold bg-slate-800 text-slate-300">IDLE</span>
-              </div>
-              <p id="msg-drafter" class="text-xs text-slate-300 leading-snug">Siap memproses bahan tayang PPT/PDF...</p>
-              <span id="time-drafter" class="block text-[10px] text-slate-500 font-mono-code mt-1.5">-</span>
+        <!-- 3 AGENT STATUS CARDS -->
+        <div class="p-3.5 bg-stone-50/70 border-t border-stone-100 grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+          <!-- Card 1: Crawler -->
+          <div onclick="focusCamera('crawler')" id="card-crawler" class="cursor-pointer bg-white hover:border-sky-400 border border-stone-200 rounded-2xl p-3 shadow-sm transition group">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-extrabold text-sky-700 group-hover:text-sky-600">1. Media Crawler</span>
+              <span id="badge-crawler" class="px-2 py-0.5 rounded-md text-[10px] font-extrabold bg-stone-100 text-slate-600">IDLE</span>
             </div>
+            <p class="text-[10px] text-slate-400 font-semibold mb-1">Cewek • Rambut Merah Ikal</p>
+            <p id="msg-crawler" class="text-[11px] text-slate-600 leading-snug line-clamp-2">Menunggu jadwal pemindaian RSS...</p>
+            <span id="time-crawler" class="block text-[10px] text-slate-400 font-mono-code mt-1.5">-</span>
+          </div>
 
-            <div id="card-auditor" class="status-bubble bg-slate-950/90 border border-purple-500/40 rounded-xl p-3">
-              <div class="flex items-center justify-between mb-1">
-                <span class="text-[11px] font-bold text-purple-400">Agent Auditor & PR</span>
-                <span id="badge-auditor" class="px-2 py-0.5 rounded text-[10px] font-bold bg-slate-800 text-slate-300">IDLE</span>
-              </div>
-              <p id="msg-auditor" class="text-xs text-slate-300 leading-snug">Menunggu validasi angka & sentimen...</p>
-              <span id="time-auditor" class="block text-[10px] text-slate-500 font-mono-code mt-1.5">-</span>
+          <!-- Card 2: Drafter -->
+          <div onclick="focusCamera('drafter')" id="card-drafter" class="cursor-pointer bg-white hover:border-emerald-400 border border-stone-200 rounded-2xl p-3 shadow-sm transition group">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-extrabold text-emerald-700 group-hover:text-emerald-600">2. Penulis BRS</span>
+              <span id="badge-drafter" class="px-2 py-0.5 rounded-md text-[10px] font-extrabold bg-stone-100 text-slate-600">IDLE</span>
             </div>
+            <p class="text-[10px] text-slate-400 font-semibold mb-1">Cowok • Rambut Curly Bergelombang</p>
+            <p id="msg-drafter" class="text-[11px] text-slate-600 leading-snug line-clamp-2">Siap memproses bahan tayang PPTX...</p>
+            <span id="time-drafter" class="block text-[10px] text-slate-400 font-mono-code mt-1.5">-</span>
+          </div>
+
+          <!-- Card 3: Auditor -->
+          <div onclick="focusCamera('auditor')" id="card-auditor" class="cursor-pointer bg-white hover:border-amber-500 border border-stone-200 rounded-2xl p-3 shadow-sm transition group">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-extrabold text-amber-800 group-hover:text-amber-700">3. Auditor & PR</span>
+              <span id="badge-auditor" class="px-2 py-0.5 rounded-md text-[10px] font-extrabold bg-stone-100 text-slate-600">IDLE</span>
+            </div>
+            <p class="text-[10px] text-slate-400 font-semibold mb-1">Ibu Senior • Sweater Putih Tenun</p>
+            <p id="msg-auditor" class="text-[11px] text-slate-600 leading-snug line-clamp-2">Menunggu validasi angka & sentimen...</p>
+            <span id="time-auditor" class="block text-[10px] text-slate-400 font-mono-code mt-1.5">-</span>
           </div>
         </div>
       </div>
 
       <!-- TERMINAL LOG -->
-      <div class="bg-slate-950 border border-slate-800 rounded-2xl p-3.5">
+      <div class="bg-white border border-stone-200 rounded-2xl p-3.5 shadow-sm">
         <div class="flex items-center justify-between mb-2">
-          <span class="text-xs font-bold text-slate-300 flex items-center gap-2">
-            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
-            Terminal Log Eksekusi Apps Script
+          <span class="text-xs font-extrabold text-slate-700 flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
+            Aktivitas Orkestrasi Apps Script
           </span>
-          <button onclick="clearLogs()" class="text-[11px] text-slate-400 hover:text-white">Bersihkan</button>
+          <button onclick="clearLogs()" class="text-[11px] font-semibold text-slate-400 hover:text-slate-700">Bersihkan Log</button>
         </div>
-        <div id="terminalLog" class="font-mono-code text-[11px] text-slate-300 space-y-1 max-h-36 overflow-y-auto bg-slate-900/70 p-2.5 rounded-xl border border-slate-800/80">
-          <div class="text-slate-400">[SYSTEM] Virtual Office siap. Klik "Tes Simulasi Live" atau hubungkan URL Web App Apps Script.</div>
+        <div id="terminalLog" class="font-mono-code text-[11px] text-slate-700 space-y-1 max-h-32 overflow-y-auto bg-stone-50 p-2.5 rounded-xl border border-stone-200/80">
+          <div class="text-slate-500">[SYSTEM] Studio 3D Virtual Office siap. Klik karakter atau "Tes Simulasi Live".</div>
         </div>
       </div>
     </section>
 
     <!-- RIGHT: WALL PREVIEW BOARD INSPECTOR (5 COLS) -->
-    <section id="previewBoardSection" class="lg:col-span-5 bg-slate-900 border border-slate-800 rounded-2xl flex flex-col overflow-hidden shadow-2xl">
-      <div class="px-4 py-3 border-b border-slate-800 bg-slate-900/80 flex items-center justify-between">
+    <section id="previewBoardSection" class="lg:col-span-5 bg-white border border-stone-200 rounded-3xl flex flex-col overflow-hidden shadow-xl shadow-stone-200/60">
+      <div class="px-4 py-3.5 border-b border-stone-100 bg-stone-50/70 flex items-center justify-between">
         <div>
-          <h2 class="text-sm font-bold text-white">Wall Preview Board</h2>
-          <p class="text-[11px] text-slate-400">Inspeksi Output Draf BRS & Hasil Crawling Media</p>
+          <h2 class="text-sm font-extrabold text-slate-900">Wall Preview Board</h2>
+          <p class="text-[11px] text-slate-500 font-medium">Inspeksi Output Draf BRS & Hasil Crawling Media</p>
         </div>
-        <a id="btnOpenOutputDoc" href="#" target="_blank" class="hidden px-2.5 py-1 rounded-lg bg-emerald-600/20 text-emerald-300 border border-emerald-500/40 text-[11px] font-semibold hover:bg-emerald-600/30 transition">
-          Buka File Output ↗
+        <a id="btnOpenOutputDoc" href="#" target="_blank" class="hidden px-3 py-1.5 rounded-xl bg-emerald-600 text-white text-[11px] font-bold hover:bg-emerald-500 shadow-sm transition">
+          Buka Dokumen ↗
         </a>
       </div>
 
-      <div class="grid grid-cols-2 border-b border-slate-800 bg-slate-950/50 text-xs font-semibold">
-        <button onclick="switchTab('brs')" id="tab-brs" class="py-2.5 text-center border-b-2 border-emerald-500 text-emerald-400 bg-slate-900/60">
+      <div class="grid grid-cols-2 border-b border-stone-200 bg-stone-50 text-xs font-bold">
+        <button onclick="switchTab('brs')" id="tab-brs" class="py-2.5 text-center border-b-2 border-emerald-600 text-emerald-700 bg-white">
           📄 Draf Siaran Pers BRS
         </button>
-        <button onclick="switchTab('news')" id="tab-news" class="py-2.5 text-center border-b-2 border-transparent text-slate-400 hover:text-slate-200">
+        <button onclick="switchTab('news')" id="tab-news" class="py-2.5 text-center border-b-2 border-transparent text-slate-500 hover:text-slate-800">
           📰 Hasil Crawling Media
         </button>
       </div>
 
       <!-- TAB 1: DRAF SIARAN PERS -->
       <div id="panel-brs" class="p-4 flex-1 flex flex-col justify-between gap-4 overflow-y-auto">
-        <div class="bg-slate-950 border border-slate-800 rounded-xl p-4 space-y-3 text-xs leading-relaxed text-slate-200">
-          <div class="border-b border-slate-800 pb-2.5 flex items-center justify-between">
+        <div class="bg-[#fdfcfa] border border-stone-200 rounded-2xl p-4 space-y-3 text-xs leading-relaxed text-slate-700 shadow-inner">
+          <div class="border-b border-stone-200 pb-2.5 flex items-center justify-between">
             <div>
-              <span class="text-[10px] uppercase tracking-wider text-emerald-400 font-bold">Template Resmi BPS Provinsi Lampung</span>
-              <p class="font-mono-code text-[11px] text-slate-400">Nomor : B-2611/18000/HM.240/2026</p>
+              <span class="text-[10px] uppercase tracking-wider text-emerald-700 font-extrabold">Template Resmi BPS Provinsi Lampung</span>
+              <p class="font-mono-code text-[11px] text-slate-500">Nomor : B-2611/18000/HM.240/2026</p>
             </div>
-            <span class="px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-300 text-[10px] font-semibold">Terverifikasi Auditor</span>
+            <span class="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-bold">Terverifikasi Auditor</span>
           </div>
 
-          <h3 id="brsTitle" class="text-sm font-bold text-white">
+          <h3 id="brsTitle" class="text-sm font-extrabold text-slate-900">
             Ekonomi Lampung Triwulan III-2026 Tumbuh Solid 5,18 Persen (y-on-y), Didorong Konsumsi Rumah Tangga dan Pengolahan
           </h3>
 
-          <div id="brsContent" class="space-y-2.5 text-slate-300">
+          <div id="brsContent" class="space-y-2.5 text-slate-700">
             <p>
               <strong>BANDAR LAMPUNG</strong> — Perekonomian Provinsi Lampung pada Triwulan III-2026 menunjukkan kinerja yang resilien dengan mencatatkan pertumbuhan sebesar <strong>5,18 persen</strong> secara tahunan (<em>y-on-y</em>). Sementara itu, dibandingkan triwulan sebelumnya (<em>q-to-q</em>), ekonomi Lampung tumbuh sebesar <strong>1,42 persen</strong>, dan secara kumulatif (<em>c-to-c</em>) meningkat <strong>5,04 persen</strong>.
             </p>
             <p>
               Dari sisi produksi, Lapangan Usaha Industri Pengolahan memberikan andil pertumbuhan tertinggi, diikuti oleh Perdagangan Besar dan Eceran serta Pertanian. Dari sisi pengeluaran, Komponen Pengeluaran Konsumsi Rumah Tangga tetap menjadi penopang utama struktur ekonomi Lampung dengan kontribusi mencapai <strong>61,84 persen</strong>.
             </p>
-            <blockquote class="border-l-2 border-emerald-500 pl-3 py-1 bg-emerald-950/20 rounded-r-lg italic text-emerald-100">
+            <blockquote class="border-l-4 border-amber-500 pl-3 py-1.5 bg-amber-50/80 rounded-r-xl italic text-slate-800">
               "Capaian pertumbuhan 5,18 persen ini mencerminkan terjaganya daya beli masyarakat dan aktivitas hilirisasi komoditas unggulan di Provinsi Lampung. Pengendalian inflasi yang konsisten menjadi fondasi penting dalam menjaga momentum ekspansi ekonomi hingga akhir tahun," ujar Kepala BPS Provinsi Lampung, <strong>Ahmadriswan Nasution</strong>.
             </blockquote>
           </div>
         </div>
 
-        <button onclick="copyPressRelease()" class="w-full py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold border border-slate-700 transition flex items-center justify-center gap-2">
+        <button onclick="copyPressRelease()" class="w-full py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold shadow-md transition flex items-center justify-center gap-2">
           <span>📋</span> <span id="copyBtnText">Salin Naskah Siaran Pers</span>
         </button>
       </div>
@@ -478,13 +228,13 @@
       <!-- TAB 2: HASIL CRAWLING MEDIA -->
       <div id="panel-news" class="hidden p-4 flex-1 overflow-y-auto space-y-2.5">
         <div id="newsListContainer" class="space-y-2.5">
-          <div class="bg-slate-950 border border-slate-800 rounded-xl p-3 space-y-1.5">
+          <div class="bg-stone-50 border border-stone-200 rounded-2xl p-3 space-y-1.5">
             <div class="flex items-center justify-between gap-2">
-              <span class="text-[10px] font-mono-code text-slate-400">12/11/2026 • Antara Lampung</span>
-              <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/15 text-emerald-300">Positif</span>
+              <span class="text-[10px] font-mono-code text-slate-500">12/11/2026 • Antara Lampung</span>
+              <span class="px-2 py-0.5 rounded-md text-[10px] font-bold bg-emerald-100 text-emerald-800">Positif</span>
             </div>
-            <h4 class="text-xs font-bold text-white leading-snug">BPS Lampung Catat Inflasi Terkendali, Daya Beli Masyarakat Tetap Terjaga</h4>
-            <p class="text-[11px] text-slate-400 leading-relaxed">Hubungkan URL Web App Apps Script untuk memuat 10 berita terbaru langsung dari database Google Sheets kamu.</p>
+            <h4 class="text-xs font-extrabold text-slate-900 leading-snug">BPS Lampung Catat Inflasi Terkendali, Daya Beli Masyarakat Tetap Terjaga</h4>
+            <p class="text-[11px] text-slate-600 leading-relaxed">Data berita otomatis ditarik dari Google Sheets melalui Apps Script Web App.</p>
           </div>
         </div>
       </div>
@@ -492,24 +242,24 @@
   </main>
 
   <!-- MODAL: KONEKSI APPS SCRIPT API -->
-  <div id="apiModal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
-    <div class="bg-slate-900 border border-slate-700 rounded-2xl max-w-md w-full p-5 shadow-2xl space-y-4">
+  <div id="apiModal" class="hidden fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white border border-stone-200 rounded-3xl max-w-md w-full p-5 shadow-2xl space-y-4">
       <div class="flex items-center justify-between">
-        <h3 class="text-base font-bold text-white">Hubungkan Apps Script Web App</h3>
-        <button onclick="closeApiModal()" class="text-slate-400 hover:text-white text-lg">✕</button>
+        <h3 class="text-base font-extrabold text-slate-900">Hubungkan Apps Script Web App</h3>
+        <button onclick="closeApiModal()" class="text-slate-400 hover:text-slate-700 text-lg font-bold">✕</button>
       </div>
-      <p class="text-xs text-slate-300 leading-relaxed">
-        Tempelkan <strong>URL Aplikasi Web</strong> (berakhiran <code class="text-sky-400">/exec</code>) dari project Media Monitoring kamu. Sistem otomatis menambahkan parameter <code class="text-sky-400">?mode=agents</code> agar tidak bentrok dengan dashboard utama.
+      <p class="text-xs text-slate-600 leading-relaxed">
+        Tempelkan <strong>URL Aplikasi Web</strong> (berakhiran <code class="text-sky-600 font-bold">/exec</code>) dari project Media Monitoring Anda. Sistem otomatis menyertakan parameter <code class="text-sky-600 font-bold">?mode=agents</code>.
       </p>
       <div>
-        <label class="block text-[11px] font-semibold text-slate-400 mb-1">URL Web App Apps Script</label>
-        <input id="apiUrlInput" type="url" placeholder="https://script.google.com/macros/s/.../exec" class="w-full px-3 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-xs text-white focus:outline-none focus:border-sky-500" />
+        <label class="block text-[11px] font-bold text-slate-700 mb-1">URL Web App Apps Script</label>
+        <input id="apiUrlInput" type="url" placeholder="https://script.google.com/macros/s/.../exec" class="w-full px-3 py-2.5 rounded-xl bg-stone-50 border border-stone-300 text-xs text-slate-900 focus:outline-none focus:border-sky-500" />
       </div>
       <div class="flex items-center justify-between gap-2 pt-1">
-        <button onclick="disconnectApi()" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold">
+        <button onclick="disconnectApi()" class="px-3 py-2 rounded-xl bg-stone-100 hover:bg-stone-200 text-slate-700 text-xs font-bold">
           Reset ke Simulasi
         </button>
-        <button onclick="saveApiUrl()" class="px-4 py-2 rounded-xl bg-sky-600 hover:bg-sky-500 text-white text-xs font-semibold">
+        <button onclick="saveApiUrl()" class="px-4 py-2 rounded-xl bg-sky-600 hover:bg-sky-500 text-white text-xs font-bold shadow-md">
           Simpan & Hubungkan Live
         </button>
       </div>
@@ -517,11 +267,851 @@
   </div>
 
   <script>
+    // =========================================================================
+    // 1. KONFIGURASI API BRIDGE & STATE AGENT
+    // =========================================================================
     const DEFAULT_API_URL = 'https://script.google.com/macros/s/AKfycbzP5bH97KdOciPcj72cyENPHC97Tlcn49cYaW3-ggVSH5NZbrWfXniVNSDeM290sPZ9Xg/exec?mode=agents';
     const STORAGE_KEY = 'bps_lampung_virtual_office_api';
     let pollingInterval = null;
 
+    const AGENT_META = {
+      crawler: {
+        name: 'Agent Media Crawler',
+        role: 'Pemantau Berita & RSS',
+        desc: 'Cewek • Rambut ikal panjang merah tembaga & headphone studio',
+        status: 'IDLE',
+        pesan: 'Menunggu jadwal pemindaian RSS...',
+        camPos: { x: -3.2, y: 3.2, z: 3.5 },
+        targetPos: { x: -4.2, y: 1.3, z: -1.8 }
+      },
+      drafter: {
+        name: 'Agent Penulis BRS',
+        role: 'Data Storyteller & Naskah',
+        desc: 'Cowok • Rambut curly bergelombang & lanyard BPS',
+        status: 'IDLE',
+        pesan: 'Siap memproses bahan tayang PPTX...',
+        camPos: { x: 0.5, y: 3.2, z: 2.2 },
+        targetPos: { x: 0.2, y: 1.3, z: -3.2 }
+      },
+      auditor: {
+        name: 'Agent Auditor & PR',
+        role: 'Quality Control & Wastra Tenun',
+        desc: 'Ibu-ibu Senior • Rambut putih panjang & sweater putih tenun Tapis',
+        status: 'IDLE',
+        pesan: 'Menunggu validasi angka & sentimen...',
+        camPos: { x: 4.5, y: 3.3, z: 5.2 },
+        targetPos: { x: 3.5, y: 1.3, z: 0.5 }
+      }
+    };
+
+    // =========================================================================
+    // 2. THREE.JS 3D ARTSY MODERN STUDIO & ROBLOX CHARACTER BUILDER
+    // =========================================================================
+    let scene, camera, renderer, controls;
+    let ambientLight, sunLight, warmLampLight;
+    let isGoldenHour = false;
+    const robloxAvatars = {};
+    const clickableObjects = [];
+    const monitorScreens = [];
+    let targetCamPos = new THREE.Vector3(7.5, 6.8, 8.8);
+    let targetLookAt = new THREE.Vector3(0, 1.1, -0.5);
+    let isCameraTransitioning = false;
+
+    function init3DOffice() {
+      const container = document.getElementById('canvasContainer');
+      const width = container.clientWidth;
+      const height = container.clientHeight;
+
+      scene = new THREE.Scene();
+      scene.background = new THREE.Color(0xf4efe6);
+      scene.fog = new THREE.FogExp2(0xf4efe6, 0.022);
+
+      camera = new THREE.PerspectiveCamera(42, width / height, 0.1, 100);
+      camera.position.copy(targetCamPos);
+
+      renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' });
+      renderer.setSize(width, height);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.shadowMap.enabled = true;
+      renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+      renderer.outputEncoding = THREE.sRGBEncoding;
+      container.appendChild(renderer.domElement);
+
+      controls = new THREE.OrbitControls(camera, renderer.domElement);
+      controls.enableDamping = true;
+      controls.dampingFactor = 0.07;
+      controls.maxPolarAngle = Math.PI / 2 - 0.04;
+      controls.minDistance = 3.5;
+      controls.maxDistance = 18;
+      controls.target.copy(targetLookAt);
+      controls.addEventListener('start', () => { isCameraTransitioning = false; });
+
+      // Pencahayaan Cerah Alami Studio
+      ambientLight = new THREE.AmbientLight(0xfffaf0, 0.78);
+      scene.add(ambientLight);
+
+      sunLight = new THREE.DirectionalLight(0xfff5e4, 0.95);
+      sunLight.position.set(-7, 11, 6);
+      sunLight.castShadow = true;
+      sunLight.shadow.mapSize.width = 2048;
+      sunLight.shadow.mapSize.height = 2048;
+      sunLight.shadow.camera.near = 1;
+      sunLight.shadow.camera.far = 30;
+      const d = 9;
+      sunLight.shadow.camera.left = -d;
+      sunLight.shadow.camera.right = d;
+      sunLight.shadow.camera.top = d;
+      sunLight.shadow.camera.bottom = -d;
+      sunLight.shadow.bias = -0.0005;
+      scene.add(sunLight);
+
+      warmLampLight = new THREE.PointLight(0xffb74d, 0.45, 14);
+      warmLampLight.position.set(2.5, 4.2, 0);
+      scene.add(warmLampLight);
+
+      buildArchitectureAndDecor();
+      buildAllWorkstations();
+      buildAllRobloxCharacters();
+
+      // Raycaster klik pada karakter
+      const raycaster = new THREE.Raycaster();
+      const mouse = new THREE.Vector2();
+      let downX = 0, downY = 0;
+
+      renderer.domElement.addEventListener('pointerdown', (e) => {
+        downX = e.clientX;
+        downY = e.clientY;
+      });
+
+      renderer.domElement.addEventListener('pointerup', (e) => {
+        if (Math.hypot(e.clientX - downX, e.clientY - downY) > 6) return;
+        const rect = renderer.domElement.getBoundingClientRect();
+        mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+        mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+
+        raycaster.setFromCamera(mouse, camera);
+        const hits = raycaster.intersectObjects(clickableObjects, true);
+        if (hits.length > 0) {
+          let obj = hits[0].object;
+          while (obj && !obj.userData.agentId) obj = obj.parent;
+          if (obj && obj.userData.agentId) {
+            selectAgentCard(obj.userData.agentId);
+            focusCamera(obj.userData.agentId);
+          }
+        }
+      });
+
+      window.addEventListener('resize', onWindowResize);
+      animate3D();
+    }
+
+    function onWindowResize() {
+      const container = document.getElementById('canvasContainer');
+      if (!container) return;
+      camera.aspect = container.clientWidth / container.clientHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(container.clientWidth, container.clientHeight);
+    }
+
+    // Tekstur Kanvas Prosedural (Parket Kayu, Sweater Tenun Tapis, Lukisan Artsy)
+    function createWoodFloorTexture() {
+      const c = document.createElement('canvas');
+      c.width = 512; c.height = 512;
+      const ctx = c.getContext('2d');
+      ctx.fillStyle = '#d9b38c';
+      ctx.fillRect(0, 0, 512, 512);
+      const plankH = 64;
+      const shades = ['#d4aa80', '#deb892', '#cfa376', '#e2be98'];
+      for (let y = 0; y < 512; y += plankH) {
+        ctx.fillStyle = shades[(y / plankH) % shades.length];
+        ctx.fillRect(0, y, 512, plankH - 2);
+        ctx.fillStyle = 'rgba(139, 90, 43, 0.14)';
+        ctx.fillRect((y * 3) % 512, y, 2, plankH);
+        ctx.fillRect(0, y + plankH - 2, 512, 2);
+      }
+      const tex = new THREE.CanvasTexture(c);
+      tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
+      tex.repeat.set(4, 4);
+      return tex;
+    }
+
+    function createTenunSweaterTexture() {
+      const c = document.createElement('canvas');
+      c.width = 256; c.height = 256;
+      const ctx = c.getContext('2d');
+      // Dasar Sweater Rajut Putih Krem Hangat
+      ctx.fillStyle = '#f8f6f0';
+      ctx.fillRect(0, 0, 256, 256);
+
+      // Tekstur rajutan halus
+      ctx.fillStyle = 'rgba(203, 213, 225, 0.25)';
+      for (let y = 0; y < 256; y += 6) {
+        for (let x = 0; x < 256; x += 6) {
+          ctx.fillRect(x, y, 3, 2);
+        }
+      }
+
+      // Motif Tenun Etnik / Tapis Geometris di Dada & Pinggiran Bawah
+      const drawWovenBand = (yStart, height) => {
+        ctx.fillStyle = '#991b1b'; // Merah marun tapis
+        ctx.fillRect(0, yStart, 256, height);
+        ctx.fillStyle = '#d97706'; // Benang emas
+        ctx.fillRect(0, yStart + 3, 256, 3);
+        ctx.fillRect(0, yStart + height - 6, 256, 3);
+
+        // Motif belah ketupat tenun
+        ctx.fillStyle = '#fbbf24';
+        for (let x = 8; x < 256; x += 24) {
+          ctx.beginPath();
+          ctx.moveTo(x + 8, yStart + 8);
+          ctx.lineTo(x + 16, yStart + height / 2);
+          ctx.lineTo(x + 8, yStart + height - 8);
+          ctx.lineTo(x, yStart + height / 2);
+          ctx.closePath();
+          ctx.fill();
+        }
+      };
+
+      drawWovenBand(54, 34);
+      drawWovenBand(186, 28);
+
+      return new THREE.CanvasTexture(c);
+    }
+
+    function createArtsyPaintingTexture(variant) {
+      const c = document.createElement('canvas');
+      c.width = 256; c.height = 320;
+      const ctx = c.getContext('2d');
+      ctx.fillStyle = variant === 1 ? '#fef3c7' : '#e0f2fe';
+      ctx.fillRect(0, 0, 256, 320);
+
+      if (variant === 1) {
+        // Lukisan Abstrak Terracotta & Sage
+        ctx.fillStyle = '#d97757';
+        ctx.beginPath(); ctx.arc(128, 130, 72, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = '#52796f';
+        ctx.fillRect(45, 175, 166, 95);
+        ctx.fillStyle = '#1e293b';
+        ctx.beginPath(); ctx.arc(165, 110, 24, 0, Math.PI * 2); ctx.fill();
+      } else {
+        // Poster Tipografi Data Statistik BPS Artsy
+        ctx.fillStyle = '#0284c7';
+        ctx.fillRect(28, 36, 200, 12);
+        ctx.fillStyle = '#10b981';
+        ctx.fillRect(28, 170, 38, 100);
+        ctx.fillStyle = '#f59e0b';
+        ctx.fillRect(82, 125, 38, 145);
+        ctx.fillStyle = '#6366f1';
+        ctx.fillRect(136, 90, 38, 180);
+        ctx.fillStyle = '#ec4899';
+        ctx.fillRect(190, 65, 38, 205);
+      }
+      return new THREE.CanvasTexture(c);
+    }
+
+    // Pembuat Tanaman Pot Nyata (Monstera & Lidah Mertua)
+    function createPottedPlant(type, x, z, scale = 1) {
+      const group = new THREE.Group();
+      group.position.set(x, 0, z);
+      group.scale.setScalar(scale);
+
+      // Pot Terakota / Keramik Putih
+      const potColor = type === 'monstera' ? 0xc86d51 : 0xf8fafc;
+      const potGeo = new THREE.CylinderGeometry(0.36, 0.26, 0.52, 16);
+      const potMat = new THREE.MeshStandardMaterial({ color: potColor, roughness: 0.7 });
+      const pot = new THREE.Mesh(potGeo, potMat);
+      pot.position.y = 0.26;
+      pot.castShadow = true;
+      pot.receiveShadow = true;
+      group.add(pot);
+
+      // Media Tanah
+      const soil = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.33, 0.33, 0.05, 16),
+        new THREE.MeshStandardMaterial({ color: 0x3e2723 })
+      );
+      soil.position.y = 0.50;
+      group.add(soil);
+
+      if (type === 'monstera') {
+        const leafMat = new THREE.MeshStandardMaterial({ color: 0x2d6a4f, roughness: 0.45, side: THREE.DoubleSide });
+        const stemMat = new THREE.MeshStandardMaterial({ color: 0x40916c });
+        for (let i = 0; i < 7; i++) {
+          const angle = (i / 7) * Math.PI * 2;
+          const height = 0.75 + (i % 3) * 0.22;
+          const stem = new THREE.Mesh(new THREE.CylinderGeometry(0.02, 0.025, height, 6), stemMat);
+          stem.position.set(Math.cos(angle) * 0.12, 0.45 + height / 2, Math.sin(angle) * 0.12);
+          stem.rotation.z = -Math.cos(angle) * 0.32;
+          stem.rotation.x = Math.sin(angle) * 0.32;
+          group.add(stem);
+
+          const leaf = new THREE.Mesh(new THREE.SphereGeometry(0.28, 10, 8), leafMat);
+          leaf.scale.set(1.2, 0.12, 0.9);
+          leaf.position.set(Math.cos(angle) * 0.34, 0.45 + height, Math.sin(angle) * 0.34);
+          leaf.rotation.y = -angle;
+          leaf.rotation.z = -0.35;
+          leaf.castShadow = true;
+          group.add(leaf);
+        }
+      } else {
+        // Lidah Mertua (Sansevieria)
+        const bladeMat = new THREE.MeshStandardMaterial({ color: 0x52796f, roughness: 0.4 });
+        for (let i = 0; i < 9; i++) {
+          const angle = (i / 9) * Math.PI * 2;
+          const h = 0.65 + (i % 3) * 0.18;
+          const blade = new THREE.Mesh(new THREE.ConeGeometry(0.075, h, 5), bladeMat);
+          blade.scale.set(1, 1, 0.35);
+          blade.position.set(Math.cos(angle) * 0.12, 0.48 + h / 2, Math.sin(angle) * 0.12);
+          blade.rotation.y = -angle;
+          blade.rotation.z = -0.12;
+          blade.castShadow = true;
+          group.add(blade);
+        }
+      }
+
+      scene.add(group);
+    }
+
+    function buildArchitectureAndDecor() {
+      // 1. Lantai Parket Kayu Hangat
+      const floorGeo = new THREE.PlaneGeometry(13, 11);
+      const floorMat = new THREE.MeshStandardMaterial({ map: createWoodFloorTexture(), roughness: 0.65 });
+      const floor = new THREE.Mesh(floorGeo, floorMat);
+      floor.rotation.x = -Math.PI / 2;
+      floor.receiveShadow = true;
+      scene.add(floor);
+
+      // Karpet Zonasi Artsy (Terracotta, Sage, Lavender)
+      const addRug = (w, d, color, x, z) => {
+        const rug = new THREE.Mesh(
+          new THREE.BoxGeometry(w, 0.025, d),
+          new THREE.MeshStandardMaterial({ color, roughness: 0.9 })
+        );
+        rug.position.set(x, 0.012, z);
+        rug.receiveShadow = true;
+        scene.add(rug);
+      };
+      addRug(3.6, 3.2, 0xe0f2fe, -4.0, -1.6); // Area Crawler
+      addRug(3.8, 3.2, 0xdcfce7, 0.3, -3.0);  // Area Drafter
+      addRug(3.8, 3.4, 0xfef3c7, 3.5, 0.6);   // Area Auditor
+
+      // 2. Dinding Studio Modern (Krem Hangat & Aksen Sage)
+      const wallMat = new THREE.MeshStandardMaterial({ color: 0xfbf9f5, roughness: 0.85 });
+      const backWall = new THREE.Mesh(new THREE.BoxGeometry(13, 4.4, 0.25), wallMat);
+      backWall.position.set(0, 2.2, -5.5);
+      backWall.receiveShadow = true;
+      scene.add(backWall);
+
+      // Dinding Kiri dengan Jendela Kaca Besar Industrial
+      const leftWallLower = new THREE.Mesh(new THREE.BoxGeometry(0.25, 1.1, 11), wallMat);
+      leftWallLower.position.set(-6.5, 0.55, 0);
+      leftWallLower.receiveShadow = true;
+      scene.add(leftWallLower);
+
+      const leftWallTop = new THREE.Mesh(new THREE.BoxGeometry(0.25, 0.7, 11), wallMat);
+      leftWallTop.position.set(-6.5, 4.05, 0);
+      scene.add(leftWallTop);
+
+      // Bingkai Jendela Hitam Tipis & Kaca Cerah
+      const frameMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, metalness: 0.5, roughness: 0.4 });
+      for (let z = -4.5; z <= 4.5; z += 2.25) {
+        const mullion = new THREE.Mesh(new THREE.BoxGeometry(0.14, 2.6, 0.08), frameMat);
+        mullion.position.set(-6.45, 2.4, z);
+        scene.add(mullion);
+      }
+      const glassPane = new THREE.Mesh(
+        new THREE.PlaneGeometry(9.5, 2.6),
+        new THREE.MeshPhysicalMaterial({ color: 0xe0f7fa, transparent: true, opacity: 0.32, roughness: 0.1 })
+      );
+      glassPane.rotation.y = Math.PI / 2;
+      glassPane.position.set(-6.45, 2.4, 0);
+      scene.add(glassPane);
+
+      // 3. Galeri Lukisan Artsy di Dinding Belakang
+      const addWallArt = (variant, x, y, w, h) => {
+        const frame = new THREE.Mesh(
+          new THREE.BoxGeometry(w + 0.14, h + 0.14, 0.08),
+          new THREE.MeshStandardMaterial({ color: 0x92400e, roughness: 0.5 })
+        );
+        frame.position.set(x, y, -5.34);
+        scene.add(frame);
+
+        const canvasArt = new THREE.Mesh(
+          new THREE.PlaneGeometry(w, h),
+          new THREE.MeshStandardMaterial({ map: createArtsyPaintingTexture(variant) })
+        );
+        canvasArt.position.set(x, y, -5.29);
+        scene.add(canvasArt);
+      };
+      addWallArt(1, -2.5, 2.55, 1.3, 1.65);
+      addWallArt(2, 2.8, 2.55, 1.3, 1.65);
+
+      // 4. Rak Buku & Dekorasi Kayu di Sudut Kanan Belakang
+      const shelfGroup = new THREE.Group();
+      shelfGroup.position.set(5.3, 0, -4.7);
+      const woodMat = new THREE.MeshStandardMaterial({ color: 0xb07d4f, roughness: 0.6 });
+      for (let y of [0.2, 1.1, 2.0, 2.9]) {
+        const plank = new THREE.Mesh(new THREE.BoxGeometry(1.8, 0.07, 0.55), woodMat);
+        plank.position.y = y;
+        plank.castShadow = true;
+        shelfGroup.add(plank);
+      }
+      for (let x of [-0.85, 0.85]) {
+        const side = new THREE.Mesh(new THREE.BoxGeometry(0.07, 3.0, 0.55), woodMat);
+        side.position.set(x, 1.5, 0);
+        shelfGroup.add(side);
+      }
+      // Buku warna-warni di rak
+      const bookColors = [0xef4444, 0x3b82f6, 0x10b981, 0xf59e0b, 0x8b5cf6];
+      for (let i = 0; i < 8; i++) {
+        const book = new THREE.Mesh(
+          new THREE.BoxGeometry(0.11, 0.42, 0.35),
+          new THREE.MeshStandardMaterial({ color: bookColors[i % bookColors.length] })
+        );
+        book.position.set(-0.6 + i * 0.14, 1.35, 0);
+        shelfGroup.add(book);
+      }
+      scene.add(shelfGroup);
+
+      // 5. Tanaman Pot Nyata di Berbagai Sudut Kantor
+      createPottedPlant('monstera', -5.6, -4.5, 1.15);
+      createPottedPlant('sansevieria', -5.7, 3.6, 1.0);
+      createPottedPlant('monstera', 5.7, -3.5, 1.05);
+      createPottedPlant('sansevieria', 5.6, 3.8, 0.95);
+    }
+
+    function buildDeskSetup(x, z, rotY, accentColor) {
+      const desk = new THREE.Group();
+      desk.position.set(x, 0, z);
+      desk.rotation.y = rotY;
+
+      const topMat = new THREE.MeshStandardMaterial({ color: 0xe6ccb2, roughness: 0.5 });
+      const legMat = new THREE.MeshStandardMaterial({ color: 0x334155, metalness: 0.4, roughness: 0.5 });
+
+      const tableTop = new THREE.Mesh(new THREE.BoxGeometry(2.1, 0.08, 1.05), topMat);
+      tableTop.position.y = 0.88;
+      tableTop.castShadow = true;
+      tableTop.receiveShadow = true;
+      desk.add(tableTop);
+
+      for (let lx of [-0.92, 0.92]) {
+        for (let lz of [-0.42, 0.42]) {
+          const leg = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.035, 0.88, 8), legMat);
+          leg.position.set(lx, 0.44, lz);
+          leg.castShadow = true;
+          desk.add(leg);
+        }
+      }
+
+      // Dual Monitor Modern
+      const stand = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.25, 0.1), legMat);
+      stand.position.set(0, 1.02, -0.25);
+      desk.add(stand);
+
+      const frame = new THREE.Mesh(new THREE.BoxGeometry(1.15, 0.58, 0.05), new THREE.MeshStandardMaterial({ color: 0x1e293b }));
+      frame.position.set(0, 1.32, -0.24);
+      frame.castShadow = true;
+      desk.add(frame);
+
+      const screenMat = new THREE.MeshBasicMaterial({ color: accentColor });
+      const screen = new THREE.Mesh(new THREE.PlaneGeometry(1.07, 0.50), screenMat);
+      screen.position.set(0, 1.32, -0.21);
+      desk.add(screen);
+      monitorScreens.push({ mesh: screen, baseColor: new THREE.Color(accentColor) });
+
+      // Sukulen Mini & Mug Kopi di Meja
+      const miniPot = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.08, 0.06, 0.11, 10),
+        new THREE.MeshStandardMaterial({ color: 0xd97757 })
+      );
+      miniPot.position.set(0.78, 0.97, 0.18);
+      desk.add(miniPot);
+
+      const succulent = new THREE.Mesh(
+        new THREE.DodecahedronGeometry(0.085),
+        new THREE.MeshStandardMaterial({ color: 0x40916c })
+      );
+      succulent.position.set(0.78, 1.06, 0.18);
+      desk.add(succulent);
+
+      const mug = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.055, 0.055, 0.11, 12),
+        new THREE.MeshStandardMaterial({ color: 0xffffff })
+      );
+      mug.position.set(-0.75, 0.97, 0.22);
+      desk.add(mug);
+
+      scene.add(desk);
+    }
+
+    function buildAllWorkstations() {
+      buildDeskSetup(-4.2, -2.1, Math.PI / 5, 0x38bdf8); // Meja Crawler
+      buildDeskSetup(0.2, -3.6, 0, 0x34d399);            // Meja Drafter
+      buildDeskSetup(3.6, 0.2, -Math.PI / 4, 0xfbbf24);  // Meja Auditor
+    }
+
+    // =========================================================================
+    // PEMBUAT KARAKTER ROBLOX BLOCKY AVATAR (R15 STYLE)
+    // =========================================================================
+    function createRobloxCharacter(config) {
+      const root = new THREE.Group();
+      root.position.set(config.x, 0, config.z);
+      root.rotation.y = config.rotY;
+      root.userData.agentId = config.id;
+
+      const skinMat = new THREE.MeshStandardMaterial({ color: config.skinColor, roughness: 0.45 });
+      const pantsMat = new THREE.MeshStandardMaterial({ color: config.pantsColor, roughness: 0.7 });
+      const torsoMat = config.torsoTexture
+        ? new THREE.MeshStandardMaterial({ map: config.torsoTexture, roughness: 0.65 })
+        : new THREE.MeshStandardMaterial({ color: config.shirtColor, roughness: 0.6 });
+      const sleeveMat = new THREE.MeshStandardMaterial({ color: config.sleeveColor || config.shirtColor, roughness: 0.6 });
+
+      // Kaki Kiri & Kanan (Blocky Roblox Legs)
+      const leftLeg = new THREE.Group();
+      leftLeg.position.set(-0.18, 0.72, 0);
+      const lLegMesh = new THREE.Mesh(new THREE.BoxGeometry(0.32, 0.72, 0.34), pantsMat);
+      lLegMesh.position.y = -0.36;
+      lLegMesh.castShadow = true;
+      leftLeg.add(lLegMesh);
+      root.add(leftLeg);
+
+      const rightLeg = new THREE.Group();
+      rightLeg.position.set(0.18, 0.72, 0);
+      const rLegMesh = new THREE.Mesh(new THREE.BoxGeometry(0.32, 0.72, 0.34), pantsMat);
+      rLegMesh.position.y = -0.36;
+      rLegMesh.castShadow = true;
+      rightLeg.add(rLegMesh);
+      root.add(rightLeg);
+
+      // Torso (Badan Kotak Khas Roblox)
+      const torso = new THREE.Mesh(new THREE.BoxGeometry(0.72, 0.78, 0.38), torsoMat);
+      torso.position.y = 1.11;
+      torso.castShadow = true;
+      root.add(torso);
+
+      // Lanyard ID Card BPS untuk Penulis BRS & Crawler
+      if (config.hasLanyard) {
+        const strap = new THREE.Mesh(
+          new THREE.BoxGeometry(0.26, 0.48, 0.40),
+          new THREE.MeshStandardMaterial({ color: 0x0284c7 })
+        );
+        strap.position.set(0, 1.24, 0);
+        root.add(strap);
+
+        const card = new THREE.Mesh(
+          new THREE.BoxGeometry(0.16, 0.22, 0.42),
+          new THREE.MeshStandardMaterial({ color: 0xffffff })
+        );
+        card.position.set(0, 0.98, 0);
+        root.add(card);
+      }
+
+      // Lengan Kiri & Kanan (Blocky Arms)
+      const createArm = (xPos) => {
+        const armPivot = new THREE.Group();
+        armPivot.position.set(xPos, 1.44, 0);
+        const upper = new THREE.Mesh(new THREE.BoxGeometry(0.28, 0.42, 0.30), sleeveMat);
+        upper.position.y = -0.21;
+        upper.castShadow = true;
+        armPivot.add(upper);
+
+        const hand = new THREE.Mesh(new THREE.BoxGeometry(0.26, 0.32, 0.28), skinMat);
+        hand.position.y = -0.56;
+        hand.castShadow = true;
+        armPivot.add(hand);
+        root.add(armPivot);
+        return armPivot;
+      };
+      const leftArm = createArm(-0.52);
+      const rightArm = createArm(0.52);
+
+      // Kepala Khas Roblox (Cylinder Beveled / Rounded Head)
+      const headGroup = new THREE.Group();
+      headGroup.position.y = 1.76;
+      const headMesh = new THREE.Mesh(new THREE.CylinderGeometry(0.29, 0.29, 0.50, 20), skinMat);
+      headMesh.castShadow = true;
+      headGroup.add(headMesh);
+
+      // Wajah Roblox Klasik (Mata & Senyum Ramah)
+      const eyeMat = new THREE.MeshBasicMaterial({ color: 0x0f172a });
+      const leftEye = new THREE.Mesh(new THREE.SphereGeometry(0.032, 8, 8), eyeMat);
+      leftEye.position.set(-0.10, 0.04, 0.285);
+      const rightEye = new THREE.Mesh(new THREE.SphereGeometry(0.032, 8, 8), eyeMat);
+      rightEye.position.set(0.10, 0.04, 0.285);
+      headGroup.add(leftEye, rightEye);
+
+      // Senyum
+      const smile = new THREE.Mesh(
+        new THREE.TorusGeometry(0.075, 0.014, 6, 12, Math.PI),
+        eyeMat
+      );
+      smile.rotation.z = Math.PI;
+      smile.position.set(0, -0.05, 0.285);
+      headGroup.add(smile);
+
+      // Kacamata Baca untuk Ibu Auditor & PR
+      if (config.hasGlasses) {
+        const glassMat = new THREE.MeshStandardMaterial({ color: 0x78350f, metalness: 0.6 });
+        const rimL = new THREE.Mesh(new THREE.TorusGeometry(0.068, 0.012, 8, 16), glassMat);
+        rimL.position.set(-0.10, 0.04, 0.30);
+        const rimR = new THREE.Mesh(new THREE.TorusGeometry(0.068, 0.012, 8, 16), glassMat);
+        rimR.position.set(0.10, 0.04, 0.30);
+        const bridge = new THREE.Mesh(new THREE.BoxGeometry(0.07, 0.015, 0.015), glassMat);
+        bridge.position.set(0, 0.04, 0.30);
+        headGroup.add(rimL, rimR, bridge);
+      }
+
+      // GAYA RAMBUT SPESIFIK PER KARAKTER
+      const hairMat = new THREE.MeshStandardMaterial({ color: config.hairColor, roughness: 0.75 });
+
+      if (config.hairStyle === 'curly-male') {
+        // Cowok Penulis BRS: Rambut Curly Bergelombang Bervolume
+        const curlOffsets = [
+          [0, 0.28, 0, 0.24], [-0.18, 0.24, 0.12, 0.17], [0.18, 0.24, 0.12, 0.17],
+          [-0.22, 0.22, -0.10, 0.18], [0.22, 0.22, -0.10, 0.18], [0, 0.25, -0.18, 0.20],
+          [-0.10, 0.32, 0.05, 0.16], [0.11, 0.32, 0.04, 0.16], [0, 0.28, 0.18, 0.15]
+        ];
+        curlOffsets.forEach(([cx, cy, cz, r]) => {
+          const puff = new THREE.Mesh(new THREE.DodecahedronGeometry(r, 1), hairMat);
+          puff.position.set(cx, cy, cz);
+          puff.castShadow = true;
+          headGroup.add(puff);
+        });
+      } else if (config.hairStyle === 'wavy-red-female') {
+        // Cewek Crawler: Rambut Ikal Panjang Warna Merah Tembaga + Headphone
+        const topHair = new THREE.Mesh(new THREE.SphereGeometry(0.33, 14, 12), hairMat);
+        topHair.position.set(0, 0.14, -0.02);
+        headGroup.add(topHair);
+
+        // Gelombang rambut ikal panjang menjuntai di kiri, kanan & belakang
+        for (let side of [-0.28, 0.28]) {
+          for (let y = 0.05; y >= -0.62; y -= 0.16) {
+            const wave = new THREE.Mesh(new THREE.SphereGeometry(0.13, 10, 10), hairMat);
+            wave.position.set(side + Math.sin(y * 8) * 0.03, y, -0.05);
+            wave.castShadow = true;
+            headGroup.add(wave);
+          }
+        }
+        const backLong = new THREE.Mesh(new THREE.BoxGeometry(0.56, 0.78, 0.18), hairMat);
+        backLong.position.set(0, -0.22, -0.25);
+        backLong.castShadow = true;
+        headGroup.add(backLong);
+
+        // Headphone Studio
+        const hpMat = new THREE.MeshStandardMaterial({ color: 0x0f172a, roughness: 0.3 });
+        const band = new THREE.Mesh(new THREE.TorusGeometry(0.35, 0.03, 8, 20, Math.PI), hpMat);
+        band.position.set(0, 0.12, 0);
+        headGroup.add(band);
+        for (let sx of [-0.35, 0.35]) {
+          const cup = new THREE.Mesh(new THREE.CylinderGeometry(0.10, 0.10, 0.07, 14), hpMat);
+          cup.rotation.z = Math.PI / 2;
+          cup.position.set(sx, 0.02, 0);
+          headGroup.add(cup);
+        }
+      } else if (config.hairStyle === 'silver-long-senior') {
+        // Ibu Auditor & PR: Rambut Putih Panjang Anggun
+        const crown = new THREE.Mesh(new THREE.SphereGeometry(0.33, 14, 12), hairMat);
+        crown.position.set(0, 0.14, -0.02);
+        headGroup.add(crown);
+
+        const backHair = new THREE.Mesh(new THREE.BoxGeometry(0.58, 0.85, 0.18), hairMat);
+        backHair.position.set(0, -0.25, -0.24);
+        backHair.castShadow = true;
+        headGroup.add(backHair);
+
+        for (let sx of [-0.27, 0.27]) {
+          const sideStrand = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.72, 0.22), hairMat);
+          sideStrand.position.set(sx, -0.20, -0.06);
+          sideStrand.castShadow = true;
+          headGroup.add(sideStrand);
+        }
+      }
+
+      root.add(headGroup);
+      scene.add(root);
+      clickableObjects.push(root);
+
+      robloxAvatars[config.id] = {
+        root,
+        leftLeg,
+        rightLeg,
+        leftArm,
+        rightArm,
+        headGroup,
+        basePos: new THREE.Vector3(config.x, 0, config.z),
+        baseRotY: config.rotY,
+        phase: Math.random() * Math.PI * 2
+      };
+    }
+
+    function buildAllRobloxCharacters() {
+      // 1. Media Crawler: Cewek rambut ikal panjang warna merah
+      createRobloxCharacter({
+        id: 'crawler',
+        x: -3.6,
+        z: -1.3,
+        rotY: Math.PI + Math.PI / 5,
+        skinColor: 0xfde2c4,
+        shirtColor: 0x0284c7,
+        pantsColor: 0x1e293b,
+        hairColor: 0xb93829, // Merah tembaga
+        hairStyle: 'wavy-red-female',
+        hasLanyard: true
+      });
+
+      // 2. Penulis BRS: Cowok rambut curly bergelombang
+      createRobloxCharacter({
+        id: 'drafter',
+        x: 0.2,
+        z: -2.6,
+        rotY: Math.PI,
+        skinColor: 0xf3cfb3,
+        shirtColor: 0x2d6a4f,
+        pantsColor: 0x334155,
+        hairColor: 0x2b1d14, // Cokelat gelap curly
+        hairStyle: 'curly-male',
+        hasLanyard: true
+      });
+
+      // 3. Auditor & PR: Ibu-ibu rambut putih panjang dengan sweater putih tenun
+      createRobloxCharacter({
+        id: 'auditor',
+        x: 2.9,
+        z: 0.9,
+        rotY: Math.PI - Math.PI / 4,
+        skinColor: 0xf6d5b8,
+        torsoTexture: createTenunSweaterTexture(),
+        sleeveColor: 0xf8f6f0,
+        pantsColor: 0x1e293b,
+        hairColor: 0xf1f5f9, // Putih perak
+        hairStyle: 'silver-long-senior',
+        hasGlasses: true
+      });
+    }
+
+    // Loop Animasi 3D Real-Time
+    const clock = new THREE.Clock();
+    function animate3D() {
+      requestAnimationFrame(animate3D);
+      const t = clock.getElapsedTime();
+
+      // Transisi Kamera Halus saat Klik Menu/Karakter
+      if (isCameraTransitioning) {
+        camera.position.lerp(targetCamPos, 0.06);
+        controls.target.lerp(targetLookAt, 0.06);
+        if (camera.position.distanceTo(targetCamPos) < 0.05) {
+          isCameraTransitioning = false;
+        }
+      }
+
+      // Animasi Tiap Karakter Roblox Sesuai Status (IDLE, WORKING, DONE)
+      Object.keys(robloxAvatars).forEach((id) => {
+        const av = robloxAvatars[id];
+        const status = (AGENT_META[id].status || 'IDLE').toUpperCase();
+        const p = t + av.phase;
+
+        if (status === 'WORKING') {
+          // Mengetik cepat & mengangguk fokus di depan meja
+          av.root.position.lerp(av.basePos, 0.1);
+          av.root.position.y = Math.abs(Math.sin(p * 8)) * 0.03;
+          av.leftArm.rotation.x = -0.95 + Math.sin(p * 18) * 0.22;
+          av.rightArm.rotation.x = -0.95 - Math.sin(p * 18) * 0.22;
+          av.leftLeg.rotation.x = 0;
+          av.rightLeg.rotation.x = 0;
+          av.headGroup.rotation.y = Math.sin(p * 3) * 0.15;
+          av.headGroup.rotation.x = 0.12;
+        } else if (status === 'DONE') {
+          // Melompat kecil merayakan selesai & melambaikan tangan
+          av.root.position.y = Math.abs(Math.sin(p * 5)) * 0.18;
+          av.rightArm.rotation.x = -2.4 + Math.sin(p * 10) * 0.3;
+          av.leftArm.rotation.x = Math.sin(p * 4) * 0.15;
+          av.leftLeg.rotation.x = 0;
+          av.rightLeg.rotation.x = 0;
+          av.headGroup.rotation.x = -0.05;
+        } else {
+          // IDLE: Bernapas santai & menoleh ringan
+          av.root.position.lerp(av.basePos, 0.1);
+          av.root.position.y = Math.sin(p * 2) * 0.02;
+          av.leftArm.rotation.x = Math.sin(p * 1.8) * 0.08;
+          av.rightArm.rotation.x = -Math.sin(p * 1.8) * 0.08;
+          av.leftLeg.rotation.x = 0;
+          av.rightLeg.rotation.x = 0;
+          av.headGroup.rotation.y = Math.sin(p * 1.1) * 0.22;
+          av.headGroup.rotation.x = 0;
+        }
+      });
+
+      // Efek denyut lembut pada layar monitor
+      monitorScreens.forEach((m, idx) => {
+        const pulse = 0.85 + Math.sin(t * 3 + idx) * 0.15;
+        m.mesh.material.color.copy(m.baseColor).multiplyScalar(pulse);
+      });
+
+      controls.update();
+      renderer.render(scene, camera);
+    }
+
+    // =========================================================================
+    // 3. KONTROL MENU, KAMERA, PENCAHAYAAN & POLLING LIVE DATA
+    // =========================================================================
+    function focusCamera(mode) {
+      document.querySelectorAll('.cam-btn').forEach(btn => {
+        btn.className = 'cam-btn px-2.5 py-1 rounded-lg text-[11px] font-bold bg-white text-slate-600 border border-stone-200 hover:bg-stone-100 transition';
+      });
+      const activeBtn = document.getElementById(`cam-${mode}`);
+      if (activeBtn) {
+        activeBtn.className = 'cam-btn px-2.5 py-1 rounded-lg text-[11px] font-bold bg-slate-900 text-white transition';
+      }
+
+      if (mode === 'overview') {
+        targetCamPos.set(7.5, 6.8, 8.8);
+        targetLookAt.set(0, 1.1, -0.5);
+        closeAgentOverlay();
+      } else if (AGENT_META[mode]) {
+        const meta = AGENT_META[mode];
+        targetCamPos.set(meta.camPos.x, meta.camPos.y, meta.camPos.z);
+        targetLookAt.set(meta.targetPos.x, meta.targetPos.y, meta.targetPos.z);
+        selectAgentCard(mode);
+      }
+      isCameraTransitioning = true;
+    }
+
+    function selectAgentCard(agentId) {
+      const meta = AGENT_META[agentId];
+      if (!meta) return;
+      document.getElementById('selectedAgentOverlay').classList.remove('hidden');
+      document.getElementById('selRoleBadge').textContent = `${meta.role} • ${meta.status}`;
+      document.getElementById('selAgentName').textContent = meta.name;
+      document.getElementById('selAgentDesc').textContent = meta.desc;
+      document.getElementById('selAgentStatusMsg').textContent = meta.pesan;
+    }
+
+    function closeAgentOverlay() {
+      document.getElementById('selectedAgentOverlay').classList.add('hidden');
+    }
+
+    function toggleLightingMode() {
+      isGoldenHour = !isGoldenHour;
+      const btnText = document.getElementById('lightingText');
+      if (isGoldenHour) {
+        scene.background = new THREE.Color(0xfde8d0);
+        scene.fog.color = new THREE.Color(0xfde8d0);
+        sunLight.color.setHex(0xffb36b);
+        sunLight.intensity = 1.05;
+        warmLampLight.intensity = 0.85;
+        btnText.textContent = 'Golden Hour Sore';
+      } else {
+        scene.background = new THREE.Color(0xf4efe6);
+        scene.fog.color = new THREE.Color(0xf4efe6);
+        sunLight.color.setHex(0xfff5e4);
+        sunLight.intensity = 0.95;
+        warmLampLight.intensity = 0.45;
+        btnText.textContent = 'Pagi Cerah';
+      }
+    }
+
     window.addEventListener('DOMContentLoaded', () => {
+      init3DOffice();
       const savedUrl = localStorage.getItem(STORAGE_KEY) || normalizeApiUrl(DEFAULT_API_URL);
       if (savedUrl && savedUrl.startsWith('http')) {
         document.getElementById('apiUrlInput').value = savedUrl;
@@ -532,9 +1122,14 @@
     function addLog(message, type = 'info') {
       const logBox = document.getElementById('terminalLog');
       const now = new Date().toLocaleTimeString('id-ID', { hour12: false });
-      const colorMap = { info: 'text-slate-300', work: 'text-sky-400', success: 'text-emerald-400', error: 'text-rose-400' };
+      const colorMap = {
+        info: 'text-slate-600',
+        work: 'text-sky-700 font-semibold',
+        success: 'text-emerald-700 font-semibold',
+        error: 'text-rose-600 font-semibold'
+      };
       const line = document.createElement('div');
-      line.className = colorMap[type] || 'text-slate-300';
+      line.className = colorMap[type] || 'text-slate-600';
       line.textContent = `[${now}] ${message}`;
       logBox.appendChild(line);
       logBox.scrollTop = logBox.scrollHeight;
@@ -546,7 +1141,11 @@
 
     function updateAgentUI(agentId, status, pesan, updatedAt, outputUrl) {
       const cleanStatus = (status || 'IDLE').toUpperCase();
-      const station = document.getElementById(`station-${agentId}`);
+      if (AGENT_META[agentId]) {
+        AGENT_META[agentId].status = cleanStatus;
+        if (pesan) AGENT_META[agentId].pesan = pesan;
+      }
+
       const badge = document.getElementById(`badge-${agentId}`);
       const msgEl = document.getElementById(`msg-${agentId}`);
       const timeEl = document.getElementById(`time-${agentId}`);
@@ -554,36 +1153,18 @@
       if (msgEl && pesan) msgEl.textContent = pesan;
       if (timeEl && updatedAt) timeEl.textContent = `Update: ${updatedAt}`;
 
-      if (station) station.classList.remove('agent-working');
       if (badge) {
         badge.textContent = cleanStatus;
-        badge.className = 'px-2 py-0.5 rounded text-[10px] font-bold ';
+        badge.className = 'px-2 py-0.5 rounded-md text-[10px] font-extrabold ';
         if (cleanStatus === 'WORKING') {
-          badge.className += 'bg-sky-500/20 text-sky-300 border border-sky-500/40 animate-pulse';
-          if (station) station.classList.add('agent-working');
+          badge.className += 'bg-sky-100 text-sky-800 border border-sky-300 animate-pulse';
         } else if (cleanStatus === 'DONE') {
-          badge.className += 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40';
+          badge.className += 'bg-emerald-100 text-emerald-800 border border-emerald-300';
         } else if (cleanStatus === 'ERROR') {
-          badge.className += 'bg-rose-500/20 text-rose-300 border border-rose-500/40';
+          badge.className += 'bg-rose-100 text-rose-800 border border-rose-300';
         } else {
-          badge.className += 'bg-slate-800 text-slate-300';
+          badge.className += 'bg-stone-100 text-slate-600';
         }
-      }
-
-      const p1 = document.getElementById('pathCrawlerToAuditor');
-      const p2 = document.getElementById('pathDrafterToAuditor');
-      const p3 = document.getElementById('pathAuditorToBoard');
-      if (agentId === 'crawler' && p1) {
-        p1.classList.toggle('flow-line-active', cleanStatus === 'WORKING');
-        p1.setAttribute('opacity', cleanStatus === 'WORKING' ? '1' : '0.35');
-      }
-      if (agentId === 'drafter' && p2) {
-        p2.classList.toggle('flow-line-active', cleanStatus === 'WORKING');
-        p2.setAttribute('opacity', cleanStatus === 'WORKING' ? '1' : '0.35');
-      }
-      if (agentId === 'auditor' && p3) {
-        p3.classList.toggle('flow-line-active', cleanStatus === 'WORKING');
-        p3.setAttribute('opacity', cleanStatus === 'WORKING' ? '1' : '0.35');
       }
 
       if (outputUrl && outputUrl.startsWith('http')) {
@@ -597,25 +1178,24 @@
       const btn = document.getElementById('btnSimulasi');
       btn.disabled = true;
       btn.classList.add('opacity-50');
-      addLog('Memulai simulasi alur kerja 3 AI Agent Humas BPS Provinsi Lampung...', 'work');
+      addLog('Memulai simulasi kerja 3 AI Agent di Studio...', 'work');
 
-      updateAgentUI('crawler', 'WORKING', 'Menarik Google News RSS ("BPS Provinsi Lampung") & filter duplikasi...', 'Baru saja');
-      updateAgentUI('drafter', 'WORKING', 'Menduplikasi template resmi & membaca bahan tayang BRS...', 'Baru saja');
+      updateAgentUI('crawler', 'WORKING', 'Memindai Google News RSS ("BPS Provinsi Lampung")...', 'Baru saja');
+      updateAgentUI('drafter', 'WORKING', 'Mengekstrak bahan tayang PPTX & menyusun narasi BRS...', 'Baru saja');
 
       setTimeout(() => {
-        addLog('[CRAWLER] 4 berita baru lolos deduplikasi URL, menganalisis sentimen via Gemini...', 'work');
-        updateAgentUI('crawler', 'DONE', 'Selesai: 4 berita baru terklasifikasi sentimennya.', 'Baru saja');
-        updateAgentUI('drafter', 'WORKING', 'Menulis narasi piramida terbalik & kutipan Kepala BPS...', 'Baru saja');
+        addLog('[CRAWLER] 4 berita baru terklasifikasi sentimennya.', 'work');
+        updateAgentUI('crawler', 'DONE', 'Selesai: 4 berita baru terklasifikasi.', 'Baru saja');
       }, 3200);
 
       setTimeout(() => {
-        addLog('[DRAFTER] Draf selesai disusun, meneruskan ke Agent Auditor...', 'work');
+        addLog('[DRAFTER] Draf Siaran Pers selesai disusun ke templat resmi.', 'work');
         updateAgentUI('drafter', 'DONE', 'Draf siaran pers selesai disusun.', 'Baru saja');
-        updateAgentUI('auditor', 'WORKING', 'Mengaudit silang angka y-on-y (5,18%), q-to-q (1,42%), c-to-c (5,04%)...', 'Baru saja');
+        updateAgentUI('auditor', 'WORKING', 'Ibu Auditor memeriksa presisi angka y-on-y & q-to-q...', 'Baru saja');
       }, 6400);
 
       setTimeout(() => {
-        addLog('[AUDITOR] Validasi angka lulus (zero margin of error). Hasil tayang di Preview Board.', 'success');
+        addLog('[AUDITOR] Validasi angka lulus (zero margin of error). Siap rilis!', 'success');
         updateAgentUI('auditor', 'DONE', 'Lolos audit angka & siap publikasi.', 'Baru saja');
         btn.disabled = false;
         btn.classList.remove('opacity-50');
@@ -646,8 +1226,8 @@
       localStorage.removeItem(STORAGE_KEY);
       if (pollingInterval) clearInterval(pollingInterval);
       const badge = document.getElementById('connectionBadge');
-      badge.className = 'inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-amber-500/15 text-amber-300 border border-amber-500/30';
-      badge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span> Mode Simulasi';
+      badge.className = 'inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-100 text-amber-800 border border-amber-300';
+      badge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span> Mode Simulasi';
       document.getElementById('lastSyncText').textContent = 'Polling: Nonaktif';
       addLog('Koneksi API diputus. Kembali ke Mode Simulasi.', 'info');
       closeApiModal();
@@ -656,9 +1236,9 @@
     function startLivePolling(url) {
       if (pollingInterval) clearInterval(pollingInterval);
       const badge = document.getElementById('connectionBadge');
-      badge.className = 'inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-500/15 text-emerald-300 border border-emerald-500/30';
-      badge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span> Live Apps Script';
-      addLog('Menghubungkan ke Apps Script API Bridge...', 'work');
+      badge.className = 'inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300';
+      badge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping"></span> Live Apps Script';
+      addLog('Terhubung ke Apps Script API Bridge...', 'work');
 
       const fetchState = async () => {
         try {
@@ -675,7 +1255,7 @@
             document.getElementById('lastSyncText').textContent = `Live Sync: ${nowStr}`;
           }
         } catch (err) {
-          addLog('Gagal mengambil status API: ' + err.message, 'error');
+          addLog('Gagal sinkronisasi API: ' + err.message, 'error');
         }
       };
 
@@ -686,13 +1266,11 @@
     function formatTanggalID(rawDate) {
       if (!rawDate || rawDate === '-') return '-';
       const str = String(rawDate).trim();
-
       if (/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(str)) {
         const [dd, mm, yyyy] = str.split('/');
         const d = new Date(Number(yyyy), Number(mm) - 1, Number(dd));
         return d.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
       }
-
       const parsed = new Date(str);
       if (!isNaN(parsed.getTime())) {
         return parsed.toLocaleDateString('id-ID', {
@@ -702,7 +1280,6 @@
           year: 'numeric'
         });
       }
-
       return str;
     }
 
@@ -711,27 +1288,25 @@
       container.innerHTML = newsItems.map(item => {
         const analisisText = String(item.analisis || '');
         let sentimen = 'Netral';
-        let badgeStyle = 'bg-slate-800 text-slate-300';
+        let badgeStyle = 'bg-stone-100 text-slate-700';
         if (/positif/i.test(analisisText)) {
           sentimen = 'Positif';
-          badgeStyle = 'bg-emerald-500/15 text-emerald-300';
+          badgeStyle = 'bg-emerald-100 text-emerald-800';
         } else if (/negatif/i.test(analisisText)) {
           sentimen = 'Negatif';
-          badgeStyle = 'bg-rose-500/15 text-rose-300';
+          badgeStyle = 'bg-rose-100 text-rose-800';
         }
-
         const tanggalRapi = formatTanggalID(item.tanggal);
-
         return `
-          <div class="bg-slate-950 border border-slate-800 rounded-xl p-3 space-y-1.5">
+          <div class="bg-stone-50 border border-stone-200 rounded-2xl p-3 space-y-1.5 hover:border-sky-300 transition">
             <div class="flex items-center justify-between gap-2">
-              <span class="text-[10px] font-mono-code text-slate-400">${tanggalRapi} • ${item.media || 'Media'}</span>
-              <span class="px-2 py-0.5 rounded text-[10px] font-bold ${badgeStyle}">${sentimen}</span>
+              <span class="text-[10px] font-mono-code text-slate-500">${tanggalRapi} • ${item.media || 'Media'}</span>
+              <span class="px-2 py-0.5 rounded-md text-[10px] font-bold ${badgeStyle}">${sentimen}</span>
             </div>
-            <a href="${item.link || '#'}" target="_blank" class="block text-xs font-bold text-white hover:text-sky-400 leading-snug transition">
+            <a href="${item.link || '#'}" target="_blank" class="block text-xs font-extrabold text-slate-900 hover:text-sky-600 leading-snug transition">
               ${item.judul || '(Tanpa Judul)'} ↗
             </a>
-            <p class="text-[11px] text-slate-400 whitespace-pre-line leading-relaxed">${analisisText}</p>
+            <p class="text-[11px] text-slate-600 whitespace-pre-line leading-relaxed">${analisisText}</p>
           </div>
         `;
       }).join('');
@@ -743,16 +1318,12 @@
       document.getElementById('panel-news').classList.toggle('hidden', isBrs);
 
       document.getElementById('tab-brs').className = isBrs
-        ? 'py-2.5 text-center border-b-2 border-emerald-500 text-emerald-400 bg-slate-900/60'
-        : 'py-2.5 text-center border-b-2 border-transparent text-slate-400 hover:text-slate-200';
+        ? 'py-2.5 text-center border-b-2 border-emerald-600 text-emerald-700 bg-white'
+        : 'py-2.5 text-center border-b-2 border-transparent text-slate-500 hover:text-slate-800';
 
       document.getElementById('tab-news').className = !isBrs
-        ? 'py-2.5 text-center border-b-2 border-sky-500 text-sky-400 bg-slate-900/60'
-        : 'py-2.5 text-center border-b-2 border-transparent text-slate-400 hover:text-slate-200';
-    }
-
-    function focusPreviewBoard() {
-      document.getElementById('previewBoardSection').scrollIntoView({ behavior: 'smooth' });
+        ? 'py-2.5 text-center border-b-2 border-sky-600 text-sky-700 bg-white'
+        : 'py-2.5 text-center border-b-2 border-transparent text-slate-500 hover:text-slate-800';
     }
 
     function copyPressRelease() {
