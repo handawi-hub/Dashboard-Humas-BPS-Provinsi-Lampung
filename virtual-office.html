@@ -750,234 +750,219 @@
       buildDeskSetup(3.6, 0.2, -Math.PI / 4, 0xfbbf24);  // Meja Auditor
     }
 
+   // =========================================================================
+    // PEMBUAT KARAKTER CHIBI 3D STYLIZED (SESUAI KARAKTER CRAWLER, DRAFTER, AUDITOR)
     // =========================================================================
-    // PEMBUAT KARAKTER ROBLOX BLOCKY AVATAR (R15 STYLE)
-    // =========================================================================
-   // Memuat foto lokal & memproyeksikannya ke lapisan depan wajah kepala Roblox
-    function applyPhotoFaceToHead(headGroup, imagePath) {
-      const loader = new THREE.TextureLoader();
-      loader.load(
-        imagePath,
-        (texture) => {
-          texture.encoding = THREE.sRGBEncoding;
-
-          // Buat masker oval lembut di kanvas agar tepi foto menyatu halus dengan kulit kepala 3D
-          const canvas = document.createElement('canvas');
-          canvas.width = 256;
-          canvas.height = 256;
-          const ctx = canvas.getContext('2d');
-
-          const img = texture.image;
-          // Crop otomatis bagian tengah foto (center square crop)
-          const minSide = Math.min(img.width, img.height);
-          const sx = (img.width - minSide) / 2;
-          const sy = (img.height - minSide) / 2;
-
-          ctx.save();
-          ctx.beginPath();
-          ctx.ellipse(128, 128, 108, 120, 0, 0, Math.PI * 2);
-          ctx.clip();
-          ctx.drawImage(img, sx, sy, minSide, minSide, 0, 0, 256, 256);
-          ctx.restore();
-
-          const maskedTexture = new THREE.CanvasTexture(canvas);
-          maskedTexture.encoding = THREE.sRGBEncoding;
-
-          // Geometri silinder lengkung tipis yang menempel persis di permukaan depan kepala (r = 0.293)
-          const faceGeo = new THREE.CylinderGeometry(
-            0.293, 0.293, 0.42, 24, 1, true,
-            -Math.PI * 0.32, // sudut mulai (kiri wajah)
-            Math.PI * 0.64   // lebar lengkungan (kanan wajah)
-          );
-          const faceMat = new THREE.MeshBasicMaterial({
-            map: maskedTexture,
-            transparent: true
-          });
-          const faceMesh = new THREE.Mesh(faceGeo, faceMat);
-          faceMesh.position.y = -0.01;
-          headGroup.add(faceMesh);
-        },
-        undefined,
-        (err) => {
-          console.warn('Foto wajah gagal dimuat, menggunakan wajah default Roblox:', imagePath);
-        }
-      );
-    }
     function createRobloxCharacter(config) {
       const root = new THREE.Group();
       root.position.set(config.x, 0, config.z);
       root.rotation.y = config.rotY;
       root.userData.agentId = config.id;
 
-      const skinMat = new THREE.MeshStandardMaterial({ color: config.skinColor, roughness: 0.45 });
-      const pantsMat = new THREE.MeshStandardMaterial({ color: config.pantsColor, roughness: 0.7 });
+      const skinMat = new THREE.MeshStandardMaterial({ color: config.skinColor, roughness: 0.42 });
+      const pantsMat = new THREE.MeshStandardMaterial({ color: config.pantsColor, roughness: 0.65 });
       const torsoMat = config.torsoTexture
         ? new THREE.MeshStandardMaterial({ map: config.torsoTexture, roughness: 0.65 })
-        : new THREE.MeshStandardMaterial({ color: config.shirtColor, roughness: 0.6 });
-      const sleeveMat = new THREE.MeshStandardMaterial({ color: config.sleeveColor || config.shirtColor, roughness: 0.6 });
+        : new THREE.MeshStandardMaterial({ color: config.shirtColor, roughness: 0.58 });
+      const sleeveMat = new THREE.MeshStandardMaterial({ color: config.sleeveColor || config.shirtColor, roughness: 0.58 });
 
-      // Kaki Kiri & Kanan (Blocky Roblox Legs)
+      // Kaki Chibi Pendek & Membulat
       const leftLeg = new THREE.Group();
-      leftLeg.position.set(-0.18, 0.72, 0);
-      const lLegMesh = new THREE.Mesh(new THREE.BoxGeometry(0.32, 0.72, 0.34), pantsMat);
-      lLegMesh.position.y = -0.36;
+      leftLeg.position.set(-0.14, 0.56, 0);
+      const lLegMesh = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.11, 0.52, 14), pantsMat);
+      lLegMesh.position.y = -0.26;
       lLegMesh.castShadow = true;
-      leftLeg.add(lLegMesh);
+      const lShoe = new THREE.Mesh(new THREE.SphereGeometry(0.13, 12, 10), new THREE.MeshStandardMaterial({ color: 0x1e293b }));
+      lShoe.scale.set(1, 0.65, 1.35);
+      lShoe.position.set(0, -0.52, 0.04);
+      leftLeg.add(lLegMesh, lShoe);
       root.add(leftLeg);
 
       const rightLeg = new THREE.Group();
-      rightLeg.position.set(0.18, 0.72, 0);
-      const rLegMesh = new THREE.Mesh(new THREE.BoxGeometry(0.32, 0.72, 0.34), pantsMat);
-      rLegMesh.position.y = -0.36;
+      rightLeg.position.set(0.14, 0.56, 0);
+      const rLegMesh = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.11, 0.52, 14), pantsMat);
+      rLegMesh.position.y = -0.26;
       rLegMesh.castShadow = true;
-      rightLeg.add(rLegMesh);
+      const rShoe = new THREE.Mesh(new THREE.SphereGeometry(0.13, 12, 10), new THREE.MeshStandardMaterial({ color: 0x1e293b }));
+      rShoe.scale.set(1, 0.65, 1.35);
+      rShoe.position.set(0, -0.52, 0.04);
+      rightLeg.add(rLegMesh, rShoe);
       root.add(rightLeg);
 
-      // Torso (Badan Kotak Khas Roblox)
-      const torso = new THREE.Mesh(new THREE.BoxGeometry(0.72, 0.78, 0.38), torsoMat);
-      torso.position.y = 1.11;
+      // Badan Chibi Mungil (Rounded Torso)
+      const torso = new THREE.Mesh(new THREE.CylinderGeometry(0.26, 0.31, 0.64, 18), torsoMat);
+      torso.position.y = 0.88;
       torso.castShadow = true;
       root.add(torso);
 
-      // Lanyard ID Card BPS untuk Penulis BRS & Crawler
-      if (config.hasLanyard) {
-        const strap = new THREE.Mesh(
-          new THREE.BoxGeometry(0.26, 0.48, 0.40),
-          new THREE.MeshStandardMaterial({ color: 0x0284c7 })
+      // Aksen Dasi Gelap untuk Crawler (Gaya Setelan Gelap)
+      if (config.hasDarkTie) {
+        const tie = new THREE.Mesh(
+          new THREE.BoxGeometry(0.08, 0.36, 0.04),
+          new THREE.MeshStandardMaterial({ color: 0x090d16, roughness: 0.4 })
         );
-        strap.position.set(0, 1.24, 0);
-        root.add(strap);
+        tie.position.set(0, 0.94, 0.27);
+        root.add(tie);
+      }
 
+      // Lanyard ID Card BPS
+      if (config.hasLanyard) {
         const card = new THREE.Mesh(
-          new THREE.BoxGeometry(0.16, 0.22, 0.42),
+          new THREE.BoxGeometry(0.14, 0.20, 0.03),
           new THREE.MeshStandardMaterial({ color: 0xffffff })
         );
-        card.position.set(0, 0.98, 0);
+        card.position.set(0, 0.88, 0.29);
         root.add(card);
       }
 
-      // Lengan Kiri & Kanan (Blocky Arms)
+      // Lengan Chibi
       const createArm = (xPos) => {
         const armPivot = new THREE.Group();
-        armPivot.position.set(xPos, 1.44, 0);
-        const upper = new THREE.Mesh(new THREE.BoxGeometry(0.28, 0.42, 0.30), sleeveMat);
-        upper.position.y = -0.21;
+        armPivot.position.set(xPos, 1.14, 0);
+        const upper = new THREE.Mesh(new THREE.CylinderGeometry(0.095, 0.09, 0.34, 12), sleeveMat);
+        upper.position.y = -0.17;
         upper.castShadow = true;
         armPivot.add(upper);
 
-        const hand = new THREE.Mesh(new THREE.BoxGeometry(0.26, 0.32, 0.28), skinMat);
-        hand.position.y = -0.56;
+        const hand = new THREE.Mesh(new THREE.SphereGeometry(0.10, 12, 12), skinMat);
+        hand.position.y = -0.38;
         hand.castShadow = true;
         armPivot.add(hand);
         root.add(armPivot);
         return armPivot;
       };
-      const leftArm = createArm(-0.52);
-      const rightArm = createArm(0.52);
+      const leftArm = createArm(-0.36);
+      const rightArm = createArm(0.36);
 
-      // Kepala Khas Roblox (Cylinder Beveled / Rounded Head)
+      // Kepala Chibi Besar & Ekspresif
       const headGroup = new THREE.Group();
-      headGroup.position.y = 1.76;
-      const headMesh = new THREE.Mesh(new THREE.CylinderGeometry(0.29, 0.29, 0.50, 20), skinMat);
+      headGroup.position.y = 1.62;
+      const headMesh = new THREE.Mesh(new THREE.SphereGeometry(0.42, 24, 20), skinMat);
+      headMesh.scale.set(1.04, 0.96, 0.98);
       headMesh.castShadow = true;
       headGroup.add(headMesh);
 
-     // Jika ada foto, tempelkan foto ke kepala. Jika tidak ada, pakai wajah kartun biasa
-   if (config.faceImage) {
-     applyPhotoFaceToHead(headGroup, config.faceImage);
-   } else {
-     const eyeMat = new THREE.MeshBasicMaterial({ color: 0x0f172a });
-     const leftEye = new THREE.Mesh(new THREE.SphereGeometry(0.032, 8, 8), eyeMat);
-     leftEye.position.set(-0.10, 0.04, 0.285);
-     const rightEye = new THREE.Mesh(new THREE.SphereGeometry(0.032, 8, 8), eyeMat);
-     rightEye.position.set(0.10, 0.04, 0.285);
-     headGroup.add(leftEye, rightEye);
+      // Mata Chibi Berbinar + Alis
+      const eyeWhiteMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
+      const pupilMat = new THREE.MeshBasicMaterial({ color: config.eyeColor || 0x1e1b18 });
+      const browMat = new THREE.MeshStandardMaterial({ color: config.browColor || config.hairColor });
 
-     const smile = new THREE.Mesh(
-       new THREE.TorusGeometry(0.075, 0.014, 6, 12, Math.PI),
-       eyeMat
-     );
-     smile.rotation.z = Math.PI;
-     smile.position.set(0, -0.05, 0.285);
-     headGroup.add(smile);
-   }
+      for (let side of [-1, 1]) {
+        const eyeBase = new THREE.Mesh(new THREE.SphereGeometry(0.068, 12, 12), eyeWhiteMat);
+        eyeBase.scale.set(1, 1.15, 0.5);
+        eyeBase.position.set(side * 0.14, 0.02, 0.37);
 
-      // Kacamata Baca untuk Ibu Auditor & PR
-      if (config.hasGlasses) {
-        const glassMat = new THREE.MeshStandardMaterial({ color: 0x78350f, metalness: 0.6 });
-        const rimL = new THREE.Mesh(new THREE.TorusGeometry(0.068, 0.012, 8, 16), glassMat);
-        rimL.position.set(-0.10, 0.04, 0.30);
-        const rimR = new THREE.Mesh(new THREE.TorusGeometry(0.068, 0.012, 8, 16), glassMat);
-        rimR.position.set(0.10, 0.04, 0.30);
-        const bridge = new THREE.Mesh(new THREE.BoxGeometry(0.07, 0.015, 0.015), glassMat);
-        bridge.position.set(0, 0.04, 0.30);
-        headGroup.add(rimL, rimR, bridge);
+        const pupil = new THREE.Mesh(new THREE.SphereGeometry(0.048, 12, 12), pupilMat);
+        pupil.scale.set(1, 1.15, 0.5);
+        pupil.position.set(side * 0.14, 0.02, 0.395);
+
+        const highlight = new THREE.Mesh(new THREE.SphereGeometry(0.016, 8, 8), eyeWhiteMat);
+        highlight.position.set(side * 0.155, 0.045, 0.415);
+
+        const brow = new THREE.Mesh(new THREE.BoxGeometry(0.11, 0.022, 0.02), browMat);
+        brow.position.set(side * 0.14, 0.11, 0.38);
+        brow.rotation.z = side * -0.06;
+
+        headGroup.add(eyeBase, pupil, highlight, brow);
       }
 
-      // GAYA RAMBUT SPESIFIK PER KARAKTER
-      const hairMat = new THREE.MeshStandardMaterial({ color: config.hairColor, roughness: 0.75 });
-
-      if (config.hairStyle === 'curly-male') {
-        // Cowok Penulis BRS: Rambut Curly Bergelombang Bervolume
-        const curlOffsets = [
-          [0, 0.28, 0, 0.24], [-0.18, 0.24, 0.12, 0.17], [0.18, 0.24, 0.12, 0.17],
-          [-0.22, 0.22, -0.10, 0.18], [0.22, 0.22, -0.10, 0.18], [0, 0.25, -0.18, 0.20],
-          [-0.10, 0.32, 0.05, 0.16], [0.11, 0.32, 0.04, 0.16], [0, 0.28, 0.18, 0.15]
-        ];
-        curlOffsets.forEach(([cx, cy, cz, r]) => {
-          const puff = new THREE.Mesh(new THREE.DodecahedronGeometry(r, 1), hairMat);
-          puff.position.set(cx, cy, cz);
-          puff.castShadow = true;
-          headGroup.add(puff);
-        });
-      } else if (config.hairStyle === 'wavy-red-female') {
-        // Cewek Crawler: Rambut Ikal Panjang Warna Merah Tembaga + Headphone
-        const topHair = new THREE.Mesh(new THREE.SphereGeometry(0.33, 14, 12), hairMat);
-        topHair.position.set(0, 0.14, -0.02);
-        headGroup.add(topHair);
-
-        // Gelombang rambut ikal panjang menjuntai di kiri, kanan & belakang
-        for (let side of [-0.28, 0.28]) {
-          for (let y = 0.05; y >= -0.62; y -= 0.16) {
-            const wave = new THREE.Mesh(new THREE.SphereGeometry(0.13, 10, 10), hairMat);
-            wave.position.set(side + Math.sin(y * 8) * 0.03, y, -0.05);
-            wave.castShadow = true;
-            headGroup.add(wave);
-          }
+      // Perona Pipi Halus & Lesung Pipi (Chibi Blush)
+      if (config.hasBlush) {
+        const blushMat = new THREE.MeshBasicMaterial({ color: 0xf472b6, transparent: true, opacity: 0.45 });
+        for (let side of [-1, 1]) {
+          const blush = new THREE.Mesh(new THREE.CircleGeometry(0.055, 12), blushMat);
+          blush.position.set(side * 0.22, -0.06, 0.36);
+          blush.rotation.y = side * 0.45;
+          headGroup.add(blush);
         }
-        const backLong = new THREE.Mesh(new THREE.BoxGeometry(0.56, 0.78, 0.18), hairMat);
-        backLong.position.set(0, -0.22, -0.25);
-        backLong.castShadow = true;
-        headGroup.add(backLong);
+      }
 
-        // Headphone Studio
-        const hpMat = new THREE.MeshStandardMaterial({ color: 0x0f172a, roughness: 0.3 });
-        const band = new THREE.Mesh(new THREE.TorusGeometry(0.35, 0.03, 8, 20, Math.PI), hpMat);
-        band.position.set(0, 0.12, 0);
-        headGroup.add(band);
-        for (let sx of [-0.35, 0.35]) {
-          const cup = new THREE.Mesh(new THREE.CylinderGeometry(0.10, 0.10, 0.07, 14), hpMat);
-          cup.rotation.z = Math.PI / 2;
-          cup.position.set(sx, 0.02, 0);
-          headGroup.add(cup);
+      // Mulut Senyum Ramah
+      const smile = new THREE.Mesh(
+        new THREE.TorusGeometry(0.065, 0.014, 8, 16, Math.PI),
+        new THREE.MeshBasicMaterial({ color: config.lipColor || 0x9f1239 })
+      );
+      smile.rotation.z = Math.PI;
+      smile.position.set(0, -0.09, 0.39);
+      headGroup.add(smile);
+
+      // GAYA RAMBUT & CIRI KHAS SESUAI MASING-MASING FILE ASSET
+      const hairMat = new THREE.MeshStandardMaterial({ color: config.hairColor, roughness: 0.65 });
+
+      if (config.hairStyle === 'crawler-beard-bob') {
+        // CRAWLER: Rambut hitam lurus belah tengah sebahu + berewok/jenggot rapi
+        const hairCap = new THREE.Mesh(new THREE.SphereGeometry(0.445, 22, 18, 0, Math.PI * 2, 0, Math.PI * 0.62), hairMat);
+        hairCap.position.set(0, 0.03, -0.02);
+        headGroup.add(hairCap);
+
+        // Belahan rambut kiri & kanan sebahu
+        for (let side of [-1, 1]) {
+          const sideHair = new THREE.Mesh(new THREE.BoxGeometry(0.14, 0.68, 0.34), hairMat);
+          sideHair.position.set(side * 0.39, -0.18, -0.03);
+          sideHair.rotation.z = side * -0.08;
+          sideHair.castShadow = true;
+          headGroup.add(sideHair);
         }
-      } else if (config.hairStyle === 'silver-long-senior') {
-        // Ibu Auditor & PR: Rambut Putih Panjang Anggun
-        const crown = new THREE.Mesh(new THREE.SphereGeometry(0.33, 14, 12), hairMat);
-        crown.position.set(0, 0.14, -0.02);
-        headGroup.add(crown);
-
-        const backHair = new THREE.Mesh(new THREE.BoxGeometry(0.58, 0.85, 0.18), hairMat);
-        backHair.position.set(0, -0.25, -0.24);
-        backHair.castShadow = true;
+        const backHair = new THREE.Mesh(new THREE.BoxGeometry(0.76, 0.66, 0.18), hairMat);
+        backHair.position.set(0, -0.18, -0.35);
         headGroup.add(backHair);
 
-        for (let sx of [-0.27, 0.27]) {
-          const sideStrand = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.72, 0.22), hairMat);
-          sideStrand.position.set(sx, -0.20, -0.06);
-          sideStrand.castShadow = true;
-          headGroup.add(sideStrand);
+        // Berewok & Kumis Rapi
+        const beardMat = new THREE.MeshStandardMaterial({ color: 0x1f242d, roughness: 0.85 });
+        const jawBeard = new THREE.Mesh(new THREE.CylinderGeometry(0.36, 0.32, 0.22, 18, 1, false, -Math.PI * 0.42, Math.PI * 0.84), beardMat);
+        jawBeard.position.set(0, -0.22, 0.06);
+        const mustache = new THREE.Mesh(new THREE.BoxGeometry(0.20, 0.045, 0.05), beardMat);
+        mustache.position.set(0, -0.05, 0.40);
+        headGroup.add(jawBeard, mustache);
+
+      } else if (config.hairStyle === 'drafter-long-wavy') {
+        // DRAFTER: Rambut cokelat gelap panjang bergelombang lembut
+        const hairCap = new THREE.Mesh(new THREE.SphereGeometry(0.45, 22, 18, 0, Math.PI * 2, 0, Math.PI * 0.65), hairMat);
+        hairCap.position.set(0, 0.03, -0.02);
+        headGroup.add(hairCap);
+
+        for (let side of [-1, 1]) {
+          const waveStrand = new THREE.Mesh(new THREE.CylinderGeometry(0.11, 0.13, 0.85, 12), hairMat);
+          waveStrand.position.set(side * 0.39, -0.26, -0.04);
+          waveStrand.rotation.z = side * -0.07;
+          waveStrand.castShadow = true;
+          headGroup.add(waveStrand);
         }
+        const longBack = new THREE.Mesh(new THREE.BoxGeometry(0.82, 0.88, 0.20), hairMat);
+        longBack.position.set(0, -0.28, -0.35);
+        longBack.castShadow = true;
+        headGroup.add(longBack);
+
+      } else if (config.hairStyle === 'auditor-blonde-teal') {
+        // AUDITOR: Rambut platinum blonde berponi menyamping dengan ujung biru toska (teal ombre)
+        const tealMat = new THREE.MeshStandardMaterial({ color: 0x06b6d4, roughness: 0.55 });
+        const blondeCrown = new THREE.Mesh(new THREE.SphereGeometry(0.45, 22, 18, 0, Math.PI * 2, 0, Math.PI * 0.64), hairMat);
+        blondeCrown.position.set(0, 0.03, -0.02);
+        headGroup.add(blondeCrown);
+
+        // Poni menyamping khas
+        const sideBangs = new THREE.Mesh(new THREE.BoxGeometry(0.42, 0.26, 0.14), hairMat);
+        sideBangs.position.set(-0.14, 0.24, 0.35);
+        sideBangs.rotation.z = 0.35;
+        headGroup.add(sideBangs);
+
+        // Rambut panjang sisi kiri & kanan + ujung gradasi biru toska
+        for (let side of [-1, 1]) {
+          const upperBlonde = new THREE.Mesh(new THREE.CylinderGeometry(0.11, 0.12, 0.52, 12), hairMat);
+          upperBlonde.position.set(side * 0.39, -0.14, -0.04);
+          upperBlonde.castShadow = true;
+
+          const lowerTeal = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.10, 0.32, 12), tealMat);
+          lowerTeal.position.set(side * 0.40, -0.52, -0.04);
+          lowerTeal.castShadow = true;
+
+          headGroup.add(upperBlonde, lowerTeal);
+        }
+        const backBlonde = new THREE.Mesh(new THREE.BoxGeometry(0.80, 0.55, 0.18), hairMat);
+        backBlonde.position.set(0, -0.15, -0.35);
+        const backTeal = new THREE.Mesh(new THREE.BoxGeometry(0.80, 0.30, 0.18), tealMat);
+        backTeal.position.set(0, -0.55, -0.35);
+        headGroup.add(backBlonde, backTeal);
       }
 
       root.add(headGroup);
@@ -998,112 +983,56 @@
     }
 
     function buildAllRobloxCharacters() {
-      // 1. Media Crawler: Cewek rambut ikal panjang warna merah
+      // 1. Media Crawler (Sesuai crawler.jpg: Pria rambut hitam sebahu, berewok & jas gelap)
       createRobloxCharacter({
         id: 'crawler',
         x: -3.6,
         z: -1.3,
         rotY: Math.PI + Math.PI / 5,
-        skinColor: 0xfde2c4,
-        shirtColor: 0x0284c7,
-        pantsColor: 0x1e293b,
-        hairColor: 0xb93829, // Merah tembaga
-        hairStyle: 'wavy-red-female',
-        hasLanyard: true
+        skinColor: 0xf5d0b5,
+        shirtColor: 0x111827,
+        pantsColor: 0x0f172a,
+        hairColor: 0x141414,
+        browColor: 0x141414,
+        lipColor: 0x7f1d1d,
+        hairStyle: 'crawler-beard-bob',
+        hasDarkTie: true
       });
 
-      // 2. Penulis BRS: Cowok rambut curly bergelombang
+      // 2. Penulis BRS (Sesuai drafter.jpg: Wanita rambut cokelat panjang bergelombang & senyum lesung pipi)
       createRobloxCharacter({
         id: 'drafter',
         x: 0.2,
         z: -2.6,
         rotY: Math.PI,
-        skinColor: 0xf3cfb3,
-        shirtColor: 0x2d6a4f,
+        skinColor: 0xfde2cf,
+        shirtColor: 0x10b981,
         pantsColor: 0x334155,
-        hairColor: 0x2b1d14, // Cokelat gelap curly
-        hairStyle: 'curly-male',
+        hairColor: 0x2c1e16,
+        browColor: 0x3b281e,
+        lipColor: 0xe11d48,
+        hairStyle: 'drafter-long-wavy',
+        hasBlush: true,
         hasLanyard: true
       });
 
-      // 3. Auditor & PR: Ibu-ibu rambut putih panjang dengan sweater putih tenun
+      // 3. Auditor & PR (Sesuai auditor.jpg: Rambut platinum blonde ombre biru toska + sweater tenun)
       createRobloxCharacter({
         id: 'auditor',
         x: 2.9,
         z: 0.9,
         rotY: Math.PI - Math.PI / 4,
-        skinColor: 0xf6d5b8,
+        skinColor: 0xfce7d6,
         torsoTexture: createTenunSweaterTexture(),
         sleeveColor: 0xf8f6f0,
         pantsColor: 0x1e293b,
-        hairColor: 0xf1f5f9, // Putih perak
-        hairStyle: 'silver-long-senior',
-        hasGlasses: true
+        hairColor: 0xf3f4f6,
+        browColor: 0x9ca3af,
+        lipColor: 0xf43f5e,
+        hairStyle: 'auditor-blonde-teal',
+        hasBlush: true
       });
     }
-
-    // Loop Animasi 3D Real-Time
-    const clock = new THREE.Clock();
-    function animate3D() {
-      requestAnimationFrame(animate3D);
-      const t = clock.getElapsedTime();
-
-      // Transisi Kamera Halus saat Klik Menu/Karakter
-      if (isCameraTransitioning) {
-        camera.position.lerp(targetCamPos, 0.06);
-        controls.target.lerp(targetLookAt, 0.06);
-        if (camera.position.distanceTo(targetCamPos) < 0.05) {
-          isCameraTransitioning = false;
-        }
-      }
-
-      // Animasi Tiap Karakter Roblox Sesuai Status (IDLE, WORKING, DONE)
-      Object.keys(robloxAvatars).forEach((id) => {
-        const av = robloxAvatars[id];
-        const status = (AGENT_META[id].status || 'IDLE').toUpperCase();
-        const p = t + av.phase;
-
-        if (status === 'WORKING') {
-          // Mengetik cepat & mengangguk fokus di depan meja
-          av.root.position.lerp(av.basePos, 0.1);
-          av.root.position.y = Math.abs(Math.sin(p * 8)) * 0.03;
-          av.leftArm.rotation.x = -0.95 + Math.sin(p * 18) * 0.22;
-          av.rightArm.rotation.x = -0.95 - Math.sin(p * 18) * 0.22;
-          av.leftLeg.rotation.x = 0;
-          av.rightLeg.rotation.x = 0;
-          av.headGroup.rotation.y = Math.sin(p * 3) * 0.15;
-          av.headGroup.rotation.x = 0.12;
-        } else if (status === 'DONE') {
-          // Melompat kecil merayakan selesai & melambaikan tangan
-          av.root.position.y = Math.abs(Math.sin(p * 5)) * 0.18;
-          av.rightArm.rotation.x = -2.4 + Math.sin(p * 10) * 0.3;
-          av.leftArm.rotation.x = Math.sin(p * 4) * 0.15;
-          av.leftLeg.rotation.x = 0;
-          av.rightLeg.rotation.x = 0;
-          av.headGroup.rotation.x = -0.05;
-        } else {
-          // IDLE: Bernapas santai & menoleh ringan
-          av.root.position.lerp(av.basePos, 0.1);
-          av.root.position.y = Math.sin(p * 2) * 0.02;
-          av.leftArm.rotation.x = Math.sin(p * 1.8) * 0.08;
-          av.rightArm.rotation.x = -Math.sin(p * 1.8) * 0.08;
-          av.leftLeg.rotation.x = 0;
-          av.rightLeg.rotation.x = 0;
-          av.headGroup.rotation.y = Math.sin(p * 1.1) * 0.22;
-          av.headGroup.rotation.x = 0;
-        }
-      });
-
-      // Efek denyut lembut pada layar monitor
-      monitorScreens.forEach((m, idx) => {
-        const pulse = 0.85 + Math.sin(t * 3 + idx) * 0.15;
-        m.mesh.material.color.copy(m.baseColor).multiplyScalar(pulse);
-      });
-
-      controls.update();
-      renderer.render(scene, camera);
-    }
-
     // =========================================================================
     // 3. KONTROL MENU, KAMERA, PENCAHAYAAN & POLLING LIVE DATA
     // =========================================================================
