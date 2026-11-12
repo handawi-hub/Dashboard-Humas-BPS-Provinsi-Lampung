@@ -66,6 +66,11 @@
       </div>
 
       <div class="flex flex-wrap items-center gap-2">
+        <!-- TOMBOL MUSIK LATAR -->
+        <button onclick="toggleMusic()" id="btnMusic" class="px-3 py-1.5 rounded-xl bg-red-50 hover:bg-red-100 text-red-800 border border-red-300 text-xs font-bold transition flex items-center gap-1.5 animate-bounce-subtle">
+          <span id="musicIcon">🤘</span> <span id="musicText">Putar Metal Hardcore</span>
+        </button>
+        
         <!-- TOMBOL PENGATUR MUSIM -->
         <button onclick="toggleSeasonMode()" id="btnSeason" class="px-3 py-1.5 rounded-xl bg-lime-50 hover:bg-lime-100 text-lime-800 border border-lime-300 text-xs font-bold transition flex items-center gap-1.5">
           <span id="seasonIcon">🌤️</span> <span id="seasonText">Musim Panas</span>
@@ -724,6 +729,36 @@
       };
       addWallArt(1, -1.2, 2.55, 1.3, 1.65);
       addWallArt(2, 4.2, 2.55, 1.3, 1.65);
+      // Menambahkan Poster Metal Band di Sisi Kanan Dinding Kantor
+      const posterTex = new THREE.TextureLoader().load('https://raw.githubusercontent.com/handawi-hub/bps-lampung-assets/main/suicide_silence_poster.jpg', 
+        () => {
+          // Callback jika berhasil load
+        }, 
+        undefined, 
+        () => {
+          // Fallback menggunakan representasi artwork jika tidak load dari internet
+        }
+      );
+
+      // Detail poster Suicide Silence - "The Cleansing" (image_9.png)
+      const posterFrame = new THREE.Mesh(
+        new THREE.BoxGeometry(1.4, 2.0, 0.04),
+        new THREE.MeshStandardMaterial({ color: 0x111111, roughness: 0.8 }) // Bingkai hitam tipis moshpit
+      );
+      posterFrame.position.set(5.8, 2.2, -6.65); // Dipasang di sebelah kanan berdampingan dengan workspace
+      scene.add(posterFrame);
+
+      const posterCanvas = new THREE.Mesh(
+        new THREE.PlaneGeometry(1.32, 1.92),
+        new THREE.MeshStandardMaterial({ 
+          map: posterTex, 
+          roughness: 0.5,
+          // Gunakan warna dasar gelap jika tekstur belum ter-load
+          color: 0x33352e 
+        })
+      );
+      posterCanvas.position.set(5.8, 2.2, -6.61);
+      scene.add(posterCanvas);
 
       createPottedPlant('monstera', -3.7, -6.0, 1.1);
       createPottedPlant('sansevieria', 6.3, -6.0, 1.0);
@@ -2004,6 +2039,49 @@
       const btnText = document.getElementById('copyBtnText');
       btnText.textContent = 'Naskah Tersalin ke Clipboard!';
       setTimeout(() => { btnText.textContent = 'Salin Naskah Siaran Pers'; }, 2500);
+    }
+  </script>
+  <!-- AUDIO PLAYER UNTUK MUSIK METAL HARDCORE -->
+  <audio id="metalMusic" loop>
+    <source src="https://assets.mixkit.co/active_storage/sfx/2568/2568-84.wav" type="audio/wav"> <!-- Loop beat distorsi/metal atau gunakan url custom Anda -->
+    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3" type="audio/mp3"> <!-- Backup track progresif cepat -->
+  </audio>
+
+  <script>
+    let isMusicPlaying = false;
+    const audio = document.getElementById('metalMusic');
+    // Atur volume sedang agar tidak mengejutkan
+    audio.volume = 0.35; 
+
+    function toggleMusic() {
+      const btn = document.getElementById('btnMusic');
+      const icon = document.getElementById('musicIcon');
+      const text = document.getElementById('musicText');
+
+      if (!isMusicPlaying) {
+        // Karena kebijakan browser, audio harus dipicu interaksi user
+        audio.play().then(() => {
+          isMusicPlaying = true;
+          btn.className = 'px-3 py-1.5 rounded-xl bg-red-600 text-white border border-red-700 text-xs font-bold transition flex items-center gap-1.5 animate-pulse';
+          icon.textContent = '🔥';
+          text.textContent = 'Moshpit Mode On! (Hardcore)';
+          addLog('🤘 Memutar musik latar Metal Hardcore - Suicide Silence Tribute! Kepala mulai headbang!', 'error');
+          
+          // Membuat gerakan karakter lebih cepat & agresif saat musik menyala
+          Object.keys(robloxAvatars).forEach(id => {
+            robloxAvatars[id].phase = Math.random() * 50; // acak ulang gerakan
+          });
+        }).catch(err => {
+          addLog('Gagal memutar musik: ' + err.message, 'error');
+        });
+      } else {
+        audio.pause();
+        isMusicPlaying = false;
+        btn.className = 'px-3 py-1.5 rounded-xl bg-red-50 hover:bg-red-100 text-red-800 border border-red-300 text-xs font-bold transition flex items-center gap-1.5';
+        icon.textContent = '🤘';
+        text.textContent = 'Putar Metal Hardcore';
+        addLog('Musik dimatikan. Kembali ke suasana tenang studio.', 'info');
+      }
     }
   </script>
 </body>
