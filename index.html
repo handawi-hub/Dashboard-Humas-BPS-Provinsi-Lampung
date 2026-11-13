@@ -968,33 +968,59 @@
 </body>
 </html>
 
-<div class="row mt-4">
+<!-- 🟢 KODE BARU: LEBIH RINGKAS, IKON VISUAL, TEKS KECIL -->
+<div class="row mt-4 mb-3">
     <div class="col-md-12">
-        <!-- Mengubah bg-dark menjadi bg-secondary atau bg-light dengan teks gelap agar kontras -->
-        <div class="card shadow-sm border-0 bg-light text-dark">
-            <div class="card-body">
-                <h5 class="card-title text-primary fw-bold">🤖 Virtual Office AI Agents - Live Status</h5>
-                <p class="card-text text-muted small">Sistem koordinasi otonom Pranata Humas BPS Provinsi Lampung</p>
-                <div class="row text-center mt-3" id="agent-status-panel">
-                    <div class="col-md-4 mb-2">
-                        <!-- Kartu bisa diklik (menambahkan efek hover & cursor pointer) -->
-                        <div class="p-3 border rounded bg-white shadow-sm agent-card" onclick="alert('Agent Media Crawler bertugas memindai RSS berita secara berkala setiap jam.')" style="cursor: pointer; transition: 0.2s;">
-                            <h6 class="text-info fw-bold">Agent Media Crawler</h6>
-                            <span class="badge bg-success" id="status-crawler">ONLINE / IDLE</span>
+        <div class="card shadow-sm border-0 bg-light">
+            <div class="card-body p-3">
+                <!-- Judul panel dibuat kecil -->
+                <div class="d-flex align-items-center mb-2 border-bottom pb-2">
+                    <i class="bi bi-robot fs-5 text-primary me-2"></i> <!-- Ikon Robot Kecil -->
+                    <div>
+                        <h6 class="card-title text-primary fw-bold m-0 p-0" style="font-size: 0.9rem;">Virtual Office AI Agents - Live Status</h6>
+                        <p class="card-text text-muted m-0 p-0" style="font-size: 0.75rem;">Status operasional agen otonom BPS Lampung</p>
+                    </div>
+                </div>
+                
+                <!-- Area Status Agen (Grid lebih padat) -->
+                <div class="row text-center mt-3 g-2" id="agent-status-panel">
+                    
+                    <!-- Agent Media Crawler -->
+                    <div class="col-md-4">
+                        <div class="p-2 border rounded bg-white shadow-sm d-flex align-items-center justify-content-center agent-card" onclick="alert('Agent Media Crawler: Memindai berita setiap jam.')" style="cursor: pointer; min-height: 60px;">
+                            <!-- Ikon Kepala Agen (Menggunakan Emoji atau Placeholder Gambar) -->
+                            <div class="fs-3 me-2" style="width: 40px;">🕷️</div> <!-- Ikon Laba-laba utk Crawler -->
+                            <div>
+                                <div class="fw-bold text-info" style="font-size: 0.85rem;">Media Crawler</div>
+                                <span class="badge bg-success text-white px-2 py-1" id="status-crawler" style="font-size: 0.7rem;">ONLINE / IDLE</span>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-md-4 mb-2">
-                        <div class="p-3 border rounded bg-white shadow-sm agent-card" onclick="alert('Agent Drafter BRS bertugas menyusun draf siaran pers resmi.')" style="cursor: pointer; transition: 0.2s;">
-                            <h6 class="text-warning fw-bold">Agent Drafter BRS</h6>
-                            <span class="badge bg-success" id="status-drafter">STANDBY</span>
+
+                    <!-- Agent Drafter BRS -->
+                    <div class="col-md-4">
+                        <div class="p-2 border rounded bg-white shadow-sm d-flex align-items-center justify-content-center agent-card" onclick="alert('Agent Drafter BRS: Menyusun draf siaran pers otomatis.')" style="cursor: pointer; min-height: 60px;">
+                            <!-- Ikon Kepala Agen -->
+                            <div class="fs-3 me-2" style="width: 40px;">📝</div> <!-- Ikon Pensil utk Drafter -->
+                            <div>
+                                <div class="fw-bold text-warning" style="font-size: 0.85rem;">Drafter BRS</div>
+                                <span class="badge bg-success text-white px-2 py-1" id="status-drafter" style="font-size: 0.7rem;">STANDBY</span>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-md-4 mb-2">
-                        <div class="p-3 border rounded bg-white shadow-sm agent-card" onclick="alert('Agent Auditor & PR bertugas memantau sentimen dan eskalasi krisis.')" style="cursor: pointer; transition: 0.2s;">
-                            <h6 class="text-danger fw-bold">Agent Auditor & PR</h6>
-                            <span class="badge bg-primary" id="status-auditor">ACTIVE MONITORING</span>
+
+                    <!-- Agent Auditor & PR -->
+                    <div class="col-md-4">
+                        <div class="p-2 border rounded bg-white shadow-sm d-flex align-items-center justify-content-center agent-card" onclick="alert('Agent Auditor & PR: Memantau sentimen berita.')" style="cursor: pointer; min-height: 60px;">
+                            <!-- Ikon Kepala Agen -->
+                            <div class="fs-3 me-2" style="width: 40px;">⚖️</div> <!-- Ikon Timbangan utk Auditor -->
+                            <div>
+                                <div class="fw-bold text-danger" style="font-size: 0.85rem;">Auditor & PR</div>
+                                <span class="badge bg-primary text-white px-2 py-1" id="status-auditor" style="font-size: 0.7rem;">ACTIVE MONITORING</span>
+                            </div>
                         </div>
                     </div>
+                    
                 </div>
             </div>
         </div>
