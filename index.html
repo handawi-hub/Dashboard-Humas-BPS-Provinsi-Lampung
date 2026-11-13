@@ -52,7 +52,7 @@
     <header class="bg-bps-dark text-white sticky top-0 z-40 shadow-md">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
-                <!-- Brand & Logo dengan Logo Lokal BPS.webp -->
+                <!-- Brand & Logo -->
                 <div class="flex items-center space-x-3">
                     <div class="w-10 h-10 rounded-lg bg-white p-1 flex items-center justify-center shadow-inner border border-slate-700">
                         <img src="BPS.webp" alt="Logo BPS" class="w-full h-full object-contain">
@@ -126,78 +126,80 @@
         <!-- ================= SECTION 1: EXECUTIVE DASHBOARD ================= -->
         <div id="section-dashboard" class="space-y-6">
 
-            <!-- KPI Metric Cards -->
+            <!-- KPI Metric Cards (Dilengkapi ID & cursor-pointer agar interaktif) -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 <!-- Card 1: Total Liputan -->
-                <div class="glass-card p-5 rounded-xl shadow-sm border border-slate-200 hover:shadow-md transition">
+                <div id="card-total" onclick="filterByCard('total')" class="glass-card p-5 rounded-xl shadow-sm border border-slate-200 hover:border-blue-400 hover:shadow-md transition cursor-pointer group">
                     <div class="flex justify-between items-start">
                         <div>
-                            <p class="text-xs font-semibold uppercase tracking-wider text-slate-500">Total Liputan Media</p>
+                            <p class="text-xs font-semibold uppercase tracking-wider text-slate-500 group-hover:text-bps-blue transition">Total Liputan Media</p>
                             <h3 class="text-3xl font-extrabold text-slate-900 mt-1" id="kpiTotal">-</h3>
                         </div>
-                        <div class="p-2.5 bg-blue-50 text-blue-600 rounded-lg">
+                        <div class="p-2.5 bg-blue-50 text-blue-600 rounded-lg group-hover:scale-110 transition">
                             <i data-lucide="globe" class="w-6 h-6"></i>
                         </div>
                     </div>
-                    <div class="mt-3 flex items-center text-xs text-slate-500 font-medium">
-                        <i data-lucide="newspaper" class="w-3.5 h-3.5 mr-1 text-blue-600"></i>
-                        <span id="kpiMediaCount">Dari 0 media daring terpantau</span>
+                    <div class="mt-3 flex items-center justify-between text-xs text-slate-500 font-medium">
+                        <span id="kpiMediaCount" class="flex items-center"><i data-lucide="newspaper" class="w-3.5 h-3.5 mr-1 text-blue-600"></i> Dari 0 media</span>
+                        <span class="text-blue-600 font-semibold opacity-0 group-hover:opacity-100 transition">Lihat Semua &rarr;</span>
                     </div>
                 </div>
 
                 <!-- Card 2: Sentimen Positif -->
-                <div class="glass-card p-5 rounded-xl shadow-sm border border-slate-200 hover:shadow-md transition">
+                <div id="card-positif" onclick="filterByCard('positif')" class="glass-card p-5 rounded-xl shadow-sm border border-slate-200 hover:border-emerald-400 hover:shadow-md transition cursor-pointer group">
                     <div class="flex justify-between items-start">
                         <div>
-                            <p class="text-xs font-semibold uppercase tracking-wider text-slate-500">Sentimen Positif</p>
+                            <p class="text-xs font-semibold uppercase tracking-wider text-slate-500 group-hover:text-emerald-600 transition">Sentimen Positif</p>
                             <h3 class="text-3xl font-extrabold text-emerald-600 mt-1" id="kpiPositivePct">-</h3>
                         </div>
-                        <div class="p-2.5 bg-emerald-50 text-emerald-600 rounded-lg">
+                        <div class="p-2.5 bg-emerald-50 text-emerald-600 rounded-lg group-hover:scale-110 transition">
                             <i data-lucide="smile" class="w-6 h-6"></i>
                         </div>
                     </div>
-                    <div class="mt-3 flex items-center text-xs text-slate-500">
+                    <div class="mt-3 flex items-center justify-between text-xs text-slate-500">
                         <span id="kpiSentimentBreakdown" class="text-slate-600 font-medium">0 Positif • 0 Netral • 0 Negatif</span>
+                        <span class="text-emerald-600 font-semibold opacity-0 group-hover:opacity-100 transition">Filter &rarr;</span>
                     </div>
                 </div>
 
                 <!-- Card 3: Indeks Reputasi Humas -->
-                <div class="glass-card p-5 rounded-xl shadow-sm border border-slate-200 hover:shadow-md transition">
+                <div id="card-reputasi" onclick="filterByCard('reputasi')" class="glass-card p-5 rounded-xl shadow-sm border border-slate-200 hover:border-sky-400 hover:shadow-md transition cursor-pointer group">
                     <div class="flex justify-between items-start">
                         <div>
-                            <p class="text-xs font-semibold uppercase tracking-wider text-slate-500">Indeks Reputasi PR</p>
+                            <p class="text-xs font-semibold uppercase tracking-wider text-slate-500 group-hover:text-bps-blue transition">Indeks Reputasi PR</p>
                             <h3 class="text-3xl font-extrabold text-bps-blue mt-1"><span id="kpiReputationScore">-</span><span class="text-base text-slate-400 font-normal">/10</span></h3>
                         </div>
-                        <div class="p-2.5 bg-sky-50 text-sky-600 rounded-lg">
+                        <div class="p-2.5 bg-sky-50 text-sky-600 rounded-lg group-hover:scale-110 transition">
                             <i data-lucide="award" class="w-6 h-6"></i>
                         </div>
                     </div>
-                    <div class="mt-3 flex items-center text-xs text-emerald-600 font-medium">
-                        <i data-lucide="check-circle2" class="w-3.5 h-3.5 mr-1"></i>
-                        <span id="kpiReputationLabel">Menghitung skor sentimen...</span>
+                    <div class="mt-3 flex items-center justify-between text-xs text-emerald-600 font-medium">
+                        <span id="kpiReputationLabel" class="flex items-center"><i data-lucide="check-circle2" class="w-3.5 h-3.5 mr-1"></i> Menghitung skor...</span>
+                        <span class="text-sky-600 font-semibold opacity-0 group-hover:opacity-100 transition">Detail &rarr;</span>
                     </div>
                 </div>
 
-                <!-- Card 4: Perlu Mitigasi / Netral-Negatif -->
-                <div class="glass-card p-5 rounded-xl shadow-sm border border-slate-200 hover:shadow-md transition">
+                <!-- Card 4: Perlu Mitigasi / Atensi Isu -->
+                <div id="card-atensi" onclick="filterByCard('atensi')" class="glass-card p-5 rounded-xl shadow-sm border border-slate-200 hover:border-orange-400 hover:shadow-md transition cursor-pointer group">
                     <div class="flex justify-between items-start">
                         <div>
-                            <p class="text-xs font-semibold uppercase tracking-wider text-slate-500">Atensi & Mitigasi Isu</p>
+                            <p class="text-xs font-semibold uppercase tracking-wider text-slate-500 group-hover:text-orange-600 transition">Atensi & Mitigasi Isu</p>
                             <h3 class="text-3xl font-extrabold text-orange-600 mt-1" id="kpiAttentionCount">-</h3>
                         </div>
-                        <div class="p-2.5 bg-orange-50 text-orange-600 rounded-lg">
+                        <div class="p-2.5 bg-orange-50 text-orange-600 rounded-lg group-hover:scale-110 transition">
                             <i data-lucide="alert-circle" class="w-6 h-6"></i>
                         </div>
                     </div>
-                    <div class="mt-3 flex items-center text-xs text-slate-500">
-                        <span id="kpiAttentionDetail">Berita bernada Netral / Negatif</span>
+                    <div class="mt-3 flex items-center justify-between text-xs text-slate-500">
+                        <span id="kpiAttentionDetail">Netral / Negatif perlu pantauan</span>
+                        <span class="text-orange-600 font-semibold opacity-0 group-hover:opacity-100 transition">Mitigasi &rarr;</span>
                     </div>
                 </div>
             </div>
 
             <!-- Charts Section Grid -->
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <!-- Sentiment Trend Chart (2 Columns Wide) -->
+                <!-- Sentiment Trend Chart -->
                 <div class="glass-card p-5 rounded-xl shadow-sm border border-slate-200 lg:col-span-2">
                     <div class="flex items-center justify-between mb-4">
                         <div>
@@ -211,7 +213,7 @@
                     </div>
                 </div>
 
-                <!-- Top Media Sources Chart (1 Column Wide) -->
+                <!-- Top Media Sources Chart -->
                 <div class="glass-card p-5 rounded-xl shadow-sm border border-slate-200">
                     <div class="flex items-center justify-between mb-4">
                         <div>
@@ -440,7 +442,6 @@
     <!-- Footer & Virtual Office AI Agents Status -->
     <footer class="bg-white border-t border-slate-200 py-4 mt-auto">
         <div class="max-w-7xl mx-auto px-4 flex flex-col items-center justify-center gap-2">
-            <!-- Copyright Terbaru -->
             <div class="text-center text-xs text-slate-500 flex flex-col sm:flex-row items-center justify-between gap-2 w-full">
                 <div>
                     &copy; 2026 <strong>BPS Provinsi Lampung</strong>: Tim Humas
@@ -456,21 +457,18 @@
             <div class="flex flex-wrap items-center justify-center gap-2 pt-2 border-t border-slate-100 w-full text-xs">
                 <span class="font-bold text-slate-700 mr-1">AI Agents:</span>
                 
-                <!-- Crawler -->
                 <div class="flex items-center gap-1.5 bg-slate-50 px-2.5 py-1 border border-slate-200 rounded-md shadow-2xs cursor-pointer hover:bg-slate-100 transition" onclick="alert('Agent Media Crawler: Memindai RSS berita secara berkala.')">
                     <span>🕷️</span>
                     <span class="font-medium text-slate-600">Crawler</span>
                     <span class="bg-emerald-600 text-white px-1.5 py-0.5 rounded text-[10px] font-bold" id="status-crawler">IDLE</span>
                 </div>
 
-                <!-- Drafter -->
                 <div class="flex items-center gap-1.5 bg-slate-50 px-2.5 py-1 border border-slate-200 rounded-md shadow-2xs cursor-pointer hover:bg-slate-100 transition" onclick="alert('Agent Drafter BRS: Menyusun draf siaran pers resmi.')">
                     <span>📝</span>
                     <span class="font-medium text-slate-600">Drafter</span>
                     <span class="bg-emerald-600 text-white px-1.5 py-0.5 rounded text-[10px] font-bold" id="status-drafter">STANDBY</span>
                 </div>
 
-                <!-- Auditor -->
                 <div class="flex items-center gap-1.5 bg-slate-50 px-2.5 py-1 border border-slate-200 rounded-md shadow-2xs cursor-pointer hover:bg-slate-100 transition" onclick="alert('Agent Auditor & PR: Memantau sentimen berita.')">
                     <span>⚖️</span>
                     <span class="font-medium text-slate-600">Auditor</span>
@@ -508,14 +506,53 @@
             });
 
             const activeBtn = document.getElementById(`tab-${tabName}`);
-            activeBtn.classList.add('bg-bps-blue', 'text-white', 'shadow-sm');
-            activeBtn.classList.remove('text-slate-600');
+            if (activeBtn) {
+                activeBtn.classList.add('bg-bps-blue', 'text-white', 'shadow-sm');
+                activeBtn.classList.remove('text-slate-600');
+            }
 
             ['dashboard', 'news', 'brs', 'bridge'].forEach(sec => {
-                document.getElementById(`section-${sec}`).classList.add('hidden');
+                const el = document.getElementById(`section-${sec}`);
+                if (el) el.classList.add('hidden');
             });
 
-            document.getElementById(`section-${tabName}`).classList.remove('hidden');
+            const targetSec = document.getElementById(`section-${tabName}`);
+            if (targetSec) targetSec.classList.remove('hidden');
+        }
+
+        // Fungsi interaktif untuk memfilter tabel berdasarkan kartu KPI yang diklik
+        function filterByCard(cardType) {
+            // Pindah tab ke 'news' (Monitoring Media)
+            switchTab('news');
+
+            // Atur dropdown filter berdasarkan kartu yang diklik
+            const sentimentSelect = document.getElementById('sentimentFilter');
+            const searchInput = document.getElementById('searchInput');
+
+            if (searchInput) searchInput.value = ''; // Reset pencarian teks
+
+            if (cardType === 'total') {
+                if (sentimentSelect) sentimentSelect.value = 'ALL';
+            } else if (cardType === 'positif') {
+                if (sentimentSelect) sentimentSelect.value = 'Positif';
+            } else if (cardType === 'reputasi') {
+                // Reputasi baik mencakup Positif dan Netral
+                if (sentimentSelect) sentimentSelect.value = 'ALL'; // Ditampilkan semua agar bisa dianalisis menyeluruh
+            } else if (cardType === 'atensi') {
+                // Atensi & Mitigasi mencakup Netral & Negatif (kita filter secara custom lewat fungsi tabel)
+                if (sentimentSelect) sentimentSelect.value = 'ALL';
+            }
+
+            // Jalankan pemfilteran tabel
+            filterNewsTable();
+
+            // Khusus untuk card atensi, kita persempit agar hanya menampilkan Netral & Negatif
+            if (cardType === 'atensi') {
+                const filtered = allNewsData.filter(item => item.sentiment === 'Netral' || item.sentiment === 'Negatif');
+                renderNewsTable(filtered);
+            }
+
+            showToast(`Menampilkan rilis data untuk kategori: ${cardType.toUpperCase()}`);
         }
 
         function parseSheetDate(rawVal) {
@@ -584,17 +621,19 @@
             const solidDot = document.getElementById('apiSolidDot');
             const statusText = document.getElementById('apiStatusText');
 
+            if (!statusText) return;
+
             if (state === 'ok') {
-                pingDot.className = 'animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75';
-                solidDot.className = 'relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500';
+                if (pingDot) pingDot.className = 'animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75';
+                if (solidDot) solidDot.className = 'relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500';
                 statusText.className = 'text-emerald-400 font-medium';
             } else if (state === 'error') {
-                pingDot.className = 'hidden';
-                solidDot.className = 'relative inline-flex rounded-full h-2.5 w-2.5 bg-rose-500';
+                if (pingDot) pingDot.className = 'hidden';
+                if (solidDot) solidDot.className = 'relative inline-flex rounded-full h-2.5 w-2.5 bg-rose-500';
                 statusText.className = 'text-rose-400 font-medium';
             } else {
-                pingDot.className = 'animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75';
-                solidDot.className = 'relative inline-flex rounded-full h-2.5 w-2.5 bg-amber-500';
+                if (pingDot) pingDot.className = 'animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75';
+                if (solidDot) solidDot.className = 'relative inline-flex rounded-full h-2.5 w-2.5 bg-amber-500';
                 statusText.className = 'text-amber-400 font-medium';
             }
             statusText.innerText = text;
@@ -602,11 +641,11 @@
 
         async function fetchLiveMonitoringData(isManual = false) {
             const icon = document.getElementById('syncIcon');
-            icon.classList.add('animate-spin');
+            if (icon) icon.classList.add('animate-spin');
             setConnectionStatus('loading', 'Menarik data...');
 
             if (!API_URL || API_URL.includes('GANTI_DENGAN_URL')) {
-                icon.classList.remove('animate-spin');
+                if (icon) icon.classList.remove('animate-spin');
                 setConnectionStatus('error', 'URL API Belum Diisi');
                 showToast('Harap isi konstanta API_URL dengan URL /exec Apps Script Anda.');
                 return;
@@ -655,7 +694,7 @@
                 setConnectionStatus('error', 'Gagal Terhubung');
                 showToast(`Gagal menarik data: ${err.message}`);
             } finally {
-                icon.classList.remove('animate-spin');
+                if (icon) icon.classList.remove('animate-spin');
             }
         }
 
@@ -673,18 +712,18 @@
                 : '0.0';
 
             document.getElementById('kpiTotal').innerText = total;
-            document.getElementById('kpiMediaCount').innerText = `Dari ${uniqueMedia} media daring terpantau`;
+            document.getElementById('kpiMediaCount').innerHTML = `<i data-lucide="newspaper" class="w-3.5 h-3.5 mr-1 text-blue-600"></i> Dari ${uniqueMedia} media daring`;
             document.getElementById('kpiPositivePct').innerText = `${posPct}%`;
             document.getElementById('kpiSentimentBreakdown').innerText = `${positif} Positif • ${netral} Netral • ${negatif} Negatif`;
             document.getElementById('kpiReputationScore').innerText = repScore;
 
             const repLabel = document.getElementById('kpiReputationLabel');
-            if (parseFloat(repScore) >= 8.5) repLabel.innerText = 'Kategori: Sangat Baik';
-            else if (parseFloat(repScore) >= 7.0) repLabel.innerText = 'Kategori: Baik / Kondusif';
-            else repLabel.innerText = 'Kategori: Perlu Atensi Humas';
+            if (parseFloat(repScore) >= 8.5) repLabel.innerHTML = '<i data-lucide="check-circle2" class="w-3.5 h-3.5 mr-1"></i> Sangat Baik';
+            else if (parseFloat(repScore) >= 7.0) repLabel.innerHTML = '<i data-lucide="check-circle2" class="w-3.5 h-3.5 mr-1"></i> Kondusif';
+            else repLabel.innerHTML = '<i data-lucide="alert-circle" class="w-3.5 h-3.5 mr-1"></i> Perlu Atensi';
 
             document.getElementById('kpiAttentionCount').innerText = `${netral + negatif} Berita`;
-            document.getElementById('kpiAttentionDetail').innerText = `${netral} Netral & ${negatif} Negatif perlu pantauan`;
+            document.getElementById('kpiAttentionDetail').innerText = `${netral} Netral & ${negatif} Negatif`;
 
             const chronological = [...data].sort((a, b) => a.sortKey - b.sortKey);
             const validDates = chronological.filter(d => d.sortKey > 0);
@@ -752,7 +791,6 @@
             if (mediaChart) mediaChart.destroy();
             if (topicsChart) topicsChart.destroy();
 
-            // Chart 1: Tren Sentimen
             const ctx1 = document.getElementById('sentimentTrendChart').getContext('2d');
             sentimentChart = new Chart(ctx1, {
                 type: 'line',
@@ -810,7 +848,6 @@
                 }
             });
 
-            // Chart 2: Top Media Partner
             const ctx2 = document.getElementById('mediaShareChart').getContext('2d');
             mediaChart = new Chart(ctx2, {
                 type: 'doughnut',
@@ -833,26 +870,14 @@
                 }
             });
 
-            // Chart 3: Sebaran Topik Indikator (Multi-Gradasi Warna Berbeda)
             const ctx3 = document.getElementById('topicsChart').getContext('2d');
             
-            const g1 = ctx3.createLinearGradient(0, 0, 0, 200);
-            g1.addColorStop(0, '#38BDF8'); g1.addColorStop(1, '#0F2C59');
-
-            const g2 = ctx3.createLinearGradient(0, 0, 0, 200);
-            g2.addColorStop(0, '#34D399'); g2.addColorStop(1, '#059669');
-
-            const g3 = ctx3.createLinearGradient(0, 0, 0, 200);
-            g3.addColorStop(0, '#FBBF24'); g3.addColorStop(1, '#D97706');
-
-            const g4 = ctx3.createLinearGradient(0, 0, 0, 200);
-            g4.addColorStop(0, '#A78BFA'); g4.addColorStop(1, '#7C3AED');
-
-            const g5 = ctx3.createLinearGradient(0, 0, 0, 200);
-            g5.addColorStop(0, '#FB7185'); g5.addColorStop(1, '#E11D48');
-
-            const g6 = ctx3.createLinearGradient(0, 0, 0, 200);
-            g6.addColorStop(0, '#2DD4BF'); g6.addColorStop(1, '#0D9488');
+            const g1 = ctx3.createLinearGradient(0, 0, 0, 200); g1.addColorStop(0, '#38BDF8'); g1.addColorStop(1, '#0F2C59');
+            const g2 = ctx3.createLinearGradient(0, 0, 0, 200); g2.addColorStop(0, '#34D399'); g2.addColorStop(1, '#059669');
+            const g3 = ctx3.createLinearGradient(0, 0, 0, 200); g3.addColorStop(0, '#FBBF24'); g3.addColorStop(1, '#D97706');
+            const g4 = ctx3.createLinearGradient(0, 0, 0, 200); g4.addColorStop(0, '#A78BFA'); g4.addColorStop(1, '#7C3AED');
+            const g5 = ctx3.createLinearGradient(0, 0, 0, 200); g5.addColorStop(0, '#FB7185'); g5.addColorStop(1, '#E11D48');
+            const g6 = ctx3.createLinearGradient(0, 0, 0, 200); g6.addColorStop(0, '#2DD4BF'); g6.addColorStop(1, '#0D9488');
 
             topicsChart = new Chart(ctx3, {
                 type: 'bar',
