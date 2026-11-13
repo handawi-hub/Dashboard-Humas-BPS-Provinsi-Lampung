@@ -968,31 +968,35 @@
 </body>
 </html>
 
-<!-- 🟢 PANEL VIRTUAL OFFICE AI AGENTS: DI POJOK KIRI BAWAH, 1 BARIS -->
-<div id="virtual-office-footer-status" style="position: fixed; bottom: 10px; left: 10px; z-index: 1050; background: rgba(33, 37, 41, 0.95); color: #fff; padding: 6px 12px; border-radius: 6px; font-size: 0.75rem; box-shadow: 0 2px 8px rgba(0,0,0,0.3); backdrop-filter: blur(5px);">
-    <div class="d-flex align-items-center flex-wrap gap-3">
-        <!-- Judul Induk -->
-        <span class="fw-bold text-info"><i class="bi bi-robot"></i> AI Agents:</span>
-        
-        <!-- Agen 1: Media Crawler -->
-        <div class="d-flex align-items-center gap-1" style="cursor: pointer;" onclick="alert('Agent Media Crawler: Memindai RSS berita secara berkala.')">
-            <span>🕷️</span>
-            <span class="fw-semibold">Crawler</span>
-            <span class="badge bg-success" style="font-size: 0.6rem;" id="status-crawler">IDLE</span>
-        </div>
+<!-- 🟢 PANEL VIRTUAL OFFICE: DIBAWAH TULISAN BPS LAMPUNG (TIDAK MELAYANG) -->
+<div class="container my-3">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex align-items-center flex-wrap gap-3 p-2 bg-light border rounded shadow-sm" style="font-size: 0.8rem;">
+                <!-- Label Judul -->
+                <span class="fw-bold text-dark"><i class="bi bi-robot text-primary"></i> AI Agents:</span>
+                
+                <!-- Agen 1: Crawler -->
+                <div class="d-flex align-items-center gap-1 bg-white px-2 py-1 border rounded shadow-sm" style="cursor: pointer;" onclick="alert('Agent Media Crawler: Memindai RSS berita secara berkala.')">
+                    <span>🕷️</span>
+                    <span class="fw-semibold text-secondary">Crawler</span>
+                    <span class="badge bg-success" style="font-size: 0.6rem;" id="status-crawler">IDLE</span>
+                </div>
 
-        <!-- Agen 2: Drafter BRS -->
-        <div class="d-flex align-items-center gap-1" style="cursor: pointer;" onclick="alert('Agent Drafter BRS: Menyusun draf siaran pers resmi.')">
-            <span>📝</span>
-            <span class="fw-semibold">Drafter</span>
-            <span class="badge bg-success" style="font-size: 0.6rem;" id="status-drafter">STANDBY</span>
-        </div>
+                <!-- Agen 2: Drafter -->
+                <div class="d-flex align-items-center gap-1 bg-white px-2 py-1 border rounded shadow-sm" style="cursor: pointer;" onclick="alert('Agent Drafter BRS: Menyusun draf siaran pers resmi.')">
+                    <span>📝</span>
+                    <span class="fw-semibold text-secondary">Drafter</span>
+                    <span class="badge bg-success" style="font-size: 0.6rem;" id="status-drafter">STANDBY</span>
+                </div>
 
-        <!-- Agen 3: Auditor & PR -->
-        <div class="d-flex align-items-center gap-1" style="cursor: pointer;" onclick="alert('Agent Auditor & PR: Memantau sentimen berita.')">
-            <span>⚖️</span>
-            <span class="fw-semibold">Auditor</span>
-            <span class="badge bg-primary" style="font-size: 0.6rem;" id="status-auditor">ACTIVE</span>
+                <!-- Agen 3: Auditor -->
+                <div class="d-flex align-items-center gap-1 bg-white px-2 py-1 border rounded shadow-sm" style="cursor: pointer;" onclick="alert('Agent Auditor & PR: Memantau sentimen berita.')">
+                    <span>⚖️</span>
+                    <span class="fw-semibold text-secondary">Auditor</span>
+                    <span class="badge bg-primary" style="font-size: 0.6rem;" id="status-auditor">ACTIVE</span>
+                </div>
+            </div>
         </div>
     </div>
 </div>
