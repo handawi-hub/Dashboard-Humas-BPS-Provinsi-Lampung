@@ -838,13 +838,32 @@
                 }
             });
 
-            // Chart 3: Sebaran Topik Indikator (Gaya 3D Modern Gradient)
+         // Chart 3: Sebaran Topik Indikator (Multi-Gradasi Warna Berbeda)
             const ctx3 = document.getElementById('topicsChart').getContext('2d');
             
-            // Membuat gradasi warna kekinian
-            const grad1 = ctx3.createLinearGradient(0, 0, 0, 200);
-            grad1.addColorStop(0, '#0284C7');
-            grad1.addColorStop(1, '#0F2C59');
+            // 1. Gradasi Biru Utama (Pertumbuhan Ekonomi)
+            const g1 = ctx3.createLinearGradient(0, 0, 0, 200);
+            g1.addColorStop(0, '#38BDF8'); g1.addColorStop(1, '#0F2C59');
+
+            // 2. Gradasi Hijau Mint (Ketenagakerjaan & Kemiskinan)
+            const g2 = ctx3.createLinearGradient(0, 0, 0, 200);
+            g2.addColorStop(0, '#34D399'); g2.addColorStop(1, '#059669');
+
+            // 3. Gradasi Oranye/Amber (Pertanian & NTP)
+            const g3 = ctx3.createLinearGradient(0, 0, 0, 200);
+            g3.addColorStop(0, '#FBBF24'); g3.addColorStop(1, '#D97706');
+
+            // 4. Gradasi Ungu/Violet (IPM & Pendidikan)
+            const g4 = ctx3.createLinearGradient(0, 0, 0, 200);
+            g4.addColorStop(0, '#A78BFA'); g4.addColorStop(1, '#7C3AED');
+
+            // 5. Gradasi Merah Coral (Inflasi & Harga)
+            const g5 = ctx3.createLinearGradient(0, 0, 0, 200);
+            g5.addColorStop(0, '#FB7185'); g5.addColorStop(1, '#E11D48');
+
+            // 6. Gradasi Tosca/Teal (Isu Daerah & Umum)
+            const g6 = ctx3.createLinearGradient(0, 0, 0, 200);
+            g6.addColorStop(0, '#2DD4BF'); g6.addColorStop(1, '#0D9488');
 
             topicsChart = new Chart(ctx3, {
                 type: 'bar',
@@ -853,7 +872,8 @@
                     datasets: [{
                         label: 'Jumlah Artikel',
                         data: topicValues,
-                        backgroundColor: grad1,
+                        // Menerapkan array warna gradasi berbeda untuk masing-masing batang
+                        backgroundColor: [g1, g2, g3, g4, g5, g6],
                         borderRadius: 8,
                         borderSkipped: false
                     }]
@@ -875,7 +895,6 @@
                     }
                 }
             });
-        }
 
         function renderNewsTable(data) {
             const tbody = document.getElementById('newsTableBody');
