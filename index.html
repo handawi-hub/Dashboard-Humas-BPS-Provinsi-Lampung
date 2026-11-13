@@ -126,7 +126,7 @@
         <!-- ================= SECTION 1: EXECUTIVE DASHBOARD ================= -->
         <div id="section-dashboard" class="space-y-6">
 
-            <!-- KPI Metric Cards (Dilengkapi ID & cursor-pointer agar interaktif) -->
+            <!-- KPI Metric Cards -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 <!-- Card 1: Total Liputan -->
                 <div id="card-total" onclick="filterByCard('total')" class="glass-card p-5 rounded-xl shadow-sm border border-slate-200 hover:border-blue-400 hover:shadow-md transition cursor-pointer group">
@@ -306,14 +306,14 @@
             </div>
         </div>
 
-        <!-- ================= SECTION 3: AUTOMATED BRS PIPELINE TRACKER ================= -->
+        <!-- ================= SECTION 3: AUTOMATED BRS PIPELINE TRACKER (DENGAN DIRECT UPLOAD) ================= -->
         <div id="section-brs" class="space-y-6 hidden">
             <div class="bg-gradient-to-r from-bps-blue to-slate-900 text-white p-6 rounded-xl shadow-md flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
                 <div>
                     <span class="bg-orange-500/30 text-orange-200 text-xs px-2.5 py-1 rounded-full font-semibold border border-orange-400/30 mb-2 inline-block">Integrasi Gemini AI & Google Apps Script</span>
                     <h2 class="text-xl font-bold">Pipelines Automasi Berita Resmi Statistik (BRS)</h2>
                     <p class="text-xs text-slate-300 mt-1 max-w-2xl">
-                        Sistem mengonversi materi paparan PPTX Kepala BPS menjadi draf narasi BRS lengkap di Google Docs secara otomatis dan terpantau langsung di AI Agent Virtual Office.
+                        Unggah bahan paparan rilis langsung dari dashboard ini. Sistem otomatis menduplikasi templat BRS resmi dan menyusun narasi data storytelling.
                     </p>
                 </div>
                 <a href="virtual-office.html" class="bg-orange-500 hover:bg-orange-600 text-white font-semibold text-xs px-4 py-2.5 rounded-lg shadow flex items-center space-x-2 transition shrink-0">
@@ -322,16 +322,59 @@
                 </a>
             </div>
 
+            <!-- Kotak Utama Upload Bahan Rilis (Direct Dashboard Upload) -->
+            <div class="glass-card p-6 rounded-xl border border-slate-200 space-y-4">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="font-bold text-slate-800 text-base">Upload Bahan Paparan Rilis (PPTX / PDF)</h3>
+                        <p class="text-xs text-slate-500">Pilih file materi paparan Kepala BPS untuk langsung diproses oleh AI Pipeline</p>
+                    </div>
+                    <span class="text-xs bg-emerald-50 text-emerald-700 px-2.5 py-1 rounded-md font-semibold border border-emerald-200">Secure Direct Upload</span>
+                </div>
+
+                <div class="border-2 border-dashed border-slate-300 rounded-xl p-8 text-center bg-slate-50 hover:bg-slate-100/50 transition relative group">
+                    <input type="file" id="brsFileInput" accept=".pptx,.ppt,.pdf" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" onchange="handleFileSelected(this)">
+                    <div class="flex flex-col items-center space-y-3 pointer-events-none">
+                        <div class="p-3 bg-bps-blue/10 text-bps-blue rounded-full group-hover:scale-110 transition">
+                            <i data-lucide="upload-cloud" class="w-8 h-8"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm font-semibold text-slate-700" id="uploadFileLabel">Seret file ke sini atau <span class="text-bps-blue underline">klik untuk memilih</span></p>
+                            <p class="text-xs text-slate-400 mt-1">Mendukung format .pptx, .ppt, atau .pdf (Maks. 25MB)</p>
+                        </div>
+                        <button type="button" class="px-4 py-2 bg-bps-blue text-white text-xs font-semibold rounded-lg shadow-sm">
+                            Pilih Berkas
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Tombol Eksekusi Upload -->
+                <div id="uploadActionArea" class="hidden flex items-center justify-between bg-blue-50 p-4 rounded-xl border border-blue-200">
+                    <div class="flex items-center space-x-3">
+                        <i data-lucide="file-check" class="w-5 h-5 text-bps-blue"></i>
+                        <div>
+                            <p class="text-xs font-bold text-slate-800" id="selectedFileName">-</p>
+                            <p class="text-[11px] text-slate-500" id="selectedFileSize">-</p>
+                        </div>
+                    </div>
+                    <button onclick="uploadBrsFileToDrive()" id="uploadSubmitBtn" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold rounded-lg shadow transition flex items-center gap-1.5">
+                        <i data-lucide="send" class="w-3.5 h-3.5"></i>
+                        <span>Kirim & Proses AI Agent</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- 4 Langkah Pipeline -->
             <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <div class="glass-card p-4 rounded-xl border-l-4 border-l-blue-500">
                     <div class="text-xs font-bold text-blue-600 uppercase">Langkah 1</div>
-                    <div class="font-semibold text-sm text-slate-800 mt-1">Upload PPTX Paparan</div>
-                    <p class="text-xs text-slate-500 mt-1">Input file slide presentasi rilis ke folder khusus Google Drive BPS.</p>
+                    <div class="font-semibold text-sm text-slate-800 mt-1">Upload Langsung Dashboard</div>
+                    <p class="text-xs text-slate-500 mt-1">File dikirim secara aman via API Bridge ke Drive instansi.</p>
                 </div>
                 <div class="glass-card p-4 rounded-xl border-l-4 border-l-sky-500">
                     <div class="text-xs font-bold text-sky-600 uppercase">Langkah 2</div>
                     <div class="font-semibold text-sm text-slate-800 mt-1">Ekstraksi & Gemini AI</div>
-                    <p class="text-xs text-slate-500 mt-1">Gemini menyusun narasi data storytelling & kutipan resmi Kepala BPS.</p>
+                    <p class="text-xs text-slate-500 mt-1">Gemini menyusun narasi data storytelling & kutipan resmi.</p>
                 </div>
                 <div class="glass-card p-4 rounded-xl border-l-4 border-l-orange-500">
                     <div class="text-xs font-bold text-orange-600 uppercase">Langkah 3</div>
@@ -341,7 +384,7 @@
                 <div class="glass-card p-4 rounded-xl border-l-4 border-l-emerald-500">
                     <div class="text-xs font-bold text-emerald-600 uppercase">Langkah 4</div>
                     <div class="font-semibold text-sm text-slate-800 mt-1">Notifikasi Telegram</div>
-                    <p class="text-xs text-slate-500 mt-1">Bot mengirim tautan draf dokumen BRS ke grup Humas BPS Lampung.</p>
+                    <p class="text-xs text-slate-500 mt-1">Bot mengirim tautan draf dokumen BRS ke grup Humas.</p>
                 </div>
             </div>
         </div>
@@ -494,6 +537,8 @@
         let sentimentChart = null;
         let mediaChart = null;
         let topicsChart = null;
+        let selectedFileBase64 = null;
+        let selectedFileMeta = null;
 
         window.onload = function() {
             fetchLiveMonitoringData(false);
@@ -522,37 +567,90 @@
 
         // Fungsi interaktif untuk memfilter tabel berdasarkan kartu KPI yang diklik
         function filterByCard(cardType) {
-            // Pindah tab ke 'news' (Monitoring Media)
             switchTab('news');
 
-            // Atur dropdown filter berdasarkan kartu yang diklik
             const sentimentSelect = document.getElementById('sentimentFilter');
             const searchInput = document.getElementById('searchInput');
 
-            if (searchInput) searchInput.value = ''; // Reset pencarian teks
+            if (searchInput) searchInput.value = '';
 
             if (cardType === 'total') {
                 if (sentimentSelect) sentimentSelect.value = 'ALL';
             } else if (cardType === 'positif') {
                 if (sentimentSelect) sentimentSelect.value = 'Positif';
             } else if (cardType === 'reputasi') {
-                // Reputasi baik mencakup Positif dan Netral
-                if (sentimentSelect) sentimentSelect.value = 'ALL'; // Ditampilkan semua agar bisa dianalisis menyeluruh
+                if (sentimentSelect) sentimentSelect.value = 'ALL';
             } else if (cardType === 'atensi') {
-                // Atensi & Mitigasi mencakup Netral & Negatif (kita filter secara custom lewat fungsi tabel)
                 if (sentimentSelect) sentimentSelect.value = 'ALL';
             }
 
-            // Jalankan pemfilteran tabel
             filterNewsTable();
 
-            // Khusus untuk card atensi, kita persempit agar hanya menampilkan Netral & Negatif
             if (cardType === 'atensi') {
                 const filtered = allNewsData.filter(item => item.sentiment === 'Netral' || item.sentiment === 'Negatif');
                 renderNewsTable(filtered);
             }
 
             showToast(`Menampilkan rilis data untuk kategori: ${cardType.toUpperCase()}`);
+        }
+
+        // Penanganan Pemilihan Berkas Upload
+        function handleFileSelected(input) {
+            if (input.files && input.files[0]) {
+                const file = input.files[0];
+                selectedFileMeta = { name: file.name, type: file.type, size: file.size };
+                
+                document.getElementById('selectedFileName').innerText = file.name;
+                document.getElementById('selectedFileSize').innerText = `${(file.size / (1024 * 1024)).toFixed(2)} MB`;
+                document.getElementById('uploadActionArea').classList.remove('hidden');
+
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    selectedFileBase64 = e.target.result.split(',')[1];
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Kirim Berkas Langsung via API ke Google Drive & Picu AI Pipeline
+        async function uploadBrsFileToDrive() {
+            if (!selectedFileBase64 || !selectedFileMeta) {
+                showToast('Pilih berkas terlebih dahulu.');
+                return;
+            }
+
+            const btn = document.getElementById('uploadSubmitBtn');
+            btn.disabled = true;
+            btn.innerHTML = `<i data-lucide="loader" class="w-3.5 h-3.5 animate-spin"></i> <span>Mengunggah...</span>`;
+            lucide.createIcons();
+
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        action: 'uploadBrs',
+                        filename: selectedFileMeta.name,
+                        mimeType: selectedFileMeta.type,
+                        fileData: selectedFileBase64
+                    })
+                });
+
+                const result = await response.json();
+                if (result.status === 'success' || result.success) {
+                    showToast('Berkas berhasil diunggah! AI Agent sedang memproses draf BRS.');
+                    document.getElementById('uploadActionArea').classList.add('hidden');
+                    document.getElementById('brsFileInput').value = '';
+                } else {
+                    throw new Error(result.error || 'Gagal memproses di server.');
+                }
+            } catch (err) {
+                console.error('Upload error:', err);
+                showToast(`Gagal mengunggah: ${err.message}`);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = `<i data-lucide="send" class="w-3.5 h-3.5"></i> <span>Kirim & Proses AI Agent</span>`;
+                lucide.createIcons();
+            }
         }
 
         function parseSheetDate(rawVal) {
