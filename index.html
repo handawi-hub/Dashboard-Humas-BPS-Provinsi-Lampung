@@ -54,8 +54,9 @@
             <div class="flex items-center justify-between h-16">
                 <!-- Brand & Logo -->
                 <div class="flex items-center space-x-3">
-                    <div class="w-10 h-10 rounded-lg bg-gradient-to-tr from-sky-500 to-blue-700 flex items-center justify-center text-white font-bold text-xl shadow-inner">
-                        <i data-lucide="bar-chart-3" class="w-6 h-6"></i>
+                    <div class="w-10 h-10 rounded-lg bg-white p-1.5 flex items-center justify-center shadow-inner border border-slate-700">
+                        <!-- Logo Resmi BPS -->
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Lambang_Badan_Pusat_Statistik_%28BPS%29_Indonesia.svg/1200px-Lambang_Badan_Pusat_Statistik_%28BPS%29_Indonesia.svg.png" alt="Logo BPS" class="w-full h-full object-contain">
                     </div>
                     <div>
                         <div class="flex items-center space-x-2">
@@ -452,7 +453,7 @@
                 </div>
             </div>
 
-            <!-- Panel Status Agen (Dirapikan menggunakan Tailwind CSS, Horizontal, Ukuran Kecil di Bawah) -->
+            <!-- Panel Status Agen -->
             <div class="flex flex-wrap items-center justify-center gap-2 pt-2 border-t border-slate-100 w-full text-xs">
                 <span class="font-bold text-slate-700 mr-1">AI Agents:</span>
                 
@@ -490,9 +491,6 @@
     <script>
         lucide.createIcons();
 
-        // =========================================================================
-        // WAJIB DIISI: Tempelkan URL Web App Apps Script (/exec) Anda di bawah ini
-        // =========================================================================
         const API_URL = 'https://script.google.com/macros/s/AKfycbzP5bH97KdOciPcj72cyENPHC97Tlcn49cYaW3-ggVSH5NZbrWfXniVNSDeM290sPZ9Xg/exec';
 
         let allNewsData = [];
@@ -504,7 +502,6 @@
             fetchLiveMonitoringData(false);
         };
 
-        // Navigasi Tab
         function switchTab(tabName) {
             document.querySelectorAll('.tab-btn').forEach(btn => {
                 btn.classList.remove('bg-bps-blue', 'text-white', 'shadow-sm');
@@ -522,7 +519,6 @@
             document.getElementById(`section-${tabName}`).classList.remove('hidden');
         }
 
-        // Normalisasi Tanggal dari Sheets (ISO UTC atau DD/MM/YYYY) -> { display: 'DD/MM/YYYY', sortKey: timestamp }
         function parseSheetDate(rawVal) {
             if (!rawVal) return { display: '-', sortKey: 0 };
             const str = String(rawVal).trim();
@@ -838,30 +834,24 @@
                 }
             });
 
-         // Chart 3: Sebaran Topik Indikator (Multi-Gradasi Warna Berbeda)
+            // Chart 3: Sebaran Topik Indikator (Multi-Gradasi Warna Berbeda)
             const ctx3 = document.getElementById('topicsChart').getContext('2d');
             
-            // 1. Gradasi Biru Utama (Pertumbuhan Ekonomi)
             const g1 = ctx3.createLinearGradient(0, 0, 0, 200);
             g1.addColorStop(0, '#38BDF8'); g1.addColorStop(1, '#0F2C59');
 
-            // 2. Gradasi Hijau Mint (Ketenagakerjaan & Kemiskinan)
             const g2 = ctx3.createLinearGradient(0, 0, 0, 200);
             g2.addColorStop(0, '#34D399'); g2.addColorStop(1, '#059669');
 
-            // 3. Gradasi Oranye/Amber (Pertanian & NTP)
             const g3 = ctx3.createLinearGradient(0, 0, 0, 200);
             g3.addColorStop(0, '#FBBF24'); g3.addColorStop(1, '#D97706');
 
-            // 4. Gradasi Ungu/Violet (IPM & Pendidikan)
             const g4 = ctx3.createLinearGradient(0, 0, 0, 200);
             g4.addColorStop(0, '#A78BFA'); g4.addColorStop(1, '#7C3AED');
 
-            // 5. Gradasi Merah Coral (Inflasi & Harga)
             const g5 = ctx3.createLinearGradient(0, 0, 0, 200);
             g5.addColorStop(0, '#FB7185'); g5.addColorStop(1, '#E11D48');
 
-            // 6. Gradasi Tosca/Teal (Isu Daerah & Umum)
             const g6 = ctx3.createLinearGradient(0, 0, 0, 200);
             g6.addColorStop(0, '#2DD4BF'); g6.addColorStop(1, '#0D9488');
 
@@ -872,7 +862,6 @@
                     datasets: [{
                         label: 'Jumlah Artikel',
                         data: topicValues,
-                        // Menerapkan array warna gradasi berbeda untuk masing-masing batang
                         backgroundColor: [g1, g2, g3, g4, g5, g6],
                         borderRadius: 8,
                         borderSkipped: false
@@ -895,6 +884,7 @@
                     }
                 }
             });
+        } // <--- KURUNG TUTUP INI YANG SEBELUMNYA HILANG DAN MENYEBABKAN ERROR
 
         function renderNewsTable(data) {
             const tbody = document.getElementById('newsTableBody');
