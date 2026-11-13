@@ -970,26 +970,28 @@
 
 <div class="row mt-4">
     <div class="col-md-12">
-        <div class="card shadow-sm border-0 bg-dark text-white">
+        <!-- Mengubah bg-dark menjadi bg-secondary atau bg-light dengan teks gelap agar kontras -->
+        <div class="card shadow-sm border-0 bg-light text-dark">
             <div class="card-body">
-                <h5 class="card-title">🤖 Virtual Office AI Agents - Live Status</h5>
+                <h5 class="card-title text-primary fw-bold">🤖 Virtual Office AI Agents - Live Status</h5>
                 <p class="card-text text-muted small">Sistem koordinasi otonom Pranata Humas BPS Provinsi Lampung</p>
                 <div class="row text-center mt-3" id="agent-status-panel">
                     <div class="col-md-4 mb-2">
-                        <div class="p-3 border rounded bg-secondary bg-opacity-25">
-                            <h6 class="text-info">Agent Media Crawler</h6>
+                        <!-- Kartu bisa diklik (menambahkan efek hover & cursor pointer) -->
+                        <div class="p-3 border rounded bg-white shadow-sm agent-card" onclick="alert('Agent Media Crawler bertugas memindai RSS berita secara berkala setiap jam.')" style="cursor: pointer; transition: 0.2s;">
+                            <h6 class="text-info fw-bold">Agent Media Crawler</h6>
                             <span class="badge bg-success" id="status-crawler">ONLINE / IDLE</span>
                         </div>
                     </div>
                     <div class="col-md-4 mb-2">
-                        <div class="p-3 border rounded bg-secondary bg-opacity-25">
-                            <h6 class="text-warning">Agent Drafter BRS</h6>
+                        <div class="p-3 border rounded bg-white shadow-sm agent-card" onclick="alert('Agent Drafter BRS bertugas menyusun draf siaran pers resmi.')" style="cursor: pointer; transition: 0.2s;">
+                            <h6 class="text-warning fw-bold">Agent Drafter BRS</h6>
                             <span class="badge bg-success" id="status-drafter">STANDBY</span>
                         </div>
                     </div>
                     <div class="col-md-4 mb-2">
-                        <div class="p-3 border rounded bg-secondary bg-opacity-25">
-                            <h6 class="text-danger">Agent Auditor & PR</h6>
+                        <div class="p-3 border rounded bg-white shadow-sm agent-card" onclick="alert('Agent Auditor & PR bertugas memantau sentimen dan eskalasi krisis.')" style="cursor: pointer; transition: 0.2s;">
+                            <h6 class="text-danger fw-bold">Agent Auditor & PR</h6>
                             <span class="badge bg-primary" id="status-auditor">ACTIVE MONITORING</span>
                         </div>
                     </div>
