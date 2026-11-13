@@ -437,16 +437,45 @@
         </div>
     </div>
 
-    <!-- Footer -->
+    <!-- Footer & Virtual Office AI Agents Status -->
     <footer class="bg-white border-t border-slate-200 py-4 mt-auto">
-        <div class="max-w-7xl mx-auto px-4 text-center text-xs text-slate-500 flex flex-col sm:flex-row items-center justify-between gap-2">
-            <div>
-                &copy; 2026 <strong>BPS Provinsi Lampung</strong> - Tim Humas
+        <div class="max-w-7xl mx-auto px-4 flex flex-col items-center justify-center gap-2">
+            <!-- Copyright Terbaru -->
+            <div class="text-center text-xs text-slate-500 flex flex-col sm:flex-row items-center justify-between gap-2 w-full">
+                <div>
+                    &copy; 2026 <strong>BPS Provinsi Lampung</strong>: Tim Humas
+                </div>
+                <div class="flex items-center space-x-3">
+                    <span>Sumber Data: Google Sheets Media Monitoring</span>
+                    <span>•</span>
+                    <a href="virtual-office.html" class="text-bps-blue font-semibold hover:underline">AI Agent Virtual Office</a>
+                </div>
             </div>
-            <div class="flex items-center space-x-3">
-                <span>Sumber Data: Google Sheets Media Monitoring</span>
-                <span>•</span>
-                <a href="virtual-office.html" class="text-bps-blue font-semibold hover:underline">AI Agent Virtual Office</a>
+
+            <!-- Panel Status Agen (Dirapikan menggunakan Tailwind CSS, Horizontal, Ukuran Kecil di Bawah) -->
+            <div class="flex flex-wrap items-center justify-center gap-2 pt-2 border-t border-slate-100 w-full text-xs">
+                <span class="font-bold text-slate-700 mr-1">AI Agents:</span>
+                
+                <!-- Crawler -->
+                <div class="flex items-center gap-1.5 bg-slate-50 px-2.5 py-1 border border-slate-200 rounded-md shadow-2xs cursor-pointer hover:bg-slate-100 transition" onclick="alert('Agent Media Crawler: Memindai RSS berita secara berkala.')">
+                    <span>🕷️</span>
+                    <span class="font-medium text-slate-600">Crawler</span>
+                    <span class="bg-emerald-600 text-white px-1.5 py-0.5 rounded text-[10px] font-bold" id="status-crawler">IDLE</span>
+                </div>
+
+                <!-- Drafter -->
+                <div class="flex items-center gap-1.5 bg-slate-50 px-2.5 py-1 border border-slate-200 rounded-md shadow-2xs cursor-pointer hover:bg-slate-100 transition" onclick="alert('Agent Drafter BRS: Menyusun draf siaran pers resmi.')">
+                    <span>📝</span>
+                    <span class="font-medium text-slate-600">Drafter</span>
+                    <span class="bg-emerald-600 text-white px-1.5 py-0.5 rounded text-[10px] font-bold" id="status-drafter">STANDBY</span>
+                </div>
+
+                <!-- Auditor -->
+                <div class="flex items-center gap-1.5 bg-slate-50 px-2.5 py-1 border border-slate-200 rounded-md shadow-2xs cursor-pointer hover:bg-slate-100 transition" onclick="alert('Agent Auditor & PR: Memantau sentimen berita.')">
+                    <span>⚖️</span>
+                    <span class="font-medium text-slate-600">Auditor</span>
+                    <span class="bg-sky-600 text-white px-1.5 py-0.5 rounded text-[10px] font-bold" id="status-auditor">ACTIVE</span>
+                </div>
             </div>
         </div>
     </footer>
@@ -498,7 +527,6 @@
             if (!rawVal) return { display: '-', sortKey: 0 };
             const str = String(rawVal).trim();
 
-            // Jika format ISO dari JSON Apps Script (contoh: 2026-11-10T17:00:00.000Z)
             if (str.includes('T')) {
                 const d = new Date(str);
                 if (!isNaN(d.getTime())) {
@@ -513,7 +541,6 @@
                 }
             }
 
-            // Jika format DD/MM/YYYY
             const parts = str.split('/');
             if (parts.length === 3) {
                 const dd = parseInt(parts[0], 10);
@@ -528,7 +555,6 @@
             return { display: str, sortKey: 0 };
         }
 
-        // Ekstrak Sentimen dari kolom Analisis
         function extractSentiment(analisisText) {
             const match = (analisisText || '').match(/SENTIMEN:\s*(Positif|Netral|Negatif)/i);
             if (!match) return 'Netral';
@@ -538,7 +564,6 @@
             return 'Netral';
         }
 
-        // Klasifikasi Topik Otomatis dari Judul & Analisis
         function detectTopic(judul, analisis) {
             const text = `${judul} ${analisis}`.toLowerCase();
             if (text.includes('inflasi') || text.includes('ihk') || text.includes('harga') || text.includes('beras') || text.includes('cabai')) {
@@ -559,7 +584,6 @@
             return 'Isu Daerah & Umum';
         }
 
-        // Set Status Indikator Koneksi di Header
         function setConnectionStatus(state, text) {
             const pingDot = document.getElementById('apiPingDot');
             const solidDot = document.getElementById('apiSolidDot');
@@ -581,7 +605,6 @@
             statusText.innerText = text;
         }
 
-        // Tarik Data Real-Time dari Google Apps Script
         async function fetchLiveMonitoringData(isManual = false) {
             const icon = document.getElementById('syncIcon');
             icon.classList.add('animate-spin');
@@ -603,7 +626,6 @@
                     throw new Error(rawData.error || 'Format JSON bukan array berita');
                 }
 
-                // Mapping seluruh baris database
                 allNewsData = rawData.map((row, idx) => {
                     const parsedDate = parseSheetDate(row.tanggal);
                     const sentiment = extractSentiment(row.analisis);
@@ -622,7 +644,6 @@
                     };
                 });
 
-                // Urutkan terbaru di atas untuk tabel
                 allNewsData.sort((a, b) => b.sortKey - a.sortKey);
 
                 updateDashboardMetricsAndCharts(allNewsData);
@@ -643,7 +664,6 @@
             }
         }
 
-        // Hitung KPI & Render Grafik Berdasarkan Database Asli
         function updateDashboardMetricsAndCharts(data) {
             const total = data.length;
             const positif = data.filter(d => d.sentiment === 'Positif').length;
@@ -653,12 +673,10 @@
             const uniqueMedia = new Set(data.map(d => d.media.toLowerCase().trim())).size;
             const posPct = total > 0 ? ((positif / total) * 100).toFixed(1) : '0.0';
 
-            // Hitung Skor Reputasi PR (Skala 10 berdasarkan bobot Positif=10, Netral=7.5, Negatif=2)
             const repScore = total > 0
                 ? (((positif * 10) + (netral * 7.5) + (negatif * 2)) / total).toFixed(1)
                 : '0.0';
 
-            // Update KPI Cards
             document.getElementById('kpiTotal').innerText = total;
             document.getElementById('kpiMediaCount').innerText = `Dari ${uniqueMedia} media daring terpantau`;
             document.getElementById('kpiPositivePct').innerText = `${posPct}%`;
@@ -673,7 +691,6 @@
             document.getElementById('kpiAttentionCount').innerText = `${netral + negatif} Berita`;
             document.getElementById('kpiAttentionDetail').innerText = `${netral} Netral & ${negatif} Negatif perlu pantauan`;
 
-            // 1. Agregasi Tren Harian (Urut kronologis dari tanggal terlama di sheet ke terbaru)
             const chronological = [...data].sort((a, b) => a.sortKey - b.sortKey);
             const validDates = chronological.filter(d => d.sortKey > 0);
             if (validDates.length > 0) {
@@ -698,7 +715,6 @@
             const trendNet = trendLabels.map(d => dateGroups[d].Netral);
             const trendNeg = trendLabels.map(d => dateGroups[d].Negatif);
 
-            // 2. Agregasi Media Partner Teraktif
             const mediaCounts = {};
             data.forEach(item => {
                 const m = item.media.trim();
@@ -715,7 +731,6 @@
                 mediaValues.push(otherMediaCount);
             }
 
-            // 3. Agregasi Topik Indikator
             const topicCounts = {
                 'Pertumbuhan Ekonomi': 0,
                 'Ketenagakerjaan & Kemiskinan': 0,
@@ -737,7 +752,6 @@
             );
         }
 
-        // Render Ulang Chart.js
         function renderCharts(trendLabels, trendPos, trendNet, trendNeg, mediaLabels, mediaValues, topicLabels, topicValues) {
             if (sentimentChart) sentimentChart.destroy();
             if (mediaChart) mediaChart.destroy();
@@ -824,8 +838,14 @@
                 }
             });
 
-            // Chart 3: Sebaran Topik Indikator
+            // Chart 3: Sebaran Topik Indikator (Gaya 3D Modern Gradient)
             const ctx3 = document.getElementById('topicsChart').getContext('2d');
+            
+            // Membuat gradasi warna kekinian
+            const grad1 = ctx3.createLinearGradient(0, 0, 0, 200);
+            grad1.addColorStop(0, '#0284C7');
+            grad1.addColorStop(1, '#0F2C59');
+
             topicsChart = new Chart(ctx3, {
                 type: 'bar',
                 data: {
@@ -833,8 +853,9 @@
                     datasets: [{
                         label: 'Jumlah Artikel',
                         data: topicValues,
-                        backgroundColor: '#0284C7',
-                        borderRadius: 6
+                        backgroundColor: grad1,
+                        borderRadius: 8,
+                        borderSkipped: false
                     }]
                 },
                 options: {
@@ -856,7 +877,6 @@
             });
         }
 
-        // Render Tabel Berita
         function renderNewsTable(data) {
             const tbody = document.getElementById('newsTableBody');
             tbody.innerHTML = '';
@@ -907,7 +927,6 @@
             lucide.createIcons();
         }
 
-        // Filter Tabel Berita
         function filterNewsTable() {
             const searchVal = document.getElementById('searchInput').value.toLowerCase();
             const sentimentVal = document.getElementById('sentimentFilter').value;
@@ -923,7 +942,6 @@
             renderNewsTable(filtered);
         }
 
-        // Modal Detail Analisis AI
         function openAnalysisModal(id) {
             const item = allNewsData.find(d => d.id === id);
             if (!item) return;
@@ -953,7 +971,6 @@
             modal.classList.remove('flex');
         }
 
-        // Toast Helper
         function showToast(message) {
             const toast = document.getElementById('toast');
             const msg = document.getElementById('toastMessage');
@@ -967,36 +984,3 @@
     </script>
 </body>
 </html>
-
-<!-- 🟢 PANEL VIRTUAL OFFICE: DIBAWAH TULISAN BPS LAMPUNG (TIDAK MELAYANG) -->
-<div class="container my-3">
-    <div class="row">
-        <div class="col-12">
-            <div class="d-flex align-items-center flex-wrap gap-3 p-2 bg-light border rounded shadow-sm" style="font-size: 0.8rem;">
-                <!-- Label Judul -->
-                <span class="fw-bold text-dark"><i class="bi bi-robot text-primary"></i> AI Agents:</span>
-                
-                <!-- Agen 1: Crawler -->
-                <div class="d-flex align-items-center gap-1 bg-white px-2 py-1 border rounded shadow-sm" style="cursor: pointer;" onclick="alert('Agent Media Crawler: Memindai RSS berita secara berkala.')">
-                    <span>🕷️</span>
-                    <span class="fw-semibold text-secondary">Crawler</span>
-                    <span class="badge bg-success" style="font-size: 0.6rem;" id="status-crawler">IDLE</span>
-                </div>
-
-                <!-- Agen 2: Drafter -->
-                <div class="d-flex align-items-center gap-1 bg-white px-2 py-1 border rounded shadow-sm" style="cursor: pointer;" onclick="alert('Agent Drafter BRS: Menyusun draf siaran pers resmi.')">
-                    <span>📝</span>
-                    <span class="fw-semibold text-secondary">Drafter</span>
-                    <span class="badge bg-success" style="font-size: 0.6rem;" id="status-drafter">STANDBY</span>
-                </div>
-
-                <!-- Agen 3: Auditor -->
-                <div class="d-flex align-items-center gap-1 bg-white px-2 py-1 border rounded shadow-sm" style="cursor: pointer;" onclick="alert('Agent Auditor & PR: Memantau sentimen berita.')">
-                    <span>⚖️</span>
-                    <span class="fw-semibold text-secondary">Auditor</span>
-                    <span class="badge bg-primary" style="font-size: 0.6rem;" id="status-auditor">ACTIVE</span>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
