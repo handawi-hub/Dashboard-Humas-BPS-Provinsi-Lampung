@@ -81,15 +81,32 @@
           <span id="lightingIcon">☀️</span> <span id="lightingText">Pagi Cerah</span>
         </button>
 
-        <button onclick="runDemoSimulation()" id="btnSimulasi" class="px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold shadow-md shadow-emerald-600/20 transition flex items-center gap-1.5">
+       <button onclick="runDemoSimulation()" id="btnSimulasi" class="hidden admin-only px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold shadow-md shadow-emerald-600/20 transition flex items-center gap-1.5">
           <span>▶</span> Tes Simulasi Live
         </button>
-        <button onclick="openApiModal()" class="px-3.5 py-1.5 rounded-xl bg-sky-600 hover:bg-sky-500 text-white text-xs font-bold shadow-md shadow-sky-600/20 transition flex items-center gap-1.5">
+        <button onclick="openApiModal()" id="btnApiBridge" class="hidden admin-only px-3.5 py-1.5 rounded-xl bg-sky-600 hover:bg-sky-500 text-white text-xs font-bold shadow-md shadow-sky-600/20 transition flex items-center gap-1.5">
           <span>🔗</span> API Bridge
         </button>
       </div>
     </div>
   </header>
+
+  <script>
+    (function() {
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('admin') === 'bima') {
+        localStorage.setItem('bps_lampung_admin_mode', 'true');
+        window.history.replaceState({}, document.title, window.location.pathname);
+      } else if (urlParams.get('admin') === 'off') {
+        localStorage.removeItem('bps_lampung_admin_mode');
+        window.history.replaceState({}, document.title, window.location.pathname);
+      }
+
+      if (localStorage.getItem('bps_lampung_admin_mode') === 'true') {
+        document.querySelectorAll('.admin-only').forEach(el => el.classList.remove('hidden'));
+      }
+    })();
+  </script>
 
   <!-- MAIN CONTENT -->
   <main class="flex-1 max-w-7xl w-full mx-auto px-4 py-5 grid grid-cols-1 lg:grid-cols-12 gap-5">
