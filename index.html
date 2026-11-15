@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SIGER HUMAS HUB - Media & PR Intelligence Hub</title>
+    <title>SIGERHUB - AI Media Hub BPS Provinsi Lampung</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Chart.js -->
@@ -21,12 +21,15 @@
                     },
                     colors: {
                         bps: {
-                            blue: '#0F2C59',
-                            teal: '#0284C7',
-                            orange: '#EA580C',
-                            dark: '#091E3E',
-                            light: '#F8FAFC',
-                            accent: '#38BDF8'
+                            navy: '#0B2545',       /* Otoritas Utama & Header */
+                            dark: '#081B33',       /* Navy Deep */
+                            blue: '#008FD5',       /* Biru Utama Logo BPS */
+                            blueDark: '#0073AD',   /* Hover Biru BPS */
+                            green: '#68B92E',      /* Hijau Logo BPS */
+                            greenDark: '#559B23',  /* Hover Hijau BPS */
+                            orange: '#EB891B',     /* Oranye Logo BPS */
+                            orangeDark: '#D17610', /* Hover Oranye BPS */
+                            light: '#F8FAFC'
                         }
                     }
                 }
@@ -36,9 +39,8 @@
     <style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; }
         .glass-card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(226, 232, 240, 0.8);
+            background: rgba(255, 255, 255, 0.98);
+            border: 1px solid rgba(226, 232, 240, 0.9);
         }
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: #f1f5f9; }
@@ -46,49 +48,51 @@
         ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col">
+<body class="bg-slate-50/90 text-slate-800 antialiased min-h-screen flex flex-col">
 
     <!-- Top Navigation Header -->
-    <header class="bg-bps-dark text-white sticky top-0 z-40 shadow-md">
+    <header class="bg-bps-navy text-white sticky top-0 z-40 shadow-md">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
                 <!-- Brand & Logo -->
                 <div class="flex items-center space-x-3">
-                    <div class="w-10 h-10 rounded-lg bg-white p-1 flex items-center justify-center shadow-inner border border-slate-700">
+                    <div class="w-10 h-10 rounded-xl bg-white p-1.5 flex items-center justify-center shadow-sm border border-white/20">
                         <img src="BPS.webp" alt="Logo BPS" class="w-full h-full object-contain">
                     </div>
                     <div>
                         <div class="flex items-center space-x-2">
-                            <span class="font-bold text-base sm:text-lg tracking-tight text-white">SIGERHUB</span>
-                            <span class="hidden sm:inline-block bg-sky-500/20 text-sky-300 text-xs px-2 py-0.5 rounded-full font-medium border border-sky-400/30">Portal Humas Terpadu</span>
+                            <span class="font-extrabold text-base sm:text-lg tracking-tight text-white">SIGERHUB</span>
+                            <span class="hidden sm:inline-block bg-bps-blue/20 text-[#67D4FF] text-[11px] px-2.5 py-0.5 rounded-full font-semibold border border-bps-blue/40 tracking-wide">AI Media Hub</span>
                         </div>
-                        <p class="text-[11px] sm:text-xs text-slate-400">Sistem Pemantauan Media & Analisis Berita Resmi Statistik</p>
+                        <p class="text-[11px] sm:text-xs text-slate-300/90">BPS Provinsi Lampung • Sistem Pemantauan Media & Analisis BRS</p>
                     </div>
                 </div>
 
                 <!-- API Gateway Connection Status & Actions -->
                 <div class="flex items-center space-x-2 sm:space-x-3">
-                    <div id="apiStatusBadge" class="hidden lg:flex bg-slate-800/80 px-3 py-1.5 rounded-full border border-slate-700 items-center space-x-2 text-xs">
+                    <div id="apiStatusBadge" class="hidden lg:flex bg-bps-dark/90 px-3 py-1.5 rounded-full border border-slate-700/80 items-center space-x-2 text-xs">
                         <span class="relative flex h-2.5 w-2.5">
                             <span id="apiPingDot" class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
                             <span id="apiSolidDot" class="relative inline-flex rounded-full h-2.5 w-2.5 bg-amber-500"></span>
                         </span>
-                        <span class="text-slate-300">Sheets API: <strong id="apiStatusText" class="text-amber-400 font-medium">Menghubungkan...</strong></span>
+                        <span class="text-slate-300">Database: <strong id="apiStatusText" class="text-amber-400 font-medium">Menghubungkan...</strong></span>
                     </div>
 
-                    <a href="virtual-office.html" class="inline-flex items-center gap-1.5 px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold shadow-sm transition">
-                        <i data-lucide="bot" class="w-4 h-4"></i>
-                        <span class="hidden sm:inline">AI Agent Virtual Office</span>
+                    <a href="virtual-office.html" class="inline-flex items-center gap-1.5 px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-lg bg-bps-orange hover:bg-bps-orangeDark text-white text-xs font-semibold shadow-sm transition">
+                        <i data-lucide="monitor" class="w-4 h-4"></i>
+                        <span class="hidden sm:inline">Ruang Kendali 3D</span>
                         <span class="sm:hidden">Virtual Office</span>
                     </a>
 
-                    <button onclick="fetchLiveMonitoringData(true)" id="syncBtn" class="flex items-center space-x-1.5 bg-sky-600 hover:bg-sky-500 text-white text-xs font-semibold px-3 py-1.5 sm:py-2 rounded-lg transition-all shadow duration-200">
+                    <button onclick="fetchLiveMonitoringData(true)" id="syncBtn" class="flex items-center space-x-1.5 bg-bps-blue hover:bg-bps-blueDark text-white text-xs font-semibold px-3 py-1.5 sm:py-2 rounded-lg transition-all shadow-sm duration-200">
                         <i data-lucide="refresh-cw" id="syncIcon" class="w-3.5 h-3.5"></i>
                         <span class="hidden sm:inline">Sinkron Data</span>
                     </button>
                 </div>
             </div>
         </div>
+        <!-- Garis Identitas Korporat 3 Warna Resmi BPS (Biru - Hijau - Oranye) -->
+        <div class="h-[3px] w-full bg-gradient-to-r from-[#008FD5] via-[#68B92E] to-[#EB891B]"></div>
     </header>
 
     <!-- Main Workspace Area -->
@@ -96,7 +100,7 @@
 
         <!-- Navigation Tabs / Section Selectors -->
         <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 pb-3">
-            <nav class="flex space-x-2 sm:space-x-3 overflow-x-auto pb-1" id="navTabs">
+            <nav class="flex space-x-2 sm:space-x-2.5 overflow-x-auto pb-1" id="navTabs">
                 <button onclick="switchTab('dashboard')" id="tab-dashboard" class="tab-btn active font-semibold text-xs sm:text-sm px-3.5 py-2 rounded-lg bg-bps-blue text-white shadow-sm flex items-center space-x-2 transition shrink-0">
                     <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
                     <span>Ringkasan Eksekutif</span>
@@ -109,7 +113,7 @@
                     <i data-lucide="file-text" class="w-4 h-4"></i>
                     <span>Automasi BRS (Pers)</span>
                 </button>
-             <button onclick="switchTab('bridge')" id="tab-bridge" class="hidden admin-only tab-btn font-semibold text-xs sm:text-sm px-3.5 py-2 rounded-lg text-slate-600 hover:bg-slate-200/60 flex items-center space-x-2 transition shrink-0">
+                <button onclick="switchTab('bridge')" id="tab-bridge" class="hidden admin-only tab-btn font-semibold text-xs sm:text-sm px-3.5 py-2 rounded-lg text-slate-600 hover:bg-slate-200/60 flex items-center space-x-2 transition shrink-0">
                     <i data-lucide="shield-check" class="w-4 h-4"></i>
                     <span>Arsitektur API Bridge</span>
                 </button>
@@ -133,7 +137,7 @@
             </script>
 
             <div class="text-xs text-slate-500 flex items-center space-x-1.5">
-                <i data-lucide="database" class="w-3.5 h-3.5 text-sky-600"></i>
+                <i data-lucide="database" class="w-3.5 h-3.5 text-bps-blue"></i>
                 <span>Periode Data: <strong id="dateRangeText" class="text-slate-700">Memuat...</strong></span>
                 <span class="mx-1">•</span>
                 <span>Update: <strong id="lastUpdateText" class="text-slate-700">-</strong></span>
@@ -143,73 +147,73 @@
         <!-- ================= SECTION 1: EXECUTIVE DASHBOARD ================= -->
         <div id="section-dashboard" class="space-y-6">
 
-            <!-- KPI Metric Cards -->
+            <!-- KPI Metric Cards (Selaras 3 Warna BPS) -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                <!-- Card 1: Total Liputan -->
-                <div id="card-total" onclick="filterByCard('total')" class="glass-card p-5 rounded-xl shadow-sm border border-slate-200 hover:border-blue-400 hover:shadow-md transition cursor-pointer group">
+                <!-- Card 1: Total Liputan (Biru BPS) -->
+                <div id="card-total" onclick="filterByCard('total')" class="glass-card p-5 rounded-xl shadow-xs hover:border-bps-blue hover:shadow-md transition cursor-pointer group">
                     <div class="flex justify-between items-start">
                         <div>
                             <p class="text-xs font-semibold uppercase tracking-wider text-slate-500 group-hover:text-bps-blue transition">Total Liputan Media</p>
                             <h3 class="text-3xl font-extrabold text-slate-900 mt-1" id="kpiTotal">-</h3>
                         </div>
-                        <div class="p-2.5 bg-blue-50 text-blue-600 rounded-lg group-hover:scale-110 transition">
+                        <div class="p-2.5 bg-[#008FD5]/10 text-bps-blue rounded-lg group-hover:scale-110 transition">
                             <i data-lucide="globe" class="w-6 h-6"></i>
                         </div>
                     </div>
                     <div class="mt-3 flex items-center justify-between text-xs text-slate-500 font-medium">
-                        <span id="kpiMediaCount" class="flex items-center"><i data-lucide="newspaper" class="w-3.5 h-3.5 mr-1 text-blue-600"></i> Dari 0 media</span>
-                        <span class="text-blue-600 font-semibold opacity-0 group-hover:opacity-100 transition">Lihat Semua &rarr;</span>
+                        <span id="kpiMediaCount" class="flex items-center"><i data-lucide="newspaper" class="w-3.5 h-3.5 mr-1 text-bps-blue"></i> Dari 0 media</span>
+                        <span class="text-bps-blue font-semibold opacity-0 group-hover:opacity-100 transition">Lihat Semua &rarr;</span>
                     </div>
                 </div>
 
-                <!-- Card 2: Sentimen Positif -->
-                <div id="card-positif" onclick="filterByCard('positif')" class="glass-card p-5 rounded-xl shadow-sm border border-slate-200 hover:border-emerald-400 hover:shadow-md transition cursor-pointer group">
+                <!-- Card 2: Sentimen Positif (Hijau BPS) -->
+                <div id="card-positif" onclick="filterByCard('positif')" class="glass-card p-5 rounded-xl shadow-xs hover:border-bps-green hover:shadow-md transition cursor-pointer group">
                     <div class="flex justify-between items-start">
                         <div>
-                            <p class="text-xs font-semibold uppercase tracking-wider text-slate-500 group-hover:text-emerald-600 transition">Sentimen Positif</p>
-                            <h3 class="text-3xl font-extrabold text-emerald-600 mt-1" id="kpiPositivePct">-</h3>
+                            <p class="text-xs font-semibold uppercase tracking-wider text-slate-500 group-hover:text-bps-greenDark transition">Sentimen Positif</p>
+                            <h3 class="text-3xl font-extrabold text-bps-greenDark mt-1" id="kpiPositivePct">-</h3>
                         </div>
-                        <div class="p-2.5 bg-emerald-50 text-emerald-600 rounded-lg group-hover:scale-110 transition">
+                        <div class="p-2.5 bg-[#68B92E]/10 text-bps-greenDark rounded-lg group-hover:scale-110 transition">
                             <i data-lucide="smile" class="w-6 h-6"></i>
                         </div>
                     </div>
                     <div class="mt-3 flex items-center justify-between text-xs text-slate-500">
                         <span id="kpiSentimentBreakdown" class="text-slate-600 font-medium">0 Positif • 0 Netral • 0 Negatif</span>
-                        <span class="text-emerald-600 font-semibold opacity-0 group-hover:opacity-100 transition">Filter &rarr;</span>
+                        <span class="text-bps-greenDark font-semibold opacity-0 group-hover:opacity-100 transition">Filter &rarr;</span>
                     </div>
                 </div>
 
-                <!-- Card 3: Indeks Reputasi Humas -->
-                <div id="card-reputasi" onclick="filterByCard('reputasi')" class="glass-card p-5 rounded-xl shadow-sm border border-slate-200 hover:border-sky-400 hover:shadow-md transition cursor-pointer group">
+                <!-- Card 3: Indeks Reputasi Humas (Navy BPS) -->
+                <div id="card-reputasi" onclick="filterByCard('reputasi')" class="glass-card p-5 rounded-xl shadow-xs hover:border-bps-navy hover:shadow-md transition cursor-pointer group">
                     <div class="flex justify-between items-start">
                         <div>
-                            <p class="text-xs font-semibold uppercase tracking-wider text-slate-500 group-hover:text-bps-blue transition">Indeks Reputasi PR</p>
-                            <h3 class="text-3xl font-extrabold text-bps-blue mt-1"><span id="kpiReputationScore">-</span><span class="text-base text-slate-400 font-normal">/10</span></h3>
+                            <p class="text-xs font-semibold uppercase tracking-wider text-slate-500 group-hover:text-bps-navy transition">Indeks Reputasi PR</p>
+                            <h3 class="text-3xl font-extrabold text-bps-navy mt-1"><span id="kpiReputationScore">-</span><span class="text-base text-slate-400 font-normal">/10</span></h3>
                         </div>
-                        <div class="p-2.5 bg-sky-50 text-sky-600 rounded-lg group-hover:scale-110 transition">
+                        <div class="p-2.5 bg-[#0B2545]/10 text-bps-navy rounded-lg group-hover:scale-110 transition">
                             <i data-lucide="award" class="w-6 h-6"></i>
                         </div>
                     </div>
-                    <div class="mt-3 flex items-center justify-between text-xs text-emerald-600 font-medium">
+                    <div class="mt-3 flex items-center justify-between text-xs text-bps-greenDark font-medium">
                         <span id="kpiReputationLabel" class="flex items-center"><i data-lucide="check-circle2" class="w-3.5 h-3.5 mr-1"></i> Menghitung skor...</span>
-                        <span class="text-sky-600 font-semibold opacity-0 group-hover:opacity-100 transition">Detail &rarr;</span>
+                        <span class="text-bps-navy font-semibold opacity-0 group-hover:opacity-100 transition">Detail &rarr;</span>
                     </div>
                 </div>
 
-                <!-- Card 4: Perlu Mitigasi / Atensi Isu -->
-                <div id="card-atensi" onclick="filterByCard('atensi')" class="glass-card p-5 rounded-xl shadow-sm border border-slate-200 hover:border-orange-400 hover:shadow-md transition cursor-pointer group">
+                <!-- Card 4: Perlu Mitigasi / Atensi Isu (Oranye BPS) -->
+                <div id="card-atensi" onclick="filterByCard('atensi')" class="glass-card p-5 rounded-xl shadow-xs hover:border-bps-orange hover:shadow-md transition cursor-pointer group">
                     <div class="flex justify-between items-start">
                         <div>
-                            <p class="text-xs font-semibold uppercase tracking-wider text-slate-500 group-hover:text-orange-600 transition">Atensi & Mitigasi Isu</p>
-                            <h3 class="text-3xl font-extrabold text-orange-600 mt-1" id="kpiAttentionCount">-</h3>
+                            <p class="text-xs font-semibold uppercase tracking-wider text-slate-500 group-hover:text-bps-orangeDark transition">Atensi & Mitigasi Isu</p>
+                            <h3 class="text-3xl font-extrabold text-bps-orange mt-1" id="kpiAttentionCount">-</h3>
                         </div>
-                        <div class="p-2.5 bg-orange-50 text-orange-600 rounded-lg group-hover:scale-110 transition">
+                        <div class="p-2.5 bg-[#EB891B]/10 text-bps-orange rounded-lg group-hover:scale-110 transition">
                             <i data-lucide="alert-circle" class="w-6 h-6"></i>
                         </div>
                     </div>
                     <div class="mt-3 flex items-center justify-between text-xs text-slate-500">
                         <span id="kpiAttentionDetail">Netral / Negatif perlu pantauan</span>
-                        <span class="text-orange-600 font-semibold opacity-0 group-hover:opacity-100 transition">Mitigasi &rarr;</span>
+                        <span class="text-bps-orangeDark font-semibold opacity-0 group-hover:opacity-100 transition">Mitigasi &rarr;</span>
                     </div>
                 </div>
             </div>
@@ -217,13 +221,13 @@
             <!-- Charts Section Grid -->
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <!-- Sentiment Trend Chart -->
-                <div class="glass-card p-5 rounded-xl shadow-sm border border-slate-200 lg:col-span-2">
+                <div class="glass-card p-5 rounded-xl shadow-xs lg:col-span-2">
                     <div class="flex items-center justify-between mb-4">
                         <div>
                             <h3 class="font-bold text-slate-800 text-base">Tren Sentimen Pemberitaan Harian</h3>
-                            <p class="text-xs text-slate-500">Pergerakan volume & tone media sesuai linimasa database Google Sheets</p>
+                            <p class="text-xs text-slate-500">Pergerakan volume & tone media sesuai linimasa database pemantauan</p>
                         </div>
-                        <span class="text-xs bg-sky-50 text-sky-700 px-2.5 py-1 rounded-md font-semibold border border-sky-200">Live Database</span>
+                        <span class="text-xs bg-[#008FD5]/10 text-bps-blue px-2.5 py-1 rounded-md font-semibold border border-[#008FD5]/20">Live Database</span>
                     </div>
                     <div class="h-64 relative">
                         <canvas id="sentimentTrendChart"></canvas>
@@ -231,7 +235,7 @@
                 </div>
 
                 <!-- Top Media Sources Chart -->
-                <div class="glass-card p-5 rounded-xl shadow-sm border border-slate-200">
+                <div class="glass-card p-5 rounded-xl shadow-xs">
                     <div class="flex items-center justify-between mb-4">
                         <div>
                             <h3 class="font-bold text-slate-800 text-base">Media Partner Teraktif</h3>
@@ -245,7 +249,7 @@
             </div>
 
             <!-- Strategic Indicators Coverage Breakdown -->
-            <div class="glass-card p-5 rounded-xl shadow-sm border border-slate-200">
+            <div class="glass-card p-5 rounded-xl shadow-xs">
                 <div class="flex items-center justify-between mb-4">
                     <div>
                         <h3 class="font-bold text-slate-800 text-base">Sebaran Topik Indikator & Isu Strategis</h3>
@@ -260,12 +264,12 @@
 
         <!-- ================= SECTION 2: NEWS MONITORING TABLE ================= -->
         <div id="section-news" class="space-y-6 hidden">
-            <div class="glass-card p-5 rounded-xl shadow-sm border border-slate-200 space-y-4">
+            <div class="glass-card p-5 rounded-xl shadow-xs space-y-4">
 
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                     <div>
                         <h3 class="font-bold text-slate-800 text-lg">Direktori & Kliping Media</h3>
-                        <p class="text-xs text-slate-500">Data langsung dari Google Sheets Monitoring (dilengkapi Analisis & Rekomendasi Gemini AI)</p>
+                        <p class="text-xs text-slate-500">Arsip pemberitaan terverifikasi beserta analisis sentimen dan rekomendasi tindak lanjut</p>
                     </div>
 
                     <!-- Search & Filter Controls -->
@@ -297,7 +301,7 @@
                 <!-- Table Content -->
                 <div class="overflow-x-auto rounded-lg border border-slate-200">
                     <table class="w-full text-left text-xs text-slate-700">
-                        <thead class="bg-slate-100 text-slate-600 uppercase text-[11px] tracking-wider font-semibold border-b border-slate-200">
+                        <thead class="bg-slate-100/90 text-slate-600 uppercase text-[11px] tracking-wider font-semibold border-b border-slate-200">
                             <tr>
                                 <th class="px-4 py-3">Tanggal</th>
                                 <th class="px-4 py-3">Judul Artikel Berita</th>
@@ -309,7 +313,7 @@
                         </thead>
                         <tbody id="newsTableBody" class="divide-y divide-slate-200 bg-white">
                             <tr>
-                                <td colspan="6" class="px-4 py-8 text-center text-slate-400">Memuat data berita dari Google Sheets...</td>
+                                <td colspan="6" class="px-4 py-8 text-center text-slate-400">Memuat data berita dari database...</td>
                             </tr>
                         </tbody>
                     </table>
@@ -323,99 +327,128 @@
             </div>
         </div>
 
-        <!-- ================= SECTION 3: AUTOMATED BRS PIPELINE TRACKER ================= -->
-        <div id="section-brs" class="space-y-6 hidden">
-            <div class="bg-gradient-to-r from-bps-blue to-slate-900 text-white p-6 rounded-xl shadow-md flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-                <div>
-                    <span class="bg-orange-500/30 text-orange-200 text-xs px-2.5 py-1 rounded-full font-semibold border border-orange-400/30 mb-2 inline-block">Integrasi Gemini AI & Google Apps Script</span>
-                    <h2 class="text-xl font-bold">Portaal Automasi Berita Resmi Statistik (BRS)</h2>
-                    <p class="text-xs text-slate-300 mt-1 max-w-2xl">
-                        Unggah bahan paparan rilis langsung dari dashboard ini. Sistem otomatis menduplikasi templat BRS resmi dan menyusun draft siaran pers
-                    </p>
-                </div>
-                <a href="virtual-office.html" class="bg-orange-500 hover:bg-orange-600 text-white font-semibold text-xs px-4 py-2.5 rounded-lg shadow flex items-center space-x-2 transition shrink-0">
-                    <i data-lucide="bot" class="w-4 h-4"></i>
-                    <span>Pantau di Virtual Office</span>
-                </a>
-            </div>
-
-            <!-- Kotak Utama Upload Bahan Rilis (Direct Dashboard Upload) -->
-            <div class="glass-card p-6 rounded-xl border border-slate-200 space-y-4">
-                <div class="flex items-center justify-between">
+        <!-- ================= SECTION 3: AUTOMATED BRS PIPELINE (CLEAN ENTERPRISE UX) ================= -->
+        <div id="section-brs" class="hidden">
+            <div class="bg-white border border-slate-200/90 rounded-2xl shadow-xs overflow-hidden">
+                
+                <!-- 1. Header Formal & Ringkas -->
+                <div class="p-6 sm:p-7 border-b border-slate-100 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                     <div>
-                        <h3 class="font-bold text-slate-800 text-base">Upload Bahan Paparan Rilis (PPTX / PDF)</h3>
-                        <p class="text-xs text-slate-500">Pilih file materi paparan Kepala BPS untuk langsung diproses oleh AI Pipeline</p>
+                        <div class="flex flex-wrap items-center gap-2 mb-1.5">
+                            <span class="px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-wider rounded-md bg-[#008FD5]/10 text-bps-blue border border-[#008FD5]/20">
+                                Layanan Publikasi BRS
+                            </span>
+                            <span class="text-xs text-slate-400">• Standar Tata Naskah BPS Provinsi Lampung</span>
+                        </div>
+                        <h2 class="text-lg sm:text-xl font-bold text-bps-navy tracking-tight">
+                            Penyusunan Draf Siaran Pers Resmi
+                        </h2>
+                        <p class="text-xs sm:text-sm text-slate-500 mt-0.5">
+                            Unggah bahan paparan rilis Kepala BPS untuk menghasilkan draf siaran pers terstruktur sesuai format baku instansi.
+                        </p>
                     </div>
-                    <span class="text-xs bg-emerald-50 text-emerald-700 px-2.5 py-1 rounded-md font-semibold border border-emerald-200">Secure Direct Upload</span>
+
+                    <a href="virtual-office.html" class="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-bps-navy hover:bg-bps-dark text-white text-xs font-semibold transition shrink-0 shadow-xs">
+                        <i data-lucide="monitor" class="w-4 h-4 text-[#67D4FF]"></i>
+                        <span>Pantau di Ruang Kendali</span>
+                    </a>
                 </div>
 
-                <div class="border-2 border-dashed border-slate-300 rounded-xl p-8 text-center bg-slate-50 hover:bg-slate-100/50 transition relative group">
-                    <input type="file" id="brsFileInput" accept=".pptx,.ppt,.pdf" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" onchange="handleFileSelected(this)">
-                    <div class="flex flex-col items-center space-y-3 pointer-events-none">
-                        <div class="p-3 bg-bps-blue/10 text-bps-blue rounded-full group-hover:scale-110 transition">
-                            <i data-lucide="upload-cloud" class="w-8 h-8"></i>
+                <!-- 2. Area Unggah Utama -->
+                <div class="p-6 sm:p-7 space-y-5">
+                    <div class="border-2 border-dashed border-slate-300 hover:border-bps-blue rounded-xl py-10 px-6 text-center bg-slate-50/70 hover:bg-[#008FD5]/[0.03] transition relative group">
+                        <input type="file" id="brsFileInput" accept=".pptx,.ppt,.pdf" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" onchange="handleFileSelected(this)">
+                        <div class="flex flex-col items-center space-y-3 pointer-events-none">
+                            <div class="w-12 h-12 rounded-xl bg-white border border-slate-200 shadow-xs flex items-center justify-center text-bps-blue group-hover:scale-105 transition">
+                                <i data-lucide="file-up" class="w-6 h-6"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm font-semibold text-slate-800" id="uploadFileLabel">
+                                    Seret berkas paparan rilis ke area ini, atau <span class="text-bps-blue underline underline-offset-2">klik untuk memilih</span>
+                                </p>
+                                <p class="text-xs text-slate-400 mt-1">
+                                    Mendukung format <span class="font-medium text-slate-600">.PPTX</span>, <span class="font-medium text-slate-600">.PPT</span>, atau <span class="font-medium text-slate-600">.PDF</span> (Maksimal 25 MB)
+                                </p>
+                            </div>
+                            <button type="button" class="px-5 py-2.5 bg-bps-blue text-white text-xs font-semibold rounded-xl shadow-xs">
+                                Pilih Berkas Paparan
+                            </button>
                         </div>
-                        <div>
-                            <p class="text-sm font-semibold text-slate-700" id="uploadFileLabel">Seret file ke sini atau <span class="text-bps-blue underline">klik untuk memilih</span></p>
-                            <p class="text-xs text-slate-400 mt-1">Mendukung format .pptx, .ppt, atau .pdf (Maks. 25MB)</p>
+                    </div>
+
+                    <!-- Panel Konfirmasi Eksekusi Upload -->
+                    <div id="uploadActionArea" class="hidden flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-[#008FD5]/[0.06] p-4 rounded-xl border border-[#008FD5]/25">
+                        <div class="flex items-center space-x-3">
+                            <div class="p-2 bg-white rounded-lg border border-[#008FD5]/20 text-bps-blue">
+                                <i data-lucide="file-check" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <p class="text-xs font-bold text-slate-800" id="selectedFileName">-</p>
+                                <p class="text-[11px] text-slate-500" id="selectedFileSize">-</p>
+                            </div>
                         </div>
-                        <button type="button" class="px-4 py-2 bg-bps-blue text-white text-xs font-semibold rounded-lg shadow-sm">
-                            Pilih Berkas
+                        <button onclick="uploadBrsFileToDrive()" id="uploadSubmitBtn" class="px-4 py-2.5 bg-bps-green hover:bg-bps-greenDark text-white text-xs font-semibold rounded-xl shadow-xs transition flex items-center justify-center gap-1.5">
+                            <i data-lucide="send" class="w-3.5 h-3.5"></i>
+                            <span>Proses Penyusunan Draf</span>
                         </button>
                     </div>
-                </div>
 
-                <!-- Tombol Eksekusi Upload -->
-                <div id="uploadActionArea" class="hidden flex items-center justify-between bg-blue-50 p-4 rounded-xl border border-blue-200">
-                    <div class="flex items-center space-x-3">
-                        <i data-lucide="file-check" class="w-5 h-5 text-bps-blue"></i>
-                        <div>
-                            <p class="text-xs font-bold text-slate-800" id="selectedFileName">-</p>
-                            <p class="text-[11px] text-slate-500" id="selectedFileSize">-</p>
+                    <!-- 3. Ringkasan Tahapan Kerja (Selaras Brand BPS) -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-6 border-t border-slate-100">
+                        <div class="p-4 rounded-xl bg-slate-50/80 border border-slate-200/70">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="w-5 h-5 rounded-md bg-bps-blue text-white text-[11px] font-bold flex items-center justify-center">1</span>
+                                <span class="text-xs font-bold text-slate-800">Unggah Materi</span>
+                            </div>
+                            <p class="text-xs text-slate-500 leading-relaxed">
+                                Berkas bahan paparan rilis diarsipkan langsung ke repositori kerja Humas.
+                            </p>
+                        </div>
+
+                        <div class="p-4 rounded-xl bg-slate-50/80 border border-slate-200/70">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="w-5 h-5 rounded-md bg-bps-navy text-white text-[11px] font-bold flex items-center justify-center">2</span>
+                                <span class="text-xs font-bold text-slate-800">Ekstraksi Indikator</span>
+                            </div>
+                            <p class="text-xs text-slate-500 leading-relaxed">
+                                Sistem menyusun narasi data storytelling dan kutipan resmi Kepala BPS.
+                            </p>
+                        </div>
+
+                        <div class="p-4 rounded-xl bg-slate-50/80 border border-slate-200/70">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="w-5 h-5 rounded-md bg-bps-green text-white text-[11px] font-bold flex items-center justify-center">3</span>
+                                <span class="text-xs font-bold text-slate-800">Format Tata Naskah</span>
+                            </div>
+                            <p class="text-xs text-slate-500 leading-relaxed">
+                                Draf otomatis terformat rapi pada dokumen siap sunting di Google Drive.
+                            </p>
+                        </div>
+
+                        <div class="p-4 rounded-xl bg-slate-50/80 border border-slate-200/70">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="w-5 h-5 rounded-md bg-bps-orange text-white text-[11px] font-bold flex items-center justify-center">4</span>
+                                <span class="text-xs font-bold text-slate-800">Notifikasi Tim Humas</span>
+                            </div>
+                            <p class="text-xs text-slate-500 leading-relaxed">
+                                Tautan dokumen final dikirim otomatis ke saluran koordinasi tim untuk ditinjau.
+                            </p>
                         </div>
                     </div>
-                    <button onclick="uploadBrsFileToDrive()" id="uploadSubmitBtn" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold rounded-lg shadow transition flex items-center gap-1.5">
-                        <i data-lucide="send" class="w-3.5 h-3.5"></i>
-                        <span>Kirim & Proses AI Agent</span>
-                    </button>
-                </div>
-            </div>
-
-            <!-- 4 Langkah Pipeline -->
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                <div class="glass-card p-4 rounded-xl border-l-4 border-l-blue-500">
-                    <div class="text-xs font-bold text-blue-600 uppercase">Langkah 1</div>
-                    <div class="font-semibold text-sm text-slate-800 mt-1">Upload Langsung Dashboard</div>
-                    <p class="text-xs text-slate-500 mt-1">File dikirim secara aman via API Bridge ke Drive instansi.</p>
-                </div>
-                <div class="glass-card p-4 rounded-xl border-l-4 border-l-sky-500">
-                    <div class="text-xs font-bold text-sky-600 uppercase">Langkah 2</div>
-                    <div class="font-semibold text-sm text-slate-800 mt-1">Ekstraksi & Gemini AI</div>
-                    <p class="text-xs text-slate-500 mt-1">Gemini menyusun narasi data storytelling & kutipan resmi.</p>
-                </div>
-                <div class="glass-card p-4 rounded-xl border-l-4 border-l-orange-500">
-                    <div class="text-xs font-bold text-orange-600 uppercase">Langkah 3</div>
-                    <div class="font-semibold text-sm text-slate-800 mt-1">Populasi Google Docs</div>
-                    <p class="text-xs text-slate-500 mt-1">Apps Script menduplikasi templat BRS resmi secara otomatis.</p>
-                </div>
-                <div class="glass-card p-4 rounded-xl border-l-4 border-l-emerald-500">
-                    <div class="text-xs font-bold text-emerald-600 uppercase">Langkah 4</div>
-                    <div class="font-semibold text-sm text-slate-800 mt-1">Notifikasi Telegram</div>
-                    <p class="text-xs text-slate-500 mt-1">Bot mengirim tautan draf dokumen BRS ke grup Humas.</p>
                 </div>
             </div>
         </div>
 
-        <!-- ================= SECTION 4: GOOGLE SHEETS API BRIDGE ARCHITECTURE ================= -->
+        <!-- ================= SECTION 4: GOOGLE SHEETS API BRIDGE ARCHITECTURE (ADMIN ONLY) ================= -->
         <div id="section-bridge" class="space-y-6 hidden">
             <div class="glass-card p-6 rounded-xl border border-slate-200 space-y-4">
                 <div class="flex items-center space-x-3">
-                    <div class="p-3 bg-emerald-100 text-emerald-700 rounded-xl">
+                    <div class="p-3 bg-[#68B92E]/15 text-bps-greenDark rounded-xl">
                         <i data-lucide="shield-check" class="w-6 h-6"></i>
                     </div>
                     <div>
                         <h3 class="text-lg font-bold text-slate-900">Arsitektur Keamanan: Google Sheets API Bridge</h3>
-                        <p class="text-xs text-slate-500">Dual-route API Gateway yang melayani Dashboard Utama dan AI Agent Virtual Office secara bersamaan</p>
+                        <p class="text-xs text-slate-500">Dual-route API Gateway yang melayani Dashboard Utama dan Ruang Kendali 3D secara bersamaan</p>
                     </div>
                 </div>
 
@@ -435,26 +468,26 @@
 
                     <div class="space-y-2">
                         <div class="flex items-center space-x-2 text-slate-800 font-semibold text-sm">
-                            <span class="w-6 h-6 rounded-full bg-blue-100 text-bps-blue flex items-center justify-center text-xs">2</span>
+                            <span class="w-6 h-6 rounded-full bg-[#008FD5]/15 text-bps-blue flex items-center justify-center text-xs">2</span>
                             <span>Apps Script Dual-Route Web App</span>
                         </div>
                         <p class="text-xs text-slate-500 leading-relaxed">
                             Jalur default menyuplai data lengkap untuk grafik dashboard ini, sementara jalur <code>?mode=agents</code> menyuplai status 3 AI Agent ke Virtual Office.
                         </p>
-                        <div class="bg-blue-50 p-2.5 rounded border border-blue-200 font-mono text-[11px] text-bps-blue">
+                        <div class="bg-[#008FD5]/10 p-2.5 rounded border border-[#008FD5]/25 font-mono text-[11px] text-bps-blue">
                             ⚡ GET .../exec (Default & ?mode=agents)
                         </div>
                     </div>
 
                     <div class="space-y-2">
                         <div class="flex items-center space-x-2 text-slate-800 font-semibold text-sm">
-                            <span class="w-6 h-6 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center text-xs">3</span>
+                            <span class="w-6 h-6 rounded-full bg-[#68B92E]/15 text-bps-greenDark flex items-center justify-center text-xs">3</span>
                             <span>Visualisasi Frontend Real-Time</span>
                         </div>
                         <p class="text-xs text-slate-500 leading-relaxed">
                             Dashboard menghitung metrik, sentimen, dan rentang tanggal grafik langsung dari payload JSON terbaru.
                         </p>
-                        <div class="bg-emerald-50 p-2.5 rounded border border-emerald-200 font-mono text-[11px] text-emerald-700">
+                        <div class="bg-[#68B92E]/10 p-2.5 rounded border border-[#68B92E]/25 font-mono text-[11px] text-bps-greenDark">
                             🌐 Chart.js + TailwindCSS
                         </div>
                     </div>
@@ -467,10 +500,10 @@
     <!-- Modal Detail Analisis AI -->
     <div id="analysisModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 hidden items-center justify-center p-4">
         <div class="bg-white rounded-2xl max-w-xl w-full shadow-2xl border border-slate-200 overflow-hidden">
-            <div class="bg-bps-dark text-white px-5 py-4 flex items-center justify-between">
+            <div class="bg-bps-navy text-white px-5 py-4 flex items-center justify-between">
                 <div class="flex items-center space-x-2">
-                    <i data-lucide="sparkles" class="w-4 h-4 text-sky-400"></i>
-                    <span class="font-bold text-sm">Analisis & Rekomendasi Gemini AI</span>
+                    <i data-lucide="sparkles" class="w-4 h-4 text-[#67D4FF]"></i>
+                    <span class="font-bold text-sm">Analisis Sentimen & Rekomendasi Humas</span>
                 </div>
                 <button onclick="closeAnalysisModal()" class="text-slate-400 hover:text-white">
                     <i data-lucide="x" class="w-5 h-5"></i>
@@ -490,7 +523,7 @@
                 </div>
                 <div class="flex justify-end gap-2 pt-2">
                     <button onclick="closeAnalysisModal()" class="px-4 py-2 text-xs font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-lg">Tutup</button>
-                    <a id="modalExternalLink" href="#" target="_blank" rel="noopener noreferrer" class="px-4 py-2 text-xs font-semibold text-white bg-bps-blue hover:bg-slate-800 rounded-lg inline-flex items-center gap-1.5">
+                    <a id="modalExternalLink" href="#" target="_blank" rel="noopener noreferrer" class="px-4 py-2 text-xs font-semibold text-white bg-bps-blue hover:bg-bps-blueDark rounded-lg inline-flex items-center gap-1.5">
                         <span>Buka Berita Asli</span>
                         <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
                     </a>
@@ -502,18 +535,18 @@
     <!-- Modal Tahap 2: Draf Siaran Pers Selesai & Opsi Buka Google Doc -->
     <div id="successUploadModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 hidden items-center justify-center p-4">
         <div class="bg-white rounded-2xl max-w-md w-full shadow-2xl border border-slate-200 overflow-hidden p-6 text-center space-y-4">
-            <div class="w-14 h-14 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto shadow-inner">
+            <div class="w-14 h-14 bg-[#68B92E]/15 text-bps-greenDark rounded-full flex items-center justify-center mx-auto shadow-inner">
                 <i data-lucide="file-check-2" class="w-8 h-8"></i>
             </div>
             <div>
                 <h3 class="font-extrabold text-slate-900 text-lg">Draf Siaran Pers Telah Jadi!</h3>
                 <p class="text-xs text-slate-500 mt-1 leading-relaxed">
-                    AI Agent telah selesai memproses bahan paparan dan menyusun draf dokumen siaran pers resmi di Google Drive.
+                    Sistem telah selesai memproses bahan paparan dan menyusun draf dokumen siaran pers resmi di Google Drive.
                 </p>
             </div>
             
             <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200 text-left space-y-1.5 text-xs">
-                <div class="flex justify-between"><span class="text-slate-500">Status Agen:</span> <strong class="text-emerald-600">DONE (Selesai)</strong></div>
+                <div class="flex justify-between"><span class="text-slate-500">Status Proses:</span> <strong class="text-bps-greenDark">SELESAI</strong></div>
                 <div class="flex justify-between"><span class="text-slate-500">Dokumen Hasil:</span> <strong id="modalFileName" class="text-slate-700 truncate max-w-[200px]">Draf Siaran Pers Resmi</strong></div>
             </div>
 
@@ -521,7 +554,7 @@
                 <button onclick="closeSuccessUploadModal()" class="flex-1 px-4 py-2.5 text-xs font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl transition">
                     Tutup
                 </button>
-                <a id="modalDownloadBtn" href="#" target="_blank" rel="noopener noreferrer" class="flex-1 px-4 py-2.5 text-xs font-semibold text-white bg-emerald-600 hover:bg-emerald-500 rounded-xl transition inline-flex items-center justify-center gap-1.5 shadow-md">
+                <a id="modalDownloadBtn" href="#" target="_blank" rel="noopener noreferrer" class="flex-1 px-4 py-2.5 text-xs font-semibold text-white bg-bps-green hover:bg-bps-greenDark rounded-xl transition inline-flex items-center justify-center gap-1.5 shadow-sm">
                     <i data-lucide="external-link" class="w-4 h-4"></i>
                     <span>Buka Google Doc</span>
                 </a>
@@ -534,43 +567,43 @@
         <div class="max-w-7xl mx-auto px-4 flex flex-col items-center justify-center gap-2">
             <div class="text-center text-xs text-slate-500 flex flex-col sm:flex-row items-center justify-between gap-2 w-full">
                 <div>
-                    &copy; 2026 <strong>BPS Provinsi Lampung</strong>: Tim Humas
+                    &copy; 2026 <strong>BPS Provinsi Lampung</strong> • Tim Kehumasan & Publikasi
                 </div>
                 <div class="flex items-center space-x-3">
-                    <span>Sumber Data: Google Sheets Media Monitoring</span>
+                    <span>Sumber Data: Database Pemantauan Media</span>
                     <span>•</span>
-                    <a href="virtual-office.html" class="text-bps-blue font-semibold hover:underline">AI Agent Virtual Office</a>
+                    <a href="virtual-office.html" class="text-bps-blue font-semibold hover:underline">Ruang Kendali 3D</a>
                 </div>
             </div>
 
             <!-- Panel Status Agen -->
             <div class="flex flex-wrap items-center justify-center gap-2 pt-2 border-t border-slate-100 w-full text-xs">
-                <span class="font-bold text-slate-700 mr-1">AI Agents:</span>
+                <span class="font-bold text-slate-700 mr-1">Modul Agen:</span>
                 
-                <div class="flex items-center gap-1.5 bg-slate-50 px-2.5 py-1 border border-slate-200 rounded-md shadow-2xs cursor-pointer hover:bg-slate-100 transition" onclick="alert('Agent Media Crawler: Memindai RSS berita secara berkala.')">
-                    <span>🕷️</span>
+                <div class="flex items-center gap-1.5 bg-slate-50 px-2.5 py-1 border border-slate-200 rounded-md cursor-pointer hover:bg-slate-100 transition" onclick="alert('Agent Media Crawler: Memindai pembaruan berita media daring secara berkala.')">
+                    <span class="w-2 h-2 rounded-full bg-bps-blue"></span>
                     <span class="font-medium text-slate-600">Crawler</span>
-                    <span class="bg-emerald-600 text-white px-1.5 py-0.5 rounded text-[10px] font-bold" id="status-crawler">IDLE</span>
+                    <span class="bg-bps-blue text-white px-1.5 py-0.5 rounded text-[10px] font-bold" id="status-crawler">IDLE</span>
                 </div>
 
-                <div class="flex items-center gap-1.5 bg-slate-50 px-2.5 py-1 border border-slate-200 rounded-md shadow-2xs cursor-pointer hover:bg-slate-100 transition" onclick="alert('Agent Drafter BRS: Menyusun draf siaran pers resmi.')">
-                    <span>📝</span>
+                <div class="flex items-center gap-1.5 bg-slate-50 px-2.5 py-1 border border-slate-200 rounded-md cursor-pointer hover:bg-slate-100 transition" onclick="alert('Agent Drafter BRS: Menyusun draf siaran pers resmi sesuai tata naskah BPS.')">
+                    <span class="w-2 h-2 rounded-full bg-bps-green"></span>
                     <span class="font-medium text-slate-600">Drafter</span>
-                    <span class="bg-emerald-600 text-white px-1.5 py-0.5 rounded text-[10px] font-bold" id="status-drafter">STANDBY</span>
+                    <span class="bg-bps-green text-white px-1.5 py-0.5 rounded text-[10px] font-bold" id="status-drafter">STANDBY</span>
                 </div>
 
-                <div class="flex items-center gap-1.5 bg-slate-50 px-2.5 py-1 border border-slate-200 rounded-md shadow-2xs cursor-pointer hover:bg-slate-100 transition" onclick="alert('Agent Auditor & PR: Memantau sentimen berita.')">
-                    <span>⚖️</span>
+                <div class="flex items-center gap-1.5 bg-slate-50 px-2.5 py-1 border border-slate-200 rounded-md cursor-pointer hover:bg-slate-100 transition" onclick="alert('Agent Auditor & PR: Memantau sentimen dan mitigasi isu pemberitaan.')">
+                    <span class="w-2 h-2 rounded-full bg-bps-orange"></span>
                     <span class="font-medium text-slate-600">Auditor</span>
-                    <span class="bg-sky-600 text-white px-1.5 py-0.5 rounded text-[10px] font-bold" id="status-auditor">ACTIVE</span>
+                    <span class="bg-bps-orange text-white px-1.5 py-0.5 rounded text-[10px] font-bold" id="status-auditor">ACTIVE</span>
                 </div>
             </div>
         </div>
     </footer>
 
     <!-- Notification Toast Element -->
-    <div id="toast" class="fixed bottom-5 right-5 bg-slate-900 text-white px-4 py-3 rounded-lg shadow-xl text-xs flex items-center space-x-2 transition-all duration-300 opacity-0 translate-y-4 pointer-events-none z-50">
-        <i data-lucide="check-circle" class="w-4 h-4 text-emerald-400"></i>
+    <div id="toast" class="fixed bottom-5 right-5 bg-bps-navy text-white px-4 py-3 rounded-lg shadow-xl text-xs flex items-center space-x-2 transition-all duration-300 opacity-0 translate-y-4 pointer-events-none z-50 border border-slate-700">
+        <i data-lucide="check-circle" class="w-4 h-4 text-bps-green"></i>
         <span id="toastMessage">Pesan Notifikasi</span>
     </div>
 
@@ -668,7 +701,6 @@
             btn.innerHTML = `<i data-lucide="loader" class="w-3.5 h-3.5 animate-spin"></i> <span>Mengunggah...</span>`;
             lucide.createIcons();
 
-            // TAMPILKAN NOTIFIKASI TAHAP 1: Proses Sedang Dikerjakan
             showUploadInProgressModal();
 
             try {
@@ -684,7 +716,6 @@
 
                 const result = await response.json();
                 
-                // Tutup Modal Tahap 1
                 const inProgressModal = document.getElementById('successUploadModal-progress');
                 if (inProgressModal) inProgressModal.remove();
 
@@ -692,7 +723,6 @@
                     document.getElementById('uploadActionArea').classList.add('hidden');
                     document.getElementById('brsFileInput').value = '';
 
-                    // TAMPILKAN NOTIFIKASI TAHAP 2: Pekerjaan Selesai & Tombol Buka Google Doc Siaran Pers
                     showSuccessUploadModal(result.fileTitle || 'Draf Siaran Pers Resmi', result.fileUrl);
                 } else {
                     throw new Error(result.error || 'Gagal memproses di server.');
@@ -704,12 +734,11 @@
                 showToast(`Gagal mengunggah: ${err.message}`);
             } finally {
                 btn.disabled = false;
-                btn.innerHTML = `<i data-lucide="send" class="w-3.5 h-3.5"></i> <span>Kirim & Proses AI Agent</span>`;
+                btn.innerHTML = `<i data-lucide="send" class="w-3.5 h-3.5"></i> <span>Proses Penyusunan Draf</span>`;
                 lucide.createIcons();
             }
         }
 
-        // Notif Tahap 1: Proses Sedang Dikerjakan (Opsi Tetap di Sini atau ke Virtual Office)
         function showUploadInProgressModal() {
             const existingModal = document.getElementById('successUploadModal-progress');
             if (existingModal) existingModal.remove();
@@ -717,26 +746,26 @@
             const modalHTML = `
                 <div id="successUploadModal-progress" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 flex items-center justify-center p-4">
                     <div class="bg-white rounded-2xl max-w-md w-full shadow-2xl border border-slate-200 overflow-hidden p-6 text-center space-y-4">
-                        <div class="w-14 h-14 bg-sky-100 text-sky-600 rounded-full flex items-center justify-center mx-auto shadow-inner animate-pulse">
+                        <div class="w-14 h-14 bg-[#008FD5]/10 text-bps-blue rounded-full flex items-center justify-center mx-auto shadow-inner animate-pulse">
                             <i data-lucide="loader" class="w-8 h-8 animate-spin"></i>
                         </div>
                         <div>
-                            <h3 class="font-extrabold text-slate-900 text-lg">AI Agent Sedang Bekerja...</h3>
+                            <h3 class="font-extrabold text-slate-900 text-lg">Menyusun Draf Siaran Pers...</h3>
                             <p class="text-xs text-slate-500 mt-1 leading-relaxed">
-                                Berkas berhasil diunggah. AI Agent (Drafter & Auditor) sedang membaca materi paparan dan menyusun draf siaran pers resmi.
+                                Berkas berhasil diunggah. Sistem sedang mengekstrak indikator paparan dan menyusun draf siaran pers resmi BPS.
                             </p>
                         </div>
                         <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200 text-left space-y-1.5 text-xs">
-                            <div class="flex justify-between"><span class="text-slate-500">Status Proses:</span> <strong class="text-amber-600 animate-pulse">WORKING (Sedang Berjalan)</strong></div>
+                            <div class="flex justify-between"><span class="text-slate-500">Status Proses:</span> <strong class="text-bps-orange animate-pulse">SEDANG BERJALAN</strong></div>
                             <div class="flex justify-between"><span class="text-slate-500">Sumber Bahan:</span> <strong class="text-slate-700 truncate max-w-[200px]">${selectedFileMeta ? selectedFileMeta.name : '-'}</strong></div>
                         </div>
                         <div class="flex items-center gap-2 pt-2">
                             <button onclick="document.getElementById('successUploadModal-progress').remove()" class="flex-1 px-4 py-2.5 text-xs font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl transition">
                                 Tetap di Sini
                             </button>
-                            <a href="virtual-office.html" class="flex-1 px-4 py-2.5 text-xs font-semibold text-white bg-bps-blue hover:bg-slate-800 rounded-xl transition inline-flex items-center justify-center gap-1.5 shadow">
-                                <i data-lucide="bot" class="w-4 h-4"></i>
-                                <span>Buka Virtual Office</span>
+                            <a href="virtual-office.html" class="flex-1 px-4 py-2.5 text-xs font-semibold text-white bg-bps-blue hover:bg-bps-blueDark rounded-xl transition inline-flex items-center justify-center gap-1.5 shadow-xs">
+                                <i data-lucide="monitor" class="w-4 h-4"></i>
+                                <span>Ruang Kendali</span>
                             </a>
                         </div>
                     </div>
@@ -746,7 +775,6 @@
             lucide.createIcons();
         }
 
-        // Notif Tahap 2: Hasil Kerja Akhir / Dokumen Google Doc Selesai
         function showSuccessUploadModal(docTitle, fileUrl) {
             document.getElementById('modalFileName').innerText = docTitle;
             document.getElementById('modalDownloadBtn').href = fileUrl || '#';
@@ -832,17 +860,17 @@
             if (!statusText) return;
 
             if (state === 'ok') {
-                if (pingDot) pingDot.className = 'animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75';
-                if (solidDot) solidDot.className = 'relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500';
-                statusText.className = 'text-emerald-400 font-medium';
+                if (pingDot) pingDot.className = 'animate-ping absolute inline-flex h-full w-full rounded-full bg-[#68B92E] opacity-75';
+                if (solidDot) solidDot.className = 'relative inline-flex rounded-full h-2.5 w-2.5 bg-[#68B92E]';
+                statusText.className = 'text-[#8CE04B] font-medium';
             } else if (state === 'error') {
                 if (pingDot) pingDot.className = 'hidden';
                 if (solidDot) solidDot.className = 'relative inline-flex rounded-full h-2.5 w-2.5 bg-rose-500';
                 statusText.className = 'text-rose-400 font-medium';
             } else {
-                if (pingDot) pingDot.className = 'animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75';
-                if (solidDot) solidDot.className = 'relative inline-flex rounded-full h-2.5 w-2.5 bg-amber-500';
-                statusText.className = 'text-amber-400 font-medium';
+                if (pingDot) pingDot.className = 'animate-ping absolute inline-flex h-full w-full rounded-full bg-[#EB891B] opacity-75';
+                if (solidDot) solidDot.className = 'relative inline-flex rounded-full h-2.5 w-2.5 bg-[#EB891B]';
+                statusText.className = 'text-[#FFB156] font-medium';
             }
             statusText.innerText = text;
         }
@@ -913,7 +941,7 @@
                 : '0.0';
 
             document.getElementById('kpiTotal').innerText = total;
-            document.getElementById('kpiMediaCount').innerHTML = `<i data-lucide="newspaper" class="w-3.5 h-3.5 mr-1 text-blue-600"></i> Dari ${uniqueMedia} media daring`;
+            document.getElementById('kpiMediaCount').innerHTML = `<i data-lucide="newspaper" class="w-3.5 h-3.5 mr-1 text-bps-blue"></i> Dari ${uniqueMedia} media daring`;
             document.getElementById('kpiPositivePct').innerText = `${posPct}%`;
             document.getElementById('kpiSentimentBreakdown').innerText = `${positif} Positif • ${netral} Netral • ${negatif} Negatif`;
             document.getElementById('kpiReputationScore').innerText = repScore;
@@ -921,7 +949,7 @@
             const repLabel = document.getElementById('kpiReputationLabel');
             if (parseFloat(repScore) >= 8.5) repLabel.innerHTML = '<i data-lucide="check-circle2" class="w-3.5 h-3.5 mr-1"></i> Sangat Baik';
             else if (parseFloat(repScore) >= 7.0) repLabel.innerHTML = '<i data-lucide="check-circle2" class="w-3.5 h-3.5 mr-1"></i> Kondusif';
-            else repLabel.innerHTML = '<i data-lucide="alert-circle" class="w-3.5 h-3.5 mr-1"></i> Perlu Atensi';
+            else repLabel.innerHTML = '<i data-lucide="alert-circle" class="w-3.5 h-3.5 mr-1 text-bps-orange"></i> Perlu Atensi';
 
             document.getElementById('kpiAttentionCount').innerText = `${netral + negatif} Berita`;
             document.getElementById('kpiAttentionDetail').innerText = `${netral} Netral & ${negatif} Negatif`;
@@ -1001,8 +1029,8 @@
                         {
                             label: 'Positif',
                             data: trendPos,
-                            borderColor: '#10B981',
-                            backgroundColor: 'rgba(16, 185, 129, 0.12)',
+                            borderColor: '#68B92E',
+                            backgroundColor: 'rgba(104, 185, 46, 0.14)',
                             fill: true,
                             tension: 0.3,
                             borderWidth: 2.5,
@@ -1011,7 +1039,7 @@
                         {
                             label: 'Netral',
                             data: trendNet,
-                            borderColor: '#64748B',
+                            borderColor: '#008FD5',
                             backgroundColor: 'transparent',
                             tension: 0.3,
                             borderWidth: 2,
@@ -1021,7 +1049,7 @@
                         {
                             label: 'Negatif',
                             data: trendNeg,
-                            borderColor: '#EF4444',
+                            borderColor: '#EB891B',
                             backgroundColor: 'transparent',
                             tension: 0.3,
                             borderWidth: 2,
@@ -1056,7 +1084,7 @@
                     labels: mediaLabels,
                     datasets: [{
                         data: mediaValues,
-                        backgroundColor: ['#0F2C59', '#0284C7', '#38BDF8', '#F97316', '#10B981', '#CBD5E1'],
+                        backgroundColor: ['#0B2545', '#008FD5', '#68B92E', '#EB891B', '#38BDF8', '#CBD5E1'],
                         borderWidth: 2,
                         borderColor: '#ffffff'
                     }]
@@ -1073,12 +1101,12 @@
 
             const ctx3 = document.getElementById('topicsChart').getContext('2d');
             
-            const g1 = ctx3.createLinearGradient(0, 0, 0, 200); g1.addColorStop(0, '#38BDF8'); g1.addColorStop(1, '#0F2C59');
-            const g2 = ctx3.createLinearGradient(0, 0, 0, 200); g2.addColorStop(0, '#34D399'); g2.addColorStop(1, '#059669');
-            const g3 = ctx3.createLinearGradient(0, 0, 0, 200); g3.addColorStop(0, '#FBBF24'); g3.addColorStop(1, '#D97706');
-            const g4 = ctx3.createLinearGradient(0, 0, 0, 200); g4.addColorStop(0, '#A78BFA'); g4.addColorStop(1, '#7C3AED');
-            const g5 = ctx3.createLinearGradient(0, 0, 0, 200); g5.addColorStop(0, '#FB7185'); g5.addColorStop(1, '#E11D48');
-            const g6 = ctx3.createLinearGradient(0, 0, 0, 200); g6.addColorStop(0, '#2DD4BF'); g6.addColorStop(1, '#0D9488');
+            const g1 = ctx3.createLinearGradient(0, 0, 0, 200); g1.addColorStop(0, '#008FD5'); g1.addColorStop(1, '#0B2545');
+            const g2 = ctx3.createLinearGradient(0, 0, 0, 200); g2.addColorStop(0, '#68B92E'); g2.addColorStop(1, '#4A8C1C');
+            const g3 = ctx3.createLinearGradient(0, 0, 0, 200); g3.addColorStop(0, '#EB891B'); g3.addColorStop(1, '#C26B0E');
+            const g4 = ctx3.createLinearGradient(0, 0, 0, 200); g4.addColorStop(0, '#38BDF8'); g4.addColorStop(1, '#008FD5');
+            const g5 = ctx3.createLinearGradient(0, 0, 0, 200); g5.addColorStop(0, '#84CC16'); g5.addColorStop(1, '#68B92E');
+            const g6 = ctx3.createLinearGradient(0, 0, 0, 200); g6.addColorStop(0, '#64748B'); g6.addColorStop(1, '#334155');
 
             topicsChart = new Chart(ctx3, {
                 type: 'bar',
@@ -1123,20 +1151,20 @@
 
             data.forEach(item => {
                 let badgeColor = 'bg-slate-100 text-slate-700 border border-slate-200';
-                if (item.sentiment === 'Positif') badgeColor = 'bg-emerald-50 text-emerald-700 border border-emerald-200';
-                if (item.sentiment === 'Negatif') badgeColor = 'bg-rose-50 text-rose-700 border border-rose-200';
+                if (item.sentiment === 'Positif') badgeColor = 'bg-[#68B92E]/15 text-bps-greenDark border border-[#68B92E]/30';
+                if (item.sentiment === 'Negatif') badgeColor = 'bg-[#EB891B]/15 text-bps-orangeDark border border-[#EB891B]/30';
 
                 const tr = document.createElement('tr');
                 tr.className = 'hover:bg-slate-50 transition';
                 tr.innerHTML = `
                     <td class="px-4 py-3 whitespace-nowrap text-slate-500 font-medium">${item.date}</td>
                     <td class="px-4 py-3 font-medium text-slate-900 max-w-md">
-                        <a href="${item.link}" target="_blank" rel="noopener noreferrer" class="hover:text-sky-600 hover:underline transition">
+                        <a href="${item.link}" target="_blank" rel="noopener noreferrer" class="hover:text-bps-blue hover:underline transition">
                             ${item.title}
                         </a>
                     </td>
                     <td class="px-4 py-3 whitespace-nowrap"><span class="font-semibold text-slate-700">${item.media}</span></td>
-                    <td class="px-4 py-3 whitespace-nowrap"><span class="bg-blue-50 text-blue-700 px-2 py-0.5 rounded text-[11px] font-medium">${item.topic}</span></td>
+                    <td class="px-4 py-3 whitespace-nowrap"><span class="bg-[#008FD5]/10 text-bps-blue px-2 py-0.5 rounded text-[11px] font-medium">${item.topic}</span></td>
                     <td class="px-4 py-3 whitespace-nowrap text-center">
                         <span class="px-2.5 py-1 rounded-full text-[11px] font-semibold ${badgeColor}">
                             ${item.sentiment}
@@ -1144,9 +1172,9 @@
                     </td>
                     <td class="px-4 py-3 whitespace-nowrap text-right">
                         <div class="inline-flex items-center gap-2">
-                            <button onclick="openAnalysisModal(${item.id})" class="px-2.5 py-1 rounded bg-sky-50 text-sky-700 hover:bg-sky-100 font-semibold text-xs inline-flex items-center gap-1 transition">
+                            <button onclick="openAnalysisModal(${item.id})" class="px-2.5 py-1 rounded bg-[#008FD5]/10 text-bps-blue hover:bg-[#008FD5]/20 font-semibold text-xs inline-flex items-center gap-1 transition">
                                 <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
-                                <span>Analisis AI</span>
+                                <span>Analisis</span>
                             </button>
                             <a href="${item.link}" target="_blank" rel="noopener noreferrer" class="text-slate-500 hover:text-bps-blue p-1" title="Buka Tautan Berita">
                                 <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
@@ -1189,8 +1217,8 @@
             const badge = document.getElementById('modalSentimentBadge');
             badge.innerText = item.sentiment;
             badge.className = 'text-[11px] px-2 py-0.5 rounded-full font-semibold ';
-            if (item.sentiment === 'Positif') badge.className += 'bg-emerald-100 text-emerald-800';
-            else if (item.sentiment === 'Negatif') badge.className += 'bg-rose-100 text-rose-800';
+            if (item.sentiment === 'Positif') badge.className += 'bg-[#68B92E]/15 text-bps-greenDark';
+            else if (item.sentiment === 'Negatif') badge.className += 'bg-[#EB891B]/15 text-bps-orangeDark';
             else badge.className += 'bg-slate-200 text-slate-800';
 
             const modal = document.getElementById('analysisModal');
