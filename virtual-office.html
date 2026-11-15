@@ -108,6 +108,79 @@
     })();
   </script>
 
+  <!-- TOMBOL & MODAL UPLOAD BAHAN RILIS BRS -->
+<button onclick="openUploadModal()" class="px-3.5 py-1.5 rounded-xl bg-emerald-700 hover:bg-emerald-600 text-white text-xs font-bold shadow-md transition flex items-center gap-1.5">
+  <span>📤</span> Upload Bahan Rilis (PPTX)
+</button>
+
+<div id="uploadModal" class="hidden fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4">
+  <div class="bg-white border border-stone-200 rounded-3xl max-w-md w-full p-5 shadow-2xl space-y-4">
+    <div class="flex items-center justify-between">
+      <h3 class="text-base font-extrabold text-slate-900">Upload Paparan Bahan Rilis BRS</h3>
+      <button onclick="closeUploadModal()" class="text-slate-400 hover:text-slate-700 text-lg font-bold">✕</button>
+    </div>
+    <p class="text-xs text-slate-600 leading-relaxed">
+      Pilih file paparan (.pptx atau .pdf). Agen Drafter akan otomatis mengunggahnya ke Drive, menduplikasi <strong>Template BRS</strong>, dan menyusun draf siaran pers.
+    </p>
+    <div>
+      <input id="brsFileInput" type="file" accept=".pptx,.pdf" class="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100" />
+    </div>
+    <div class="flex items-center justify-end gap-2 pt-2">
+      <button onclick="closeUploadModal()" class="px-3 py-2 rounded-xl bg-stone-100 hover:bg-stone-200 text-slate-700 text-xs font-bold">Batal</button>
+      <button onclick="submitBrsFile()" id="btnSubmitUpload" class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold shadow-md">Proses dengan AI Agent</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  function openUploadModal() { document.getElementById('uploadModal').classList.remove('hidden'); }
+  function closeUploadModal() { document.getElementById('uploadModal').classList.add('hidden'); }
+
+  async function submitBrsFile() {
+    const fileInput = document.getElementById('brsFileInput');
+    if (!fileInput.files.length) {
+      alert('Pilih file paparan terlebih dahulu!');
+      return;
+    }
+    const file = fileInput.files[0];
+    const btn = document.getElementById('btnSubmitUpload');
+    btn.textContent = 'Mengunggah & Memproses...';
+    btn.disabled = true;
+
+    const reader = new FileReader();
+    reader.onload = async function(e) {
+      const base64Data = e.target.result.split(',')[1];
+      const targetApiUrl = localStorage.getItem('bps_lampung_virtual_office_api') || DEFAULT_API_URL.replace('?mode=agents', '');
+
+      try {
+        const res = await fetch(targetApiUrl, {
+          method: 'POST',
+          body: JSON.stringify({
+            action: 'uploadBrs',
+            filename: file.name,
+            mimeType: file.type || 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+            fileData: base64Data
+          })
+        });
+        const result = await res.json();
+        if (result.status === 'success') {
+          alert('Berhasil! Draf Siaran Pers telah dibuat.');
+          closeUploadModal();
+          window.location.reload();
+        } else {
+          alert('Gagal: ' + (result.error || 'Terjadi kesalahan sistem.'));
+        }
+      } catch (err) {
+        alert('Error koneksi: ' + err.message);
+      } finally {
+        btn.textContent = 'Proses dengan AI Agent';
+        btn.disabled = false;
+      }
+    };
+    reader.readAsDataURL(file);
+  }
+</script>
+
   <!-- MAIN CONTENT -->
   <main class="flex-1 max-w-7xl w-full mx-auto px-4 py-5 grid grid-cols-1 lg:grid-cols-12 gap-5">
 
