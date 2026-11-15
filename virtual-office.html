@@ -66,9 +66,9 @@
       </div>
 
       <div class="flex flex-wrap items-center gap-2">
-        <!-- TOMBOL MUSIK LATAR SYMPHONIC METALCORE -->
+        <!-- TOMBOL MUSIK LATAR -->
         <button onclick="toggleMusic()" id="btnMusic" class="px-3 py-1.5 rounded-xl bg-red-50 hover:bg-red-100 text-red-800 border border-red-300 text-xs font-bold transition flex items-center gap-1.5">
-          <span id="musicIcon">🤘</span> <span id="musicText">🎵 Ambient Audio</span>
+          <span id="musicIcon">🤘</span> <span id="musicText">Putar Metal Hardcore</span>
         </button>
 
         <!-- TOMBOL PENGATUR MUSIM -->
@@ -81,7 +81,7 @@
           <span id="lightingIcon">☀️</span> <span id="lightingText">Pagi Cerah</span>
         </button>
 
-       <button onclick="runDemoSimulation()" id="btnSimulasi" class="hidden admin-only px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold shadow-md shadow-emerald-600/20 transition flex items-center gap-1.5">
+        <button onclick="runDemoSimulation()" id="btnSimulasi" class="hidden admin-only px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold shadow-md shadow-emerald-600/20 transition flex items-center gap-1.5">
           <span>▶</span> Tes Simulasi Live
         </button>
         <button onclick="openApiModal()" id="btnApiBridge" class="hidden admin-only px-3.5 py-1.5 rounded-xl bg-sky-600 hover:bg-sky-500 text-white text-xs font-bold shadow-md shadow-sky-600/20 transition flex items-center gap-1.5">
@@ -193,7 +193,7 @@
           <button onclick="clearLogs()" class="text-[11px] font-semibold text-slate-400 hover:text-slate-700">Bersihkan Log</button>
         </div>
         <div id="terminalLog" class="font-mono-code text-[11px] text-slate-700 space-y-1 max-h-32 overflow-y-auto bg-stone-50 p-2.5 rounded-xl border border-stone-200/80">
-          <div class="text-slate-500">[SYSTEM] Studio Industrial siap. Klik "Putar Metal Hardcore" untuk BGM Symphonic 🎵 Ambient Audio</div>
+          <div class="text-slate-500">[SYSTEM] Studio Industrial siap. Klik "Putar Metal Hardcore" untuk BGM Symphonic Metalcore.</div>
         </div>
       </div>
     </section>
@@ -205,7 +205,7 @@
           <h2 class="text-sm font-extrabold text-slate-900">Wall Preview Board</h2>
           <p class="text-[11px] text-slate-500 font-medium">Inspeksi Output Draf BRS & Hasil Crawling Media</p>
         </div>
-        <a id="btnOpenOutputDoc" href="#" target="_blank" class="hidden px-3 py-1.5 rounded-xl bg-emerald-600 text-white text-[11px] font-bold hover:bg-emerald-500 shadow-sm transition">
+        <a id="btnOpenOutputDoc" href="#" target="_blank" rel="noopener noreferrer" class="hidden px-3 py-1.5 rounded-xl bg-emerald-600 text-white text-[11px] font-bold hover:bg-emerald-500 shadow-sm transition">
           Buka Dokumen ↗
         </a>
       </div>
@@ -225,16 +225,16 @@
           <div class="border-b border-stone-200 pb-2.5 flex items-center justify-between">
             <div>
               <span class="text-[10px] uppercase tracking-wider text-emerald-700 font-extrabold">Template Resmi BPS Provinsi Lampung</span>
-              <p class="font-mono-code text-[11px] text-slate-500">Nomor : B-2611/18000/HM.240/2026</p>
+              <p id="brsNumber" class="font-mono-code text-[11px] text-slate-500">Nomor : B-2611/18000/HM.240/2026</p>
             </div>
-            <span class="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-bold">Terverifikasi Auditor</span>
+            <span id="brsStatusBadge" class="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-bold">Terverifikasi Auditor</span>
           </div>
 
           <h3 id="brsTitle" class="text-sm font-extrabold text-slate-900">
             Ekonomi Lampung Triwulan III-2026 Tumbuh Solid 5,18 Persen (y-on-y), Didorong Konsumsi Rumah Tangga dan Pengolahan
           </h3>
 
-          <div id="brsContent" class="space-y-2.5 text-slate-700">
+          <div id="brsContent" class="space-y-2.5 text-slate-700 whitespace-pre-line">
             <p>
               <strong>BANDAR LAMPUNG</strong> — Perekonomian Provinsi Lampung pada Triwulan III-2026 menunjukkan kinerja yang resilien dengan mencatatkan pertumbuhan sebesar <strong>5,18 persen</strong> secara tahunan (<em>y-on-y</em>). Sementara itu, dibandingkan triwulan sebelumnya (<em>q-to-q</em>), ekonomi Lampung tumbuh sebesar <strong>1,42 persen</strong>, dan secara kumulatif (<em>c-to-c</em>) meningkat <strong>5,04 persen</strong>.
             </p>
@@ -293,8 +293,8 @@
     </div>
   </div>
 
-<!-- AUDIO PLAYER KHUSUS HARDCORE_BGM.MP3 (LOOPING) -->
-<audio id="metalMusic" src="hardcore_bgm.mp3" loop preload="auto"></audio>
+  <!-- AUDIO PLAYER KHUSUS HARDCORE_BGM.MP3 (LOOPING) -->
+  <audio id="metalMusic" src="hardcore_bgm.mp3" loop preload="auto"></audio>
 
   <script>
     // =========================================================================
@@ -305,6 +305,7 @@
     let pollingInterval = null;
     let isMusicPlaying = false;
     let isMoshPitActive = false;
+    let lastRenderedBrsTitle = '';
 
     const AGENT_META = {
       crawler: {
@@ -351,28 +352,29 @@
       }
     }
 
-   function toggleMusic() {
-  const audio = document.getElementById('metalMusic');
-  audio.volume = 0.42;
+    function toggleMusic() {
+      const audio = document.getElementById('metalMusic');
+      audio.volume = 0.42;
 
-  if (!isMusicPlaying) {
-    audio.play().then(() => {
-      isMusicPlaying = true;
-      isMoshPitActive = true; // Aktifkan Mosh Pit saat musik nyala!
-      updateMusicButtonUI(true);
-      addLog('🔥 MOSH PIT MODE ON! Para agent mulai headbang & moshing mengikuti irama hardcore!', 'work');
-    }).catch((err) => {
-      console.warn("Gagal memutar audio:", err);
-      addLog('⚠️ Gagal memutar musik: Pastikan file hardcore_bgm.mp3 ada.', 'error');
-    });
-  } else {
-    audio.pause();
-    isMusicPlaying = false;
-    isMoshPitActive = false; // Matikan Mosh Pit saat musik dijeda
-    updateMusicButtonUI(false);
-    addLog('⏸️ Musik latar dijeda. Agent kembali santai.', 'info');
-  }
-}
+      if (!isMusicPlaying) {
+        audio.play().then(() => {
+          isMusicPlaying = true;
+          isMoshPitActive = true;
+          updateMusicButtonUI(true);
+          addLog('🔥 MOSH PIT MODE ON! Para agent mulai headbang & moshing mengikuti irama hardcore!', 'work');
+        }).catch((err) => {
+          console.warn("Gagal memutar audio:", err);
+          addLog('⚠️ Gagal memutar musik: Pastikan file hardcore_bgm.mp3 ada.', 'error');
+        });
+      } else {
+        audio.pause();
+        isMusicPlaying = false;
+        isMoshPitActive = false;
+        updateMusicButtonUI(false);
+        addLog('⏸️ Musik latar dijeda. Agent kembali santai.', 'info');
+      }
+    }
+
     // =========================================================================
     // 2. THREE.JS 3D SEMI-OUTDOOR STUDIO, TAMAN, KOLAM, HEWAN & CUACA MUSIM
     // =========================================================================
@@ -1568,20 +1570,6 @@
         const status = (AGENT_META[id].status || 'IDLE').toUpperCase();
         const p = t + av.phase;
 
-       // Jika sedang idle dan musik metal aktif, ubah jadi Mosh Pit / Headbang brutal!
-if (isMoshPitActive) {
-  // Gerakan Headbang cepat menggunakan fungsi Sinusoidal waktu (t)
-  av.headGroup.rotation.x = 0.35 + Math.sin(t * 18) * 0.45; // Anggukan kepala cepat
-  av.headGroup.rotation.y = Math.sin(t * 12) * 0.3;         // Gelengan kepala kekanan-kekiri
-  
-  // Gerakan tangan mengepal / moshing
-  av.leftArm.rotation.x = -1.2 + Math.sin(t * 16) * 0.5;
-  av.rightArm.rotation.x = -1.2 - Math.sin(t * 16) * 0.5;
-  
-  // Sedikit lompat-lompat kecil (pitted bounce)
-  av.root.position.y = av.basePos.y + Math.abs(Math.sin(t * 14)) * 0.18;
-}
-
         if (id === 'auditor' && activeHandshakeVisitor) {
           const arrived = moveCharacterTo(av, auditorHandshakeSpot, 0.04, t);
           if (arrived) {
@@ -1627,6 +1615,21 @@ if (isMoshPitActive) {
           return;
         }
 
+        // Mode Mosh Pit saat musik nyala & status IDLE
+        if (isMoshPitActive) {
+          const arrived = moveCharacterTo(av, av.basePos, 0.05, t);
+          if (arrived) {
+            av.headGroup.rotation.x = 0.35 + Math.sin(t * 18 + av.phase) * 0.45;
+            av.headGroup.rotation.y = Math.sin(t * 12 + av.phase) * 0.3;
+            av.leftArm.rotation.x = -1.2 + Math.sin(t * 16 + av.phase) * 0.5;
+            av.rightArm.rotation.x = -1.2 - Math.sin(t * 16 + av.phase) * 0.5;
+            av.leftLeg.rotation.x = 0;
+            av.rightLeg.rotation.x = 0;
+            av.root.position.y = av.basePos.y + Math.abs(Math.sin(t * 14 + av.phase)) * 0.18;
+          }
+          return;
+        }
+
         if (isChatTime && activeChatters.includes(id)) {
           const isFirst = activeChatters[0] === id;
           const myChatSpot = isFirst ? chatSpotA : chatSpotB;
@@ -1655,7 +1658,7 @@ if (isMoshPitActive) {
             av.leftLeg.rotation.x = 0;
             av.rightLeg.rotation.x = 0;
             av.headGroup.rotation.y = Math.sin(p * 1.1) * 0.25;
-            av.headGroup.rotation.x = isMusicPlaying ? Math.sin(t * 14) * 0.20 : 0;
+            av.headGroup.rotation.x = 0;
           }
         }
       });
@@ -1955,6 +1958,41 @@ if (isMoshPitActive) {
       }
     }
 
+    // =========================================================================
+    // SINKRONISASI WALL PREVIEW BOARD DENGAN TAB LATEST_BRS DI GOOGLE SHEETS
+    // =========================================================================
+    function updateLatestBrsPreview(latestBrs) {
+      if (!latestBrs || !latestBrs.judul) return;
+
+      const numEl = document.getElementById('brsNumber');
+      const titleEl = document.getElementById('brsTitle');
+      const bodyEl = document.getElementById('brsContent');
+      const statusBadge = document.getElementById('brsStatusBadge');
+      const btnOut = document.getElementById('btnOpenOutputDoc');
+
+      if (numEl && latestBrs.nomor) {
+        numEl.textContent = `Nomor : ${latestBrs.nomor}`;
+      }
+      if (titleEl) {
+        titleEl.textContent = latestBrs.judul;
+      }
+      if (bodyEl && latestBrs.isi) {
+        bodyEl.textContent = latestBrs.isi;
+      }
+      if (statusBadge && latestBrs.updated_at) {
+        statusBadge.textContent = `Live • ${latestBrs.updated_at}`;
+      }
+      if (btnOut && latestBrs.doc_url && latestBrs.doc_url.startsWith('http')) {
+        btnOut.href = latestBrs.doc_url;
+        btnOut.classList.remove('hidden');
+      }
+
+      if (lastRenderedBrsTitle !== latestBrs.judul) {
+        lastRenderedBrsTitle = latestBrs.judul;
+        addLog(`[WALL BOARD] Draf BRS terbaru dimuat: "${latestBrs.judul}"`, 'success');
+      }
+    }
+
     function runDemoSimulation() {
       const btn = document.getElementById('btnSimulasi');
       btn.disabled = true;
@@ -2032,6 +2070,9 @@ if (isMoshPitActive) {
             if (Array.isArray(data.news) && data.news.length > 0) {
               renderNewsList(data.news);
             }
+            if (data.latestBrs) {
+              updateLatestBrsPreview(data.latestBrs);
+            }
             const nowStr = new Date().toLocaleTimeString('id-ID', { hour12: false });
             document.getElementById('lastSyncText').textContent = `Live Sync: ${nowStr}`;
           }
@@ -2084,7 +2125,7 @@ if (isMoshPitActive) {
               <span class="text-[10px] font-mono-code text-slate-500">${tanggalRapi} • ${item.media || 'Media'}</span>
               <span class="px-2 py-0.5 rounded-md text-[10px] font-bold ${badgeStyle}">${sentimen}</span>
             </div>
-            <a href="${item.link || '#'}" target="_blank" class="block text-xs font-extrabold text-slate-900 hover:text-sky-600 leading-snug transition">
+            <a href="${item.link || '#'}" target="_blank" rel="noopener noreferrer" class="block text-xs font-extrabold text-slate-900 hover:text-sky-600 leading-snug transition">
               ${item.judul || '(Tanpa Judul)'} ↗
             </a>
             <p class="text-[11px] text-slate-600 whitespace-pre-line leading-relaxed">${analisisText}</p>
