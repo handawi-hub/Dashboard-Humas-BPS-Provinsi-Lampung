@@ -673,23 +673,33 @@
             showToast(`Menampilkan rilis data untuk kategori: ${cardType.toUpperCase()}`);
         }
 
-        function handleFileSelected(input) {
-            if (input.files && input.files[0]) {
-                const file = input.files[0];
-                selectedFileMeta = { name: file.name, type: file.type, size: file.size };
-                
-                document.getElementById('selectedFileName').innerText = file.name;
-                document.getElementById('selectedFileSize').innerText = `${(file.size / (1024 * 1024)).toFixed(2)} MB`;
-                document.getElementById('uploadActionArea').classList.remove('hidden');
+       function handleFileSelected(input) {
+    if (input.files && input.files[0]) {
+        const file = input.files[0];
+        selectedFileBase64 = null;
+        selectedFileMeta = { name: file.name, type: file.type, size: file.size };
 
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    selectedFileBase64 = e.target.result.split(',')[1];
-                };
-                reader.readAsDataURL(file);
-            }
-        }
+        document.getElementById('selectedFileName').innerText = file.name + ' (Membaca berkas...)';
+        document.getElementById('selectedFileSize').innerText = `${(file.size / (1024 * 1024)).toFixed(2)} MB`;
+        document.getElementById('uploadActionArea').classList.remove('hidden');
 
+        const submitBtn = document.getElementById('uploadSubmitBtn');
+        submitBtn.disabled = true;
+        submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            selectedFileBase64 = e.target.result.split(',')[1];
+            document.getElementById('selectedFileName').innerText = file.name;
+            submitBtn.disabled = false;
+            submitBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+        };
+        reader.onerror = function() {
+            showToast('Gagal membaca berkas lokal. Coba pilih ulang.');
+        };
+        reader.readAsDataURL(file);
+    }
+}
         async function uploadBrsFileToDrive() {
             if (!selectedFileBase64 || !selectedFileMeta) {
                 showToast('Pilih berkas terlebih dahulu.');
