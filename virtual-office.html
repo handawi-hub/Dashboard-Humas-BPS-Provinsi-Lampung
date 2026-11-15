@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>3D Realistic AI Agent Virtual Office — Humas BPS Provinsi Lampung</title>
+  <title>3D AAA-Style Realistic AI Agents — Humas BPS Provinsi Lampung</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <!-- Three.js & OrbitControls untuk 3D Creative Studio Semi-Outdoor -->
@@ -55,7 +55,7 @@
         </a>
         <div>
           <div class="flex items-center gap-2">
-            <h1 class="text-sm sm:text-base font-extrabold text-slate-900 tracking-tight">SIGER Humas Hub (Realistic Human 3D AI Agents)</h1>
+            <h1 class="text-sm sm:text-base font-extrabold text-slate-900 tracking-tight">SIGER Humas Hub (AAA-Style Realistic 3D Agents)</h1>
             <span id="connectionBadge" class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-100 text-amber-800 border border-amber-300">
               <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
               Mode Simulasi
@@ -193,12 +193,12 @@
         <div class="flex items-center justify-between mb-2">
           <span class="text-xs font-extrabold text-slate-700 flex items-center gap-2">
             <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
-            Aktivitas Orkestrasi Apps Script (Realistic Human 3D Agents)
+            Aktivitas Orkestrasi Apps Script (AAA-Style Realistic 3D Agents)
           </span>
           <button onclick="clearLogs()" class="text-[11px] font-semibold text-slate-400 hover:text-slate-700">Bersihkan Log</button>
         </div>
         <div id="terminalLog" class="font-mono-code text-[11px] text-slate-700 space-y-1 max-h-32 overflow-y-auto bg-stone-50 p-2.5 rounded-xl border border-stone-200/80">
-          <div class="text-slate-500">[SYSTEM] Karakter manusia realistis 3D & layout simetris dimuat. Klik "Putar Metal Hardcore" untuk BGM.</div>
+          <div class="text-slate-500">[SYSTEM] Model karakter manusia realistis standar game AAA dimuat. Klik "Putar Metal Hardcore" untuk BGM.</div>
         </div>
       </div>
     </section>
@@ -319,7 +319,7 @@
         desc: 'Mengumpulkan, memantau, dan menyaring berita atau informasi dari berbagai sumber media online secara real-time',
         status: 'IDLE',
         pesan: 'Menunggu jadwal pemindaian RSS...',
-        camPos: { x: -2.2, y: 3.2, z: 3.5 },
+        camPos: { x: -3.2, y: 3.2, z: 3.5 },
         targetPos: { x: -3.2, y: 1.3, z: -2.2 }
       },
       drafter: {
@@ -328,7 +328,7 @@
         desc: 'Mengolah data materi paparan (file PPTX/PDF) menjadi draf produk komunikasi publik yang terstruktur dan siap terbit.',
         status: 'IDLE',
         pesan: 'Siap memproses bahan tayang PPTX...',
-        camPos: { x: 2.2, y: 3.2, z: 3.5 },
+        camPos: { x: 3.2, y: 3.2, z: 3.5 },
         targetPos: { x: 3.2, y: 1.3, z: -2.2 }
       },
       auditor: {
@@ -381,7 +381,7 @@
     }
 
     // =========================================================================
-    // 2. THREE.JS 3D SEMI-OUTDOOR STUDIO, LAYOUT SIMETRIS & REALISTIC HUMANS
+    // 2. THREE.JS 3D SEMI-OUTDOOR STUDIO, LAYOUT SIMETRIS & AAA-STYLE HUMANS
     // =========================================================================
     let scene, camera, renderer, controls;
     let ambientLight, sunLight, warmLampLight, pondLight;
@@ -436,10 +436,10 @@
       controls.target.copy(targetLookAt);
       controls.addEventListener('start', () => { isCameraTransitioning = false; });
 
-      ambientLight = new THREE.AmbientLight(0xfffaf0, 0.82);
+      ambientLight = new THREE.AmbientLight(0xfffaf0, 0.85);
       scene.add(ambientLight);
 
-      sunLight = new THREE.DirectionalLight(0xfff5e4, 0.98);
+      sunLight = new THREE.DirectionalLight(0xfff5e4, 1.05);
       sunLight.position.set(-9, 14, 8);
       sunLight.castShadow = true;
       sunLight.shadow.mapSize.width = 2048;
@@ -454,11 +454,11 @@
       sunLight.shadow.bias = -0.0005;
       scene.add(sunLight);
 
-      warmLampLight = new THREE.PointLight(0xffb74d, 0.65, 18);
+      warmLampLight = new THREE.PointLight(0xffb74d, 0.75, 18);
       warmLampLight.position.set(2.5, 6.2, -1.5);
       scene.add(warmLampLight);
 
-      pondLight = new THREE.PointLight(0x38bdf8, 0.35, 9);
+      pondLight = new THREE.PointLight(0x38bdf8, 0.45, 9);
       pondLight.position.set(-5.2, 0.8, 3.8);
       scene.add(pondLight);
 
@@ -594,44 +594,6 @@
       tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
       tex.repeat.set(6, 6);
       return tex;
-    }
-
-    function createTenunSweaterTexture() {
-      const c = document.createElement('canvas');
-      c.width = 256; c.height = 256;
-      const ctx = c.getContext('2d');
-      ctx.fillStyle = '#f8f6f0';
-      ctx.fillRect(0, 0, 256, 256);
-
-      ctx.fillStyle = 'rgba(203, 213, 225, 0.25)';
-      for (let y = 0; y < 256; y += 6) {
-        for (let x = 0; x < 256; x += 6) {
-          ctx.fillRect(x, y, 3, 2);
-        }
-      }
-
-      const drawWovenBand = (yStart, height) => {
-        ctx.fillStyle = '#991b1b';
-        ctx.fillRect(0, yStart, 256, height);
-        ctx.fillStyle = '#d97706';
-        ctx.fillRect(0, yStart + 3, 256, 3);
-        ctx.fillRect(0, yStart + height - 6, 256, 3);
-
-        ctx.fillStyle = '#fbbf24';
-        for (let x = 8; x < 256; x += 24) {
-          ctx.beginPath();
-          ctx.moveTo(x + 8, yStart + 8);
-          ctx.lineTo(x + 16, yStart + height / 2);
-          ctx.lineTo(x + 8, yStart + height - 8);
-          ctx.lineTo(x, yStart + height / 2);
-          ctx.closePath();
-          ctx.fill();
-        }
-      };
-
-      drawWovenBand(54, 34);
-      drawWovenBand(186, 28);
-      return new THREE.CanvasTexture(c);
     }
 
     function createFallbackBandPoster(title1, title2, subtitle, accentColor) {
@@ -1220,8 +1182,8 @@
       group.position.set(x, yOffset + 0.12, z);
       group.rotation.y = rotY;
 
-      const topMat = new THREE.MeshStandardMaterial({ color: 0xe6ccb2, roughness: 0.5 });
-      const legMat = new THREE.MeshStandardMaterial({ color: 0x334155, metalness: 0.4, roughness: 0.5 });
+      const topMat = new THREE.MeshStandardMaterial({ color: 0xe6ccb2, roughness: 0.4, metalness: 0.1 });
+      const legMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, metalness: 0.8, roughness: 0.2 });
 
       const tableTop = new THREE.Mesh(new THREE.BoxGeometry(2.1, 0.08, 1.05), topMat);
       tableTop.position.y = 0.88;
@@ -1231,7 +1193,7 @@
 
       for (let lx of [-0.92, 0.92]) {
         for (let lz of [-0.42, 0.42]) {
-          const leg = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.035, 0.88, 8), legMat);
+          const leg = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.035, 0.88, 12), legMat);
           leg.position.set(lx, 0.44, lz);
           leg.castShadow = true;
           group.add(leg);
@@ -1242,7 +1204,7 @@
       stand.position.set(0, 1.02, -0.25);
       group.add(stand);
 
-      const frame = new THREE.Mesh(new THREE.BoxGeometry(1.15, 0.58, 0.05), new THREE.MeshStandardMaterial({ color: 0x1e293b }));
+      const frame = new THREE.Mesh(new THREE.BoxGeometry(1.15, 0.58, 0.05), new THREE.MeshStandardMaterial({ color: 0x0f172a, roughness: 0.2 }));
       frame.position.set(0, 1.32, -0.24);
       frame.castShadow = true;
       group.add(frame);
@@ -1253,31 +1215,34 @@
       group.add(screen);
       monitorScreens.push({ mesh: screen, baseColor: new THREE.Color(accentColor) });
 
-      const miniPot = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.06, 0.11, 10), new THREE.MeshStandardMaterial({ color: 0xd97757 }));
+      const miniPot = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.06, 0.11, 12), new THREE.MeshStandardMaterial({ color: 0xd97757, roughness: 0.5 }));
       miniPot.position.set(0.78, 0.97, 0.18);
       group.add(miniPot);
 
-      const succulent = new THREE.Mesh(new THREE.DodecahedronGeometry(0.085), new THREE.MeshStandardMaterial({ color: 0x40916c }));
+      const succulent = new THREE.Mesh(new THREE.DodecahedronGeometry(0.085, 1), new THREE.MeshStandardMaterial({ color: 0x2d6a4f, roughness: 0.4 }));
       succulent.position.set(0.78, 1.06, 0.18);
       group.add(succulent);
 
-      const mug = new THREE.Mesh(new THREE.CylinderGeometry(0.055, 0.055, 0.11, 12), new THREE.MeshStandardMaterial({ color: 0xffffff }));
+      const mug = new THREE.Mesh(new THREE.CylinderGeometry(0.055, 0.055, 0.11, 16), new THREE.MeshStandardMaterial({ color: 0xf8fafc, roughness: 0.3 }));
       mug.position.set(-0.75, 0.97, 0.22);
       group.add(mug);
 
-      // Kursi Kerja Ergonomis Simetris
-      const chairBase = new THREE.Mesh(new THREE.CylinderGeometry(0.32, 0.32, 0.06, 16), new THREE.MeshStandardMaterial({ color: 0x1e293b }));
+      // Kursi Gaming / Ergonomis Standar AAA
+      const chairBaseMat = new THREE.MeshStandardMaterial({ color: 0x0f172a, metalness: 0.8, roughness: 0.2 });
+      const chairPadMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, roughness: 0.6 });
+
+      const chairBase = new THREE.Mesh(new THREE.CylinderGeometry(0.34, 0.34, 0.06, 16), chairBaseMat);
       chairBase.position.set(0, 0.42, 0.55);
       chairBase.castShadow = true;
       group.add(chairBase);
 
-      const chairSeat = new THREE.Mesh(new THREE.BoxGeometry(0.52, 0.12, 0.52), new THREE.MeshStandardMaterial({ color: 0x334155, roughness: 0.6 }));
+      const chairSeat = new THREE.Mesh(new THREE.BoxGeometry(0.52, 0.12, 0.52), chairPadMat);
       chairSeat.position.set(0, 0.52, 0.55);
       chairSeat.castShadow = true;
       group.add(chairSeat);
 
-      const chairBack = new THREE.Mesh(new THREE.BoxGeometry(0.52, 0.65, 0.08), new THREE.MeshStandardMaterial({ color: 0x1e293b, roughness: 0.6 }));
-      chairBack.position.set(0, 0.88, 0.78);
+      const chairBack = new THREE.Mesh(new THREE.BoxGeometry(0.52, 0.72, 0.08), chairPadMat);
+      chairBack.position.set(0, 0.92, 0.78);
       chairBack.castShadow = true;
       group.add(chairBack);
 
@@ -1285,119 +1250,145 @@
     }
 
     function buildAllWorkstations() {
-      // Lantai 1 Simetris (Kiri: Crawler, Kanan: Drafter)
       buildDeskWithChair(-3.2, -2.6, 0, 0, 0x38bdf8);
       buildDeskWithChair(3.2, -2.6, 0, 0, 0x34d399);
-
-      // Lantai 2 Tinggi (Auditor di Balkon Atas 4.6 meter - Simetris di Tengah)
       buildDeskWithChair(3.4, -2.2, 4.6, 0, 0xfbbf24);
     }
 
     // =========================================================================
-    // KARAKTER MANUSIA REALISTIS 3D (PROPORTIONAL, MALE & FEMALE)
+    // KARAKTER MANUSIA 3D REALISTIS BERSTANDAR GAME (AAA-STYLE / GTA V / SEMI-REALISTIC)
     // =========================================================================
-    function createRealisticHuman(config) {
+    function createAAACharacter(config) {
       const root = new THREE.Group();
       root.position.set(config.x, (config.yOffset || 0) + 0.12, config.z);
-      root.rotation.y = config.rotY;
+      root.rotation.y = config.rotY + Math.PI; // Menghadap ke meja/monitor
       root.userData.agentId = config.id;
 
-      const skinMat = new THREE.MeshStandardMaterial({ color: config.skinColor, roughness: 0.5 });
-      const clothMat = new THREE.MeshStandardMaterial({ color: config.shirtColor, roughness: 0.65 });
+      const skinMat = new THREE.MeshStandardMaterial({ color: config.skinColor, roughness: 0.45, metalness: 0.05 });
+      const clothMat = new THREE.MeshStandardMaterial({ color: config.shirtColor, roughness: 0.6, metalness: 0.1 });
       const pantsMat = new THREE.MeshStandardMaterial({ color: config.pantsColor, roughness: 0.7 });
-      const hairMat = new THREE.MeshStandardMaterial({ color: config.hairColor, roughness: 0.6 });
+      const hairMat = new THREE.MeshStandardMaterial({ color: config.hairColor, roughness: 0.5, metalness: 0.2 });
+      const shoeMat = new THREE.MeshStandardMaterial({ color: 0x0f172a, roughness: 0.4 });
 
-      // Kaki Manusia Proporsional
+      // Kaki Proporsional (Posisi Duduk Ergonomis)
       for (let side of [-1, 1]) {
-        const leg = new THREE.Group();
-        leg.position.set(side * 0.14, 0.46, 0.22);
-        leg.rotation.x = -Math.PI / 2.2;
-        const thigh = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.07, 0.42, 12), pantsMat);
-        thigh.position.y = -0.21;
+        const legGroup = new THREE.Group();
+        legGroup.position.set(side * 0.14, 0.46, 0.22);
+        legGroup.rotation.x = -Math.PI / 2.2;
+
+        const thigh = new THREE.Mesh(new THREE.CylinderGeometry(0.085, 0.075, 0.44, 16), pantsMat);
+        thigh.position.y = -0.22;
         thigh.castShadow = true;
-        const shoe = new THREE.Mesh(new THREE.SphereGeometry(0.09, 10, 10), new THREE.MeshStandardMaterial({ color: 0x111827 }));
-        shoe.scale.set(0.9, 0.6, 1.5);
-        shoe.position.set(0, -0.44, 0.05);
-        leg.add(thigh, shoe);
-        root.add(leg);
+
+        const shin = new THREE.Mesh(new THREE.CylinderGeometry(0.07, 0.06, 0.42, 16), pantsMat);
+        shin.position.set(0, -0.48, 0.18);
+        shin.rotation.x = Math.PI / 2.2;
+        shin.castShadow = true;
+
+        const shoe = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.10, 0.26), shoeMat);
+        shoe.position.set(0, -0.48, 0.38);
+        shoe.castShadow = true;
+
+        legGroup.add(thigh, shin, shoe);
+        root.add(legGroup);
       }
 
-      // Torso Manusia Proporsional
-      const torso = new THREE.Mesh(new THREE.CylinderGeometry(0.22, 0.24, 0.68, 16), clothMat);
+      // Torso / Dada Proporsional (Pria/Wanita Game Standard)
+      const torso = new THREE.Mesh(new THREE.CylinderGeometry(0.23, 0.25, 0.70, 20), clothMat);
       torso.position.y = 0.78;
       torso.castShadow = true;
       root.add(torso);
 
+      // Kerah / Dasi Opsional
       if (config.hasDarkTie) {
-        const tie = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.32, 0.03), new THREE.MeshStandardMaterial({ color: 0x0f172a }));
-        tie.position.set(0, 0.84, 0.23);
+        const tie = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.35, 0.03), new THREE.MeshStandardMaterial({ color: 0x0f172a }));
+        tie.position.set(0, 0.85, 0.235);
         root.add(tie);
       }
 
-      // Lengan Manusia
+      // Lengan Artikulasi Natural
       for (let side of [-1, 1]) {
-        const arm = new THREE.Group();
-        arm.position.set(side * 0.27, 1.02, 0.14);
-        arm.rotation.x = -0.65;
-        const upperArm = new THREE.Mesh(new THREE.CylinderGeometry(0.065, 0.06, 0.38, 12), clothMat);
+        const armGroup = new THREE.Group();
+        armGroup.position.set(side * 0.28, 1.04, 0.15);
+        armGroup.rotation.x = -0.65;
+        armGroup.rotation.z = side * 0.05;
+
+        const upperArm = new THREE.Mesh(new THREE.CylinderGeometry(0.07, 0.06, 0.38, 14), clothMat);
         upperArm.position.y = -0.19;
         upperArm.castShadow = true;
-        const hand = new THREE.Mesh(new THREE.SphereGeometry(0.065, 10, 10), skinMat);
-        hand.position.y = -0.40;
-        arm.add(upperArm, hand);
-        root.add(arm);
+
+        const forearm = new THREE.Mesh(new THREE.CylinderGeometry(0.055, 0.05, 0.36, 14), skinMat);
+        forearm.position.set(0, -0.48, 0.08);
+        forearm.rotation.x = 0.4;
+        forearm.castShadow = true;
+
+        const hand = new THREE.Mesh(new THREE.SphereGeometry(0.06, 12, 12), skinMat);
+        hand.scale.set(0.8, 0.6, 1.3);
+        hand.position.set(0, -0.68, 0.20);
+
+        armGroup.add(upperArm, forearm, hand);
+        root.add(armGroup);
       }
 
-      // Kepala Manusia Realistis (Oval & Proporsional)
+      // Kepala & Wajah Standar Game AAA (Anatomi Proporsional)
       const headGroup = new THREE.Group();
-      headGroup.position.y = 1.48;
+      headGroup.position.y = 1.50;
 
-      const skull = new THREE.Mesh(new THREE.SphereGeometry(0.24, 20, 20), skinMat);
-      skull.scale.set(0.9, 1.15, 1.0);
+      const skull = new THREE.Mesh(new THREE.SphereGeometry(0.24, 24, 24), skinMat);
+      skull.scale.set(0.92, 1.18, 1.02);
       skull.castShadow = true;
       headGroup.add(skull);
 
-      // Wajah: Mata & Hidung Halus
-      const eyeMat = new THREE.MeshBasicMaterial({ color: 0x1e293b });
+      // Detail Mata, Hidung, dan Alis
+      const eyeMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, roughness: 0.2 });
       for (let side of [-1, 1]) {
-        const eye = new THREE.Mesh(new THREE.SphereGeometry(0.025, 8, 8), eyeMat);
-        eye.position.set(side * 0.08, 0.04, 0.21);
+        const eye = new THREE.Mesh(new THREE.SphereGeometry(0.026, 12, 12), eyeMat);
+        eye.position.set(side * 0.082, 0.04, 0.215);
         headGroup.add(eye);
       }
-      const nose = new THREE.Mesh(new THREE.ConeGeometry(0.022, 0.06, 5), skinMat);
+
+      const nose = new THREE.Mesh(new THREE.ConeGeometry(0.024, 0.07, 6), skinMat);
       nose.rotation.x = Math.PI / 2;
-      nose.position.set(0, -0.01, 0.23);
+      nose.position.set(0, -0.01, 0.235);
       headGroup.add(nose);
 
-      // Model Rambut Manusia Realistis Sesuai Permintaan
+      const lipMat = new THREE.MeshStandardMaterial({ color: 0xd97775, roughness: 0.5 });
+      const lips = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.02, 0.03), lipMat);
+      lips.position.set(0, -0.12, 0.22);
+      headGroup.add(lips);
+
+      // Model Rambut HD / Stylized AAA
       if (config.hairStyle === 'crawler-man-bob') {
-        const hairMesh = new THREE.Mesh(new THREE.SphereGeometry(0.26, 18, 16, 0, Math.PI * 2, 0, Math.PI * 0.65), hairMat);
-        hairMesh.position.set(0, 0.06, -0.02);
+        const hairMesh = new THREE.Mesh(new THREE.SphereGeometry(0.265, 20, 18, 0, Math.PI * 2, 0, Math.PI * 0.68), hairMat);
+        hairMesh.position.set(0, 0.05, -0.02);
         headGroup.add(hairMesh);
 
-        // Jenggot rapi pria
+        // Jenggot rapi bertekstur
         const beardMat = new THREE.MeshStandardMaterial({ color: 0x111827, roughness: 0.8 });
-        const beard = new THREE.Mesh(new THREE.CylinderGeometry(0.21, 0.19, 0.18, 14, 1, false, -Math.PI * 0.45, Math.PI * 0.9), beardMat);
+        const beard = new THREE.Mesh(new THREE.CylinderGeometry(0.215, 0.195, 0.19, 16, 1, false, -Math.PI * 0.45, Math.PI * 0.9), beardMat);
         beard.position.set(0, -0.16, 0.08);
         headGroup.add(beard);
 
       } else if (config.hairStyle === 'drafter-woman-long') {
-        const hairMesh = new THREE.Mesh(new THREE.SphereGeometry(0.26, 18, 16, 0, Math.PI * 2, 0, Math.PI * 0.7), hairMat);
-        hairMesh.position.set(0, 0.06, -0.02);
+        const hairMesh = new THREE.Mesh(new THREE.SphereGeometry(0.265, 20, 18, 0, Math.PI * 2, 0, Math.PI * 0.72), hairMat);
+        hairMesh.position.set(0, 0.05, -0.02);
         
-        const longBack = new THREE.Mesh(new THREE.BoxGeometry(0.42, 0.55, 0.18), hairMat);
-        longBack.position.set(0, -0.18, -0.18);
+        // Rambut panjang bergelombang jatuh ke belakang
+        const longBack = new THREE.Mesh(new THREE.CylinderGeometry(0.22, 0.26, 0.62, 16), hairMat);
+        longBack.scale.set(1.1, 1, 0.6);
+        longBack.position.set(0, -0.25, -0.16);
+        longBack.rotation.x = 0.15;
         headGroup.add(hairMesh, longBack);
 
       } else if (config.hairStyle === 'auditor-blonde-teal') {
-        const blondeMat = new THREE.MeshStandardMaterial({ color: 0xfde047, roughness: 0.5 });
-        const tealMat = new THREE.MeshStandardMaterial({ color: 0x06b6d4, roughness: 0.5 });
+        const blondeMat = new THREE.MeshStandardMaterial({ color: 0xfde047, roughness: 0.4, metalness: 0.2 });
+        const tealMat = new THREE.MeshStandardMaterial({ color: 0x06b6d4, roughness: 0.4, metalness: 0.3 });
 
-        const crown = new THREE.Mesh(new THREE.SphereGeometry(0.26, 18, 16, 0, Math.PI * 2, 0, Math.PI * 0.65), blondeMat);
-        crown.position.set(0, 0.06, -0.02);
+        const crown = new THREE.Mesh(new THREE.SphereGeometry(0.265, 20, 18, 0, Math.PI * 2, 0, Math.PI * 0.68), blondeMat);
+        crown.position.set(0, 0.05, -0.02);
 
         for (let side of [-1, 1]) {
-          const tealStrand = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.05, 0.35, 10), tealMat);
+          const tealStrand = new THREE.Mesh(new THREE.CylinderGeometry(0.065, 0.055, 0.38, 12), tealMat);
           tealStrand.position.set(side * 0.22, -0.18, -0.02);
           headGroup.add(tealStrand);
         }
@@ -1412,17 +1403,17 @@
         root,
         headGroup,
         basePos: new THREE.Vector3(config.x, (config.yOffset || 0) + 0.12, config.z),
-        baseRotY: config.rotY,
+        baseRotY: config.rotY + Math.PI,
         phase: Math.random() * Math.PI * 2
       };
     }
 
     function buildAllRealisticCharacters() {
-      // Agent 1: News Crawler (Pria, rambut bob hitam pendek & jenggot rapi)
-      createRealisticHuman({
+      // 1. Crawler (Pria, jas rapi, rambut bob & jenggot realistis)
+      createAAACharacter({
         id: 'crawler',
         x: -3.2,
-        z: -2.1,
+        z: -3.15,
         yOffset: 0,
         rotY: 0,
         skinColor: 0xf5d0b5,
@@ -1433,11 +1424,11 @@
         hasDarkTie: true
       });
 
-      // Agent 2: Press Release Drafter (Wanita, rambut panjang bergelombang elegan)
-      createRealisticHuman({
+      // 2. Drafter (Wanita, kemeja hijau emerald, rambut panjang bergelombang)
+      createAAACharacter({
         id: 'drafter',
         x: 3.2,
-        z: -2.1,
+        z: -3.15,
         yOffset: 0,
         rotY: 0,
         skinColor: 0xfde2cf,
@@ -1447,11 +1438,11 @@
         hairStyle: 'drafter-woman-long'
       });
 
-      // Agent 3: Auditor (Wanita di Lantai 2, rambut blonde dengan ujung teal khas)
-      createRealisticHuman({
+      // 3. Auditor (Wanita di Lantai 2, rambut blonde-teal khas)
+      createAAACharacter({
         id: 'auditor',
         x: 3.4,
-        z: -1.6,
+        z: -2.75,
         yOffset: 4.6,
         rotY: 0,
         skinColor: 0xfce7d6,
@@ -1658,9 +1649,9 @@
         ambientLight.color.setHex(0xfffaf0);
         ambientLight.intensity = seasonModeIndex === 1 ? 0.68 : 0.85;
         sunLight.color.setHex(0xfff5e4);
-        sunLight.intensity = seasonModeIndex === 1 ? 0.55 : 0.98;
-        warmLampLight.intensity = seasonModeIndex === 1 ? 0.85 : 0.65;
-        pondLight.intensity = 0.35;
+        sunLight.intensity = seasonModeIndex === 1 ? 0.55 : 1.05;
+        warmLampLight.intensity = seasonModeIndex === 1 ? 0.85 : 0.75;
+        pondLight.intensity = 0.45;
       } else if (lightingModeIndex === 1) {
         let skyHex = 0xfde8d0;
         if (seasonModeIndex === 1) skyHex = 0x94a3b8;
@@ -1670,7 +1661,7 @@
         ambientLight.color.setHex(0xfff0db);
         ambientLight.intensity = 0.72;
         sunLight.color.setHex(0xffb36b);
-        sunLight.intensity = seasonModeIndex === 1 ? 0.55 : 1.05;
+        sunLight.intensity = seasonModeIndex === 1 ? 0.55 : 1.15;
         warmLampLight.intensity = 0.95;
         pondLight.intensity = 0.55;
       } else {
@@ -1825,7 +1816,7 @@
       const btn = document.getElementById('btnSimulasi');
       btn.disabled = true;
       btn.classList.add('opacity-50');
-      addLog('Memulai simulasi kerja 3 AI Agent (Human 3D realistic agents)...', 'work');
+      addLog('Memulai simulasi kerja 3 AI Agent (AAA-Style Realistic 3D Agents)...', 'work');
 
       updateAgentUI('crawler', 'WORKING', 'Memindai Google News RSS ("BPS Provinsi Lampung")...', 'Baru saja');
       updateAgentUI('drafter', 'WORKING', 'Mengekstrak bahan tayang PPTX & menyusun narasi BRS...', 'Baru saja');
