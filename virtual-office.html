@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>3D Semi-Outdoor AI Agent Virtual Office (Fixed Auditor Seating) — Humas BPS Provinsi Lampung</title>
+  <title>3D Realistic AI Agent Virtual Office — Humas BPS Provinsi Lampung</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <!-- Three.js & OrbitControls untuk 3D Creative Studio Semi-Outdoor -->
@@ -55,7 +55,7 @@
         </a>
         <div>
           <div class="flex items-center gap-2">
-            <h1 class="text-sm sm:text-base font-extrabold text-slate-900 tracking-tight">SIGER Humas Hub (Ruang Kendali Humas 2 Lantai)</h1>
+            <h1 class="text-sm sm:text-base font-extrabold text-slate-900 tracking-tight">SIGER Humas Hub (Realistic Human 3D AI Agents)</h1>
             <span id="connectionBadge" class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-100 text-amber-800 border border-amber-300">
               <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
               Mode Simulasi
@@ -181,7 +181,7 @@
               <span id="badge-auditor" class="px-2 py-0.5 rounded-md text-[10px] font-extrabold bg-stone-100 text-slate-600">IDLE</span>
             </div>
             <p class="text-[10px] text-slate-400 font-semibold mb-1">Editorial Control (Balkon Atas)</p>
-            <p id="msg-auditor" class="text-[11px] text-slate-600 leading-snug line-clamp-2">Memvalidasi substansi data statistik di ruang balkon lantai 2 dengan kursi & meja kerja proper.</p>
+            <p id="msg-auditor" class="text-[11px] text-slate-600 leading-snug line-clamp-2">Memvalidasi substansi data statistik di ruang balkon lantai 2 dengan layout simetris.</p>
             <span id="time-auditor" class="block text-[10px] text-slate-400 font-mono-code mt-1.5">-</span>
           </div>
 
@@ -193,12 +193,12 @@
         <div class="flex items-center justify-between mb-2">
           <span class="text-xs font-extrabold text-slate-700 flex items-center gap-2">
             <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
-            Aktivitas Orkestrasi Apps Script (High Ceiling 2 Lantai)
+            Aktivitas Orkestrasi Apps Script (Realistic Human 3D Agents)
           </span>
           <button onclick="clearLogs()" class="text-[11px] font-semibold text-slate-400 hover:text-slate-700">Bersihkan Log</button>
         </div>
         <div id="terminalLog" class="font-mono-code text-[11px] text-slate-700 space-y-1 max-h-32 overflow-y-auto bg-stone-50 p-2.5 rounded-xl border border-stone-200/80">
-          <div class="text-slate-500">[SYSTEM] Virtual Office 2 Lantai & Posisi Kursi Auditor diperbaiki. Klik "Putar Metal Hardcore" untuk BGM.</div>
+          <div class="text-slate-500">[SYSTEM] Karakter manusia realistis 3D & layout simetris dimuat. Klik "Putar Metal Hardcore" untuk BGM.</div>
         </div>
       </div>
     </section>
@@ -319,8 +319,8 @@
         desc: 'Mengumpulkan, memantau, dan menyaring berita atau informasi dari berbagai sumber media online secara real-time',
         status: 'IDLE',
         pesan: 'Menunggu jadwal pemindaian RSS...',
-        camPos: { x: -1.8, y: 3.1, z: 3.2 },
-        targetPos: { x: -2.8, y: 1.3, z: -2.2 }
+        camPos: { x: -2.2, y: 3.2, z: 3.5 },
+        targetPos: { x: -3.2, y: 1.3, z: -2.2 }
       },
       drafter: {
         name: 'Agent Penulis BRS',
@@ -328,8 +328,8 @@
         desc: 'Mengolah data materi paparan (file PPTX/PDF) menjadi draf produk komunikasi publik yang terstruktur dan siap terbit.',
         status: 'IDLE',
         pesan: 'Siap memproses bahan tayang PPTX...',
-        camPos: { x: 1.8, y: 3.1, z: 1.8 },
-        targetPos: { x: 1.5, y: 1.3, z: -3.5 }
+        camPos: { x: 2.2, y: 3.2, z: 3.5 },
+        targetPos: { x: 3.2, y: 1.3, z: -2.2 }
       },
       auditor: {
         name: 'Agent Auditor & PR (Lantai 2)',
@@ -381,14 +381,14 @@
     }
 
     // =========================================================================
-    // 2. THREE.JS 3D SEMI-OUTDOOR STUDIO, LANTAI 2 TINGGI & KURSI PROPER
+    // 2. THREE.JS 3D SEMI-OUTDOOR STUDIO, LAYOUT SIMETRIS & REALISTIC HUMANS
     // =========================================================================
     let scene, camera, renderer, controls;
     let ambientLight, sunLight, warmLampLight, pondLight;
     let lightingModeIndex = 0; // 0: Pagi Cerah, 1: Golden Hour Sore, 2: Malam
     let seasonModeIndex = 0;   // 0: Panas, 1: Hujan, 2: Salju
 
-    const robloxAvatars = {};
+    const realisticAvatars = {};
     const clickableObjects = [];
     const monitorScreens = [];
     const koiFishes = [];
@@ -467,7 +467,7 @@
       buildLivingAnimals();
       buildWeatherSystems();
       buildAllWorkstations();
-      buildAllRobloxCharacters();
+      buildAllRealisticCharacters();
 
       const raycaster = new THREE.Raycaster();
       const mouse = new THREE.Vector2();
@@ -707,7 +707,7 @@
     }
 
     // =========================================================================
-    // ARSITEKTUR 2 LANTAI (HIGH CEILING 4.6 METER) & TANGGA SPIRAL
+    // ARSITEKTUR SIMETRIS 2 LANTAI (HIGH CEILING 4.6 METER) & TANGGA SPIRAL
     // =========================================================================
     function buildTallSpiralStaircase(x, z) {
       const group = new THREE.Group();
@@ -793,8 +793,8 @@
         rug.receiveShadow = true;
         scene.add(rug);
       };
-      addRug(3.4, 3.0, 0xe0f2fe, -2.6, -2.5);
-      addRug(3.6, 3.0, 0xdcfce7, 1.5, -3.9);
+      addRug(3.4, 3.0, 0xe0f2fe, -3.2, -2.5);
+      addRug(3.4, 3.0, 0xdcfce7, 3.2, -2.5);
 
       const rugAuditor = new THREE.Mesh(
         new THREE.BoxGeometry(3.5, 0.025, 3.2),
@@ -1213,7 +1213,7 @@
     }
 
     // =========================================================================
-    // MEJA KERJA, KURSI PROPER & KARAKTER DUDUK
+    // MEJA, KURSI & WORKSTATION SIMETRIS
     // =========================================================================
     function buildDeskWithChair(x, z, yOffset, rotY, accentColor) {
       const group = new THREE.Group();
@@ -1223,7 +1223,6 @@
       const topMat = new THREE.MeshStandardMaterial({ color: 0xe6ccb2, roughness: 0.5 });
       const legMat = new THREE.MeshStandardMaterial({ color: 0x334155, metalness: 0.4, roughness: 0.5 });
 
-      // Meja
       const tableTop = new THREE.Mesh(new THREE.BoxGeometry(2.1, 0.08, 1.05), topMat);
       tableTop.position.y = 0.88;
       tableTop.castShadow = true;
@@ -1239,7 +1238,6 @@
         }
       }
 
-      // Monitor & Komputer
       const stand = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.25, 0.1), legMat);
       stand.position.set(0, 1.02, -0.25);
       group.add(stand);
@@ -1255,7 +1253,6 @@
       group.add(screen);
       monitorScreens.push({ mesh: screen, baseColor: new THREE.Color(accentColor) });
 
-      // Dekorasi Meja
       const miniPot = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.06, 0.11, 10), new THREE.MeshStandardMaterial({ color: 0xd97757 }));
       miniPot.position.set(0.78, 0.97, 0.18);
       group.add(miniPot);
@@ -1268,7 +1265,7 @@
       mug.position.set(-0.75, 0.97, 0.22);
       group.add(mug);
 
-      // Kursi Kantor Ergonomis yang Proper di Depan Meja (Menghadap Monitor)
+      // Kursi Kerja Ergonomis Simetris
       const chairBase = new THREE.Mesh(new THREE.CylinderGeometry(0.32, 0.32, 0.06, 16), new THREE.MeshStandardMaterial({ color: 0x1e293b }));
       chairBase.position.set(0, 0.42, 0.55);
       chairBase.castShadow = true;
@@ -1288,276 +1285,180 @@
     }
 
     function buildAllWorkstations() {
-      // Lantai 1 (Crawler & Drafter)
-      buildDeskWithChair(-2.8, -3.1, 0, Math.PI / 5, 0x38bdf8);
-      buildDeskWithChair(1.5, -4.6, 0, 0, 0x34d399);
+      // Lantai 1 Simetris (Kiri: Crawler, Kanan: Drafter)
+      buildDeskWithChair(-3.2, -2.6, 0, 0, 0x38bdf8);
+      buildDeskWithChair(3.2, -2.6, 0, 0, 0x34d399);
 
-      // Lantai 2 Tinggi (Auditor di Balkon Atas 4.6 meter - menghadap meja & kursi proper)
+      // Lantai 2 Tinggi (Auditor di Balkon Atas 4.6 meter - Simetris di Tengah)
       buildDeskWithChair(3.4, -2.2, 4.6, 0, 0xfbbf24);
     }
 
-    function createRobloxCharacter(config) {
+    // =========================================================================
+    // KARAKTER MANUSIA REALISTIS 3D (PROPORTIONAL, MALE & FEMALE)
+    // =========================================================================
+    function createRealisticHuman(config) {
       const root = new THREE.Group();
-      root.position.set(config.x, config.yOffset + 0.12, config.z);
+      root.position.set(config.x, (config.yOffset || 0) + 0.12, config.z);
       root.rotation.y = config.rotY;
       root.userData.agentId = config.id;
 
-      const skinMat = new THREE.MeshStandardMaterial({ color: config.skinColor, roughness: 0.42 });
-      const pantsMat = new THREE.MeshStandardMaterial({ color: config.pantsColor, roughness: 0.65 });
-      const torsoMat = config.torsoTexture
-        ? new THREE.MeshStandardMaterial({ map: config.torsoTexture, roughness: 0.65 })
-        : new THREE.MeshStandardMaterial({ color: config.shirtColor, roughness: 0.58 });
-      const sleeveMat = new THREE.MeshStandardMaterial({ color: config.sleeveColor || config.shirtColor, roughness: 0.58 });
+      const skinMat = new THREE.MeshStandardMaterial({ color: config.skinColor, roughness: 0.5 });
+      const clothMat = new THREE.MeshStandardMaterial({ color: config.shirtColor, roughness: 0.65 });
+      const pantsMat = new THREE.MeshStandardMaterial({ color: config.pantsColor, roughness: 0.7 });
+      const hairMat = new THREE.MeshStandardMaterial({ color: config.hairColor, roughness: 0.6 });
 
-      // Jika agent duduk di kursi, tekuk kaki sedikit agar proporsional
-      const leftLeg = new THREE.Group();
-      leftLeg.position.set(-0.14, config.isSitting ? 0.48 : 0.56, config.isSitting ? 0.22 : 0);
-      if (config.isSitting) leftLeg.rotation.x = -Math.PI / 2.2;
-      const lLegMesh = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.11, 0.52, 14), pantsMat);
-      lLegMesh.position.y = -0.26;
-      lLegMesh.castShadow = true;
-      const lShoe = new THREE.Mesh(new THREE.SphereGeometry(0.13, 12, 10), new THREE.MeshStandardMaterial({ color: 0x1e293b }));
-      lShoe.scale.set(1, 0.65, 1.35);
-      lShoe.position.set(0, -0.52, 0.04);
-      leftLeg.add(lLegMesh, lShoe);
-      root.add(leftLeg);
+      // Kaki Manusia Proporsional
+      for (let side of [-1, 1]) {
+        const leg = new THREE.Group();
+        leg.position.set(side * 0.14, 0.46, 0.22);
+        leg.rotation.x = -Math.PI / 2.2;
+        const thigh = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.07, 0.42, 12), pantsMat);
+        thigh.position.y = -0.21;
+        thigh.castShadow = true;
+        const shoe = new THREE.Mesh(new THREE.SphereGeometry(0.09, 10, 10), new THREE.MeshStandardMaterial({ color: 0x111827 }));
+        shoe.scale.set(0.9, 0.6, 1.5);
+        shoe.position.set(0, -0.44, 0.05);
+        leg.add(thigh, shoe);
+        root.add(leg);
+      }
 
-      const rightLeg = new THREE.Group();
-      rightLeg.position.set(0.14, config.isSitting ? 0.48 : 0.56, config.isSitting ? 0.22 : 0);
-      if (config.isSitting) rightLeg.rotation.x = -Math.PI / 2.2;
-      const rLegMesh = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.11, 0.52, 14), pantsMat);
-      rLegMesh.position.y = -0.26;
-      rLegMesh.castShadow = true;
-      const rShoe = new THREE.Mesh(new THREE.SphereGeometry(0.13, 12, 10), new THREE.MeshStandardMaterial({ color: 0x1e293b }));
-      rShoe.scale.set(1, 0.65, 1.35);
-      rShoe.position.set(0, -0.52, 0.04);
-      rightLeg.add(rLegMesh, rShoe);
-      root.add(rightLeg);
-
-      const torso = new THREE.Mesh(new THREE.CylinderGeometry(0.26, 0.31, 0.64, 18), torsoMat);
-      torso.position.y = config.isSitting ? 0.78 : 0.88;
+      // Torso Manusia Proporsional
+      const torso = new THREE.Mesh(new THREE.CylinderGeometry(0.22, 0.24, 0.68, 16), clothMat);
+      torso.position.y = 0.78;
       torso.castShadow = true;
       root.add(torso);
 
       if (config.hasDarkTie) {
-        const tie = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.36, 0.04), new THREE.MeshStandardMaterial({ color: 0x090d16 }));
-        tie.position.set(0, 0.84, 0.27);
+        const tie = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.32, 0.03), new THREE.MeshStandardMaterial({ color: 0x0f172a }));
+        tie.position.set(0, 0.84, 0.23);
         root.add(tie);
       }
 
-      if (config.hasLanyard) {
-        const card = new THREE.Mesh(new THREE.BoxGeometry(0.14, 0.20, 0.03), new THREE.MeshStandardMaterial({ color: 0xffffff }));
-        card.position.set(0, 0.78, 0.29);
-        root.add(card);
-      }
-
-      const createArm = (xPos) => {
-        const armPivot = new THREE.Group();
-        armPivot.position.set(xPos, config.isSitting ? 1.04 : 1.14, config.isSitting ? 0.12 : 0);
-        if (config.isSitting) armPivot.rotation.x = -0.65;
-        const upper = new THREE.Mesh(new THREE.CylinderGeometry(0.095, 0.09, 0.34, 12), sleeveMat);
-        upper.position.y = -0.17;
-        upper.castShadow = true;
-        armPivot.add(upper);
-
-        const hand = new THREE.Mesh(new THREE.SphereGeometry(0.10, 12, 12), skinMat);
-        hand.position.y = -0.38;
-        hand.castShadow = true;
-        armPivot.add(hand);
-        root.add(armPivot);
-        return armPivot;
-      };
-      const leftArm = createArm(-0.36);
-      const rightArm = createArm(0.36);
-
-      const headGroup = new THREE.Group();
-      headGroup.position.y = config.isSitting ? 1.52 : 1.62;
-      const headMesh = new THREE.Mesh(new THREE.SphereGeometry(0.42, 24, 20), skinMat);
-      headMesh.scale.set(1.04, 0.96, 0.98);
-      headMesh.castShadow = true;
-      headGroup.add(headMesh);
-
-      const eyeWhiteMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
-      const pupilMat = new THREE.MeshBasicMaterial({ color: config.eyeColor || 0x1e1b18 });
-      const browMat = new THREE.MeshStandardMaterial({ color: config.browColor || config.hairColor });
-
+      // Lengan Manusia
       for (let side of [-1, 1]) {
-        const eyeBase = new THREE.Mesh(new THREE.SphereGeometry(0.068, 12, 12), eyeWhiteMat);
-        eyeBase.scale.set(1, 1.15, 0.5);
-        eyeBase.position.set(side * 0.14, 0.02, 0.37);
-
-        const pupil = new THREE.Mesh(new THREE.SphereGeometry(0.048, 12, 12), pupilMat);
-        pupil.scale.set(1, 1.15, 0.5);
-        pupil.position.set(side * 0.14, 0.02, 0.395);
-
-        const highlight = new THREE.Mesh(new THREE.SphereGeometry(0.016, 8, 8), eyeWhiteMat);
-        highlight.position.set(side * 0.155, 0.045, 0.415);
-
-        const brow = new THREE.Mesh(new THREE.BoxGeometry(0.11, 0.022, 0.02), browMat);
-        brow.position.set(side * 0.14, 0.11, 0.38);
-        brow.rotation.z = side * -0.06;
-
-        headGroup.add(eyeBase, pupil, highlight, brow);
+        const arm = new THREE.Group();
+        arm.position.set(side * 0.27, 1.02, 0.14);
+        arm.rotation.x = -0.65;
+        const upperArm = new THREE.Mesh(new THREE.CylinderGeometry(0.065, 0.06, 0.38, 12), clothMat);
+        upperArm.position.y = -0.19;
+        upperArm.castShadow = true;
+        const hand = new THREE.Mesh(new THREE.SphereGeometry(0.065, 10, 10), skinMat);
+        hand.position.y = -0.40;
+        arm.add(upperArm, hand);
+        root.add(arm);
       }
 
-      if (config.hasBlush) {
-        const blushMat = new THREE.MeshBasicMaterial({ color: 0xf472b6, transparent: true, opacity: 0.45 });
-        for (let side of [-1, 1]) {
-          const blush = new THREE.Mesh(new THREE.CircleGeometry(0.055, 12), blushMat);
-          blush.position.set(side * 0.22, -0.06, 0.36);
-          blush.rotation.y = side * 0.45;
-          headGroup.add(blush);
-        }
+      // Kepala Manusia Realistis (Oval & Proporsional)
+      const headGroup = new THREE.Group();
+      headGroup.position.y = 1.48;
+
+      const skull = new THREE.Mesh(new THREE.SphereGeometry(0.24, 20, 20), skinMat);
+      skull.scale.set(0.9, 1.15, 1.0);
+      skull.castShadow = true;
+      headGroup.add(skull);
+
+      // Wajah: Mata & Hidung Halus
+      const eyeMat = new THREE.MeshBasicMaterial({ color: 0x1e293b });
+      for (let side of [-1, 1]) {
+        const eye = new THREE.Mesh(new THREE.SphereGeometry(0.025, 8, 8), eyeMat);
+        eye.position.set(side * 0.08, 0.04, 0.21);
+        headGroup.add(eye);
       }
+      const nose = new THREE.Mesh(new THREE.ConeGeometry(0.022, 0.06, 5), skinMat);
+      nose.rotation.x = Math.PI / 2;
+      nose.position.set(0, -0.01, 0.23);
+      headGroup.add(nose);
 
-      const smile = new THREE.Mesh(
-        new THREE.TorusGeometry(0.065, 0.014, 8, 16, Math.PI),
-        new THREE.MeshBasicMaterial({ color: config.lipColor || 0x9f1239 })
-      );
-      smile.rotation.z = Math.PI;
-      smile.position.set(0, -0.09, 0.39);
-      headGroup.add(smile);
+      // Model Rambut Manusia Realistis Sesuai Permintaan
+      if (config.hairStyle === 'crawler-man-bob') {
+        const hairMesh = new THREE.Mesh(new THREE.SphereGeometry(0.26, 18, 16, 0, Math.PI * 2, 0, Math.PI * 0.65), hairMat);
+        hairMesh.position.set(0, 0.06, -0.02);
+        headGroup.add(hairMesh);
 
-      const hairMat = new THREE.MeshStandardMaterial({ color: config.hairColor, roughness: 0.65 });
+        // Jenggot rapi pria
+        const beardMat = new THREE.MeshStandardMaterial({ color: 0x111827, roughness: 0.8 });
+        const beard = new THREE.Mesh(new THREE.CylinderGeometry(0.21, 0.19, 0.18, 14, 1, false, -Math.PI * 0.45, Math.PI * 0.9), beardMat);
+        beard.position.set(0, -0.16, 0.08);
+        headGroup.add(beard);
 
-      if (config.hairStyle === 'crawler-beard-bob') {
-        const hairCap = new THREE.Mesh(new THREE.SphereGeometry(0.445, 22, 18, 0, Math.PI * 2, 0, Math.PI * 0.62), hairMat);
-        hairCap.position.set(0, 0.03, -0.02);
-        headGroup.add(hairCap);
-
-        for (let side of [-1, 1]) {
-          const sideHair = new THREE.Mesh(new THREE.BoxGeometry(0.14, 0.68, 0.34), hairMat);
-          sideHair.position.set(side * 0.39, -0.18, -0.03);
-          sideHair.rotation.z = side * -0.08;
-          headGroup.add(sideHair);
-        }
-        const backHair = new THREE.Mesh(new THREE.BoxGeometry(0.76, 0.66, 0.18), hairMat);
-        backHair.position.set(0, -0.18, -0.35);
-        headGroup.add(backHair);
-
-        const beardMat = new THREE.MeshStandardMaterial({ color: 0x1f242d, roughness: 0.85 });
-        const jawBeard = new THREE.Mesh(new THREE.CylinderGeometry(0.36, 0.32, 0.22, 18, 1, false, -Math.PI * 0.42, Math.PI * 0.84), beardMat);
-        jawBeard.position.set(0, -0.22, 0.06);
-        const mustache = new THREE.Mesh(new THREE.BoxGeometry(0.20, 0.045, 0.05), beardMat);
-        mustache.position.set(0, -0.05, 0.40);
-        headGroup.add(jawBeard, mustache);
-
-      } else if (config.hairStyle === 'drafter-long-wavy') {
-        const hairCap = new THREE.Mesh(new THREE.SphereGeometry(0.45, 22, 18, 0, Math.PI * 2, 0, Math.PI * 0.65), hairMat);
-        hairCap.position.set(0, 0.03, -0.02);
-        headGroup.add(hairCap);
-
-        for (let side of [-1, 1]) {
-          const waveStrand = new THREE.Mesh(new THREE.CylinderGeometry(0.11, 0.13, 0.85, 12), hairMat);
-          waveStrand.position.set(side * 0.39, -0.26, -0.04);
-          waveStrand.rotation.z = side * -0.07;
-          headGroup.add(waveStrand);
-        }
-        const longBack = new THREE.Mesh(new THREE.BoxGeometry(0.82, 0.88, 0.20), hairMat);
-        longBack.position.set(0, -0.28, -0.35);
-        headGroup.add(longBack);
+      } else if (config.hairStyle === 'drafter-woman-long') {
+        const hairMesh = new THREE.Mesh(new THREE.SphereGeometry(0.26, 18, 16, 0, Math.PI * 2, 0, Math.PI * 0.7), hairMat);
+        hairMesh.position.set(0, 0.06, -0.02);
+        
+        const longBack = new THREE.Mesh(new THREE.BoxGeometry(0.42, 0.55, 0.18), hairMat);
+        longBack.position.set(0, -0.18, -0.18);
+        headGroup.add(hairMesh, longBack);
 
       } else if (config.hairStyle === 'auditor-blonde-teal') {
-        const tealMat = new THREE.MeshStandardMaterial({ color: 0x06b6d4, roughness: 0.55 });
-        const blondeCrown = new THREE.Mesh(new THREE.SphereGeometry(0.45, 22, 18, 0, Math.PI * 2, 0, Math.PI * 0.64), hairMat);
-        blondeCrown.position.set(0, 0.03, -0.02);
-        headGroup.add(blondeCrown);
+        const blondeMat = new THREE.MeshStandardMaterial({ color: 0xfde047, roughness: 0.5 });
+        const tealMat = new THREE.MeshStandardMaterial({ color: 0x06b6d4, roughness: 0.5 });
 
-        const sideBangs = new THREE.Mesh(new THREE.BoxGeometry(0.42, 0.26, 0.14), hairMat);
-        sideBangs.position.set(-0.14, 0.24, 0.35);
-        sideBangs.rotation.z = 0.35;
-        headGroup.add(sideBangs);
+        const crown = new THREE.Mesh(new THREE.SphereGeometry(0.26, 18, 16, 0, Math.PI * 2, 0, Math.PI * 0.65), blondeMat);
+        crown.position.set(0, 0.06, -0.02);
 
         for (let side of [-1, 1]) {
-          const upperBlonde = new THREE.Mesh(new THREE.CylinderGeometry(0.11, 0.12, 0.52, 12), hairMat);
-          upperBlonde.position.set(side * 0.39, -0.14, -0.04);
-
-          const lowerTeal = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.10, 0.32, 12), tealMat);
-          lowerTeal.position.set(side * 0.40, -0.52, -0.04);
-
-          headGroup.add(upperBlonde, lowerTeal);
+          const tealStrand = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.05, 0.35, 10), tealMat);
+          tealStrand.position.set(side * 0.22, -0.18, -0.02);
+          headGroup.add(tealStrand);
         }
-        const backBlonde = new THREE.Mesh(new THREE.BoxGeometry(0.80, 0.55, 0.18), hairMat);
-        backBlonde.position.set(0, -0.15, -0.35);
-        const backTeal = new THREE.Mesh(new THREE.BoxGeometry(0.80, 0.30, 0.18), tealMat);
-        backTeal.position.set(0, -0.55, -0.35);
-        headGroup.add(backBlonde, backTeal);
+        headGroup.add(crown);
       }
 
       root.add(headGroup);
       scene.add(root);
       clickableObjects.push(root);
 
-      robloxAvatars[config.id] = {
+      realisticAvatars[config.id] = {
         root,
-        leftLeg,
-        rightLeg,
-        leftArm,
-        rightArm,
         headGroup,
         basePos: new THREE.Vector3(config.x, (config.yOffset || 0) + 0.12, config.z),
         baseRotY: config.rotY,
-        phase: Math.random() * Math.PI * 2,
-        workStartTime: 0,
-        lastStatus: 'IDLE',
-        isSitting: config.isSitting || false
+        phase: Math.random() * Math.PI * 2
       };
     }
 
-    function buildAllRobloxCharacters() {
-      // Agent 1 & 2 di Lantai 1 (Duduk rapi di kursi kerja menghadap meja)
-      createRobloxCharacter({
+    function buildAllRealisticCharacters() {
+      // Agent 1: News Crawler (Pria, rambut bob hitam pendek & jenggot rapi)
+      createRealisticHuman({
         id: 'crawler',
-        x: -2.8,
-        z: -2.6,
+        x: -3.2,
+        z: -2.1,
         yOffset: 0,
         rotY: 0,
         skinColor: 0xf5d0b5,
-        shirtColor: 0x111827,
+        shirtColor: 0x1e293b,
         pantsColor: 0x0f172a,
-        hairColor: 0x141414,
-        browColor: 0x141414,
-        lipColor: 0x7f1d1d,
-        hairStyle: 'crawler-beard-bob',
-        hasDarkTie: true,
-        isSitting: true
+        hairColor: 0x111827,
+        hairStyle: 'crawler-man-bob',
+        hasDarkTie: true
       });
 
-      createRobloxCharacter({
+      // Agent 2: Press Release Drafter (Wanita, rambut panjang bergelombang elegan)
+      createRealisticHuman({
         id: 'drafter',
-        x: 1.5,
-        z: -4.1,
+        x: 3.2,
+        z: -2.1,
         yOffset: 0,
         rotY: 0,
         skinColor: 0xfde2cf,
         shirtColor: 0x10b981,
         pantsColor: 0x334155,
         hairColor: 0x2c1e16,
-        browColor: 0x3b281e,
-        lipColor: 0xe11d48,
-        hairStyle: 'drafter-long-wavy',
-        hasBlush: true,
-        hasLanyard: true,
-        isSitting: true
+        hairStyle: 'drafter-woman-long'
       });
 
-      // Agent 3 (Auditor) di Lantai 2 Tinggi (Duduk rapi di kursi menghadap monitor & meja)
-      createRobloxCharacter({
+      // Agent 3: Auditor (Wanita di Lantai 2, rambut blonde dengan ujung teal khas)
+      createRealisticHuman({
         id: 'auditor',
         x: 3.4,
         z: -1.6,
         yOffset: 4.6,
         rotY: 0,
         skinColor: 0xfce7d6,
-        torsoTexture: createTenunSweaterTexture(),
-        sleeveColor: 0xf8f6f0,
+        shirtColor: 0xb91c1c,
         pantsColor: 0x1e293b,
-        hairColor: 0xf3f4f6,
-        browColor: 0x9ca3af,
-        lipColor: 0xf43f5e,
-        hairStyle: 'auditor-blonde-teal',
-        hasBlush: true,
-        isSitting: true
+        hairColor: 0xfde047,
+        hairStyle: 'auditor-blonde-teal'
       });
     }
 
@@ -1578,23 +1479,18 @@
         }
       }
 
-      Object.keys(robloxAvatars).forEach((id) => {
-        const av = robloxAvatars[id];
+      Object.keys(realisticAvatars).forEach((id) => {
+        const av = realisticAvatars[id];
         const status = (AGENT_META[id].status || 'IDLE').toUpperCase();
-        const p = t + av.phase;
+        
+        av.root.position.copy(av.basePos);
+        av.root.rotation.y = av.baseRotY;
 
-        // Karakter duduk mengetik di kursi kerja
-        if (av.isSitting) {
-          av.root.position.copy(av.basePos);
-          av.root.rotation.y = av.baseRotY;
-          if (status === 'WORKING' || isMusicPlaying) {
-            av.headGroup.rotation.x = 0.15 + Math.sin(t * 14 + av.phase) * 0.12;
-            av.leftArm.rotation.x = -0.75 + Math.sin(t * 16) * 0.15;
-            av.rightArm.rotation.x = -0.75 - Math.sin(t * 16) * 0.15;
-          } else {
-            av.headGroup.rotation.x = 0.1;
-            av.headGroup.rotation.y = Math.sin(p * 1.5) * 0.15;
-          }
+        if (status === 'WORKING' || isMusicPlaying) {
+          av.headGroup.rotation.x = 0.12 + Math.sin(t * 14 + av.phase) * 0.12;
+        } else {
+          av.headGroup.rotation.x = 0.08;
+          av.headGroup.rotation.y = Math.sin(t + av.phase) * 0.1;
         }
       });
 
@@ -1617,7 +1513,7 @@
         const x = r.centerX + Math.cos(ang) * r.radius;
         const z = r.centerZ + Math.sin(ang) * r.radius;
         const nx = r.centerX + Math.cos(nextAng) * r.radius;
-        const nz = r.centerZ + Math.sin(nextAng) * r.radius;
+        const nz = r.centerZ + Math.sin(ang) * r.radius;
 
         const hop = Math.abs(Math.sin(t * 4.5 + idx * 1.7)) * 0.16;
         r.mesh.position.set(x, hop, z);
@@ -1630,7 +1526,7 @@
         const x = c.centerX + Math.cos(ang) * c.radius;
         const z = c.centerZ + Math.sin(ang) * c.radius;
         const nx = c.centerX + Math.cos(nextAng) * c.radius;
-        const nz = c.centerZ + Math.sin(nextAng) * c.radius;
+        const nz = c.centerZ + Math.sin(ang) * c.radius;
 
         c.group.position.set(x, c.baseY + Math.abs(Math.sin(t * 5 + idx)) * 0.02, z);
         c.group.lookAt(nx, c.group.position.y, nz);
@@ -1929,7 +1825,7 @@
       const btn = document.getElementById('btnSimulasi');
       btn.disabled = true;
       btn.classList.add('opacity-50');
-      addLog('Memulai simulasi kerja 3 AI Agent (Auditor duduk proper di lantai 2)...', 'work');
+      addLog('Memulai simulasi kerja 3 AI Agent (Human 3D realistic agents)...', 'work');
 
       updateAgentUI('crawler', 'WORKING', 'Memindai Google News RSS ("BPS Provinsi Lampung")...', 'Baru saja');
       updateAgentUI('drafter', 'WORKING', 'Mengekstrak bahan tayang PPTX & menyusun narasi BRS...', 'Baru saja');
