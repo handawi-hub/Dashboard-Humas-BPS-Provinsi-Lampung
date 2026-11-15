@@ -21,14 +21,14 @@
                     },
                     colors: {
                         bps: {
-                            navy: '#0B2545',       /* Otoritas Utama & Header */
-                            dark: '#081B33',       /* Navy Deep */
-                            blue: '#008FD5',       /* Biru Utama Logo BPS */
-                            blueDark: '#0073AD',   /* Hover Biru BPS */
-                            green: '#68B92E',      /* Hijau Logo BPS */
-                            greenDark: '#559B23',  /* Hover Hijau BPS */
-                            orange: '#EB891B',     /* Oranye Logo BPS */
-                            orangeDark: '#D17610', /* Hover Oranye BPS */
+                            navy: '#0B2545',
+                            dark: '#081B33',
+                            blue: '#008FD5',
+                            blueDark: '#0073AD',
+                            green: '#68B92E',
+                            greenDark: '#559B23',
+                            orange: '#EB891B',
+                            orangeDark: '#D17610',
                             light: '#F8FAFC'
                         }
                     }
@@ -91,7 +91,6 @@
                 </div>
             </div>
         </div>
-        <!-- Garis Identitas Korporat 3 Warna Resmi BPS (Biru - Hijau - Oranye) -->
         <div class="h-[3px] w-full bg-gradient-to-r from-[#008FD5] via-[#68B92E] to-[#EB891B]"></div>
     </header>
 
@@ -146,10 +145,7 @@
 
         <!-- ================= SECTION 1: EXECUTIVE DASHBOARD ================= -->
         <div id="section-dashboard" class="space-y-6">
-
-            <!-- KPI Metric Cards (Selaras 3 Warna BPS) -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                <!-- Card 1: Total Liputan (Biru BPS) -->
                 <div id="card-total" onclick="filterByCard('total')" class="glass-card p-5 rounded-xl shadow-xs hover:border-bps-blue hover:shadow-md transition cursor-pointer group">
                     <div class="flex justify-between items-start">
                         <div>
@@ -166,7 +162,6 @@
                     </div>
                 </div>
 
-                <!-- Card 2: Sentimen Positif (Hijau BPS) -->
                 <div id="card-positif" onclick="filterByCard('positif')" class="glass-card p-5 rounded-xl shadow-xs hover:border-bps-green hover:shadow-md transition cursor-pointer group">
                     <div class="flex justify-between items-start">
                         <div>
@@ -183,7 +178,6 @@
                     </div>
                 </div>
 
-                <!-- Card 3: Indeks Reputasi Humas (Navy BPS) -->
                 <div id="card-reputasi" onclick="filterByCard('reputasi')" class="glass-card p-5 rounded-xl shadow-xs hover:border-bps-navy hover:shadow-md transition cursor-pointer group">
                     <div class="flex justify-between items-start">
                         <div>
@@ -200,7 +194,6 @@
                     </div>
                 </div>
 
-                <!-- Card 4: Perlu Mitigasi / Atensi Isu (Oranye BPS) -->
                 <div id="card-atensi" onclick="filterByCard('atensi')" class="glass-card p-5 rounded-xl shadow-xs hover:border-bps-orange hover:shadow-md transition cursor-pointer group">
                     <div class="flex justify-between items-start">
                         <div>
@@ -218,9 +211,7 @@
                 </div>
             </div>
 
-            <!-- Charts Section Grid -->
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <!-- Sentiment Trend Chart -->
                 <div class="glass-card p-5 rounded-xl shadow-xs lg:col-span-2">
                     <div class="flex items-center justify-between mb-4">
                         <div>
@@ -234,7 +225,6 @@
                     </div>
                 </div>
 
-                <!-- Top Media Sources Chart -->
                 <div class="glass-card p-5 rounded-xl shadow-xs">
                     <div class="flex items-center justify-between mb-4">
                         <div>
@@ -248,7 +238,6 @@
                 </div>
             </div>
 
-            <!-- Strategic Indicators Coverage Breakdown -->
             <div class="glass-card p-5 rounded-xl shadow-xs">
                 <div class="flex items-center justify-between mb-4">
                     <div>
@@ -265,27 +254,22 @@
         <!-- ================= SECTION 2: NEWS MONITORING TABLE ================= -->
         <div id="section-news" class="space-y-6 hidden">
             <div class="glass-card p-5 rounded-xl shadow-xs space-y-4">
-
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                     <div>
                         <h3 class="font-bold text-slate-800 text-lg">Direktori & Kliping Media</h3>
                         <p class="text-xs text-slate-500">Arsip pemberitaan terverifikasi beserta analisis sentimen dan rekomendasi tindak lanjut</p>
                     </div>
-
-                    <!-- Search & Filter Controls -->
                     <div class="flex flex-wrap items-center gap-2">
                         <div class="relative min-w-[220px]">
                             <i data-lucide="search" class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
                             <input type="text" id="searchInput" onkeyup="filterNewsTable()" placeholder="Cari judul atau media..." class="w-full pl-9 pr-3 py-1.5 text-xs bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-bps-blue">
                         </div>
-
                         <select id="sentimentFilter" onchange="filterNewsTable()" class="bg-white border border-slate-300 text-xs rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-bps-blue">
                             <option value="ALL">Semua Sentimen</option>
                             <option value="Positif">Positif</option>
                             <option value="Netral">Netral</option>
                             <option value="Negatif">Negatif</option>
                         </select>
-
                         <select id="topicFilter" onchange="filterNewsTable()" class="bg-white border border-slate-300 text-xs rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-bps-blue">
                             <option value="ALL">Semua Topik</option>
                             <option value="Pertumbuhan Ekonomi">Pertumbuhan Ekonomi</option>
@@ -298,7 +282,6 @@
                     </div>
                 </div>
 
-                <!-- Table Content -->
                 <div class="overflow-x-auto rounded-lg border border-slate-200">
                     <table class="w-full text-left text-xs text-slate-700">
                         <thead class="bg-slate-100/90 text-slate-600 uppercase text-[11px] tracking-wider font-semibold border-b border-slate-200">
@@ -319,7 +302,6 @@
                     </table>
                 </div>
 
-                <!-- Table Footer Info -->
                 <div class="flex items-center justify-between text-xs text-slate-500 pt-2">
                     <span id="showingCount">Menampilkan 0 dari 0 berita</span>
                     <span class="text-[11px] text-slate-400">Urutan: Terbaru di atas</span>
@@ -327,11 +309,9 @@
             </div>
         </div>
 
-        <!-- ================= SECTION 3: AUTOMATED BRS PIPELINE (CLEAN ENTERPRISE UX) ================= -->
+        <!-- ================= SECTION 3: AUTOMATED BRS PIPELINE ================= -->
         <div id="section-brs" class="hidden">
             <div class="bg-white border border-slate-200/90 rounded-2xl shadow-xs overflow-hidden">
-                
-                <!-- 1. Header Formal & Ringkas -->
                 <div class="p-6 sm:p-7 border-b border-slate-100 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                     <div>
                         <div class="flex flex-wrap items-center gap-2 mb-1.5">
@@ -347,14 +327,12 @@
                             Unggah bahan paparan rilis Kepala BPS untuk menghasilkan draf siaran pers terstruktur sesuai format baku instansi.
                         </p>
                     </div>
-
                     <a href="virtual-office.html" class="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-bps-navy hover:bg-bps-dark text-white text-xs font-semibold transition shrink-0 shadow-xs">
                         <i data-lucide="monitor" class="w-4 h-4 text-[#67D4FF]"></i>
                         <span>Pantau di Ruang Kendali</span>
                     </a>
                 </div>
 
-                <!-- 2. Area Unggah Utama -->
                 <div class="p-6 sm:p-7 space-y-5">
                     <div class="border-2 border-dashed border-slate-300 hover:border-bps-blue rounded-xl py-10 px-6 text-center bg-slate-50/70 hover:bg-[#008FD5]/[0.03] transition relative group">
                         <input type="file" id="brsFileInput" accept=".pptx,.ppt,.pdf" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" onchange="handleFileSelected(this)">
@@ -376,7 +354,6 @@
                         </div>
                     </div>
 
-                    <!-- Panel Konfirmasi Eksekusi Upload -->
                     <div id="uploadActionArea" class="hidden flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-[#008FD5]/[0.06] p-4 rounded-xl border border-[#008FD5]/25">
                         <div class="flex items-center space-x-3">
                             <div class="p-2 bg-white rounded-lg border border-[#008FD5]/20 text-bps-blue">
@@ -393,53 +370,41 @@
                         </button>
                     </div>
 
-                    <!-- 3. Ringkasan Tahapan Kerja (Selaras Brand BPS) -->
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-6 border-t border-slate-100">
                         <div class="p-4 rounded-xl bg-slate-50/80 border border-slate-200/70">
                             <div class="flex items-center gap-2 mb-2">
                                 <span class="w-5 h-5 rounded-md bg-bps-blue text-white text-[11px] font-bold flex items-center justify-center">1</span>
                                 <span class="text-xs font-bold text-slate-800">Unggah Materi</span>
                             </div>
-                            <p class="text-xs text-slate-500 leading-relaxed">
-                                Berkas bahan paparan rilis diarsipkan langsung ke repositori kerja Humas.
-                            </p>
+                            <p class="text-xs text-slate-500 leading-relaxed">Berkas bahan paparan rilis diarsipkan langsung ke repositori kerja Humas.</p>
                         </div>
-
                         <div class="p-4 rounded-xl bg-slate-50/80 border border-slate-200/70">
                             <div class="flex items-center gap-2 mb-2">
                                 <span class="w-5 h-5 rounded-md bg-bps-navy text-white text-[11px] font-bold flex items-center justify-center">2</span>
                                 <span class="text-xs font-bold text-slate-800">Ekstraksi Indikator</span>
                             </div>
-                            <p class="text-xs text-slate-500 leading-relaxed">
-                                Sistem menyusun narasi data storytelling dan kutipan resmi Kepala BPS.
-                            </p>
+                            <p class="text-xs text-slate-500 leading-relaxed">Sistem menyusun narasi data storytelling dan kutipan resmi Kepala BPS.</p>
                         </div>
-
                         <div class="p-4 rounded-xl bg-slate-50/80 border border-slate-200/70">
                             <div class="flex items-center gap-2 mb-2">
                                 <span class="w-5 h-5 rounded-md bg-bps-green text-white text-[11px] font-bold flex items-center justify-center">3</span>
                                 <span class="text-xs font-bold text-slate-800">Format Tata Naskah</span>
                             </div>
-                            <p class="text-xs text-slate-500 leading-relaxed">
-                                Draf otomatis terformat rapi pada dokumen siap sunting di Google Drive.
-                            </p>
+                            <p class="text-xs text-slate-500 leading-relaxed">Draf otomatis terformat rapi pada dokumen siap sunting di Google Drive.</p>
                         </div>
-
                         <div class="p-4 rounded-xl bg-slate-50/80 border border-slate-200/70">
                             <div class="flex items-center gap-2 mb-2">
                                 <span class="w-5 h-5 rounded-md bg-bps-orange text-white text-[11px] font-bold flex items-center justify-center">4</span>
                                 <span class="text-xs font-bold text-slate-800">Notifikasi Tim Humas</span>
                             </div>
-                            <p class="text-xs text-slate-500 leading-relaxed">
-                                Tautan dokumen final dikirim otomatis ke saluran koordinasi tim untuk ditinjau.
-                            </p>
+                            <p class="text-xs text-slate-500 leading-relaxed">Tautan dokumen final dikirim otomatis ke saluran koordinasi tim untuk ditinjau.</p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- ================= SECTION 4: GOOGLE SHEETS API BRIDGE ARCHITECTURE (ADMIN ONLY) ================= -->
+        <!-- ================= SECTION 4: API BRIDGE ARCHITECTURE (ADMIN ONLY) ================= -->
         <div id="section-bridge" class="space-y-6 hidden">
             <div class="glass-card p-6 rounded-xl border border-slate-200 space-y-4">
                 <div class="flex items-center space-x-3">
@@ -451,45 +416,30 @@
                         <p class="text-xs text-slate-500">Dual-route API Gateway yang melayani Dashboard Utama dan Ruang Kendali 3D secara bersamaan</p>
                     </div>
                 </div>
-
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4 border-t border-slate-200">
                     <div class="space-y-2">
                         <div class="flex items-center space-x-2 text-slate-800 font-semibold text-sm">
                             <span class="w-6 h-6 rounded-full bg-slate-200 text-slate-700 flex items-center justify-center text-xs">1</span>
                             <span>Spreadsheet Internal (Protected)</span>
                         </div>
-                        <p class="text-xs text-slate-500 leading-relaxed">
-                            Database monitoring dan status agent disimpan secara tertutup di Google Drive BPS Provinsi Lampung.
-                        </p>
-                        <div class="bg-slate-100 p-2.5 rounded border border-slate-200 font-mono text-[11px] text-slate-600">
-                            🔒 Tab: Monitoring & Agent_State
-                        </div>
+                        <p class="text-xs text-slate-500 leading-relaxed">Database monitoring dan status agent disimpan secara tertutup di Google Drive BPS Provinsi Lampung.</p>
+                        <div class="bg-slate-100 p-2.5 rounded border border-slate-200 font-mono text-[11px] text-slate-600">🔒 Tab: Monitoring & Agent_State</div>
                     </div>
-
                     <div class="space-y-2">
                         <div class="flex items-center space-x-2 text-slate-800 font-semibold text-sm">
                             <span class="w-6 h-6 rounded-full bg-[#008FD5]/15 text-bps-blue flex items-center justify-center text-xs">2</span>
                             <span>Apps Script Dual-Route Web App</span>
                         </div>
-                        <p class="text-xs text-slate-500 leading-relaxed">
-                            Jalur default menyuplai data lengkap untuk grafik dashboard ini, sementara jalur <code>?mode=agents</code> menyuplai status 3 AI Agent ke Virtual Office.
-                        </p>
-                        <div class="bg-[#008FD5]/10 p-2.5 rounded border border-[#008FD5]/25 font-mono text-[11px] text-bps-blue">
-                            ⚡ GET .../exec (Default & ?mode=agents)
-                        </div>
+                        <p class="text-xs text-slate-500 leading-relaxed">Jalur default menyuplai data grafik, jalur <code>?mode=agents</code> menyuplai status agen dengan Secret Payload Token.</p>
+                        <div class="bg-[#008FD5]/10 p-2.5 rounded border border-[#008FD5]/25 font-mono text-[11px] text-bps-blue">⚡ GET .../exec (Secured Token)</div>
                     </div>
-
                     <div class="space-y-2">
                         <div class="flex items-center space-x-2 text-slate-800 font-semibold text-sm">
                             <span class="w-6 h-6 rounded-full bg-[#68B92E]/15 text-bps-greenDark flex items-center justify-center text-xs">3</span>
                             <span>Visualisasi Frontend Real-Time</span>
                         </div>
-                        <p class="text-xs text-slate-500 leading-relaxed">
-                            Dashboard menghitung metrik, sentimen, dan rentang tanggal grafik langsung dari payload JSON terbaru.
-                        </p>
-                        <div class="bg-[#68B92E]/10 p-2.5 rounded border border-[#68B92E]/25 font-mono text-[11px] text-bps-greenDark">
-                            🌐 Chart.js + TailwindCSS
-                        </div>
+                        <p class="text-xs text-slate-500 leading-relaxed">Dashboard menghitung metrik, sentimen, dan rentang tanggal grafik langsung dari payload JSON terbaru.</p>
+                        <div class="bg-[#68B92E]/10 p-2.5 rounded border border-[#68B92E]/25 font-mono text-[11px] text-bps-greenDark">🌐 Chart.js + TailwindCSS</div>
                     </div>
                 </div>
             </div>
@@ -497,7 +447,7 @@
 
     </main>
 
-    <!-- Modal Detail Analisis AI -->
+    <!-- Modals (Analysis & Success Upload) -->
     <div id="analysisModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 hidden items-center justify-center p-4">
         <div class="bg-white rounded-2xl max-w-xl w-full shadow-2xl border border-slate-200 overflow-hidden">
             <div class="bg-bps-navy text-white px-5 py-4 flex items-center justify-between">
@@ -505,34 +455,28 @@
                     <i data-lucide="sparkles" class="w-4 h-4 text-[#67D4FF]"></i>
                     <span class="font-bold text-sm">Analisis Sentimen & Rekomendasi Humas</span>
                 </div>
-                <button onclick="closeAnalysisModal()" class="text-slate-400 hover:text-white">
-                    <i data-lucide="x" class="w-5 h-5"></i>
-                </button>
+                <button onclick="closeAnalysisModal()" class="text-slate-400 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
             </div>
             <div class="p-5 space-y-4 max-h-[75vh] overflow-y-auto">
                 <div>
                     <div class="flex items-center gap-2 mb-1">
-                        <span id="modalDate" class="text-xs text-slate-500"></span>
-                        <span>•</span>
+                        <span id="modalDate" class="text-xs text-slate-500"></span><span>•</span>
                         <span id="modalMedia" class="text-xs font-semibold text-bps-blue"></span>
                         <span id="modalSentimentBadge" class="text-[11px] px-2 py-0.5 rounded-full font-semibold"></span>
                     </div>
                     <h4 id="modalTitle" class="font-bold text-slate-900 text-base leading-snug"></h4>
                 </div>
-                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 text-xs text-slate-700 whitespace-pre-line leading-relaxed" id="modalBody">
-                </div>
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 text-xs text-slate-700 whitespace-pre-line leading-relaxed" id="modalBody"></div>
                 <div class="flex justify-end gap-2 pt-2">
                     <button onclick="closeAnalysisModal()" class="px-4 py-2 text-xs font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-lg">Tutup</button>
                     <a id="modalExternalLink" href="#" target="_blank" rel="noopener noreferrer" class="px-4 py-2 text-xs font-semibold text-white bg-bps-blue hover:bg-bps-blueDark rounded-lg inline-flex items-center gap-1.5">
-                        <span>Buka Berita Asli</span>
-                        <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                        <span>Buka Berita Asli</span><i data-lucide="external-link" class="w-3.5 h-3.5"></i>
                     </a>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Modal Tahap 2: Draf Siaran Pers Selesai & Opsi Buka Google Doc -->
     <div id="successUploadModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 hidden items-center justify-center p-4">
         <div class="bg-white rounded-2xl max-w-md w-full shadow-2xl border border-slate-200 overflow-hidden p-6 text-center space-y-4">
             <div class="w-14 h-14 bg-[#68B92E]/15 text-bps-greenDark rounded-full flex items-center justify-center mx-auto shadow-inner">
@@ -540,23 +484,16 @@
             </div>
             <div>
                 <h3 class="font-extrabold text-slate-900 text-lg">Draf Siaran Pers Telah Jadi!</h3>
-                <p class="text-xs text-slate-500 mt-1 leading-relaxed">
-                    Sistem telah selesai memproses bahan paparan dan menyusun draf dokumen siaran pers resmi di Google Drive.
-                </p>
+                <p class="text-xs text-slate-500 mt-1 leading-relaxed">Sistem telah selesai memproses bahan paparan dan menyusun draf dokumen siaran pers resmi di Google Drive.</p>
             </div>
-            
             <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200 text-left space-y-1.5 text-xs">
                 <div class="flex justify-between"><span class="text-slate-500">Status Proses:</span> <strong class="text-bps-greenDark">SELESAI</strong></div>
                 <div class="flex justify-between"><span class="text-slate-500">Dokumen Hasil:</span> <strong id="modalFileName" class="text-slate-700 truncate max-w-[200px]">Draf Siaran Pers Resmi</strong></div>
             </div>
-
             <div class="flex items-center gap-2 pt-2">
-                <button onclick="closeSuccessUploadModal()" class="flex-1 px-4 py-2.5 text-xs font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl transition">
-                    Tutup
-                </button>
+                <button onclick="closeSuccessUploadModal()" class="flex-1 px-4 py-2.5 text-xs font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl transition">Tutup</button>
                 <a id="modalDownloadBtn" href="#" target="_blank" rel="noopener noreferrer" class="flex-1 px-4 py-2.5 text-xs font-semibold text-white bg-bps-green hover:bg-bps-greenDark rounded-xl transition inline-flex items-center justify-center gap-1.5 shadow-sm">
-                    <i data-lucide="external-link" class="w-4 h-4"></i>
-                    <span>Buka Google Doc</span>
+                    <i data-lucide="external-link" class="w-4 h-4"></i><span>Buka Google Doc</span>
                 </a>
             </div>
         </div>
@@ -566,32 +503,24 @@
     <footer class="bg-white border-t border-slate-200 py-4 mt-auto">
         <div class="max-w-7xl mx-auto px-4 flex flex-col items-center justify-center gap-2">
             <div class="text-center text-xs text-slate-500 flex flex-col sm:flex-row items-center justify-between gap-2 w-full">
-                <div>
-                    &copy; 2026 <strong>BPS Provinsi Lampung</strong> • Tim Kehumasan & Publikasi
-                </div>
+                <div>&copy; 2026 <strong>BPS Provinsi Lampung</strong> • Tim Kehumasan & Publikasi</div>
                 <div class="flex items-center space-x-3">
-                    <span>Sumber Data: Database Pemantauan Media</span>
-                    <span>•</span>
+                    <span>Sumber Data: Database Pemantauan Media</span><span>•</span>
                     <a href="virtual-office.html" class="text-bps-blue font-semibold hover:underline">Ruang Kendali 3D</a>
                 </div>
             </div>
-
-            <!-- Panel Status Agen -->
             <div class="flex flex-wrap items-center justify-center gap-2 pt-2 border-t border-slate-100 w-full text-xs">
                 <span class="font-bold text-slate-700 mr-1">Modul Agen:</span>
-                
                 <div class="flex items-center gap-1.5 bg-slate-50 px-2.5 py-1 border border-slate-200 rounded-md cursor-pointer hover:bg-slate-100 transition" onclick="alert('Agent Media Crawler: Memindai pembaruan berita media daring secara berkala.')">
                     <span class="w-2 h-2 rounded-full bg-bps-blue"></span>
                     <span class="font-medium text-slate-600">Crawler</span>
                     <span class="bg-bps-blue text-white px-1.5 py-0.5 rounded text-[10px] font-bold" id="status-crawler">IDLE</span>
                 </div>
-
                 <div class="flex items-center gap-1.5 bg-slate-50 px-2.5 py-1 border border-slate-200 rounded-md cursor-pointer hover:bg-slate-100 transition" onclick="alert('Agent Drafter BRS: Menyusun draf siaran pers resmi sesuai tata naskah BPS.')">
                     <span class="w-2 h-2 rounded-full bg-bps-green"></span>
                     <span class="font-medium text-slate-600">Drafter</span>
                     <span class="bg-bps-green text-white px-1.5 py-0.5 rounded text-[10px] font-bold" id="status-drafter">STANDBY</span>
                 </div>
-
                 <div class="flex items-center gap-1.5 bg-slate-50 px-2.5 py-1 border border-slate-200 rounded-md cursor-pointer hover:bg-slate-100 transition" onclick="alert('Agent Auditor & PR: Memantau sentimen dan mitigasi isu pemberitaan.')">
                     <span class="w-2 h-2 rounded-full bg-bps-orange"></span>
                     <span class="font-medium text-slate-600">Auditor</span>
@@ -607,11 +536,13 @@
         <span id="toastMessage">Pesan Notifikasi</span>
     </div>
 
-    <!-- Application Script -->
+    <!-- Application Script & Secured Token Handler -->
     <script>
         lucide.createIcons();
 
         const API_URL = 'https://script.google.com/macros/s/AKfycbz6rjK1i0nCWf9i2ZgH6yblzCdeiz4Cq9hMeKbrEbEZImr5vRUEel8KIP4H2c0UWYMnAA/exec';
+        // Secret Token klien untuk mencocokkan request dengan Apps Script backend
+        const CLIENT_SECRET_TOKEN = 'BPS_Lampung_Humas_2026_SecureKey';
 
         let allNewsData = [];
         let sentimentChart = null;
@@ -621,86 +552,71 @@
         let selectedFileMeta = null;
 
         window.onload = function() {
-        fetchLiveMonitoringData(false);
-    fetchAgentStates(); // Panggil pertama kali saat load
-};
+            fetchLiveMonitoringData(false);
+            fetchAgentStates();
+        };
 
         function switchTab(tabName) {
             document.querySelectorAll('.tab-btn').forEach(btn => {
                 btn.classList.remove('bg-bps-blue', 'text-white', 'shadow-sm');
                 btn.classList.add('text-slate-600');
             });
-
             const activeBtn = document.getElementById(`tab-${tabName}`);
             if (activeBtn) {
                 activeBtn.classList.add('bg-bps-blue', 'text-white', 'shadow-sm');
                 activeBtn.classList.remove('text-slate-600');
             }
-
             ['dashboard', 'news', 'brs', 'bridge'].forEach(sec => {
                 const el = document.getElementById(`section-${sec}`);
                 if (el) el.classList.add('hidden');
             });
-
             const targetSec = document.getElementById(`section-${tabName}`);
             if (targetSec) targetSec.classList.remove('hidden');
         }
 
         function filterByCard(cardType) {
             switchTab('news');
-
             const sentimentSelect = document.getElementById('sentimentFilter');
             const searchInput = document.getElementById('searchInput');
-
             if (searchInput) searchInput.value = '';
-
-            if (cardType === 'total') {
-                if (sentimentSelect) sentimentSelect.value = 'ALL';
-            } else if (cardType === 'positif') {
+            if (cardType === 'positif') {
                 if (sentimentSelect) sentimentSelect.value = 'Positif';
-            } else if (cardType === 'reputasi') {
-                if (sentimentSelect) sentimentSelect.value = 'ALL';
-            } else if (cardType === 'atensi') {
+            } else {
                 if (sentimentSelect) sentimentSelect.value = 'ALL';
             }
-
             filterNewsTable();
-
             if (cardType === 'atensi') {
                 const filtered = allNewsData.filter(item => item.sentiment === 'Netral' || item.sentiment === 'Negatif');
                 renderNewsTable(filtered);
             }
-
             showToast(`Menampilkan rilis data untuk kategori: ${cardType.toUpperCase()}`);
         }
 
-       function handleFileSelected(input) {
-    if (input.files && input.files[0]) {
-        const file = input.files[0];
-        selectedFileBase64 = null;
-        selectedFileMeta = { name: file.name, type: file.type, size: file.size };
+        function handleFileSelected(input) {
+            if (input.files && input.files[0]) {
+                const file = input.files[0];
+                selectedFileBase64 = null;
+                selectedFileMeta = { name: file.name, type: file.type, size: file.size };
 
-        document.getElementById('selectedFileName').innerText = file.name + ' (Membaca berkas...)';
-        document.getElementById('selectedFileSize').innerText = `${(file.size / (1024 * 1024)).toFixed(2)} MB`;
-        document.getElementById('uploadActionArea').classList.remove('hidden');
+                document.getElementById('selectedFileName').innerText = file.name + ' (Membaca berkas...)';
+                document.getElementById('selectedFileSize').innerText = `${(file.size / (1024 * 1024)).toFixed(2)} MB`;
+                document.getElementById('uploadActionArea').classList.remove('hidden');
 
-        const submitBtn = document.getElementById('uploadSubmitBtn');
-        submitBtn.disabled = true;
-        submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
+                const submitBtn = document.getElementById('uploadSubmitBtn');
+                submitBtn.disabled = true;
+                submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
 
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            selectedFileBase64 = e.target.result.split(',')[1];
-            document.getElementById('selectedFileName').innerText = file.name;
-            submitBtn.disabled = false;
-            submitBtn.classList.remove('opacity-50', 'cursor-not-allowed');
-        };
-        reader.onerror = function() {
-            showToast('Gagal membaca berkas lokal. Coba pilih ulang.');
-        };
-        reader.readAsDataURL(file);
-    }
-}
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    selectedFileBase64 = e.target.result.split(',')[1];
+                    document.getElementById('selectedFileName').innerText = file.name;
+                    submitBtn.disabled = false;
+                    submitBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
         async function uploadBrsFileToDrive() {
             if (!selectedFileBase64 || !selectedFileMeta) {
                 showToast('Pilih berkas terlebih dahulu.');
@@ -711,7 +627,6 @@
             btn.disabled = true;
             btn.innerHTML = `<i data-lucide="loader" class="w-3.5 h-3.5 animate-spin"></i> <span>Mengunggah...</span>`;
             lucide.createIcons();
-
             showUploadInProgressModal();
 
             try {
@@ -719,6 +634,7 @@
                     method: 'POST',
                     body: JSON.stringify({
                         action: 'uploadBrs',
+                        token: CLIENT_SECRET_TOKEN, // Mengirim secret token validasi
                         filename: selectedFileMeta.name,
                         mimeType: selectedFileMeta.type,
                         fileData: selectedFileBase64
@@ -726,14 +642,12 @@
                 });
 
                 const result = await response.json();
-                
                 const inProgressModal = document.getElementById('successUploadModal-progress');
                 if (inProgressModal) inProgressModal.remove();
 
                 if (result.status === 'success' || result.fileUrl) {
                     document.getElementById('uploadActionArea').classList.add('hidden');
                     document.getElementById('brsFileInput').value = '';
-
                     showSuccessUploadModal(result.fileTitle || 'Draf Siaran Pers Resmi', result.fileUrl);
                 } else {
                     throw new Error(result.error || 'Gagal memproses di server.');
@@ -762,21 +676,16 @@
                         </div>
                         <div>
                             <h3 class="font-extrabold text-slate-900 text-lg">Menyusun Draf Siaran Pers...</h3>
-                            <p class="text-xs text-slate-500 mt-1 leading-relaxed">
-                                Berkas berhasil diunggah. Sistem sedang mengekstrak indikator paparan dan menyusun draf siaran pers resmi BPS.
-                            </p>
+                            <p class="text-xs text-slate-500 mt-1 leading-relaxed">Berkas berhasil diunggah. Sistem sedang mengekstrak indikator paparan dan menyusun draf siaran pers resmi BPS.</p>
                         </div>
                         <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200 text-left space-y-1.5 text-xs">
                             <div class="flex justify-between"><span class="text-slate-500">Status Proses:</span> <strong class="text-bps-orange animate-pulse">SEDANG BERJALAN</strong></div>
                             <div class="flex justify-between"><span class="text-slate-500">Sumber Bahan:</span> <strong class="text-slate-700 truncate max-w-[200px]">${selectedFileMeta ? selectedFileMeta.name : '-'}</strong></div>
                         </div>
                         <div class="flex items-center gap-2 pt-2">
-                            <button onclick="document.getElementById('successUploadModal-progress').remove()" class="flex-1 px-4 py-2.5 text-xs font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl transition">
-                                Tetap di Sini
-                            </button>
+                            <button onclick="document.getElementById('successUploadModal-progress').remove()" class="flex-1 px-4 py-2.5 text-xs font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl transition">Tetap di Sini</button>
                             <a href="virtual-office.html" class="flex-1 px-4 py-2.5 text-xs font-semibold text-white bg-bps-blue hover:bg-bps-blueDark rounded-xl transition inline-flex items-center justify-center gap-1.5 shadow-xs">
-                                <i data-lucide="monitor" class="w-4 h-4"></i>
-                                <span>Ruang Kendali</span>
+                                <i data-lucide="monitor" class="w-4 h-4"></i><span>Ruang Kendali</span>
                             </a>
                         </div>
                     </div>
@@ -789,7 +698,6 @@
         function showSuccessUploadModal(docTitle, fileUrl) {
             document.getElementById('modalFileName').innerText = docTitle;
             document.getElementById('modalDownloadBtn').href = fileUrl || '#';
-
             const modal = document.getElementById('successUploadModal');
             modal.classList.remove('hidden');
             modal.classList.add('flex');
@@ -805,7 +713,6 @@
         function parseSheetDate(rawVal) {
             if (!rawVal) return { display: '-', sortKey: 0 };
             const str = String(rawVal).trim();
-
             if (str.includes('T')) {
                 const d = new Date(str);
                 if (!isNaN(d.getTime())) {
@@ -819,7 +726,6 @@
                     };
                 }
             }
-
             const parts = str.split('/');
             if (parts.length === 3) {
                 const dd = parseInt(parts[0], 10);
@@ -830,7 +736,6 @@
                     sortKey: new Date(yyyy, mm - 1, dd).getTime()
                 };
             }
-
             return { display: str, sortKey: 0 };
         }
 
@@ -845,21 +750,11 @@
 
         function detectTopic(judul, analisis) {
             const text = `${judul} ${analisis}`.toLowerCase();
-            if (text.includes('inflasi') || text.includes('ihk') || text.includes('harga') || text.includes('beras') || text.includes('cabai')) {
-                return 'Inflasi & Harga';
-            }
-            if (text.includes('ekonomi') || text.includes('pdrb') || text.includes('tumbuh') || text.includes('pertumbuhan') || text.includes('ekspor') || text.includes('impor')) {
-                return 'Pertumbuhan Ekonomi';
-            }
-            if (text.includes('pengangguran') || text.includes('tenaga kerja') || text.includes('kemiskinan') || text.includes('miskin') || text.includes('tpt') || text.includes('bpjstk')) {
-                return 'Ketenagakerjaan & Kemiskinan';
-            }
-            if (text.includes('pertanian') || text.includes('padi') || text.includes('jagung') || text.includes('ntp') || text.includes('petani') || text.includes('panen')) {
-                return 'Pertanian & NTP';
-            }
-            if (text.includes('ipm') || text.includes('pendidikan') || text.includes('sekolah') || text.includes('beasiswa') || text.includes('pembangunan manusia')) {
-                return 'IPM & Pendidikan';
-            }
+            if (text.includes('inflasi') || text.includes('ihk') || text.includes('harga') || text.includes('beras')) return 'Inflasi & Harga';
+            if (text.includes('ekonomi') || text.includes('pdrb') || text.includes('tumbuh') || text.includes('ekspor')) return 'Pertumbuhan Ekonomi';
+            if (text.includes('pengangguran') || text.includes('tenaga kerja') || text.includes('kemiskinan') || text.includes('tpt')) return 'Ketenagakerjaan & Kemiskinan';
+            if (text.includes('pertanian') || text.includes('padi') || text.includes('ntp') || text.includes('petani')) return 'Pertanian & NTP';
+            if (text.includes('ipm') || text.includes('pendidikan') || text.includes('sekolah')) return 'IPM & Pendidikan';
             return 'Isu Daerah & Umum';
         }
 
@@ -867,9 +762,7 @@
             const pingDot = document.getElementById('apiPingDot');
             const solidDot = document.getElementById('apiSolidDot');
             const statusText = document.getElementById('apiStatusText');
-
             if (!statusText) return;
-
             if (state === 'ok') {
                 if (pingDot) pingDot.className = 'animate-ping absolute inline-flex h-full w-full rounded-full bg-[#68B92E] opacity-75';
                 if (solidDot) solidDot.className = 'relative inline-flex rounded-full h-2.5 w-2.5 bg-[#68B92E]';
@@ -892,7 +785,8 @@
             setConnectionStatus('loading', 'Menarik data...');
 
             try {
-                const response = await fetch(API_URL);
+                // Mengirim token rahasia via parameter query untuk otorisasi GET
+                const response = await fetch(`${API_URL}?token=${CLIENT_SECRET_TOKEN}`);
                 if (!response.ok) throw new Error(`HTTP ${response.status}`);
                 const rawData = await response.json();
 
@@ -904,7 +798,6 @@
                     const parsedDate = parseSheetDate(row.tanggal);
                     const sentiment = extractSentiment(row.analisis);
                     const topic = detectTopic(row.judul, row.analisis);
-
                     return {
                         id: idx + 1,
                         date: parsedDate.display,
@@ -919,16 +812,13 @@
                 });
 
                 allNewsData.sort((a, b) => b.sortKey - a.sortKey);
-
                 updateDashboardMetricsAndCharts(allNewsData);
                 renderNewsTable(allNewsData);
 
                 const now = new Date();
                 document.getElementById('lastUpdateText').innerText = `${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')} WIB`;
                 setConnectionStatus('ok', `Terhubung (${allNewsData.length} Berita)`);
-
                 if (isManual) showToast(`Sinkronisasi berhasil: ${allNewsData.length} berita dimuat dari database.`);
-
             } catch (err) {
                 console.error('Error fetch sheets:', err);
                 setConnectionStatus('error', 'Gagal Terhubung');
@@ -938,18 +828,44 @@
             }
         }
 
+        async function fetchAgentStates() {
+            try {
+                const response = await fetch(`${API_URL}?mode=agents&token=${CLIENT_SECRET_TOKEN}`);
+                if (!response.ok) return;
+                const data = await response.json();
+                
+                if (data.agents && Array.isArray(data.agents)) {
+                    data.agents.forEach(agent => {
+                        let badgeEl = document.getElementById(`status-${agent.id}`);
+                        if (badgeEl) {
+                            badgeEl.innerText = agent.status;
+                            if (agent.status === 'WORKING') {
+                                badgeEl.className = 'bg-bps-orange text-white px-1.5 py-0.5 rounded text-[10px] font-bold animate-pulse';
+                            } else if (agent.status === 'DONE') {
+                                badgeEl.className = 'bg-bps-green text-white px-1.5 py-0.5 rounded text-[10px] font-bold';
+                            } else if (agent.status === 'ERROR') {
+                                badgeEl.className = 'bg-rose-600 text-white px-1.5 py-0.5 rounded text-[10px] font-bold';
+                            } else {
+                                badgeEl.className = 'bg-slate-400 text-white px-1.5 py-0.5 rounded text-[10px] font-bold';
+                            }
+                        }
+                    });
+                }
+            } catch (e) {
+                console.error('Gagal memuat status agen:', e);
+            }
+        }
+
+        setInterval(fetchAgentStates, 6000);
+
         function updateDashboardMetricsAndCharts(data) {
             const total = data.length;
             const positif = data.filter(d => d.sentiment === 'Positif').length;
             const netral = data.filter(d => d.sentiment === 'Netral').length;
             const negatif = data.filter(d => d.sentiment === 'Negatif').length;
-
             const uniqueMedia = new Set(data.map(d => d.media.toLowerCase().trim())).size;
             const posPct = total > 0 ? ((positif / total) * 100).toFixed(1) : '0.0';
-
-            const repScore = total > 0
-                ? (((positif * 10) + (netral * 7.5) + (negatif * 2)) / total).toFixed(1)
-                : '0.0';
+            const repScore = total > 0 ? (((positif * 10) + (netral * 7.5) + (negatif * 2)) / total).toFixed(1) : '0.0';
 
             document.getElementById('kpiTotal').innerText = total;
             document.getElementById('kpiMediaCount').innerHTML = `<i data-lucide="newspaper" class="w-3.5 h-3.5 mr-1 text-bps-blue"></i> Dari ${uniqueMedia} media daring`;
@@ -968,62 +884,30 @@
             const chronological = [...data].sort((a, b) => a.sortKey - b.sortKey);
             const validDates = chronological.filter(d => d.sortKey > 0);
             if (validDates.length > 0) {
-                const startDate = validDates[0].date;
-                const endDate = validDates[validDates.length - 1].date;
-                document.getElementById('dateRangeText').innerText = startDate === endDate ? startDate : `${startDate} – ${endDate}`;
+                document.getElementById('dateRangeText').innerText = validDates[0].date === validDates[validDates.length - 1].date ? validDates[0].date : `${validDates[0].date} – ${validDates[validDates.length - 1].date}`;
             } else {
                 document.getElementById('dateRangeText').innerText = 'Semua Data';
             }
 
             const dateGroups = {};
             chronological.forEach(item => {
-                const key = item.date;
-                if (!dateGroups[key]) {
-                    dateGroups[key] = { Positif: 0, Netral: 0, Negatif: 0 };
-                }
-                dateGroups[key][item.sentiment]++;
+                if (!dateGroups[item.date]) dateGroups[item.date] = { Positif: 0, Netral: 0, Negatif: 0 };
+                dateGroups[item.date][item.sentiment]++;
             });
-
-            const trendLabels = Object.keys(dateGroups);
-            const trendPos = trendLabels.map(d => dateGroups[d].Positif);
-            const trendNet = trendLabels.map(d => dateGroups[d].Netral);
-            const trendNeg = trendLabels.map(d => dateGroups[d].Negatif);
 
             const mediaCounts = {};
-            data.forEach(item => {
-                const m = item.media.trim();
-                mediaCounts[m] = (mediaCounts[m] || 0) + 1;
-            });
+            data.forEach(item => { const m = item.media.trim(); mediaCounts[m] = (mediaCounts[m] || 0) + 1; });
             const sortedMedia = Object.entries(mediaCounts).sort((a, b) => b[1] - a[1]);
             const topMedia = sortedMedia.slice(0, 5);
             const otherMediaCount = sortedMedia.slice(5).reduce((sum, curr) => sum + curr[1], 0);
-
             const mediaLabels = topMedia.map(m => m[0]);
             const mediaValues = topMedia.map(m => m[1]);
-            if (otherMediaCount > 0) {
-                mediaLabels.push('Media Lainnya');
-                mediaValues.push(otherMediaCount);
-            }
+            if (otherMediaCount > 0) { mediaLabels.push('Media Lainnya'); mediaValues.push(otherMediaCount); }
 
-            const topicCounts = {
-                'Pertumbuhan Ekonomi': 0,
-                'Ketenagakerjaan & Kemiskinan': 0,
-                'Pertanian & NTP': 0,
-                'IPM & Pendidikan': 0,
-                'Inflasi & Harga': 0,
-                'Isu Daerah & Umum': 0
-            };
-            data.forEach(item => {
-                if (topicCounts[item.topic] !== undefined) {
-                    topicCounts[item.topic]++;
-                }
-            });
+            const topicCounts = { 'Pertumbuhan Ekonomi': 0, 'Ketenagakerjaan & Kemiskinan': 0, 'Pertanian & NTP': 0, 'IPM & Pendidikan': 0, 'Inflasi & Harga': 0, 'Isu Daerah & Umum': 0 };
+            data.forEach(item => { if (topicCounts[item.topic] !== undefined) topicCounts[item.topic]++; });
 
-            renderCharts(
-                trendLabels, trendPos, trendNet, trendNeg,
-                mediaLabels, mediaValues,
-                Object.keys(topicCounts), Object.values(topicCounts)
-            );
+            renderCharts(Object.keys(dateGroups), Object.keys(dateGroups).map(d => dateGroups[d].Positif), Object.keys(dateGroups).map(d => dateGroups[d].Netral), Object.keys(dateGroups).map(d => dateGroups[d].Negatif), mediaLabels, mediaValues, Object.keys(topicCounts), Object.values(topicCounts));
         }
 
         function renderCharts(trendLabels, trendPos, trendNet, trendNeg, mediaLabels, mediaValues, topicLabels, topicValues) {
@@ -1031,171 +915,59 @@
             if (mediaChart) mediaChart.destroy();
             if (topicsChart) topicsChart.destroy();
 
-            const ctx1 = document.getElementById('sentimentTrendChart').getContext('2d');
-            sentimentChart = new Chart(ctx1, {
+            sentimentChart = new Chart(document.getElementById('sentimentTrendChart').getContext('2d'), {
                 type: 'line',
                 data: {
                     labels: trendLabels,
                     datasets: [
-                        {
-                            label: 'Positif',
-                            data: trendPos,
-                            borderColor: '#68B92E',
-                            backgroundColor: 'rgba(104, 185, 46, 0.14)',
-                            fill: true,
-                            tension: 0.3,
-                            borderWidth: 2.5,
-                            pointRadius: 4
-                        },
-                        {
-                            label: 'Netral',
-                            data: trendNet,
-                            borderColor: '#008FD5',
-                            backgroundColor: 'transparent',
-                            tension: 0.3,
-                            borderWidth: 2,
-                            borderDash: [4, 4],
-                            pointRadius: 4
-                        },
-                        {
-                            label: 'Negatif',
-                            data: trendNeg,
-                            borderColor: '#EB891B',
-                            backgroundColor: 'transparent',
-                            tension: 0.3,
-                            borderWidth: 2,
-                            pointRadius: 4
-                        }
+                        { label: 'Positif', data: trendPos, borderColor: '#68B92E', backgroundColor: 'rgba(104, 185, 46, 0.14)', fill: true, tension: 0.3, borderWidth: 2.5, pointRadius: 4 },
+                        { label: 'Netral', data: trendNet, borderColor: '#008FD5', backgroundColor: 'transparent', tension: 0.3, borderWidth: 2, borderDash: [4, 4], pointRadius: 4 },
+                        { label: 'Negatif', data: trendNeg, borderColor: '#EB891B', backgroundColor: 'transparent', tension: 0.3, borderWidth: 2, pointRadius: 4 }
                     ]
                 },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { position: 'top', labels: { boxWidth: 12, font: { size: 11 } } }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            ticks: { stepSize: 1, precision: 0, font: { size: 11 } },
-                            grid: { borderDash: [2, 2] }
-                        },
-                        x: {
-                            grid: { display: false },
-                            ticks: { font: { size: 11 } }
-                        }
-                    }
-                }
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top', labels: { boxWidth: 12, font: { size: 11 } } } }, scales: { y: { beginAtZero: true, ticks: { stepSize: 1, precision: 0 } }, x: { grid: { display: false } } } }
             });
 
-            const ctx2 = document.getElementById('mediaShareChart').getContext('2d');
-            mediaChart = new Chart(ctx2, {
+            mediaChart = new Chart(document.getElementById('mediaShareChart').getContext('2d'), {
                 type: 'doughnut',
-                data: {
-                    labels: mediaLabels,
-                    datasets: [{
-                        data: mediaValues,
-                        backgroundColor: ['#0B2545', '#008FD5', '#68B92E', '#EB891B', '#38BDF8', '#CBD5E1'],
-                        borderWidth: 2,
-                        borderColor: '#ffffff'
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 10 } } }
-                    },
-                    cutout: '62%'
-                }
+                data: { labels: mediaLabels, datasets: [{ data: mediaValues, backgroundColor: ['#0B2545', '#008FD5', '#68B92E', '#EB891B', '#38BDF8', '#CBD5E1'], borderWidth: 2, borderColor: '#ffffff' }] },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 10 } } } }, cutout: '62%' }
             });
 
-            const ctx3 = document.getElementById('topicsChart').getContext('2d');
-            
-            const g1 = ctx3.createLinearGradient(0, 0, 0, 200); g1.addColorStop(0, '#008FD5'); g1.addColorStop(1, '#0B2545');
-            const g2 = ctx3.createLinearGradient(0, 0, 0, 200); g2.addColorStop(0, '#68B92E'); g2.addColorStop(1, '#4A8C1C');
-            const g3 = ctx3.createLinearGradient(0, 0, 0, 200); g3.addColorStop(0, '#EB891B'); g3.addColorStop(1, '#C26B0E');
-            const g4 = ctx3.createLinearGradient(0, 0, 0, 200); g4.addColorStop(0, '#38BDF8'); g4.addColorStop(1, '#008FD5');
-            const g5 = ctx3.createLinearGradient(0, 0, 0, 200); g5.addColorStop(0, '#84CC16'); g5.addColorStop(1, '#68B92E');
-            const g6 = ctx3.createLinearGradient(0, 0, 0, 200); g6.addColorStop(0, '#64748B'); g6.addColorStop(1, '#334155');
-
-            topicsChart = new Chart(ctx3, {
+            topicsChart = new Chart(document.getElementById('topicsChart').getContext('2d'), {
                 type: 'bar',
-                data: {
-                    labels: topicLabels,
-                    datasets: [{
-                        label: 'Jumlah Artikel',
-                        data: topicValues,
-                        backgroundColor: [g1, g2, g3, g4, g5, g6],
-                        borderRadius: 8,
-                        borderSkipped: false
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { legend: { display: false } },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            ticks: { stepSize: 1, precision: 0, font: { size: 11 } },
-                            grid: { borderDash: [2, 2] }
-                        },
-                        x: {
-                            grid: { display: false },
-                            ticks: { font: { size: 11 } }
-                        }
-                    }
-                }
+                data: { labels: topicLabels, datasets: [{ label: 'Jumlah Artikel', data: topicValues, backgroundColor: ['#008FD5', '#68B92E', '#EB891B', '#38BDF8', '#84CC16', '#64748B'], borderRadius: 8 }] },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } }, x: { grid: { display: false } } } }
             });
         }
 
         function renderNewsTable(data) {
             const tbody = document.getElementById('newsTableBody');
             tbody.innerHTML = '';
-
             if (data.length === 0) {
                 tbody.innerHTML = `<tr><td colspan="6" class="px-4 py-8 text-center text-slate-400">Tidak ada berita yang sesuai dengan filter.</td></tr>`;
                 document.getElementById('showingCount').innerText = `Menampilkan 0 dari ${allNewsData.length} berita`;
                 return;
             }
-
             data.forEach(item => {
-                let badgeColor = 'bg-slate-100 text-slate-700 border border-slate-200';
-                if (item.sentiment === 'Positif') badgeColor = 'bg-[#68B92E]/15 text-bps-greenDark border border-[#68B92E]/30';
-                if (item.sentiment === 'Negatif') badgeColor = 'bg-[#EB891B]/15 text-bps-orangeDark border border-[#EB891B]/30';
-
+                let badgeColor = item.sentiment === 'Positif' ? 'bg-[#68B92E]/15 text-bps-greenDark border border-[#68B92E]/30' : (item.sentiment === 'Negatif' ? 'bg-[#EB891B]/15 text-bps-orangeDark border border-[#EB891B]/30' : 'bg-slate-100 text-slate-700 border border-slate-200');
                 const tr = document.createElement('tr');
                 tr.className = 'hover:bg-slate-50 transition';
                 tr.innerHTML = `
                     <td class="px-4 py-3 whitespace-nowrap text-slate-500 font-medium">${item.date}</td>
-                    <td class="px-4 py-3 font-medium text-slate-900 max-w-md">
-                        <a href="${item.link}" target="_blank" rel="noopener noreferrer" class="hover:text-bps-blue hover:underline transition">
-                            ${item.title}
-                        </a>
-                    </td>
+                    <td class="px-4 py-3 font-medium text-slate-900 max-w-md"><a href="${item.link}" target="_blank" class="hover:text-bps-blue hover:underline transition">${item.title}</a></td>
                     <td class="px-4 py-3 whitespace-nowrap"><span class="font-semibold text-slate-700">${item.media}</span></td>
                     <td class="px-4 py-3 whitespace-nowrap"><span class="bg-[#008FD5]/10 text-bps-blue px-2 py-0.5 rounded text-[11px] font-medium">${item.topic}</span></td>
-                    <td class="px-4 py-3 whitespace-nowrap text-center">
-                        <span class="px-2.5 py-1 rounded-full text-[11px] font-semibold ${badgeColor}">
-                            ${item.sentiment}
-                        </span>
-                    </td>
+                    <td class="px-4 py-3 whitespace-nowrap text-center"><span class="px-2.5 py-1 rounded-full text-[11px] font-semibold ${badgeColor}">${item.sentiment}</span></td>
                     <td class="px-4 py-3 whitespace-nowrap text-right">
                         <div class="inline-flex items-center gap-2">
-                            <button onclick="openAnalysisModal(${item.id})" class="px-2.5 py-1 rounded bg-[#008FD5]/10 text-bps-blue hover:bg-[#008FD5]/20 font-semibold text-xs inline-flex items-center gap-1 transition">
-                                <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
-                                <span>Analisis</span>
-                            </button>
-                            <a href="${item.link}" target="_blank" rel="noopener noreferrer" class="text-slate-500 hover:text-bps-blue p-1" title="Buka Tautan Berita">
-                                <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
-                            </a>
+                            <button onclick="openAnalysisModal(${item.id})" class="px-2.5 py-1 rounded bg-[#008FD5]/10 text-bps-blue hover:bg-[#008FD5]/20 font-semibold text-xs inline-flex items-center gap-1 transition"><i data-lucide="sparkles" class="w-3.5 h-3.5"></i><span>Analisis</span></button>
+                            <a href="${item.link}" target="_blank" class="text-slate-500 hover:text-bps-blue p-1"><i data-lucide="external-link" class="w-3.5 h-3.5"></i></a>
                         </div>
                     </td>
                 `;
                 tbody.appendChild(tr);
             });
-
             document.getElementById('showingCount').innerText = `Menampilkan ${data.length} dari ${allNewsData.length} berita`;
             lucide.createIcons();
         }
@@ -1204,92 +976,41 @@
             const searchVal = document.getElementById('searchInput').value.toLowerCase();
             const sentimentVal = document.getElementById('sentimentFilter').value;
             const topicVal = document.getElementById('topicFilter').value;
-
             const filtered = allNewsData.filter(item => {
-                const matchesSearch = item.title.toLowerCase().includes(searchVal) || item.media.toLowerCase().includes(searchVal);
-                const matchesSentiment = sentimentVal === 'ALL' || item.sentiment === sentimentVal;
-                const matchesTopic = topicVal === 'ALL' || item.topic === topicVal;
-                return matchesSearch && matchesSentiment && matchesTopic;
+                return (item.title.toLowerCase().includes(searchVal) || item.media.toLowerCase().includes(searchVal)) &&
+                       (sentimentVal === 'ALL' || item.sentiment === sentimentVal) &&
+                       (topicVal === 'ALL' || item.topic === topicVal);
             });
-
             renderNewsTable(filtered);
         }
 
         function openAnalysisModal(id) {
             const item = allNewsData.find(d => d.id === id);
             if (!item) return;
-
             document.getElementById('modalDate').innerText = item.date;
             document.getElementById('modalMedia').innerText = item.media;
             document.getElementById('modalTitle').innerText = item.title;
             document.getElementById('modalBody').innerText = item.analisis;
             document.getElementById('modalExternalLink').href = item.link;
-
             const badge = document.getElementById('modalSentimentBadge');
             badge.innerText = item.sentiment;
-            badge.className = 'text-[11px] px-2 py-0.5 rounded-full font-semibold ';
-            if (item.sentiment === 'Positif') badge.className += 'bg-[#68B92E]/15 text-bps-greenDark';
-            else if (item.sentiment === 'Negatif') badge.className += 'bg-[#EB891B]/15 text-bps-orangeDark';
-            else badge.className += 'bg-slate-200 text-slate-800';
-
-            const modal = document.getElementById('analysisModal');
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
+            badge.className = item.sentiment === 'Positif' ? 'text-[11px] px-2 py-0.5 rounded-full font-semibold bg-[#68B92E]/15 text-bps-greenDark' : (item.sentiment === 'Negatif' ? 'text-[11px] px-2 py-0.5 rounded-full font-semibold bg-[#EB891B]/15 text-bps-orangeDark' : 'text-[11px] px-2 py-0.5 rounded-full font-semibold bg-slate-200 text-slate-800');
+            document.getElementById('analysisModal').classList.remove('hidden');
+            document.getElementById('analysisModal').classList.add('flex');
             lucide.createIcons();
         }
 
         function closeAnalysisModal() {
-            const modal = document.getElementById('analysisModal');
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
+            document.getElementById('analysisModal').classList.add('hidden');
+            document.getElementById('analysisModal').classList.remove('flex');
         }
 
         function showToast(message) {
             const toast = document.getElementById('toast');
-            const msg = document.getElementById('toastMessage');
-            msg.innerText = message;
+            document.getElementById('toastMessage').innerText = message;
             toast.classList.remove('opacity-0', 'translate-y-4', 'pointer-events-none');
-
-            setTimeout(() => {
-                toast.classList.add('opacity-0', 'translate-y-4', 'pointer-events-none');
-            }, 3500);
+            setTimeout(() => { toast.classList.add('opacity-0', 'translate-y-4', 'pointer-events-none'); }, 3500);
         }
     </script>
 </body>
 </html>
-
-// Fungsi Polling Real-Time Status 3 AI Agent Humas
-async function fetchAgentStates() {
-    try {
-        const response = await fetch(`${API_URL}?mode=agents`);
-        if (!response.ok) return;
-        const data = await response.json();
-        
-        if (data.agents && Array.isArray(data.agents)) {
-            data.agents.forEach(agent => {
-                // Mapping id agen dari sheet ke elemen ID badge di HTML
-                // id di sheet: 'crawler', 'drafter', 'auditor'
-                let badgeEl = document.getElementById(`status-${agent.id}`);
-                if (badgeEl) {
-                    badgeEl.innerText = agent.status;
-                    
-                    // Sesuaikan warna badge berdasarkan status
-                    if (agent.status === 'WORKING') {
-                        badgeEl.className = 'bg-bps-orange text-white px-1.5 py-0.5 rounded text-[10px] font-bold animate-pulse';
-                    } else if (agent.status === 'DONE') {
-                        badgeEl.className = 'bg-bps-green text-white px-1.5 py-0.5 rounded text-[10px] font-bold';
-                    } else if (agent.status === 'ERROR') {
-                        badgeEl.className = 'bg-rose-600 text-white px-1.5 py-0.5 rounded text-[10px] font-bold';
-                    } else {
-                        badgeEl.className = 'bg-slate-400 text-white px-1.5 py-0.5 rounded text-[10px] font-bold';
-                    }
-                }
-            });
-        }
-    } catch (e) {
-        console.error('Gagal memuat status agen:', e);
-    }
-}
-
-// Jalankan polling otomatis setiap 6 detik setelah halaman dimuat
-setInterval(fetchAgentStates, 6000);
