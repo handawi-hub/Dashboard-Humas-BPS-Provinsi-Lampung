@@ -149,39 +149,43 @@
           </div>
         </div>
 
-        <!-- 3 AGENT STATUS CARDS -->
-        <div class="p-3.5 bg-stone-50/70 border-t border-stone-100 grid grid-cols-1 sm:grid-cols-3 gap-2.5">
-          <div onclick="focusCamera('crawler')" id="card-crawler" class="cursor-pointer bg-white hover:border-sky-400 border border-stone-200 rounded-2xl p-3 shadow-sm transition group">
-            <div class="flex items-center justify-between mb-1">
-              <span class="text-xs font-extrabold text-sky-700 group-hover:text-sky-600">1. Media Crawler</span>
-              <span id="badge-crawler" class="px-2 py-0.5 rounded-md text-[10px] font-extrabold bg-stone-100 text-slate-600">IDLE</span>
-            </div>
-            <p class="text-[10px] text-slate-400 font-semibold mb-1">Chibi • Rambut Sebahu & Jas Gelap</p>
-            <p id="msg-crawler" class="text-[11px] text-slate-600 leading-snug line-clamp-2">Menunggu jadwal pemindaian RSS...</p>
-            <span id="time-crawler" class="block text-[10px] text-slate-400 font-mono-code mt-1.5">-</span>
-          </div>
+        <!<!-- 3 AGENT STATUS CARDS -->
+<div class="p-3.5 bg-stone-50/70 border-t border-stone-100 grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+  
+  <!-- AGENT 1: Media Crawler -->
+  <div onclick="focusCamera('crawler')" id="card-crawler" class="cursor-pointer bg-white hover:border-sky-400 border border-stone-200 rounded-2xl p-3 shadow-sm transition group">
+    <div class="flex items-center justify-between mb-1">
+      <span class="text-xs font-extrabold text-sky-700 group-hover:text-sky-600">1. News Crawler & PR Specialist</span>
+      <span id="badge-crawler" class="px-2 py-0.5 rounded-md text-[10px] font-extrabold bg-stone-100 text-slate-600">IDLE</span>
+    </div>
+    <p class="text-[10px] text-slate-400 font-semibold mb-1">Media Monitoring & Intelligence Unit</p>
+    <p id="msg-crawler" class="text-[11px] text-slate-600 leading-snug line-clamp-2">Memindai pemberitaan media online seputar BPS Provinsi Lampung.</p>
+    <span id="time-crawler" class="block text-[10px] text-slate-400 font-mono-code mt-1.5">-</span>
+  </div>
 
-          <div onclick="focusCamera('drafter')" id="card-drafter" class="cursor-pointer bg-white hover:border-emerald-400 border border-stone-200 rounded-2xl p-3 shadow-sm transition group">
-            <div class="flex items-center justify-between mb-1">
-              <span class="text-xs font-extrabold text-emerald-700 group-hover:text-emerald-600">2. Penulis BRS</span>
-              <span id="badge-drafter" class="px-2 py-0.5 rounded-md text-[10px] font-extrabold bg-stone-100 text-slate-600">IDLE</span>
-            </div>
-            <p class="text-[10px] text-slate-400 font-semibold mb-1">Chibi • Rambut Panjang Bergelombang</p>
-            <p id="msg-drafter" class="text-[11px] text-slate-600 leading-snug line-clamp-2">Siap memproses bahan tayang PPTX...</p>
-            <span id="time-drafter" class="block text-[10px] text-slate-400 font-mono-code mt-1.5">-</span>
-          </div>
+  <!-- AGENT 2: Penulis BRS -->
+  <div onclick="focusCamera('drafter')" id="card-drafter" class="cursor-pointer bg-white hover:border-emerald-400 border border-stone-200 rounded-2xl p-3 shadow-sm transition group">
+    <div class="flex items-center justify-between mb-1">
+      <span class="text-xs font-extrabold text-emerald-700 group-hover:text-emerald-600">2. Press Release Drafter</span>
+      <span id="badge-drafter" class="px-2 py-0.5 rounded-md text-[10px] font-extrabold bg-stone-100 text-slate-600">IDLE</span>
+    </div>
+    <p class="text-[10px] text-slate-400 font-semibold mb-1">Statistical Data Storyteller & Benchmark Stylist</p>
+    <p id="msg-drafter" class="text-[11px] text-slate-600 leading-snug line-clamp-2">Menyusun narasi siaran pers berbasis materi paparan dan standar rilis resmi.</p>
+    <span id="time-drafter" class="block text-[10px] text-slate-400 font-mono-code mt-1.5">-</span>
+  </div>
 
-          <div onclick="focusCamera('auditor')" id="card-auditor" class="cursor-pointer bg-white hover:border-amber-500 border border-stone-200 rounded-2xl p-3 shadow-sm transition group">
-            <div class="flex items-center justify-between mb-1">
-              <span class="text-xs font-extrabold text-amber-800 group-hover:text-amber-700">3. Auditor & PR</span>
-              <span id="badge-auditor" class="px-2 py-0.5 rounded-md text-[10px] font-extrabold bg-stone-100 text-slate-600">IDLE</span>
-            </div>
-            <p class="text-[10px] text-slate-400 font-semibold mb-1">Chibi • Platinum Ombre & Sweater Tenun</p>
-            <p id="msg-auditor" class="text-[11px] text-slate-600 leading-snug line-clamp-2">Menunggu validasi angka & sentimen...</p>
-            <span id="time-auditor" class="block text-[10px] text-slate-400 font-mono-code mt-1.5">-</span>
-          </div>
-        </div>
-      </div>
+  <!-- AGENT 3: Auditor & PR -->
+  <div onclick="focusCamera('auditor')" id="card-auditor" class="cursor-pointer bg-white hover:border-amber-500 border border-stone-200 rounded-2xl p-3 shadow-sm transition group">
+    <div class="flex items-center justify-between mb-1">
+      <span class="text-xs font-extrabold text-amber-800 group-hover:text-amber-700">3. Auditor & PR Strategy Advisor</span>
+      <span id="badge-auditor" class="px-2 py-0.5 rounded-md text-[10px] font-extrabold bg-stone-100 text-slate-600">IDLE</span>
+    </div>
+    <p class="text-[10px] text-slate-400 font-semibold mb-1">Editorial Validation & Content Quality Control</p>
+    <p id="msg-auditor" class="text-[11px] text-slate-600 leading-snug line-clamp-2">Memvalidasi substansi data statistik dan keselarasan strategi komunikasi publik.</p>
+    <span id="time-auditor" class="block text-[10px] text-slate-400 font-mono-code mt-1.5">-</span>
+  </div>
+
+</div>
 
       <!-- TERMINAL LOG -->
       <div class="bg-white border border-stone-200 rounded-2xl p-3.5 shadow-sm">
