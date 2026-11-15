@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>3D Semi-Outdoor AI Agent Virtual Office — Humas BPS Provinsi Lampung</title>
+  <title>3D Semi-Outdoor AI Agent Virtual Office (2 Lantai) — Humas BPS Provinsi Lampung</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <!-- Three.js & OrbitControls untuk 3D Creative Studio Semi-Outdoor -->
@@ -55,7 +55,7 @@
         </a>
         <div>
           <div class="flex items-center gap-2">
-            <h1 class="text-sm sm:text-base font-extrabold text-slate-900 tracking-tight">SIGER Humas Hub (Ruang Kendali Humas)</h1>
+            <h1 class="text-sm sm:text-base font-extrabold text-slate-900 tracking-tight">SIGER Humas Hub (Ruang Kendali Humas 2 Lantai)</h1>
             <span id="connectionBadge" class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-100 text-amber-800 border border-amber-300">
               <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
               Mode Simulasi
@@ -121,7 +121,7 @@
             <button onclick="focusCamera('overview')" id="cam-overview" class="cam-btn px-2.5 py-1 rounded-lg text-[11px] font-bold bg-slate-900 text-white transition">Taman & Studio</button>
             <button onclick="focusCamera('crawler')" id="cam-crawler" class="cam-btn px-2.5 py-1 rounded-lg text-[11px] font-bold bg-white text-slate-600 border border-stone-200 hover:bg-sky-50 transition">Crawler</button>
             <button onclick="focusCamera('drafter')" id="cam-drafter" class="cam-btn px-2.5 py-1 rounded-lg text-[11px] font-bold bg-white text-slate-600 border border-stone-200 hover:bg-emerald-50 transition">Penulis BRS</button>
-            <button onclick="focusCamera('auditor')" id="cam-auditor" class="cam-btn px-2.5 py-1 rounded-lg text-[11px] font-bold bg-white text-slate-600 border border-stone-200 hover:bg-purple-50 transition">Auditor</button>
+            <button onclick="focusCamera('auditor')" id="cam-auditor" class="cam-btn px-2.5 py-1 rounded-lg text-[11px] font-bold bg-white text-slate-600 border border-stone-200 hover:bg-purple-50 transition">Auditor (Lantai 2)</button>
             <button onclick="focusCamera('garden')" id="cam-garden" class="cam-btn px-2.5 py-1 rounded-lg text-[11px] font-bold bg-white text-emerald-700 border border-emerald-200 hover:bg-emerald-50 transition">🌿 Area Taman</button>
           </div>
           <span id="lastSyncText" class="text-[11px] text-slate-500 font-mono-code font-semibold">Polling: Siap</span>
@@ -158,7 +158,7 @@
               <span class="text-xs font-extrabold text-sky-700 group-hover:text-sky-600">1. News Crawler & PR Specialist</span>
               <span id="badge-crawler" class="px-2 py-0.5 rounded-md text-[10px] font-extrabold bg-stone-100 text-slate-600">IDLE</span>
             </div>
-            <p class="text-[10px] text-slate-400 font-semibold mb-1">Media Monitoring & Intelligence Unit</p>
+            <p class="text-[10px] text-slate-400 font-semibold mb-1">Media Monitoring Unit</p>
             <p id="msg-crawler" class="text-[11px] text-slate-600 leading-snug line-clamp-2">Memindai pemberitaan media online seputar BPS Provinsi Lampung.</p>
             <span id="time-crawler" class="block text-[10px] text-slate-400 font-mono-code mt-1.5">-</span>
           </div>
@@ -169,19 +169,19 @@
               <span class="text-xs font-extrabold text-emerald-700 group-hover:text-emerald-600">2. Press Release Drafter</span>
               <span id="badge-drafter" class="px-2 py-0.5 rounded-md text-[10px] font-extrabold bg-stone-100 text-slate-600">IDLE</span>
             </div>
-            <p class="text-[10px] text-slate-400 font-semibold mb-1">Statistical Data Storyteller & Benchmark Stylist</p>
+            <p class="text-[10px] text-slate-400 font-semibold mb-1">Statistical Data Storyteller</p>
             <p id="msg-drafter" class="text-[11px] text-slate-600 leading-snug line-clamp-2">Menyusun narasi siaran pers berbasis materi paparan dan standar rilis resmi.</p>
             <span id="time-drafter" class="block text-[10px] text-slate-400 font-mono-code mt-1.5">-</span>
           </div>
 
-          <!-- AGENT 3: Auditor & PR -->
+          <!-- AGENT 3: Auditor & PR (Lantai 2) -->
           <div onclick="focusCamera('auditor')" id="card-auditor" class="cursor-pointer bg-white hover:border-amber-500 border border-stone-200 rounded-2xl p-3 shadow-sm transition group">
             <div class="flex items-center justify-between mb-1">
-              <span class="text-xs font-extrabold text-amber-800 group-hover:text-amber-700">3. Auditor & PR Strategy Advisor</span>
+              <span class="text-xs font-extrabold text-amber-800 group-hover:text-amber-700">3. Auditor & PR Strategy (Lantai 2)</span>
               <span id="badge-auditor" class="px-2 py-0.5 rounded-md text-[10px] font-extrabold bg-stone-100 text-slate-600">IDLE</span>
             </div>
-            <p class="text-[10px] text-slate-400 font-semibold mb-1">Editorial Validation & Content Quality Control</p>
-            <p id="msg-auditor" class="text-[11px] text-slate-600 leading-snug line-clamp-2">Memvalidasi substansi data statistik dan keselarasan strategi komunikasi publik.</p>
+            <p class="text-[10px] text-slate-400 font-semibold mb-1">Editorial Control (Ruan Balcony Atas)</p>
+            <p id="msg-auditor" class="text-[11px] text-slate-600 leading-snug line-clamp-2">Memvalidasi substansi data statistik dan keselarasan strategi komunikasi publik di lantai 2.</p>
             <span id="time-auditor" class="block text-[10px] text-slate-400 font-mono-code mt-1.5">-</span>
           </div>
 
@@ -193,12 +193,12 @@
         <div class="flex items-center justify-between mb-2">
           <span class="text-xs font-extrabold text-slate-700 flex items-center gap-2">
             <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
-            Aktivitas Orkestrasi Apps Script
+            Aktivitas Orkestrasi Apps Script (2 Lantai)
           </span>
           <button onclick="clearLogs()" class="text-[11px] font-semibold text-slate-400 hover:text-slate-700">Bersihkan Log</button>
         </div>
         <div id="terminalLog" class="font-mono-code text-[11px] text-slate-700 space-y-1 max-h-32 overflow-y-auto bg-stone-50 p-2.5 rounded-xl border border-stone-200/80">
-          <div class="text-slate-500">[SYSTEM] Studio Industrial siap. Klik "Putar Metal Hardcore" untuk BGM Symphonic Metalcore.</div>
+          <div class="text-slate-500">[SYSTEM] Virtual Office 2 Lantai & Tangga Spiral siap. Klik "Putar Metal Hardcore" untuk BGM.</div>
         </div>
       </div>
     </section>
@@ -232,7 +232,7 @@
               <span class="text-[10px] uppercase tracking-wider text-emerald-700 font-extrabold">Template Resmi BPS Provinsi Lampung</span>
               <p id="brsNumber" class="font-mono-code text-[11px] text-slate-500">Nomor : B-2611/18000/HM.240/2026</p>
             </div>
-            <span id="brsStatusBadge" class="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-bold">Terverifikasi Auditor</span>
+            <span id="brsStatusBadge" class="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-bold">Terverifikasi Auditor (Lantai 2)</span>
           </div>
 
           <h3 id="brsTitle" class="text-sm font-extrabold text-slate-900">
@@ -316,7 +316,7 @@
       crawler: {
         name: 'Agent Media Crawler',
         role: 'Pemantau Berita & RSS',
-        desc: 'Mengumpulkan, memantau, dan menyaring berita atau informasi dari berbagai sumber media online/digital secara real-time',
+        desc: 'Mengumpulkan, memantau, dan menyaring berita atau informasi dari berbagai sumber media online secara real-time',
         status: 'IDLE',
         pesan: 'Menunggu jadwal pemindaian RSS...',
         camPos: { x: -1.8, y: 3.1, z: 3.2 },
@@ -332,13 +332,13 @@
         targetPos: { x: 1.5, y: 1.3, z: -3.5 }
       },
       auditor: {
-        name: 'Agent Auditor & PR',
-        role: 'Quality Control & Wastra Tenun',
-        desc: 'Menganalisis sentimen publik, mengevaluasi risiko reputasi, serta merumuskan rekomendasi strategi komunikasi.',
+        name: 'Agent Auditor & PR (Lantai 2)',
+        role: 'Quality Control & Strategi',
+        desc: 'Menganalisis sentimen publik dan mengevaluasi risiko reputasi dari balkon lantai 2 virtual office.',
         status: 'IDLE',
-        pesan: 'Menunggu validasi angka & sentimen...',
-        camPos: { x: 5.5, y: 3.2, z: 4.5 },
-        targetPos: { x: 4.5, y: 1.3, z: -0.2 }
+        pesan: 'Menunggu validasi angka & sentimen di Lantai 2...',
+        camPos: { x: 4.8, y: 4.5, z: 4.2 },
+        targetPos: { x: 2.8, y: 2.5, z: -1.5 }
       }
     };
 
@@ -381,7 +381,7 @@
     }
 
     // =========================================================================
-    // 2. THREE.JS 3D SEMI-OUTDOOR STUDIO, TAMAN, KOLAM, HEWAN & CUACA MUSIM
+    // 2. THREE.JS 3D SEMI-OUTDOOR STUDIO, LANTAI 2, TANGGA SPIRAL & LINGKUNGAN
     // =========================================================================
     let scene, camera, renderer, controls;
     let ambientLight, sunLight, warmLampLight, pondLight;
@@ -707,8 +707,43 @@
     }
 
     // =========================================================================
-    // ARSITEKTUR SEMI-OUTDOOR: DINDING BETON INDUSTRIAL & 2 POSTER BAND
+    // ARSITEKTUR 2 LANTAI & TANGGA SPIRAL MINIMALIS MODERN
     // =========================================================================
+    function buildSpiralStaircase(x, z) {
+      const group = new THREE.Group();
+      group.position.set(x, 0.06, z);
+
+      const poleMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, metalness: 0.8, roughness: 0.2 });
+      const stepMat = new THREE.MeshStandardMaterial({ color: 0xd9b38c, roughness: 0.5 });
+      const railMat = new THREE.MeshStandardMaterial({ color: 0x334155, metalness: 0.6 });
+
+      const centerPole = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.06, 2.4, 16), poleMat);
+      centerPole.position.y = 1.2;
+      centerPole.castShadow = true;
+      group.add(centerPole);
+
+      const stepCount = 14;
+      for (let i = 0; i < stepCount; i++) {
+        const angle = (i / stepCount) * Math.PI * 1.8;
+        const height = 0.12 + (i / stepCount) * 2.15;
+
+        const step = new THREE.Mesh(new THREE.BoxGeometry(0.65, 0.05, 0.28), stepMat);
+        step.position.set(Math.cos(angle) * 0.45, height, Math.sin(angle) * 0.45);
+        step.rotation.y = -angle;
+        step.castShadow = true;
+        step.receiveShadow = true;
+        group.add(step);
+
+        if (i % 2 === 0) {
+          const rail = new THREE.Mesh(new THREE.CylinderGeometry(0.015, 0.015, 0.9, 8), railMat);
+          rail.position.set(Math.cos(angle) * 0.72, height + 0.45, Math.sin(angle) * 0.72);
+          group.add(rail);
+        }
+      }
+
+      scene.add(group);
+    }
+
     function buildSemiOutdoorArchitecture() {
       summerGrassTex = createGrassTexture();
       winterSnowTex = createSnowGroundTexture();
@@ -721,6 +756,7 @@
       grassFloorMesh.receiveShadow = true;
       scene.add(grassFloorMesh);
 
+      // Lantai 1 (Ground Deck)
       const deckBase = new THREE.Mesh(
         new THREE.BoxGeometry(11.5, 0.12, 8.8),
         new THREE.MeshStandardMaterial({ map: createWoodFloorTexture(), roughness: 0.6 })
@@ -728,6 +764,29 @@
       deckBase.position.set(1.4, 0.06, -2.5);
       deckBase.receiveShadow = true;
       scene.add(deckBase);
+
+      // Lantai 2 (Second Floor Balcony / Mezzanine)
+      const secondFloor = new THREE.Mesh(
+        new THREE.BoxGeometry(6.5, 0.15, 4.5),
+        new THREE.MeshStandardMaterial({ map: createWoodFloorTexture(), roughness: 0.55 })
+      );
+      secondFloor.position.set(3.5, 2.35, -1.8);
+      secondFloor.castShadow = true;
+      secondFloor.receiveShadow = true;
+      scene.add(secondFloor);
+
+      // Pagar Pembatas Lantai 2 (Glass Railing)
+      const railingMat = new THREE.MeshPhysicalMaterial({ color: 0x38bdf8, transparent: true, opacity: 0.35, roughness: 0.1 });
+      const railingFront = new THREE.Mesh(new THREE.BoxGeometry(6.5, 0.65, 0.05), railingMat);
+      railingFront.position.set(3.5, 2.75, -3.85);
+      scene.add(railingFront);
+
+      const railingLeft = new THREE.Mesh(new THREE.BoxGeometry(0.05, 0.65, 2.05), railingMat);
+      railingLeft.position.set(0.27, 2.75, -2.82);
+      scene.add(railingLeft);
+
+      // Tangga Spiral Penghubung Lantai 1 ke Lantai 2
+      buildSpiralStaircase(0.5, -0.6);
 
       const addRug = (w, d, color, x, z) => {
         const rug = new THREE.Mesh(
@@ -740,7 +799,15 @@
       };
       addRug(3.4, 3.0, 0xe0f2fe, -2.6, -2.5);
       addRug(3.6, 3.0, 0xdcfce7, 1.5, -3.9);
-      addRug(3.6, 3.2, 0xfef3c7, 4.6, -0.3);
+
+      // Karpet di Lantai 2 khusus Auditor
+      const rugAuditor = new THREE.Mesh(
+        new THREE.BoxGeometry(3.2, 0.025, 2.8),
+        new THREE.MeshStandardMaterial({ color: 0xfef3c7, roughness: 0.9 })
+      );
+      rugAuditor.position.set(3.5, 2.44, -1.8);
+      rugAuditor.receiveShadow = true;
+      scene.add(rugAuditor);
 
       const wallMat = new THREE.MeshStandardMaterial({
         map: createIndustrialConcreteTexture(),
@@ -749,13 +816,13 @@
         metalness: 0.08
       });
 
-      const backWall = new THREE.Mesh(new THREE.BoxGeometry(11.5, 4.2, 0.25), wallMat);
-      backWall.position.set(1.4, 2.1, -6.8);
+      const backWall = new THREE.Mesh(new THREE.BoxGeometry(11.5, 4.8, 0.25), wallMat);
+      backWall.position.set(1.4, 2.4, -6.8);
       backWall.receiveShadow = true;
       scene.add(backWall);
 
-      const rightWall = new THREE.Mesh(new THREE.BoxGeometry(0.25, 4.2, 5.2), wallMat);
-      rightWall.position.set(7.05, 2.1, -4.2);
+      const rightWall = new THREE.Mesh(new THREE.BoxGeometry(0.25, 4.8, 5.2), wallMat);
+      rightWall.position.set(7.05, 2.4, -4.2);
       rightWall.receiveShadow = true;
       scene.add(rightWall);
 
@@ -764,8 +831,8 @@
         [-4.2, -6.6], [-4.2, 1.7], [6.9, 1.7]
       ];
       pillarCoords.forEach(([px, pz]) => {
-        const pillar = new THREE.Mesh(new THREE.BoxGeometry(0.20, 4.1, 0.20), pillarMat);
-        pillar.position.set(px, 2.05, pz);
+        const pillar = new THREE.Mesh(new THREE.BoxGeometry(0.20, 4.7, 0.20), pillarMat);
+        pillar.position.set(px, 2.35, pz);
         pillar.castShadow = true;
         scene.add(pillar);
       });
@@ -781,7 +848,7 @@
           depthWrite: false
         })
       );
-      glassRoof.position.set(1.35, 4.12, -2.45);
+      glassRoof.position.set(1.35, 4.82, -2.45);
       scene.add(glassRoof);
 
       const roofRimGeo = new THREE.EdgesGeometry(new THREE.BoxGeometry(11.35, 0.05, 8.55));
@@ -805,7 +872,7 @@
           new THREE.BoxGeometry(1.48, 2.02, 0.06),
           new THREE.MeshStandardMaterial({ color: 0x0f1115, roughness: 0.7 })
         );
-        frame.position.set(xPos, 2.55, -6.64);
+        frame.position.set(xPos, 2.95, -6.64);
         scene.add(frame);
 
         const posterMat = new THREE.MeshBasicMaterial({ map: fallbackTex });
@@ -813,7 +880,7 @@
           new THREE.PlaneGeometry(1.36, 1.90),
           posterMat
         );
-        canvasMesh.position.set(xPos, 2.55, -6.59);
+        canvasMesh.position.set(xPos, 2.95, -6.59);
         scene.add(canvasMesh);
 
         const tryLoad = (idx) => {
@@ -846,7 +913,6 @@
 
       createPottedPlant('monstera', -3.7, -6.0, 1.1);
       createPottedPlant('sansevieria', 6.3, -6.0, 1.0);
-      createPottedPlant('monstera', 6.4, 1.2, 1.05);
     }
 
     // =========================================================================
@@ -1155,11 +1221,11 @@
     }
 
     // =========================================================================
-    // MEJA KERJA & 3 KARAKTER CHIBI INTERAKTIF
+    // MEJA KERJA & 3 KARAKTER CHIBI INTERAKTIF (AUDITOR DI LANTAI 2)
     // =========================================================================
-    function buildDeskSetup(x, z, rotY, accentColor) {
+    function buildDeskSetup(x, z, yOffset, rotY, accentColor) {
       const desk = new THREE.Group();
-      desk.position.set(x, 0.12, z);
+      desk.position.set(x, yOffset + 0.12, z);
       desk.rotation.y = rotY;
 
       const topMat = new THREE.MeshStandardMaterial({ color: 0xe6ccb2, roughness: 0.5 });
@@ -1220,14 +1286,17 @@
     }
 
     function buildAllWorkstations() {
-      buildDeskSetup(-2.8, -3.1, Math.PI / 5, 0x38bdf8);
-      buildDeskSetup(1.5, -4.6, 0, 0x34d399);
-      buildDeskSetup(4.8, -0.8, -Math.PI / 4, 0xfbbf24);
+      // Lantai 1 (Crawler & Drafter)
+      buildDeskSetup(-2.8, -3.1, 0, Math.PI / 5, 0x38bdf8);
+      buildDeskSetup(1.5, -4.6, 0, 0, 0x34d399);
+
+      // Lantai 2 (Auditor di Balkon Atas)
+      buildDeskSetup(3.2, -1.8, 2.23, -Math.PI / 4, 0xfbbf24);
     }
 
     function createRobloxCharacter(config) {
       const root = new THREE.Group();
-      root.position.set(config.x, 0.12, config.z);
+      root.position.set(config.x, config.yOffset + 0.12, config.z);
       root.rotation.y = config.rotY;
       root.userData.agentId = config.id;
 
@@ -1431,7 +1500,7 @@
         leftArm,
         rightArm,
         headGroup,
-        basePos: new THREE.Vector3(config.x, 0.12, config.z),
+        basePos: new THREE.Vector3(config.x, config.yOffset + 0.12, config.z),
         baseRotY: config.rotY,
         phase: Math.random() * Math.PI * 2,
         workStartTime: 0,
@@ -1440,10 +1509,12 @@
     }
 
     function buildAllRobloxCharacters() {
+      // Agent 1 & 2 di Lantai 1
       createRobloxCharacter({
         id: 'crawler',
         x: -2.2,
         z: -2.3,
+        yOffset: 0,
         rotY: Math.PI + Math.PI / 5,
         skinColor: 0xf5d0b5,
         shirtColor: 0x111827,
@@ -1459,6 +1530,7 @@
         id: 'drafter',
         x: 1.5,
         z: -3.6,
+        yOffset: 0,
         rotY: Math.PI,
         skinColor: 0xfde2cf,
         shirtColor: 0x10b981,
@@ -1471,10 +1543,12 @@
         hasLanyard: true
       });
 
+      // Agent 3 (Auditor) dipindah ke Lantai 2 (Balcony Atas)
       createRobloxCharacter({
         id: 'auditor',
-        x: 4.1,
-        z: -0.1,
+        x: 3.2,
+        z: -1.8,
+        yOffset: 2.23,
         rotY: Math.PI - Math.PI / 4,
         skinColor: 0xfce7d6,
         torsoTexture: createTenunSweaterTexture(),
@@ -1489,7 +1563,7 @@
     }
 
     // =========================================================================
-    // LOOP ANIMASI 3D REAL-TIME (OBROLAN IDLE, SALAMAN & HEADBANG MUSIK)
+    // LOOP ANIMASI 3D REAL-TIME
     // =========================================================================
     const clock = new THREE.Clock();
 
@@ -1515,19 +1589,11 @@
         av.leftArm.rotation.x = -swing * 0.65;
         av.rightArm.rotation.x = swing * 0.65;
         av.rightArm.rotation.z = 0;
-        av.root.position.y = 0.12 + Math.abs(Math.cos(t * walkFreq)) * 0.035;
+        av.root.position.y = av.basePos.y + Math.abs(Math.cos(t * walkFreq)) * 0.035;
         av.headGroup.rotation.set(0, 0, 0);
         return false;
       }
       return true;
-    }
-
-    function faceToward(av, targetVec) {
-      const desiredRot = Math.atan2(targetVec.x - av.root.position.x, targetVec.z - av.root.position.z);
-      let diff = desiredRot - av.root.rotation.y;
-      while (diff > Math.PI) diff -= Math.PI * 2;
-      while (diff < -Math.PI) diff += Math.PI * 2;
-      av.root.rotation.y += diff * 0.15;
     }
 
     function animate3D() {
@@ -1542,128 +1608,29 @@
         }
       }
 
-      const chatCycle = t % 22;
-      const isChatTime = chatCycle > 9 && chatCycle < 16.5;
-      const chatPairIndex = Math.floor(t / 22) % 3;
-      const chatPairs = [
-        ['crawler', 'drafter'],
-        ['drafter', 'auditor'],
-        ['crawler', 'auditor']
-      ];
-      const activeChatters = chatPairs[chatPairIndex];
-      const chatSpotA = new THREE.Vector3(0.75, 0.12, -1.65);
-      const chatSpotB = new THREE.Vector3(1.65, 0.12, -1.65);
-
-      let activeHandshakeVisitor = null;
-      ['crawler', 'drafter'].forEach((id) => {
-        const av = robloxAvatars[id];
-        const st = (AGENT_META[id].status || 'IDLE').toUpperCase();
-        if (st !== av.lastStatus) {
-          av.lastStatus = st;
-          if (st === 'WORKING') av.workStartTime = t;
-        }
-        if (st === 'WORKING' && (t - av.workStartTime) > 2.2 && !activeHandshakeVisitor) {
-          activeHandshakeVisitor = id;
-        }
-      });
-
-      const auditorHandshakeSpot = new THREE.Vector3(3.95, 0.12, -0.35);
-      const visitorHandshakeSpot = new THREE.Vector3(3.15, 0.12, -0.35);
-
       Object.keys(robloxAvatars).forEach((id) => {
         const av = robloxAvatars[id];
         const status = (AGENT_META[id].status || 'IDLE').toUpperCase();
         const p = t + av.phase;
 
-        if (id === 'auditor' && activeHandshakeVisitor) {
-          const arrived = moveCharacterTo(av, auditorHandshakeSpot, 0.04, t);
-          if (arrived) {
-            faceToward(av, visitorHandshakeSpot);
-            av.leftLeg.rotation.x = 0;
-            av.rightLeg.rotation.x = 0;
-            av.leftArm.rotation.x = 0;
-            av.rightArm.rotation.x = -1.15 - Math.sin(t * 9) * 0.18;
-            av.rightArm.rotation.z = -0.15;
-            av.headGroup.rotation.x = -Math.sin(t * 4) * 0.1;
-          }
-          return;
-        }
-
-        if (status === 'WORKING') {
-          const arrived = moveCharacterTo(av, av.basePos, 0.05, t);
-          if (arrived) {
-            av.root.rotation.y += (av.baseRotY - av.root.rotation.y) * 0.15;
-            av.root.position.y = 0.12 + Math.abs(Math.sin(p * 8)) * 0.03;
+        const arrived = moveCharacterTo(av, av.basePos, 0.05, t);
+        if (arrived) {
+          av.root.rotation.y += (av.baseRotY - av.root.rotation.y) * 0.15;
+          if (status === 'WORKING') {
+            av.root.position.y = av.basePos.y + Math.abs(Math.sin(p * 8)) * 0.03;
             av.leftArm.rotation.x = -0.95 + Math.sin(p * 18) * 0.22;
             av.rightArm.rotation.x = -0.95 - Math.sin(p * 18) * 0.22;
-            av.rightArm.rotation.z = 0;
-            av.leftLeg.rotation.x = 0;
-            av.rightLeg.rotation.x = 0;
-            av.headGroup.rotation.y = Math.sin(p * 3) * 0.15;
             av.headGroup.rotation.x = isMusicPlaying ? 0.12 + Math.sin(t * 14) * 0.16 : 0.12;
-          }
-          return;
-        }
-
-        if (status === 'DONE') {
-          const arrived = moveCharacterTo(av, av.basePos, 0.05, t);
-          if (arrived) {
-            av.root.rotation.y += (av.baseRotY - av.root.rotation.y) * 0.15;
-            av.root.position.y = 0.12 + Math.abs(Math.sin(p * 5)) * 0.18;
+          } else if (status === 'DONE') {
+            av.root.position.y = av.basePos.y + Math.abs(Math.sin(p * 5)) * 0.18;
             av.rightArm.rotation.x = -2.4 + Math.sin(p * 10) * 0.3;
-            av.rightArm.rotation.z = 0;
-            av.leftArm.rotation.x = Math.sin(p * 4) * 0.15;
-            av.leftLeg.rotation.x = 0;
-            av.rightLeg.rotation.x = 0;
-            av.headGroup.rotation.x = -0.05;
-          }
-          return;
-        }
-
-        // Mode Mosh Pit saat musik nyala & status IDLE
-        if (isMoshPitActive) {
-          const arrived = moveCharacterTo(av, av.basePos, 0.05, t);
-          if (arrived) {
+          } else if (isMoshPitActive) {
             av.headGroup.rotation.x = 0.35 + Math.sin(t * 18 + av.phase) * 0.45;
-            av.headGroup.rotation.y = Math.sin(t * 12 + av.phase) * 0.3;
-            av.leftArm.rotation.x = -1.2 + Math.sin(t * 16 + av.phase) * 0.5;
-            av.rightArm.rotation.x = -1.2 - Math.sin(t * 16 + av.phase) * 0.5;
-            av.leftLeg.rotation.x = 0;
-            av.rightLeg.rotation.x = 0;
             av.root.position.y = av.basePos.y + Math.abs(Math.sin(t * 14 + av.phase)) * 0.18;
-          }
-          return;
-        }
-
-        if (isChatTime && activeChatters.includes(id)) {
-          const isFirst = activeChatters[0] === id;
-          const myChatSpot = isFirst ? chatSpotA : chatSpotB;
-          const partnerSpot = isFirst ? chatSpotB : chatSpotA;
-
-          const arrived = moveCharacterTo(av, myChatSpot, 0.035, t, 9);
-          if (arrived) {
-            faceToward(av, partnerSpot);
-            av.leftLeg.rotation.x = 0;
-            av.rightLeg.rotation.x = 0;
-            av.rightArm.rotation.z = 0;
-            const talkWave = isFirst ? Math.sin(t * 4.5) : Math.cos(t * 4.5);
-            av.rightArm.rotation.x = -0.45 + Math.max(0, talkWave) * -0.45;
-            av.leftArm.rotation.x = Math.sin(p * 1.5) * 0.1;
-            av.headGroup.rotation.x = Math.sin(t * 5 + (isFirst ? 0 : 2)) * 0.12;
-            av.headGroup.rotation.y = Math.cos(t * 2.5) * 0.12;
-          }
-        } else {
-          const arrived = moveCharacterTo(av, av.basePos, 0.035, t, 9);
-          if (arrived) {
-            av.root.rotation.y += (av.baseRotY - av.root.rotation.y) * 0.12;
-            av.root.position.y = 0.12 + Math.sin(p * 2) * 0.02;
+          } else {
+            av.root.position.y = av.basePos.y + Math.sin(p * 2) * 0.02;
             av.leftArm.rotation.x = Math.sin(p * 1.8) * 0.08;
             av.rightArm.rotation.x = -Math.sin(p * 1.8) * 0.08;
-            av.rightArm.rotation.z = 0;
-            av.leftLeg.rotation.x = 0;
-            av.rightLeg.rotation.x = 0;
-            av.headGroup.rotation.y = Math.sin(p * 1.1) * 0.25;
-            av.headGroup.rotation.x = 0;
           }
         }
       });
@@ -1963,9 +1930,6 @@
       }
     }
 
-    // =========================================================================
-    // SINKRONISASI WALL PREVIEW BOARD DENGAN TAB LATEST_BRS DI GOOGLE SHEETS
-    // =========================================================================
     function updateLatestBrsPreview(latestBrs) {
       if (!latestBrs || !latestBrs.judul) return;
 
@@ -2002,25 +1966,25 @@
       const btn = document.getElementById('btnSimulasi');
       btn.disabled = true;
       btn.classList.add('opacity-50');
-      addLog('Memulai simulasi kerja 3 AI Agent (termasuk salaman dengan Auditor)...', 'work');
+      addLog('Memulai simulasi kerja 3 AI Agent (Auditor bekerja di lantai 2)...', 'work');
 
       updateAgentUI('crawler', 'WORKING', 'Memindai Google News RSS ("BPS Provinsi Lampung")...', 'Baru saja');
       updateAgentUI('drafter', 'WORKING', 'Mengekstrak bahan tayang PPTX & menyusun narasi BRS...', 'Baru saja');
 
       setTimeout(() => {
-        addLog('[CRAWLER] 4 berita baru terklasifikasi sentimennya & dilaporkan ke Auditor.', 'work');
+        addLog('[CRAWLER] 4 berita baru terklasifikasi sentimennya & dilaporkan ke Lantai 2.', 'work');
         updateAgentUI('crawler', 'DONE', 'Selesai: 4 berita baru terklasifikasi.', 'Baru saja');
       }, 4500);
 
       setTimeout(() => {
-        addLog('[DRAFTER] Draf Siaran Pers selesai disusun & diserahkan ke Auditor.', 'work');
+        addLog('[DRAFTER] Draf Siaran Pers disusun & dikirim ke Balkon Lantai 2.', 'work');
         updateAgentUI('drafter', 'DONE', 'Draf siaran pers selesai disusun.', 'Baru saja');
-        updateAgentUI('auditor', 'WORKING', 'Auditor memeriksa presisi angka y-on-y & q-to-q...', 'Baru saja');
+        updateAgentUI('auditor', 'WORKING', 'Auditor memeriksa presisi angka di lantai 2...', 'Baru saja');
       }, 8200);
 
       setTimeout(() => {
-        addLog('[AUDITOR] Validasi angka lulus (zero margin of error). Siap rilis!', 'success');
-        updateAgentUI('auditor', 'DONE', 'Lolos audit angka & siap publikasi.', 'Baru saja');
+        addLog('[AUDITOR] Validasi angka di lantai 2 lulus (zero margin of error). Siap rilis!', 'success');
+        updateAgentUI('auditor', 'DONE', 'Lolos audit angka Lantai 2.', 'Baru saja');
         btn.disabled = false;
         btn.classList.remove('opacity-50');
       }, 11500);
