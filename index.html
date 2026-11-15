@@ -621,8 +621,9 @@
         let selectedFileMeta = null;
 
         window.onload = function() {
-            fetchLiveMonitoringData(false);
-        };
+        fetchLiveMonitoringData(false);
+    fetchAgentStates(); // Panggil pertama kali saat load
+};
 
         function switchTab(tabName) {
             document.querySelectorAll('.tab-btn').forEach(btn => {
@@ -1256,3 +1257,39 @@
     </script>
 </body>
 </html>
+
+// Fungsi Polling Real-Time Status 3 AI Agent Humas
+async function fetchAgentStates() {
+    try {
+        const response = await fetch(`${API_URL}?mode=agents`);
+        if (!response.ok) return;
+        const data = await response.json();
+        
+        if (data.agents && Array.isArray(data.agents)) {
+            data.agents.forEach(agent => {
+                // Mapping id agen dari sheet ke elemen ID badge di HTML
+                // id di sheet: 'crawler', 'drafter', 'auditor'
+                let badgeEl = document.getElementById(`status-${agent.id}`);
+                if (badgeEl) {
+                    badgeEl.innerText = agent.status;
+                    
+                    // Sesuaikan warna badge berdasarkan status
+                    if (agent.status === 'WORKING') {
+                        badgeEl.className = 'bg-bps-orange text-white px-1.5 py-0.5 rounded text-[10px] font-bold animate-pulse';
+                    } else if (agent.status === 'DONE') {
+                        badgeEl.className = 'bg-bps-green text-white px-1.5 py-0.5 rounded text-[10px] font-bold';
+                    } else if (agent.status === 'ERROR') {
+                        badgeEl.className = 'bg-rose-600 text-white px-1.5 py-0.5 rounded text-[10px] font-bold';
+                    } else {
+                        badgeEl.className = 'bg-slate-400 text-white px-1.5 py-0.5 rounded text-[10px] font-bold';
+                    }
+                }
+            });
+        }
+    } catch (e) {
+        console.error('Gagal memuat status agen:', e);
+    }
+}
+
+// Jalankan polling otomatis setiap 6 detik setelah halaman dimuat
+setInterval(fetchAgentStates, 6000);
