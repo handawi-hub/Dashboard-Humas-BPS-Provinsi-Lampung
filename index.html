@@ -525,9 +525,9 @@
 
         const API_URL = 'https://script.google.com/macros/s/AKfycbz6rjK1i0nCWf9i2ZgH6yblzCdeiz4Cq9hMeKbrEbEZImr5vRUEel8KIP4H2c0UWYMnAA/exec';
         
-        // [HARDENING] Mengaburkan token dari plain-text di F12 / Inspect Element
-        const _encT = ['QlB', 'Q19MYW1wdW5n', 'X0h1bWFz', 'XzIwMjZf', 'U2VjdXJlS2V5'];
-        const getClientToken = () => atob(_encT[0]) + atob(_encT[1]) + atob(_encT[2]) + atob(_encT[3]) + atob(_encT[4]);
+        // [HARDENING] Mengaburkan token dari plain-text di F12 / Inspect Element (Diselaraskan ke BPS_Lampung_Humas_2026_SecureKey)
+        const _encT = ['QlA', 'Uy', 'X0xhbXB1bmc', 'X0h1bWFz', 'XzIwMjZf', 'U2VjdXJlS2V5'];
+        const getClientToken = () => atob(_encT[0]) + atob(_encT[1]) + atob(_encT[2]) + atob(_encT[3]) + atob(_encT[4]) + atob(_encT[5]);
 
         let allNewsData = [];
         let sentimentChart = null;
