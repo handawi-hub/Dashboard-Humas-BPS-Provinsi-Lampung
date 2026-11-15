@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>3D Semi-Outdoor AI Agent Virtual Office (2 Lantai) — Humas BPS Provinsi Lampung</title>
+  <title>3D Semi-Outdoor AI Agent Virtual Office (Lantai 2 Lebih Tinggi) — Humas BPS Provinsi Lampung</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <!-- Three.js & OrbitControls untuk 3D Creative Studio Semi-Outdoor -->
@@ -55,7 +55,7 @@
         </a>
         <div>
           <div class="flex items-center gap-2">
-            <h1 class="text-sm sm:text-base font-extrabold text-slate-900 tracking-tight">SIGER Humas Hub (Ruang Kendali Humas 2 Lantai)</h1>
+            <h1 class="text-sm sm:text-base font-extrabold text-slate-900 tracking-tight">SIGER Humas Hub (Ruang Kendali Humas 2 Lantai - High Ceiling)</h1>
             <span id="connectionBadge" class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-100 text-amber-800 border border-amber-300">
               <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
               Mode Simulasi
@@ -174,14 +174,14 @@
             <span id="time-drafter" class="block text-[10px] text-slate-400 font-mono-code mt-1.5">-</span>
           </div>
 
-          <!-- AGENT 3: Auditor & PR (Lantai 2) -->
+          <!-- AGENT 3: Auditor & PR (Lantai 2 High Ceiling) -->
           <div onclick="focusCamera('auditor')" id="card-auditor" class="cursor-pointer bg-white hover:border-amber-500 border border-stone-200 rounded-2xl p-3 shadow-sm transition group">
             <div class="flex items-center justify-between mb-1">
-              <span class="text-xs font-extrabold text-amber-800 group-hover:text-amber-700">3. Auditor & PR Strategy (Lantai 2)</span>
+              <span class="text-xs font-extrabold text-amber-800 group-hover:text-amber-700">3. Auditor & PR (Lantai 2 Tinggi)</span>
               <span id="badge-auditor" class="px-2 py-0.5 rounded-md text-[10px] font-extrabold bg-stone-100 text-slate-600">IDLE</span>
             </div>
-            <p class="text-[10px] text-slate-400 font-semibold mb-1">Editorial Control (Ruan Balcony Atas)</p>
-            <p id="msg-auditor" class="text-[11px] text-slate-600 leading-snug line-clamp-2">Memvalidasi substansi data statistik dan keselarasan strategi komunikasi publik di lantai 2.</p>
+            <p class="text-[10px] text-slate-400 font-semibold mb-1">Editorial Control (High Ceiling Balcony)</p>
+            <p id="msg-auditor" class="text-[11px] text-slate-600 leading-snug line-clamp-2">Memvalidasi substansi data statistik di ruang balkon lantai 2 yang lapang.</p>
             <span id="time-auditor" class="block text-[10px] text-slate-400 font-mono-code mt-1.5">-</span>
           </div>
 
@@ -193,12 +193,12 @@
         <div class="flex items-center justify-between mb-2">
           <span class="text-xs font-extrabold text-slate-700 flex items-center gap-2">
             <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
-            Aktivitas Orkestrasi Apps Script (2 Lantai)
+            Aktivitas Orkestrasi Apps Script (High Ceiling 2 Lantai)
           </span>
           <button onclick="clearLogs()" class="text-[11px] font-semibold text-slate-400 hover:text-slate-700">Bersihkan Log</button>
         </div>
         <div id="terminalLog" class="font-mono-code text-[11px] text-slate-700 space-y-1 max-h-32 overflow-y-auto bg-stone-50 p-2.5 rounded-xl border border-stone-200/80">
-          <div class="text-slate-500">[SYSTEM] Virtual Office 2 Lantai & Tangga Spiral siap. Klik "Putar Metal Hardcore" untuk BGM.</div>
+          <div class="text-slate-500">[SYSTEM] Virtual Office 2 Lantai (High Ceiling) & Tangga Spiral siap. Klik "Putar Metal Hardcore" untuk BGM.</div>
         </div>
       </div>
     </section>
@@ -337,8 +337,8 @@
         desc: 'Menganalisis sentimen publik dan mengevaluasi risiko reputasi dari balkon lantai 2 virtual office.',
         status: 'IDLE',
         pesan: 'Menunggu validasi angka & sentimen di Lantai 2...',
-        camPos: { x: 4.8, y: 4.5, z: 4.2 },
-        targetPos: { x: 2.8, y: 2.5, z: -1.5 }
+        camPos: { x: 5.5, y: 5.8, z: 5.2 },
+        targetPos: { x: 3.2, y: 4.6, z: -1.8 }
       }
     };
 
@@ -381,7 +381,7 @@
     }
 
     // =========================================================================
-    // 2. THREE.JS 3D SEMI-OUTDOOR STUDIO, LANTAI 2, TANGGA SPIRAL & LINGKUNGAN
+    // 2. THREE.JS 3D SEMI-OUTDOOR STUDIO, LANTAI 2 TINGGI & TANGGA SPIRAL
     // =========================================================================
     let scene, camera, renderer, controls;
     let ambientLight, sunLight, warmLampLight, pondLight;
@@ -454,8 +454,8 @@
       sunLight.shadow.bias = -0.0005;
       scene.add(sunLight);
 
-      warmLampLight = new THREE.PointLight(0xffb74d, 0.45, 16);
-      warmLampLight.position.set(2.5, 4.2, -1.5);
+      warmLampLight = new THREE.PointLight(0xffb74d, 0.65, 18);
+      warmLampLight.position.set(2.5, 6.2, -1.5);
       scene.add(warmLampLight);
 
       pondLight = new THREE.PointLight(0x38bdf8, 0.35, 9);
@@ -556,7 +556,7 @@
 
       const tex = new THREE.CanvasTexture(c);
       tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
-      tex.repeat.set(3, 2);
+      tex.repeat.set(3, 3);
       return tex;
     }
 
@@ -707,9 +707,9 @@
     }
 
     // =========================================================================
-    // ARSITEKTUR 2 LANTAI & TANGGA SPIRAL MINIMALIS MODERN
+    // ARSITEKTUR 2 LANTAI (HIGH CEILING 4.6 METER) & TANGGA SPIRAL TINGGI
     // =========================================================================
-    function buildSpiralStaircase(x, z) {
+    function buildTallSpiralStaircase(x, z) {
       const group = new THREE.Group();
       group.position.set(x, 0.06, z);
 
@@ -717,26 +717,26 @@
       const stepMat = new THREE.MeshStandardMaterial({ color: 0xd9b38c, roughness: 0.5 });
       const railMat = new THREE.MeshStandardMaterial({ color: 0x334155, metalness: 0.6 });
 
-      const centerPole = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.06, 2.4, 16), poleMat);
-      centerPole.position.y = 1.2;
+      const centerPole = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.06, 4.7, 16), poleMat);
+      centerPole.position.y = 2.35;
       centerPole.castShadow = true;
       group.add(centerPole);
 
-      const stepCount = 14;
+      const stepCount = 26; // Lebih banyak anak tangga untuk ketinggian 4.6 meter
       for (let i = 0; i < stepCount; i++) {
-        const angle = (i / stepCount) * Math.PI * 1.8;
-        const height = 0.12 + (i / stepCount) * 2.15;
+        const angle = (i / stepCount) * Math.PI * 3.2;
+        const height = 0.15 + (i / stepCount) * 4.4;
 
         const step = new THREE.Mesh(new THREE.BoxGeometry(0.65, 0.05, 0.28), stepMat);
-        step.position.set(Math.cos(angle) * 0.45, height, Math.sin(angle) * 0.45);
+        step.position.set(Math.cos(angle) * 0.48, height, Math.sin(angle) * 0.48);
         step.rotation.y = -angle;
         step.castShadow = true;
-        step.receiveShadow = true;
+        step.receiveSecurity = true;
         group.add(step);
 
         if (i % 2 === 0) {
           const rail = new THREE.Mesh(new THREE.CylinderGeometry(0.015, 0.015, 0.9, 8), railMat);
-          rail.position.set(Math.cos(angle) * 0.72, height + 0.45, Math.sin(angle) * 0.72);
+          rail.position.set(Math.cos(angle) * 0.75, height + 0.45, Math.sin(angle) * 0.75);
           group.add(rail);
         }
       }
@@ -765,28 +765,28 @@
       deckBase.receiveShadow = true;
       scene.add(deckBase);
 
-      // Lantai 2 (Second Floor Balcony / Mezzanine)
+      // Lantai 2 (High Ceiling Mezzanine di Ketinggian 4.6 Meter - Lebih dari 2x tinggi badan agen)
       const secondFloor = new THREE.Mesh(
-        new THREE.BoxGeometry(6.5, 0.15, 4.5),
+        new THREE.BoxGeometry(6.8, 0.18, 4.8),
         new THREE.MeshStandardMaterial({ map: createWoodFloorTexture(), roughness: 0.55 })
       );
-      secondFloor.position.set(3.5, 2.35, -1.8);
+      secondFloor.position.set(3.4, 4.6, -1.8);
       secondFloor.castShadow = true;
       secondFloor.receiveShadow = true;
       scene.add(secondFloor);
 
       // Pagar Pembatas Lantai 2 (Glass Railing)
-      const railingMat = new THREE.MeshPhysicalMaterial({ color: 0x38bdf8, transparent: true, opacity: 0.35, roughness: 0.1 });
-      const railingFront = new THREE.Mesh(new THREE.BoxGeometry(6.5, 0.65, 0.05), railingMat);
-      railingFront.position.set(3.5, 2.75, -3.85);
+      const railingMat = new THREE.MeshPhysicalMaterial({ color: 0x38bdf8, transparent: true, opacity: 0.38, roughness: 0.1 });
+      const railingFront = new THREE.Mesh(new THREE.BoxGeometry(6.8, 0.75, 0.05), railingMat);
+      railingFront.position.set(3.4, 5.08, -4.18);
       scene.add(railingFront);
 
-      const railingLeft = new THREE.Mesh(new THREE.BoxGeometry(0.05, 0.65, 2.05), railingMat);
-      railingLeft.position.set(0.27, 2.75, -2.82);
+      const railingLeft = new THREE.Mesh(new THREE.BoxGeometry(0.05, 0.75, 2.35), railingMat);
+      railingLeft.position.set(0.02, 5.08, -3.0);
       scene.add(railingLeft);
 
-      // Tangga Spiral Penghubung Lantai 1 ke Lantai 2
-      buildSpiralStaircase(0.5, -0.6);
+      // Tangga Spiral Tinggi Penghubung Lantai 1 ke Lantai 2
+      buildTallSpiralStaircase(0.5, -0.6);
 
       const addRug = (w, d, color, x, z) => {
         const rug = new THREE.Mesh(
@@ -802,10 +802,10 @@
 
       // Karpet di Lantai 2 khusus Auditor
       const rugAuditor = new THREE.Mesh(
-        new THREE.BoxGeometry(3.2, 0.025, 2.8),
+        new THREE.BoxGeometry(3.5, 0.025, 3.2),
         new THREE.MeshStandardMaterial({ color: 0xfef3c7, roughness: 0.9 })
       );
-      rugAuditor.position.set(3.5, 2.44, -1.8);
+      rugAuditor.position.set(3.4, 4.70, -1.8);
       rugAuditor.receiveShadow = true;
       scene.add(rugAuditor);
 
@@ -816,13 +816,14 @@
         metalness: 0.08
       });
 
-      const backWall = new THREE.Mesh(new THREE.BoxGeometry(11.5, 4.8, 0.25), wallMat);
-      backWall.position.set(1.4, 2.4, -6.8);
+      // Tinggi Dinding Belakang & Samping Ditinggikan menjadi 7.5 Meter (High Ceiling Studio)
+      const backWall = new THREE.Mesh(new THREE.BoxGeometry(11.5, 7.5, 0.25), wallMat);
+      backWall.position.set(1.4, 3.75, -6.8);
       backWall.receiveShadow = true;
       scene.add(backWall);
 
-      const rightWall = new THREE.Mesh(new THREE.BoxGeometry(0.25, 4.8, 5.2), wallMat);
-      rightWall.position.set(7.05, 2.4, -4.2);
+      const rightWall = new THREE.Mesh(new THREE.BoxGeometry(0.25, 7.5, 5.2), wallMat);
+      rightWall.position.set(7.05, 3.75, -4.2);
       rightWall.receiveShadow = true;
       scene.add(rightWall);
 
@@ -831,12 +832,13 @@
         [-4.2, -6.6], [-4.2, 1.7], [6.9, 1.7]
       ];
       pillarCoords.forEach(([px, pz]) => {
-        const pillar = new THREE.Mesh(new THREE.BoxGeometry(0.20, 4.7, 0.20), pillarMat);
-        pillar.position.set(px, 2.35, pz);
+        const pillar = new THREE.Mesh(new THREE.BoxGeometry(0.20, 7.4, 0.20), pillarMat);
+        pillar.position.set(px, 3.7, pz);
         pillar.castShadow = true;
         scene.add(pillar);
       });
 
+      // Atap Kaca disesuaikan ke ketinggian 7.5 Meter
       const glassRoof = new THREE.Mesh(
         new THREE.BoxGeometry(11.35, 0.05, 8.55),
         new THREE.MeshPhysicalMaterial({
@@ -848,7 +850,7 @@
           depthWrite: false
         })
       );
-      glassRoof.position.set(1.35, 4.82, -2.45);
+      glassRoof.position.set(1.35, 7.52, -2.45);
       scene.add(glassRoof);
 
       const roofRimGeo = new THREE.EdgesGeometry(new THREE.BoxGeometry(11.35, 0.05, 8.55));
@@ -872,7 +874,7 @@
           new THREE.BoxGeometry(1.48, 2.02, 0.06),
           new THREE.MeshStandardMaterial({ color: 0x0f1115, roughness: 0.7 })
         );
-        frame.position.set(xPos, 2.95, -6.64);
+        frame.position.set(xPos, 4.85, -6.64);
         scene.add(frame);
 
         const posterMat = new THREE.MeshBasicMaterial({ map: fallbackTex });
@@ -880,7 +882,7 @@
           new THREE.PlaneGeometry(1.36, 1.90),
           posterMat
         );
-        canvasMesh.position.set(xPos, 2.95, -6.59);
+        canvasMesh.position.set(xPos, 4.85, -6.59);
         scene.add(canvasMesh);
 
         const tryLoad = (idx) => {
@@ -1104,7 +1106,7 @@
     }
 
     // =========================================================================
-    // HEWAN PELIHARAAN HIDUP: KELINCI MELOMPAT & KUCING JALAN-JALAN
+    // HEWAN PELIHARAAN HIDUP
     // =========================================================================
     function createRabbit(x, z, furColor) {
       const group = new THREE.Group();
@@ -1221,7 +1223,7 @@
     }
 
     // =========================================================================
-    // MEJA KERJA & 3 KARAKTER CHIBI INTERAKTIF (AUDITOR DI LANTAI 2)
+    // MEJA KERJA & KARAKTER (AUDITOR DI LANTAI 2 TINGGI)
     // =========================================================================
     function buildDeskSetup(x, z, yOffset, rotY, accentColor) {
       const desk = new THREE.Group();
@@ -1290,8 +1292,8 @@
       buildDeskSetup(-2.8, -3.1, 0, Math.PI / 5, 0x38bdf8);
       buildDeskSetup(1.5, -4.6, 0, 0, 0x34d399);
 
-      // Lantai 2 (Auditor di Balkon Atas)
-      buildDeskSetup(3.2, -1.8, 2.23, -Math.PI / 4, 0xfbbf24);
+      // Lantai 2 Tinggi (Auditor di Balkon Atas 4.6 meter)
+      buildDeskSetup(3.2, -1.8, 4.6, -Math.PI / 4, 0xfbbf24);
     }
 
     function createRobloxCharacter(config) {
@@ -1543,12 +1545,12 @@
         hasLanyard: true
       });
 
-      // Agent 3 (Auditor) dipindah ke Lantai 2 (Balcony Atas)
+      // Agent 3 (Auditor) di Lantai 2 Tinggi (4.6 Meter)
       createRobloxCharacter({
         id: 'auditor',
         x: 3.2,
         z: -1.8,
-        yOffset: 2.23,
+        yOffset: 4.6,
         rotY: Math.PI - Math.PI / 4,
         skinColor: 0xfce7d6,
         torsoTexture: createTenunSweaterTexture(),
@@ -1800,7 +1802,7 @@
         ambientLight.intensity = seasonModeIndex === 1 ? 0.68 : 0.85;
         sunLight.color.setHex(0xfff5e4);
         sunLight.intensity = seasonModeIndex === 1 ? 0.55 : 0.98;
-        warmLampLight.intensity = seasonModeIndex === 1 ? 0.85 : 0.45;
+        warmLampLight.intensity = seasonModeIndex === 1 ? 0.85 : 0.65;
         pondLight.intensity = 0.35;
       } else if (lightingModeIndex === 1) {
         let skyHex = 0xfde8d0;
@@ -1821,7 +1823,7 @@
         ambientLight.intensity = 0.46;
         sunLight.color.setHex(0x60a5fa);
         sunLight.intensity = 0.35;
-        warmLampLight.intensity = 1.75;
+        warmLampLight.intensity = 1.95;
         pondLight.intensity = 1.35;
       }
     }
@@ -1836,8 +1838,8 @@
       }
 
       if (mode === 'overview') {
-        targetCamPos.set(9.5, 8.2, 11.8);
-        targetLookAt.set(-0.5, 0.9, 0.2);
+        targetCamPos.set(10.5, 9.5, 13.2);
+        targetLookAt.set(-0.5, 2.0, 0.2);
         closeAgentOverlay();
       } else if (mode === 'garden') {
         targetCamPos.set(-1.5, 4.8, 9.8);
@@ -1966,7 +1968,7 @@
       const btn = document.getElementById('btnSimulasi');
       btn.disabled = true;
       btn.classList.add('opacity-50');
-      addLog('Memulai simulasi kerja 3 AI Agent (Auditor bekerja di lantai 2)...', 'work');
+      addLog('Memulai simulasi kerja 3 AI Agent (Auditor bekerja di lantai 2 high ceiling)...', 'work');
 
       updateAgentUI('crawler', 'WORKING', 'Memindai Google News RSS ("BPS Provinsi Lampung")...', 'Baru saja');
       updateAgentUI('drafter', 'WORKING', 'Mengekstrak bahan tayang PPTX & menyusun narasi BRS...', 'Baru saja');
@@ -1979,7 +1981,7 @@
       setTimeout(() => {
         addLog('[DRAFTER] Draf Siaran Pers disusun & dikirim ke Balkon Lantai 2.', 'work');
         updateAgentUI('drafter', 'DONE', 'Draf siaran pers selesai disusun.', 'Baru saja');
-        updateAgentUI('auditor', 'WORKING', 'Auditor memeriksa presisi angka di lantai 2...', 'Baru saja');
+        updateAgentUI('auditor', 'WORKING', 'Auditor memeriksa presisi angka di lantai 2 tinggi...', 'Baru saja');
       }, 8200);
 
       setTimeout(() => {
@@ -2112,7 +2114,7 @@
         ? 'py-2.5 text-center border-b-2 border-emerald-600 text-emerald-700 bg-white'
         : 'py-2.5 text-center border-b-2 border-transparent text-slate-500 hover:text-slate-800';
 
-      document.getElementById('tab-news').className = !isBrs
+      document.getElementById('panel-news').className = !isBrs
         ? 'py-2.5 text-center border-b-2 border-sky-600 text-sky-700 bg-white'
         : 'py-2.5 text-center border-b-2 border-transparent text-slate-500 hover:text-slate-800';
     }
