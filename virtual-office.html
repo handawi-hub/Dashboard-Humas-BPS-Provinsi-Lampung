@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>3D AAA-Style Realistic AI Agents — Humas BPS Provinsi Lampung</title>
+  <title>3D Semi-Outdoor AI Agent Virtual Office — Humas BPS Provinsi Lampung</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <!-- Three.js & OrbitControls untuk 3D Creative Studio Semi-Outdoor -->
@@ -55,7 +55,7 @@
         </a>
         <div>
           <div class="flex items-center gap-2">
-            <h1 class="text-sm sm:text-base font-extrabold text-slate-900 tracking-tight">SIGER Humas Hub (AAA-Style Realistic 3D Agents)</h1>
+            <h1 class="text-sm sm:text-base font-extrabold text-slate-900 tracking-tight">SIGER Humas Hub (Ruang Kendali Humas)</h1>
             <span id="connectionBadge" class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-100 text-amber-800 border border-amber-300">
               <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
               Mode Simulasi
@@ -121,7 +121,7 @@
             <button onclick="focusCamera('overview')" id="cam-overview" class="cam-btn px-2.5 py-1 rounded-lg text-[11px] font-bold bg-slate-900 text-white transition">Taman & Studio</button>
             <button onclick="focusCamera('crawler')" id="cam-crawler" class="cam-btn px-2.5 py-1 rounded-lg text-[11px] font-bold bg-white text-slate-600 border border-stone-200 hover:bg-sky-50 transition">Crawler</button>
             <button onclick="focusCamera('drafter')" id="cam-drafter" class="cam-btn px-2.5 py-1 rounded-lg text-[11px] font-bold bg-white text-slate-600 border border-stone-200 hover:bg-emerald-50 transition">Penulis BRS</button>
-            <button onclick="focusCamera('auditor')" id="cam-auditor" class="cam-btn px-2.5 py-1 rounded-lg text-[11px] font-bold bg-white text-slate-600 border border-stone-200 hover:bg-purple-50 transition">Auditor (Lantai 2)</button>
+            <button onclick="focusCamera('auditor')" id="cam-auditor" class="cam-btn px-2.5 py-1 rounded-lg text-[11px] font-bold bg-white text-slate-600 border border-stone-200 hover:bg-purple-50 transition">Auditor</button>
             <button onclick="focusCamera('garden')" id="cam-garden" class="cam-btn px-2.5 py-1 rounded-lg text-[11px] font-bold bg-white text-emerald-700 border border-emerald-200 hover:bg-emerald-50 transition">🌿 Area Taman</button>
           </div>
           <span id="lastSyncText" class="text-[11px] text-slate-500 font-mono-code font-semibold">Polling: Siap</span>
@@ -158,7 +158,7 @@
               <span class="text-xs font-extrabold text-sky-700 group-hover:text-sky-600">1. News Crawler & PR Specialist</span>
               <span id="badge-crawler" class="px-2 py-0.5 rounded-md text-[10px] font-extrabold bg-stone-100 text-slate-600">IDLE</span>
             </div>
-            <p class="text-[10px] text-slate-400 font-semibold mb-1">Media Monitoring Unit</p>
+            <p class="text-[10px] text-slate-400 font-semibold mb-1">Media Monitoring & Intelligence Unit</p>
             <p id="msg-crawler" class="text-[11px] text-slate-600 leading-snug line-clamp-2">Memindai pemberitaan media online seputar BPS Provinsi Lampung.</p>
             <span id="time-crawler" class="block text-[10px] text-slate-400 font-mono-code mt-1.5">-</span>
           </div>
@@ -169,19 +169,19 @@
               <span class="text-xs font-extrabold text-emerald-700 group-hover:text-emerald-600">2. Press Release Drafter</span>
               <span id="badge-drafter" class="px-2 py-0.5 rounded-md text-[10px] font-extrabold bg-stone-100 text-slate-600">IDLE</span>
             </div>
-            <p class="text-[10px] text-slate-400 font-semibold mb-1">Statistical Data Storyteller</p>
+            <p class="text-[10px] text-slate-400 font-semibold mb-1">Statistical Data Storyteller & Benchmark Stylist</p>
             <p id="msg-drafter" class="text-[11px] text-slate-600 leading-snug line-clamp-2">Menyusun narasi siaran pers berbasis materi paparan dan standar rilis resmi.</p>
             <span id="time-drafter" class="block text-[10px] text-slate-400 font-mono-code mt-1.5">-</span>
           </div>
 
-          <!-- AGENT 3: Auditor & PR (Lantai 2) -->
+          <!-- AGENT 3: Auditor & PR -->
           <div onclick="focusCamera('auditor')" id="card-auditor" class="cursor-pointer bg-white hover:border-amber-500 border border-stone-200 rounded-2xl p-3 shadow-sm transition group">
             <div class="flex items-center justify-between mb-1">
-              <span class="text-xs font-extrabold text-amber-800 group-hover:text-amber-700">3. Auditor & PR (Lantai 2)</span>
+              <span class="text-xs font-extrabold text-amber-800 group-hover:text-amber-700">3. Auditor & PR Strategy Advisor</span>
               <span id="badge-auditor" class="px-2 py-0.5 rounded-md text-[10px] font-extrabold bg-stone-100 text-slate-600">IDLE</span>
             </div>
-            <p class="text-[10px] text-slate-400 font-semibold mb-1">Editorial Control (Balkon Atas)</p>
-            <p id="msg-auditor" class="text-[11px] text-slate-600 leading-snug line-clamp-2">Memvalidasi substansi data statistik di ruang balkon lantai 2 dengan layout simetris.</p>
+            <p class="text-[10px] text-slate-400 font-semibold mb-1">Editorial Validation & Content Quality Control</p>
+            <p id="msg-auditor" class="text-[11px] text-slate-600 leading-snug line-clamp-2">Memvalidasi substansi data statistik dan keselarasan strategi komunikasi publik.</p>
             <span id="time-auditor" class="block text-[10px] text-slate-400 font-mono-code mt-1.5">-</span>
           </div>
 
@@ -193,12 +193,12 @@
         <div class="flex items-center justify-between mb-2">
           <span class="text-xs font-extrabold text-slate-700 flex items-center gap-2">
             <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
-            Aktivitas Orkestrasi Apps Script (AAA-Style Realistic 3D Agents)
+            Aktivitas Orkestrasi Apps Script
           </span>
           <button onclick="clearLogs()" class="text-[11px] font-semibold text-slate-400 hover:text-slate-700">Bersihkan Log</button>
         </div>
         <div id="terminalLog" class="font-mono-code text-[11px] text-slate-700 space-y-1 max-h-32 overflow-y-auto bg-stone-50 p-2.5 rounded-xl border border-stone-200/80">
-          <div class="text-slate-500">[SYSTEM] Model karakter manusia realistis standar game AAA dimuat. Klik "Putar Metal Hardcore" untuk BGM.</div>
+          <div class="text-slate-500">[SYSTEM] Studio Industrial siap. Klik "Putar Metal Hardcore" untuk BGM Symphonic Metalcore.</div>
         </div>
       </div>
     </section>
@@ -232,7 +232,7 @@
               <span class="text-[10px] uppercase tracking-wider text-emerald-700 font-extrabold">Template Resmi BPS Provinsi Lampung</span>
               <p id="brsNumber" class="font-mono-code text-[11px] text-slate-500">Nomor : B-2611/18000/HM.240/2026</p>
             </div>
-            <span id="brsStatusBadge" class="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-bold">Terverifikasi Auditor (Lantai 2)</span>
+            <span id="brsStatusBadge" class="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-bold">Terverifikasi Auditor</span>
           </div>
 
           <h3 id="brsTitle" class="text-sm font-extrabold text-slate-900">
@@ -316,11 +316,11 @@
       crawler: {
         name: 'Agent Media Crawler',
         role: 'Pemantau Berita & RSS',
-        desc: 'Mengumpulkan, memantau, dan menyaring berita atau informasi dari berbagai sumber media online secara real-time',
+        desc: 'Mengumpulkan, memantau, dan menyaring berita atau informasi dari berbagai sumber media online/digital secara real-time',
         status: 'IDLE',
         pesan: 'Menunggu jadwal pemindaian RSS...',
-        camPos: { x: -3.2, y: 3.2, z: 3.5 },
-        targetPos: { x: -3.2, y: 1.3, z: -2.2 }
+        camPos: { x: -1.8, y: 3.1, z: 3.2 },
+        targetPos: { x: -2.8, y: 1.3, z: -2.2 }
       },
       drafter: {
         name: 'Agent Penulis BRS',
@@ -328,17 +328,17 @@
         desc: 'Mengolah data materi paparan (file PPTX/PDF) menjadi draf produk komunikasi publik yang terstruktur dan siap terbit.',
         status: 'IDLE',
         pesan: 'Siap memproses bahan tayang PPTX...',
-        camPos: { x: 3.2, y: 3.2, z: 3.5 },
-        targetPos: { x: 3.2, y: 1.3, z: -2.2 }
+        camPos: { x: 1.8, y: 3.1, z: 1.8 },
+        targetPos: { x: 1.5, y: 1.3, z: -3.5 }
       },
       auditor: {
-        name: 'Agent Auditor & PR (Lantai 2)',
-        role: 'Quality Control & Strategi',
-        desc: 'Menganalisis sentimen publik dan mengevaluasi risiko reputasi dari balkon lantai 2 virtual office.',
+        name: 'Agent Auditor & PR',
+        role: 'Quality Control & Wastra Tenun',
+        desc: 'Menganalisis sentimen publik, mengevaluasi risiko reputasi, serta merumuskan rekomendasi strategi komunikasi.',
         status: 'IDLE',
-        pesan: 'Menunggu validasi angka & sentimen di Lantai 2...',
-        camPos: { x: 5.8, y: 5.9, z: 5.2 },
-        targetPos: { x: 3.4, y: 4.6, z: -1.6 }
+        pesan: 'Menunggu validasi angka & sentimen...',
+        camPos: { x: 5.5, y: 3.2, z: 4.5 },
+        targetPos: { x: 4.5, y: 1.3, z: -0.2 }
       }
     };
 
@@ -381,14 +381,14 @@
     }
 
     // =========================================================================
-    // 2. THREE.JS 3D SEMI-OUTDOOR STUDIO, LAYOUT SIMETRIS & AAA-STYLE HUMANS
+    // 2. THREE.JS 3D SEMI-OUTDOOR STUDIO, TAMAN, KOLAM, HEWAN & CUACA MUSIM
     // =========================================================================
     let scene, camera, renderer, controls;
     let ambientLight, sunLight, warmLampLight, pondLight;
     let lightingModeIndex = 0; // 0: Pagi Cerah, 1: Golden Hour Sore, 2: Malam
     let seasonModeIndex = 0;   // 0: Panas, 1: Hujan, 2: Salju
 
-    const realisticAvatars = {};
+    const robloxAvatars = {};
     const clickableObjects = [];
     const monitorScreens = [];
     const koiFishes = [];
@@ -436,10 +436,10 @@
       controls.target.copy(targetLookAt);
       controls.addEventListener('start', () => { isCameraTransitioning = false; });
 
-      ambientLight = new THREE.AmbientLight(0xfffaf0, 0.85);
+      ambientLight = new THREE.AmbientLight(0xfffaf0, 0.82);
       scene.add(ambientLight);
 
-      sunLight = new THREE.DirectionalLight(0xfff5e4, 1.05);
+      sunLight = new THREE.DirectionalLight(0xfff5e4, 0.98);
       sunLight.position.set(-9, 14, 8);
       sunLight.castShadow = true;
       sunLight.shadow.mapSize.width = 2048;
@@ -454,11 +454,11 @@
       sunLight.shadow.bias = -0.0005;
       scene.add(sunLight);
 
-      warmLampLight = new THREE.PointLight(0xffb74d, 0.75, 18);
-      warmLampLight.position.set(2.5, 6.2, -1.5);
+      warmLampLight = new THREE.PointLight(0xffb74d, 0.45, 16);
+      warmLampLight.position.set(2.5, 4.2, -1.5);
       scene.add(warmLampLight);
 
-      pondLight = new THREE.PointLight(0x38bdf8, 0.45, 9);
+      pondLight = new THREE.PointLight(0x38bdf8, 0.35, 9);
       pondLight.position.set(-5.2, 0.8, 3.8);
       scene.add(pondLight);
 
@@ -467,7 +467,7 @@
       buildLivingAnimals();
       buildWeatherSystems();
       buildAllWorkstations();
-      buildAllRealisticCharacters();
+      buildAllRobloxCharacters();
 
       const raycaster = new THREE.Raycaster();
       const mouse = new THREE.Vector2();
@@ -556,7 +556,7 @@
 
       const tex = new THREE.CanvasTexture(c);
       tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
-      tex.repeat.set(3, 3);
+      tex.repeat.set(3, 2);
       return tex;
     }
 
@@ -594,6 +594,44 @@
       tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
       tex.repeat.set(6, 6);
       return tex;
+    }
+
+    function createTenunSweaterTexture() {
+      const c = document.createElement('canvas');
+      c.width = 256; c.height = 256;
+      const ctx = c.getContext('2d');
+      ctx.fillStyle = '#f8f6f0';
+      ctx.fillRect(0, 0, 256, 256);
+
+      ctx.fillStyle = 'rgba(203, 213, 225, 0.25)';
+      for (let y = 0; y < 256; y += 6) {
+        for (let x = 0; x < 256; x += 6) {
+          ctx.fillRect(x, y, 3, 2);
+        }
+      }
+
+      const drawWovenBand = (yStart, height) => {
+        ctx.fillStyle = '#991b1b';
+        ctx.fillRect(0, yStart, 256, height);
+        ctx.fillStyle = '#d97706';
+        ctx.fillRect(0, yStart + 3, 256, 3);
+        ctx.fillRect(0, yStart + height - 6, 256, 3);
+
+        ctx.fillStyle = '#fbbf24';
+        for (let x = 8; x < 256; x += 24) {
+          ctx.beginPath();
+          ctx.moveTo(x + 8, yStart + 8);
+          ctx.lineTo(x + 16, yStart + height / 2);
+          ctx.lineTo(x + 8, yStart + height - 8);
+          ctx.lineTo(x, yStart + height / 2);
+          ctx.closePath();
+          ctx.fill();
+        }
+      };
+
+      drawWovenBand(54, 34);
+      drawWovenBand(186, 28);
+      return new THREE.CanvasTexture(c);
     }
 
     function createFallbackBandPoster(title1, title2, subtitle, accentColor) {
@@ -669,43 +707,8 @@
     }
 
     // =========================================================================
-    // ARSITEKTUR SIMETRIS 2 LANTAI (HIGH CEILING 4.6 METER) & TANGGA SPIRAL
+    // ARSITEKTUR SEMI-OUTDOOR: DINDING BETON INDUSTRIAL & 2 POSTER BAND
     // =========================================================================
-    function buildTallSpiralStaircase(x, z) {
-      const group = new THREE.Group();
-      group.position.set(x, 0.06, z);
-
-      const poleMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, metalness: 0.8, roughness: 0.2 });
-      const stepMat = new THREE.MeshStandardMaterial({ color: 0xd9b38c, roughness: 0.5 });
-      const railMat = new THREE.MeshStandardMaterial({ color: 0x334155, metalness: 0.6 });
-
-      const centerPole = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.06, 4.7, 16), poleMat);
-      centerPole.position.y = 2.35;
-      centerPole.castShadow = true;
-      group.add(centerPole);
-
-      const stepCount = 26;
-      for (let i = 0; i < stepCount; i++) {
-        const angle = (i / stepCount) * Math.PI * 3.2;
-        const height = 0.15 + (i / stepCount) * 4.4;
-
-        const step = new THREE.Mesh(new THREE.BoxGeometry(0.65, 0.05, 0.28), stepMat);
-        step.position.set(Math.cos(angle) * 0.48, height, Math.sin(angle) * 0.48);
-        step.rotation.y = -angle;
-        step.castShadow = true;
-        step.receiveShadow = true;
-        group.add(step);
-
-        if (i % 2 === 0) {
-          const rail = new THREE.Mesh(new THREE.CylinderGeometry(0.015, 0.015, 0.9, 8), railMat);
-          rail.position.set(Math.cos(angle) * 0.75, height + 0.45, Math.sin(angle) * 0.75);
-          group.add(rail);
-        }
-      }
-
-      scene.add(group);
-    }
-
     function buildSemiOutdoorArchitecture() {
       summerGrassTex = createGrassTexture();
       winterSnowTex = createSnowGroundTexture();
@@ -726,26 +729,6 @@
       deckBase.receiveShadow = true;
       scene.add(deckBase);
 
-      const secondFloor = new THREE.Mesh(
-        new THREE.BoxGeometry(6.8, 0.18, 4.8),
-        new THREE.MeshStandardMaterial({ map: createWoodFloorTexture(), roughness: 0.55 })
-      );
-      secondFloor.position.set(3.4, 4.6, -1.8);
-      secondFloor.castShadow = true;
-      secondFloor.receiveShadow = true;
-      scene.add(secondFloor);
-
-      const railingMat = new THREE.MeshPhysicalMaterial({ color: 0x38bdf8, transparent: true, opacity: 0.38, roughness: 0.1 });
-      const railingFront = new THREE.Mesh(new THREE.BoxGeometry(6.8, 0.75, 0.05), railingMat);
-      railingFront.position.set(3.4, 5.08, -4.18);
-      scene.add(railingFront);
-
-      const railingLeft = new THREE.Mesh(new THREE.BoxGeometry(0.05, 0.75, 2.35), railingMat);
-      railingLeft.position.set(0.02, 5.08, -3.0);
-      scene.add(railingLeft);
-
-      buildTallSpiralStaircase(0.5, -0.6);
-
       const addRug = (w, d, color, x, z) => {
         const rug = new THREE.Mesh(
           new THREE.BoxGeometry(w, 0.025, d),
@@ -755,16 +738,9 @@
         rug.receiveShadow = true;
         scene.add(rug);
       };
-      addRug(3.4, 3.0, 0xe0f2fe, -3.2, -2.5);
-      addRug(3.4, 3.0, 0xdcfce7, 3.2, -2.5);
-
-      const rugAuditor = new THREE.Mesh(
-        new THREE.BoxGeometry(3.5, 0.025, 3.2),
-        new THREE.MeshStandardMaterial({ color: 0xfef3c7, roughness: 0.9 })
-      );
-      rugAuditor.position.set(3.4, 4.70, -1.8);
-      rugAuditor.receiveShadow = true;
-      scene.add(rugAuditor);
+      addRug(3.4, 3.0, 0xe0f2fe, -2.6, -2.5);
+      addRug(3.6, 3.0, 0xdcfce7, 1.5, -3.9);
+      addRug(3.6, 3.2, 0xfef3c7, 4.6, -0.3);
 
       const wallMat = new THREE.MeshStandardMaterial({
         map: createIndustrialConcreteTexture(),
@@ -773,20 +749,23 @@
         metalness: 0.08
       });
 
-      const backWall = new THREE.Mesh(new THREE.BoxGeometry(11.5, 7.5, 0.25), wallMat);
-      backWall.position.set(1.4, 3.75, -6.8);
+      const backWall = new THREE.Mesh(new THREE.BoxGeometry(11.5, 4.2, 0.25), wallMat);
+      backWall.position.set(1.4, 2.1, -6.8);
       backWall.receiveShadow = true;
       scene.add(backWall);
 
-      const rightWall = new THREE.Mesh(new THREE.BoxGeometry(0.25, 7.5, 5.2), wallMat);
-      rightWall.position.set(7.05, 3.75, -4.2);
+      const rightWall = new THREE.Mesh(new THREE.BoxGeometry(0.25, 4.2, 5.2), wallMat);
+      rightWall.position.set(7.05, 2.1, -4.2);
       rightWall.receiveShadow = true;
       scene.add(rightWall);
 
       const pillarMat = new THREE.MeshStandardMaterial({ color: 0x78350f, roughness: 0.6 });
-      [[-4.2, -6.6], [-4.2, 1.7], [6.9, 1.7]].forEach(([px, pz]) => {
-        const pillar = new THREE.Mesh(new THREE.BoxGeometry(0.20, 7.4, 0.20), pillarMat);
-        pillar.position.set(px, 3.7, pz);
+      const pillarCoords = [
+        [-4.2, -6.6], [-4.2, 1.7], [6.9, 1.7]
+      ];
+      pillarCoords.forEach(([px, pz]) => {
+        const pillar = new THREE.Mesh(new THREE.BoxGeometry(0.20, 4.1, 0.20), pillarMat);
+        pillar.position.set(px, 2.05, pz);
         pillar.castShadow = true;
         scene.add(pillar);
       });
@@ -802,7 +781,7 @@
           depthWrite: false
         })
       );
-      glassRoof.position.set(1.35, 7.52, -2.45);
+      glassRoof.position.set(1.35, 4.12, -2.45);
       scene.add(glassRoof);
 
       const roofRimGeo = new THREE.EdgesGeometry(new THREE.BoxGeometry(11.35, 0.05, 8.55));
@@ -826,7 +805,7 @@
           new THREE.BoxGeometry(1.48, 2.02, 0.06),
           new THREE.MeshStandardMaterial({ color: 0x0f1115, roughness: 0.7 })
         );
-        frame.position.set(xPos, 4.85, -6.64);
+        frame.position.set(xPos, 2.55, -6.64);
         scene.add(frame);
 
         const posterMat = new THREE.MeshBasicMaterial({ map: fallbackTex });
@@ -834,7 +813,7 @@
           new THREE.PlaneGeometry(1.36, 1.90),
           posterMat
         );
-        canvasMesh.position.set(xPos, 4.85, -6.59);
+        canvasMesh.position.set(xPos, 2.55, -6.59);
         scene.add(canvasMesh);
 
         const tryLoad = (idx) => {
@@ -867,6 +846,7 @@
 
       createPottedPlant('monstera', -3.7, -6.0, 1.1);
       createPottedPlant('sansevieria', 6.3, -6.0, 1.0);
+      createPottedPlant('monstera', 6.4, 1.2, 1.05);
     }
 
     // =========================================================================
@@ -1058,7 +1038,7 @@
     }
 
     // =========================================================================
-    // HEWAN PELIHARAAN HIDUP
+    // HEWAN PELIHARAAN HIDUP: KELINCI MELOMPAT & KUCING JALAN-JALAN
     // =========================================================================
     function createRabbit(x, z, furColor) {
       const group = new THREE.Group();
@@ -1175,288 +1155,380 @@
     }
 
     // =========================================================================
-    // MEJA, KURSI & WORKSTATION SIMETRIS
+    // MEJA KERJA & 3 KARAKTER CHIBI INTERAKTIF
     // =========================================================================
-    function buildDeskWithChair(x, z, yOffset, rotY, accentColor) {
-      const group = new THREE.Group();
-      group.position.set(x, yOffset + 0.12, z);
-      group.rotation.y = rotY;
+    function buildDeskSetup(x, z, rotY, accentColor) {
+      const desk = new THREE.Group();
+      desk.position.set(x, 0.12, z);
+      desk.rotation.y = rotY;
 
-      const topMat = new THREE.MeshStandardMaterial({ color: 0xe6ccb2, roughness: 0.4, metalness: 0.1 });
-      const legMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, metalness: 0.8, roughness: 0.2 });
+      const topMat = new THREE.MeshStandardMaterial({ color: 0xe6ccb2, roughness: 0.5 });
+      const legMat = new THREE.MeshStandardMaterial({ color: 0x334155, metalness: 0.4, roughness: 0.5 });
 
       const tableTop = new THREE.Mesh(new THREE.BoxGeometry(2.1, 0.08, 1.05), topMat);
       tableTop.position.y = 0.88;
       tableTop.castShadow = true;
       tableTop.receiveShadow = true;
-      group.add(tableTop);
+      desk.add(tableTop);
 
       for (let lx of [-0.92, 0.92]) {
         for (let lz of [-0.42, 0.42]) {
-          const leg = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.035, 0.88, 12), legMat);
+          const leg = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.035, 0.88, 8), legMat);
           leg.position.set(lx, 0.44, lz);
           leg.castShadow = true;
-          group.add(leg);
+          desk.add(leg);
         }
       }
 
       const stand = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.25, 0.1), legMat);
       stand.position.set(0, 1.02, -0.25);
-      group.add(stand);
+      desk.add(stand);
 
-      const frame = new THREE.Mesh(new THREE.BoxGeometry(1.15, 0.58, 0.05), new THREE.MeshStandardMaterial({ color: 0x0f172a, roughness: 0.2 }));
+      const frame = new THREE.Mesh(new THREE.BoxGeometry(1.15, 0.58, 0.05), new THREE.MeshStandardMaterial({ color: 0x1e293b }));
       frame.position.set(0, 1.32, -0.24);
       frame.castShadow = true;
-      group.add(frame);
+      desk.add(frame);
 
       const screenMat = new THREE.MeshBasicMaterial({ color: accentColor });
       const screen = new THREE.Mesh(new THREE.PlaneGeometry(1.07, 0.50), screenMat);
       screen.position.set(0, 1.32, -0.21);
-      group.add(screen);
+      desk.add(screen);
       monitorScreens.push({ mesh: screen, baseColor: new THREE.Color(accentColor) });
 
-      const miniPot = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.06, 0.11, 12), new THREE.MeshStandardMaterial({ color: 0xd97757, roughness: 0.5 }));
+      const miniPot = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.08, 0.06, 0.11, 10),
+        new THREE.MeshStandardMaterial({ color: 0xd97757 })
+      );
       miniPot.position.set(0.78, 0.97, 0.18);
-      group.add(miniPot);
+      desk.add(miniPot);
 
-      const succulent = new THREE.Mesh(new THREE.DodecahedronGeometry(0.085, 1), new THREE.MeshStandardMaterial({ color: 0x2d6a4f, roughness: 0.4 }));
+      const succulent = new THREE.Mesh(
+        new THREE.DodecahedronGeometry(0.085),
+        new THREE.MeshStandardMaterial({ color: 0x40916c })
+      );
       succulent.position.set(0.78, 1.06, 0.18);
-      group.add(succulent);
+      desk.add(succulent);
 
-      const mug = new THREE.Mesh(new THREE.CylinderGeometry(0.055, 0.055, 0.11, 16), new THREE.MeshStandardMaterial({ color: 0xf8fafc, roughness: 0.3 }));
+      const mug = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.055, 0.055, 0.11, 12),
+        new THREE.MeshStandardMaterial({ color: 0xffffff })
+      );
       mug.position.set(-0.75, 0.97, 0.22);
-      group.add(mug);
+      desk.add(mug);
 
-      // Kursi Gaming / Ergonomis Standar AAA
-      const chairBaseMat = new THREE.MeshStandardMaterial({ color: 0x0f172a, metalness: 0.8, roughness: 0.2 });
-      const chairPadMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, roughness: 0.6 });
-
-      const chairBase = new THREE.Mesh(new THREE.CylinderGeometry(0.34, 0.34, 0.06, 16), chairBaseMat);
-      chairBase.position.set(0, 0.42, 0.55);
-      chairBase.castShadow = true;
-      group.add(chairBase);
-
-      const chairSeat = new THREE.Mesh(new THREE.BoxGeometry(0.52, 0.12, 0.52), chairPadMat);
-      chairSeat.position.set(0, 0.52, 0.55);
-      chairSeat.castShadow = true;
-      group.add(chairSeat);
-
-      const chairBack = new THREE.Mesh(new THREE.BoxGeometry(0.52, 0.72, 0.08), chairPadMat);
-      chairBack.position.set(0, 0.92, 0.78);
-      chairBack.castShadow = true;
-      group.add(chairBack);
-
-      scene.add(group);
+      scene.add(desk);
     }
 
     function buildAllWorkstations() {
-      buildDeskWithChair(-3.2, -2.6, 0, 0, 0x38bdf8);
-      buildDeskWithChair(3.2, -2.6, 0, 0, 0x34d399);
-      buildDeskWithChair(3.4, -2.2, 4.6, 0, 0xfbbf24);
+      buildDeskSetup(-2.8, -3.1, Math.PI / 5, 0x38bdf8);
+      buildDeskSetup(1.5, -4.6, 0, 0x34d399);
+      buildDeskSetup(4.8, -0.8, -Math.PI / 4, 0xfbbf24);
     }
 
-    // =========================================================================
-    // KARAKTER MANUSIA 3D REALISTIS BERSTANDAR GAME (AAA-STYLE / GTA V / SEMI-REALISTIC)
-    // =========================================================================
-    function createAAACharacter(config) {
+    function createRobloxCharacter(config) {
       const root = new THREE.Group();
-      root.position.set(config.x, (config.yOffset || 0) + 0.12, config.z);
-      root.rotation.y = config.rotY + Math.PI; // Menghadap ke meja/monitor
+      root.position.set(config.x, 0.12, config.z);
+      root.rotation.y = config.rotY;
       root.userData.agentId = config.id;
 
-      const skinMat = new THREE.MeshStandardMaterial({ color: config.skinColor, roughness: 0.45, metalness: 0.05 });
-      const clothMat = new THREE.MeshStandardMaterial({ color: config.shirtColor, roughness: 0.6, metalness: 0.1 });
-      const pantsMat = new THREE.MeshStandardMaterial({ color: config.pantsColor, roughness: 0.7 });
-      const hairMat = new THREE.MeshStandardMaterial({ color: config.hairColor, roughness: 0.5, metalness: 0.2 });
-      const shoeMat = new THREE.MeshStandardMaterial({ color: 0x0f172a, roughness: 0.4 });
+      const skinMat = new THREE.MeshStandardMaterial({ color: config.skinColor, roughness: 0.42 });
+      const pantsMat = new THREE.MeshStandardMaterial({ color: config.pantsColor, roughness: 0.65 });
+      const torsoMat = config.torsoTexture
+        ? new THREE.MeshStandardMaterial({ map: config.torsoTexture, roughness: 0.65 })
+        : new THREE.MeshStandardMaterial({ color: config.shirtColor, roughness: 0.58 });
+      const sleeveMat = new THREE.MeshStandardMaterial({ color: config.sleeveColor || config.shirtColor, roughness: 0.58 });
 
-      // Kaki Proporsional (Posisi Duduk Ergonomis)
-      for (let side of [-1, 1]) {
-        const legGroup = new THREE.Group();
-        legGroup.position.set(side * 0.14, 0.46, 0.22);
-        legGroup.rotation.x = -Math.PI / 2.2;
+      const leftLeg = new THREE.Group();
+      leftLeg.position.set(-0.14, 0.56, 0);
+      const lLegMesh = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.11, 0.52, 14), pantsMat);
+      lLegMesh.position.y = -0.26;
+      lLegMesh.castShadow = true;
+      const lShoe = new THREE.Mesh(new THREE.SphereGeometry(0.13, 12, 10), new THREE.MeshStandardMaterial({ color: 0x1e293b }));
+      lShoe.scale.set(1, 0.65, 1.35);
+      lShoe.position.set(0, -0.52, 0.04);
+      leftLeg.add(lLegMesh, lShoe);
+      root.add(leftLeg);
 
-        const thigh = new THREE.Mesh(new THREE.CylinderGeometry(0.085, 0.075, 0.44, 16), pantsMat);
-        thigh.position.y = -0.22;
-        thigh.castShadow = true;
+      const rightLeg = new THREE.Group();
+      rightLeg.position.set(0.14, 0.56, 0);
+      const rLegMesh = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.11, 0.52, 14), pantsMat);
+      rLegMesh.position.y = -0.26;
+      rLegMesh.castShadow = true;
+      const rShoe = new THREE.Mesh(new THREE.SphereGeometry(0.13, 12, 10), new THREE.MeshStandardMaterial({ color: 0x1e293b }));
+      rShoe.scale.set(1, 0.65, 1.35);
+      rShoe.position.set(0, -0.52, 0.04);
+      rightLeg.add(rLegMesh, rShoe);
+      root.add(rightLeg);
 
-        const shin = new THREE.Mesh(new THREE.CylinderGeometry(0.07, 0.06, 0.42, 16), pantsMat);
-        shin.position.set(0, -0.48, 0.18);
-        shin.rotation.x = Math.PI / 2.2;
-        shin.castShadow = true;
-
-        const shoe = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.10, 0.26), shoeMat);
-        shoe.position.set(0, -0.48, 0.38);
-        shoe.castShadow = true;
-
-        legGroup.add(thigh, shin, shoe);
-        root.add(legGroup);
-      }
-
-      // Torso / Dada Proporsional (Pria/Wanita Game Standard)
-      const torso = new THREE.Mesh(new THREE.CylinderGeometry(0.23, 0.25, 0.70, 20), clothMat);
-      torso.position.y = 0.78;
+      const torso = new THREE.Mesh(new THREE.CylinderGeometry(0.26, 0.31, 0.64, 18), torsoMat);
+      torso.position.y = 0.88;
       torso.castShadow = true;
       root.add(torso);
 
-      // Kerah / Dasi Opsional
       if (config.hasDarkTie) {
-        const tie = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.35, 0.03), new THREE.MeshStandardMaterial({ color: 0x0f172a }));
-        tie.position.set(0, 0.85, 0.235);
+        const tie = new THREE.Mesh(
+          new THREE.BoxGeometry(0.08, 0.36, 0.04),
+          new THREE.MeshStandardMaterial({ color: 0x090d16, roughness: 0.4 })
+        );
+        tie.position.set(0, 0.94, 0.27);
         root.add(tie);
       }
 
-      // Lengan Artikulasi Natural
-      for (let side of [-1, 1]) {
-        const armGroup = new THREE.Group();
-        armGroup.position.set(side * 0.28, 1.04, 0.15);
-        armGroup.rotation.x = -0.65;
-        armGroup.rotation.z = side * 0.05;
-
-        const upperArm = new THREE.Mesh(new THREE.CylinderGeometry(0.07, 0.06, 0.38, 14), clothMat);
-        upperArm.position.y = -0.19;
-        upperArm.castShadow = true;
-
-        const forearm = new THREE.Mesh(new THREE.CylinderGeometry(0.055, 0.05, 0.36, 14), skinMat);
-        forearm.position.set(0, -0.48, 0.08);
-        forearm.rotation.x = 0.4;
-        forearm.castShadow = true;
-
-        const hand = new THREE.Mesh(new THREE.SphereGeometry(0.06, 12, 12), skinMat);
-        hand.scale.set(0.8, 0.6, 1.3);
-        hand.position.set(0, -0.68, 0.20);
-
-        armGroup.add(upperArm, forearm, hand);
-        root.add(armGroup);
+      if (config.hasLanyard) {
+        const card = new THREE.Mesh(
+          new THREE.BoxGeometry(0.14, 0.20, 0.03),
+          new THREE.MeshStandardMaterial({ color: 0xffffff })
+        );
+        card.position.set(0, 0.88, 0.29);
+        root.add(card);
       }
 
-      // Kepala & Wajah Standar Game AAA (Anatomi Proporsional)
+      const createArm = (xPos) => {
+        const armPivot = new THREE.Group();
+        armPivot.position.set(xPos, 1.14, 0);
+        const upper = new THREE.Mesh(new THREE.CylinderGeometry(0.095, 0.09, 0.34, 12), sleeveMat);
+        upper.position.y = -0.17;
+        upper.castShadow = true;
+        armPivot.add(upper);
+
+        const hand = new THREE.Mesh(new THREE.SphereGeometry(0.10, 12, 12), skinMat);
+        hand.position.y = -0.38;
+        hand.castShadow = true;
+        armPivot.add(hand);
+        root.add(armPivot);
+        return armPivot;
+      };
+      const leftArm = createArm(-0.36);
+      const rightArm = createArm(0.36);
+
       const headGroup = new THREE.Group();
-      headGroup.position.y = 1.50;
+      headGroup.position.y = 1.62;
+      const headMesh = new THREE.Mesh(new THREE.SphereGeometry(0.42, 24, 20), skinMat);
+      headMesh.scale.set(1.04, 0.96, 0.98);
+      headMesh.castShadow = true;
+      headGroup.add(headMesh);
 
-      const skull = new THREE.Mesh(new THREE.SphereGeometry(0.24, 24, 24), skinMat);
-      skull.scale.set(0.92, 1.18, 1.02);
-      skull.castShadow = true;
-      headGroup.add(skull);
+      const eyeWhiteMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
+      const pupilMat = new THREE.MeshBasicMaterial({ color: config.eyeColor || 0x1e1b18 });
+      const browMat = new THREE.MeshStandardMaterial({ color: config.browColor || config.hairColor });
 
-      // Detail Mata, Hidung, dan Alis
-      const eyeMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, roughness: 0.2 });
       for (let side of [-1, 1]) {
-        const eye = new THREE.Mesh(new THREE.SphereGeometry(0.026, 12, 12), eyeMat);
-        eye.position.set(side * 0.082, 0.04, 0.215);
-        headGroup.add(eye);
+        const eyeBase = new THREE.Mesh(new THREE.SphereGeometry(0.068, 12, 12), eyeWhiteMat);
+        eyeBase.scale.set(1, 1.15, 0.5);
+        eyeBase.position.set(side * 0.14, 0.02, 0.37);
+
+        const pupil = new THREE.Mesh(new THREE.SphereGeometry(0.048, 12, 12), pupilMat);
+        pupil.scale.set(1, 1.15, 0.5);
+        pupil.position.set(side * 0.14, 0.02, 0.395);
+
+        const highlight = new THREE.Mesh(new THREE.SphereGeometry(0.016, 8, 8), eyeWhiteMat);
+        highlight.position.set(side * 0.155, 0.045, 0.415);
+
+        const brow = new THREE.Mesh(new THREE.BoxGeometry(0.11, 0.022, 0.02), browMat);
+        brow.position.set(side * 0.14, 0.11, 0.38);
+        brow.rotation.z = side * -0.06;
+
+        headGroup.add(eyeBase, pupil, highlight, brow);
       }
 
-      const nose = new THREE.Mesh(new THREE.ConeGeometry(0.024, 0.07, 6), skinMat);
-      nose.rotation.x = Math.PI / 2;
-      nose.position.set(0, -0.01, 0.235);
-      headGroup.add(nose);
+      if (config.hasBlush) {
+        const blushMat = new THREE.MeshBasicMaterial({ color: 0xf472b6, transparent: true, opacity: 0.45 });
+        for (let side of [-1, 1]) {
+          const blush = new THREE.Mesh(new THREE.CircleGeometry(0.055, 12), blushMat);
+          blush.position.set(side * 0.22, -0.06, 0.36);
+          blush.rotation.y = side * 0.45;
+          headGroup.add(blush);
+        }
+      }
 
-      const lipMat = new THREE.MeshStandardMaterial({ color: 0xd97775, roughness: 0.5 });
-      const lips = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.02, 0.03), lipMat);
-      lips.position.set(0, -0.12, 0.22);
-      headGroup.add(lips);
+      const smile = new THREE.Mesh(
+        new THREE.TorusGeometry(0.065, 0.014, 8, 16, Math.PI),
+        new THREE.MeshBasicMaterial({ color: config.lipColor || 0x9f1239 })
+      );
+      smile.rotation.z = Math.PI;
+      smile.position.set(0, -0.09, 0.39);
+      headGroup.add(smile);
 
-      // Model Rambut HD / Stylized AAA
-      if (config.hairStyle === 'crawler-man-bob') {
-        const hairMesh = new THREE.Mesh(new THREE.SphereGeometry(0.265, 20, 18, 0, Math.PI * 2, 0, Math.PI * 0.68), hairMat);
-        hairMesh.position.set(0, 0.05, -0.02);
-        headGroup.add(hairMesh);
+      const hairMat = new THREE.MeshStandardMaterial({ color: config.hairColor, roughness: 0.65 });
 
-        // Jenggot rapi bertekstur
-        const beardMat = new THREE.MeshStandardMaterial({ color: 0x111827, roughness: 0.8 });
-        const beard = new THREE.Mesh(new THREE.CylinderGeometry(0.215, 0.195, 0.19, 16, 1, false, -Math.PI * 0.45, Math.PI * 0.9), beardMat);
-        beard.position.set(0, -0.16, 0.08);
-        headGroup.add(beard);
-
-      } else if (config.hairStyle === 'drafter-woman-long') {
-        const hairMesh = new THREE.Mesh(new THREE.SphereGeometry(0.265, 20, 18, 0, Math.PI * 2, 0, Math.PI * 0.72), hairMat);
-        hairMesh.position.set(0, 0.05, -0.02);
-        
-        // Rambut panjang bergelombang jatuh ke belakang
-        const longBack = new THREE.Mesh(new THREE.CylinderGeometry(0.22, 0.26, 0.62, 16), hairMat);
-        longBack.scale.set(1.1, 1, 0.6);
-        longBack.position.set(0, -0.25, -0.16);
-        longBack.rotation.x = 0.15;
-        headGroup.add(hairMesh, longBack);
-
-      } else if (config.hairStyle === 'auditor-blonde-teal') {
-        const blondeMat = new THREE.MeshStandardMaterial({ color: 0xfde047, roughness: 0.4, metalness: 0.2 });
-        const tealMat = new THREE.MeshStandardMaterial({ color: 0x06b6d4, roughness: 0.4, metalness: 0.3 });
-
-        const crown = new THREE.Mesh(new THREE.SphereGeometry(0.265, 20, 18, 0, Math.PI * 2, 0, Math.PI * 0.68), blondeMat);
-        crown.position.set(0, 0.05, -0.02);
+      if (config.hairStyle === 'crawler-beard-bob') {
+        const hairCap = new THREE.Mesh(new THREE.SphereGeometry(0.445, 22, 18, 0, Math.PI * 2, 0, Math.PI * 0.62), hairMat);
+        hairCap.position.set(0, 0.03, -0.02);
+        headGroup.add(hairCap);
 
         for (let side of [-1, 1]) {
-          const tealStrand = new THREE.Mesh(new THREE.CylinderGeometry(0.065, 0.055, 0.38, 12), tealMat);
-          tealStrand.position.set(side * 0.22, -0.18, -0.02);
-          headGroup.add(tealStrand);
+          const sideHair = new THREE.Mesh(new THREE.BoxGeometry(0.14, 0.68, 0.34), hairMat);
+          sideHair.position.set(side * 0.39, -0.18, -0.03);
+          sideHair.rotation.z = side * -0.08;
+          sideHair.castShadow = true;
+          headGroup.add(sideHair);
         }
-        headGroup.add(crown);
+        const backHair = new THREE.Mesh(new THREE.BoxGeometry(0.76, 0.66, 0.18), hairMat);
+        backHair.position.set(0, -0.18, -0.35);
+        headGroup.add(backHair);
+
+        const beardMat = new THREE.MeshStandardMaterial({ color: 0x1f242d, roughness: 0.85 });
+        const jawBeard = new THREE.Mesh(new THREE.CylinderGeometry(0.36, 0.32, 0.22, 18, 1, false, -Math.PI * 0.42, Math.PI * 0.84), beardMat);
+        jawBeard.position.set(0, -0.22, 0.06);
+        const mustache = new THREE.Mesh(new THREE.BoxGeometry(0.20, 0.045, 0.05), beardMat);
+        mustache.position.set(0, -0.05, 0.40);
+        headGroup.add(jawBeard, mustache);
+
+      } else if (config.hairStyle === 'drafter-long-wavy') {
+        const hairCap = new THREE.Mesh(new THREE.SphereGeometry(0.45, 22, 18, 0, Math.PI * 2, 0, Math.PI * 0.65), hairMat);
+        hairCap.position.set(0, 0.03, -0.02);
+        headGroup.add(hairCap);
+
+        for (let side of [-1, 1]) {
+          const waveStrand = new THREE.Mesh(new THREE.CylinderGeometry(0.11, 0.13, 0.85, 12), hairMat);
+          waveStrand.position.set(side * 0.39, -0.26, -0.04);
+          waveStrand.rotation.z = side * -0.07;
+          waveStrand.castShadow = true;
+          headGroup.add(waveStrand);
+        }
+        const longBack = new THREE.Mesh(new THREE.BoxGeometry(0.82, 0.88, 0.20), hairMat);
+        longBack.position.set(0, -0.28, -0.35);
+        longBack.castShadow = true;
+        headGroup.add(longBack);
+
+      } else if (config.hairStyle === 'auditor-blonde-teal') {
+        const tealMat = new THREE.MeshStandardMaterial({ color: 0x06b6d4, roughness: 0.55 });
+        const blondeCrown = new THREE.Mesh(new THREE.SphereGeometry(0.45, 22, 18, 0, Math.PI * 2, 0, Math.PI * 0.64), hairMat);
+        blondeCrown.position.set(0, 0.03, -0.02);
+        headGroup.add(blondeCrown);
+
+        const sideBangs = new THREE.Mesh(new THREE.BoxGeometry(0.42, 0.26, 0.14), hairMat);
+        sideBangs.position.set(-0.14, 0.24, 0.35);
+        sideBangs.rotation.z = 0.35;
+        headGroup.add(sideBangs);
+
+        for (let side of [-1, 1]) {
+          const upperBlonde = new THREE.Mesh(new THREE.CylinderGeometry(0.11, 0.12, 0.52, 12), hairMat);
+          upperBlonde.position.set(side * 0.39, -0.14, -0.04);
+          upperBlonde.castShadow = true;
+
+          const lowerTeal = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.10, 0.32, 12), tealMat);
+          lowerTeal.position.set(side * 0.40, -0.52, -0.04);
+          lowerTeal.castShadow = true;
+
+          headGroup.add(upperBlonde, lowerTeal);
+        }
+        const backBlonde = new THREE.Mesh(new THREE.BoxGeometry(0.80, 0.55, 0.18), hairMat);
+        backBlonde.position.set(0, -0.15, -0.35);
+        const backTeal = new THREE.Mesh(new THREE.BoxGeometry(0.80, 0.30, 0.18), tealMat);
+        backTeal.position.set(0, -0.55, -0.35);
+        headGroup.add(backBlonde, backTeal);
       }
 
       root.add(headGroup);
       scene.add(root);
       clickableObjects.push(root);
 
-      realisticAvatars[config.id] = {
+      robloxAvatars[config.id] = {
         root,
+        leftLeg,
+        rightLeg,
+        leftArm,
+        rightArm,
         headGroup,
-        basePos: new THREE.Vector3(config.x, (config.yOffset || 0) + 0.12, config.z),
-        baseRotY: config.rotY + Math.PI,
-        phase: Math.random() * Math.PI * 2
+        basePos: new THREE.Vector3(config.x, 0.12, config.z),
+        baseRotY: config.rotY,
+        phase: Math.random() * Math.PI * 2,
+        workStartTime: 0,
+        lastStatus: 'IDLE'
       };
     }
 
-    function buildAllRealisticCharacters() {
-      // 1. Crawler (Pria, jas rapi, rambut bob & jenggot realistis)
-      createAAACharacter({
+    function buildAllRobloxCharacters() {
+      createRobloxCharacter({
         id: 'crawler',
-        x: -3.2,
-        z: -3.15,
-        yOffset: 0,
-        rotY: 0,
+        x: -2.2,
+        z: -2.3,
+        rotY: Math.PI + Math.PI / 5,
         skinColor: 0xf5d0b5,
-        shirtColor: 0x1e293b,
+        shirtColor: 0x111827,
         pantsColor: 0x0f172a,
-        hairColor: 0x111827,
-        hairStyle: 'crawler-man-bob',
+        hairColor: 0x141414,
+        browColor: 0x141414,
+        lipColor: 0x7f1d1d,
+        hairStyle: 'crawler-beard-bob',
         hasDarkTie: true
       });
 
-      // 2. Drafter (Wanita, kemeja hijau emerald, rambut panjang bergelombang)
-      createAAACharacter({
+      createRobloxCharacter({
         id: 'drafter',
-        x: 3.2,
-        z: -3.15,
-        yOffset: 0,
-        rotY: 0,
+        x: 1.5,
+        z: -3.6,
+        rotY: Math.PI,
         skinColor: 0xfde2cf,
         shirtColor: 0x10b981,
         pantsColor: 0x334155,
         hairColor: 0x2c1e16,
-        hairStyle: 'drafter-woman-long'
+        browColor: 0x3b281e,
+        lipColor: 0xe11d48,
+        hairStyle: 'drafter-long-wavy',
+        hasBlush: true,
+        hasLanyard: true
       });
 
-      // 3. Auditor (Wanita di Lantai 2, rambut blonde-teal khas)
-      createAAACharacter({
+      createRobloxCharacter({
         id: 'auditor',
-        x: 3.4,
-        z: -2.75,
-        yOffset: 4.6,
-        rotY: 0,
+        x: 4.1,
+        z: -0.1,
+        rotY: Math.PI - Math.PI / 4,
         skinColor: 0xfce7d6,
-        shirtColor: 0xb91c1c,
+        torsoTexture: createTenunSweaterTexture(),
+        sleeveColor: 0xf8f6f0,
         pantsColor: 0x1e293b,
-        hairColor: 0xfde047,
-        hairStyle: 'auditor-blonde-teal'
+        hairColor: 0xf3f4f6,
+        browColor: 0x9ca3af,
+        lipColor: 0xf43f5e,
+        hairStyle: 'auditor-blonde-teal',
+        hasBlush: true
       });
     }
 
     // =========================================================================
-    // LOOP ANIMASI 3D REAL-TIME
+    // LOOP ANIMASI 3D REAL-TIME (OBROLAN IDLE, SALAMAN & HEADBANG MUSIK)
     // =========================================================================
     const clock = new THREE.Clock();
+
+    function moveCharacterTo(av, targetVec, speed, t, walkFreq = 11) {
+      const dx = targetVec.x - av.root.position.x;
+      const dz = targetVec.z - av.root.position.z;
+      const dist = Math.hypot(dx, dz);
+
+      if (dist > 0.08) {
+        const step = Math.min(dist, speed);
+        av.root.position.x += (dx / dist) * step;
+        av.root.position.z += (dz / dist) * step;
+
+        const desiredRot = Math.atan2(dx, dz);
+        let diff = desiredRot - av.root.rotation.y;
+        while (diff > Math.PI) diff -= Math.PI * 2;
+        while (diff < -Math.PI) diff += Math.PI * 2;
+        av.root.rotation.y += diff * 0.15;
+
+        const swing = Math.sin(t * walkFreq) * 0.55;
+        av.leftLeg.rotation.x = swing;
+        av.rightLeg.rotation.x = -swing;
+        av.leftArm.rotation.x = -swing * 0.65;
+        av.rightArm.rotation.x = swing * 0.65;
+        av.rightArm.rotation.z = 0;
+        av.root.position.y = 0.12 + Math.abs(Math.cos(t * walkFreq)) * 0.035;
+        av.headGroup.rotation.set(0, 0, 0);
+        return false;
+      }
+      return true;
+    }
+
+    function faceToward(av, targetVec) {
+      const desiredRot = Math.atan2(targetVec.x - av.root.position.x, targetVec.z - av.root.position.z);
+      let diff = desiredRot - av.root.rotation.y;
+      while (diff > Math.PI) diff -= Math.PI * 2;
+      while (diff < -Math.PI) diff += Math.PI * 2;
+      av.root.rotation.y += diff * 0.15;
+    }
 
     function animate3D() {
       requestAnimationFrame(animate3D);
@@ -1470,18 +1542,129 @@
         }
       }
 
-      Object.keys(realisticAvatars).forEach((id) => {
-        const av = realisticAvatars[id];
-        const status = (AGENT_META[id].status || 'IDLE').toUpperCase();
-        
-        av.root.position.copy(av.basePos);
-        av.root.rotation.y = av.baseRotY;
+      const chatCycle = t % 22;
+      const isChatTime = chatCycle > 9 && chatCycle < 16.5;
+      const chatPairIndex = Math.floor(t / 22) % 3;
+      const chatPairs = [
+        ['crawler', 'drafter'],
+        ['drafter', 'auditor'],
+        ['crawler', 'auditor']
+      ];
+      const activeChatters = chatPairs[chatPairIndex];
+      const chatSpotA = new THREE.Vector3(0.75, 0.12, -1.65);
+      const chatSpotB = new THREE.Vector3(1.65, 0.12, -1.65);
 
-        if (status === 'WORKING' || isMusicPlaying) {
-          av.headGroup.rotation.x = 0.12 + Math.sin(t * 14 + av.phase) * 0.12;
+      let activeHandshakeVisitor = null;
+      ['crawler', 'drafter'].forEach((id) => {
+        const av = robloxAvatars[id];
+        const st = (AGENT_META[id].status || 'IDLE').toUpperCase();
+        if (st !== av.lastStatus) {
+          av.lastStatus = st;
+          if (st === 'WORKING') av.workStartTime = t;
+        }
+        if (st === 'WORKING' && (t - av.workStartTime) > 2.2 && !activeHandshakeVisitor) {
+          activeHandshakeVisitor = id;
+        }
+      });
+
+      const auditorHandshakeSpot = new THREE.Vector3(3.95, 0.12, -0.35);
+      const visitorHandshakeSpot = new THREE.Vector3(3.15, 0.12, -0.35);
+
+      Object.keys(robloxAvatars).forEach((id) => {
+        const av = robloxAvatars[id];
+        const status = (AGENT_META[id].status || 'IDLE').toUpperCase();
+        const p = t + av.phase;
+
+        if (id === 'auditor' && activeHandshakeVisitor) {
+          const arrived = moveCharacterTo(av, auditorHandshakeSpot, 0.04, t);
+          if (arrived) {
+            faceToward(av, visitorHandshakeSpot);
+            av.leftLeg.rotation.x = 0;
+            av.rightLeg.rotation.x = 0;
+            av.leftArm.rotation.x = 0;
+            av.rightArm.rotation.x = -1.15 - Math.sin(t * 9) * 0.18;
+            av.rightArm.rotation.z = -0.15;
+            av.headGroup.rotation.x = -Math.sin(t * 4) * 0.1;
+          }
+          return;
+        }
+
+        if (status === 'WORKING') {
+          const arrived = moveCharacterTo(av, av.basePos, 0.05, t);
+          if (arrived) {
+            av.root.rotation.y += (av.baseRotY - av.root.rotation.y) * 0.15;
+            av.root.position.y = 0.12 + Math.abs(Math.sin(p * 8)) * 0.03;
+            av.leftArm.rotation.x = -0.95 + Math.sin(p * 18) * 0.22;
+            av.rightArm.rotation.x = -0.95 - Math.sin(p * 18) * 0.22;
+            av.rightArm.rotation.z = 0;
+            av.leftLeg.rotation.x = 0;
+            av.rightLeg.rotation.x = 0;
+            av.headGroup.rotation.y = Math.sin(p * 3) * 0.15;
+            av.headGroup.rotation.x = isMusicPlaying ? 0.12 + Math.sin(t * 14) * 0.16 : 0.12;
+          }
+          return;
+        }
+
+        if (status === 'DONE') {
+          const arrived = moveCharacterTo(av, av.basePos, 0.05, t);
+          if (arrived) {
+            av.root.rotation.y += (av.baseRotY - av.root.rotation.y) * 0.15;
+            av.root.position.y = 0.12 + Math.abs(Math.sin(p * 5)) * 0.18;
+            av.rightArm.rotation.x = -2.4 + Math.sin(p * 10) * 0.3;
+            av.rightArm.rotation.z = 0;
+            av.leftArm.rotation.x = Math.sin(p * 4) * 0.15;
+            av.leftLeg.rotation.x = 0;
+            av.rightLeg.rotation.x = 0;
+            av.headGroup.rotation.x = -0.05;
+          }
+          return;
+        }
+
+        // Mode Mosh Pit saat musik nyala & status IDLE
+        if (isMoshPitActive) {
+          const arrived = moveCharacterTo(av, av.basePos, 0.05, t);
+          if (arrived) {
+            av.headGroup.rotation.x = 0.35 + Math.sin(t * 18 + av.phase) * 0.45;
+            av.headGroup.rotation.y = Math.sin(t * 12 + av.phase) * 0.3;
+            av.leftArm.rotation.x = -1.2 + Math.sin(t * 16 + av.phase) * 0.5;
+            av.rightArm.rotation.x = -1.2 - Math.sin(t * 16 + av.phase) * 0.5;
+            av.leftLeg.rotation.x = 0;
+            av.rightLeg.rotation.x = 0;
+            av.root.position.y = av.basePos.y + Math.abs(Math.sin(t * 14 + av.phase)) * 0.18;
+          }
+          return;
+        }
+
+        if (isChatTime && activeChatters.includes(id)) {
+          const isFirst = activeChatters[0] === id;
+          const myChatSpot = isFirst ? chatSpotA : chatSpotB;
+          const partnerSpot = isFirst ? chatSpotB : chatSpotA;
+
+          const arrived = moveCharacterTo(av, myChatSpot, 0.035, t, 9);
+          if (arrived) {
+            faceToward(av, partnerSpot);
+            av.leftLeg.rotation.x = 0;
+            av.rightLeg.rotation.x = 0;
+            av.rightArm.rotation.z = 0;
+            const talkWave = isFirst ? Math.sin(t * 4.5) : Math.cos(t * 4.5);
+            av.rightArm.rotation.x = -0.45 + Math.max(0, talkWave) * -0.45;
+            av.leftArm.rotation.x = Math.sin(p * 1.5) * 0.1;
+            av.headGroup.rotation.x = Math.sin(t * 5 + (isFirst ? 0 : 2)) * 0.12;
+            av.headGroup.rotation.y = Math.cos(t * 2.5) * 0.12;
+          }
         } else {
-          av.headGroup.rotation.x = 0.08;
-          av.headGroup.rotation.y = Math.sin(t + av.phase) * 0.1;
+          const arrived = moveCharacterTo(av, av.basePos, 0.035, t, 9);
+          if (arrived) {
+            av.root.rotation.y += (av.baseRotY - av.root.rotation.y) * 0.12;
+            av.root.position.y = 0.12 + Math.sin(p * 2) * 0.02;
+            av.leftArm.rotation.x = Math.sin(p * 1.8) * 0.08;
+            av.rightArm.rotation.x = -Math.sin(p * 1.8) * 0.08;
+            av.rightArm.rotation.z = 0;
+            av.leftLeg.rotation.x = 0;
+            av.rightLeg.rotation.x = 0;
+            av.headGroup.rotation.y = Math.sin(p * 1.1) * 0.25;
+            av.headGroup.rotation.x = 0;
+          }
         }
       });
 
@@ -1504,7 +1687,7 @@
         const x = r.centerX + Math.cos(ang) * r.radius;
         const z = r.centerZ + Math.sin(ang) * r.radius;
         const nx = r.centerX + Math.cos(nextAng) * r.radius;
-        const nz = r.centerZ + Math.sin(ang) * r.radius;
+        const nz = r.centerZ + Math.sin(nextAng) * r.radius;
 
         const hop = Math.abs(Math.sin(t * 4.5 + idx * 1.7)) * 0.16;
         r.mesh.position.set(x, hop, z);
@@ -1517,7 +1700,7 @@
         const x = c.centerX + Math.cos(ang) * c.radius;
         const z = c.centerZ + Math.sin(ang) * c.radius;
         const nx = c.centerX + Math.cos(nextAng) * c.radius;
-        const nz = c.centerZ + Math.sin(ang) * c.radius;
+        const nz = c.centerZ + Math.sin(nextAng) * c.radius;
 
         c.group.position.set(x, c.baseY + Math.abs(Math.sin(t * 5 + idx)) * 0.02, z);
         c.group.lookAt(nx, c.group.position.y, nz);
@@ -1649,9 +1832,9 @@
         ambientLight.color.setHex(0xfffaf0);
         ambientLight.intensity = seasonModeIndex === 1 ? 0.68 : 0.85;
         sunLight.color.setHex(0xfff5e4);
-        sunLight.intensity = seasonModeIndex === 1 ? 0.55 : 1.05;
-        warmLampLight.intensity = seasonModeIndex === 1 ? 0.85 : 0.75;
-        pondLight.intensity = 0.45;
+        sunLight.intensity = seasonModeIndex === 1 ? 0.55 : 0.98;
+        warmLampLight.intensity = seasonModeIndex === 1 ? 0.85 : 0.45;
+        pondLight.intensity = 0.35;
       } else if (lightingModeIndex === 1) {
         let skyHex = 0xfde8d0;
         if (seasonModeIndex === 1) skyHex = 0x94a3b8;
@@ -1661,7 +1844,7 @@
         ambientLight.color.setHex(0xfff0db);
         ambientLight.intensity = 0.72;
         sunLight.color.setHex(0xffb36b);
-        sunLight.intensity = seasonModeIndex === 1 ? 0.55 : 1.15;
+        sunLight.intensity = seasonModeIndex === 1 ? 0.55 : 1.05;
         warmLampLight.intensity = 0.95;
         pondLight.intensity = 0.55;
       } else {
@@ -1671,7 +1854,7 @@
         ambientLight.intensity = 0.46;
         sunLight.color.setHex(0x60a5fa);
         sunLight.intensity = 0.35;
-        warmLampLight.intensity = 1.95;
+        warmLampLight.intensity = 1.75;
         pondLight.intensity = 1.35;
       }
     }
@@ -1686,8 +1869,8 @@
       }
 
       if (mode === 'overview') {
-        targetCamPos.set(10.5, 9.5, 13.2);
-        targetLookAt.set(-0.5, 2.0, 0.2);
+        targetCamPos.set(9.5, 8.2, 11.8);
+        targetLookAt.set(-0.5, 0.9, 0.2);
         closeAgentOverlay();
       } else if (mode === 'garden') {
         targetCamPos.set(-1.5, 4.8, 9.8);
@@ -1780,6 +1963,9 @@
       }
     }
 
+    // =========================================================================
+    // SINKRONISASI WALL PREVIEW BOARD DENGAN TAB LATEST_BRS DI GOOGLE SHEETS
+    // =========================================================================
     function updateLatestBrsPreview(latestBrs) {
       if (!latestBrs || !latestBrs.judul) return;
 
@@ -1816,25 +2002,25 @@
       const btn = document.getElementById('btnSimulasi');
       btn.disabled = true;
       btn.classList.add('opacity-50');
-      addLog('Memulai simulasi kerja 3 AI Agent (AAA-Style Realistic 3D Agents)...', 'work');
+      addLog('Memulai simulasi kerja 3 AI Agent (termasuk salaman dengan Auditor)...', 'work');
 
       updateAgentUI('crawler', 'WORKING', 'Memindai Google News RSS ("BPS Provinsi Lampung")...', 'Baru saja');
       updateAgentUI('drafter', 'WORKING', 'Mengekstrak bahan tayang PPTX & menyusun narasi BRS...', 'Baru saja');
 
       setTimeout(() => {
-        addLog('[CRAWLER] 4 berita baru terklasifikasi sentimennya & dilaporkan ke Lantai 2.', 'work');
+        addLog('[CRAWLER] 4 berita baru terklasifikasi sentimennya & dilaporkan ke Auditor.', 'work');
         updateAgentUI('crawler', 'DONE', 'Selesai: 4 berita baru terklasifikasi.', 'Baru saja');
       }, 4500);
 
       setTimeout(() => {
-        addLog('[DRAFTER] Draf Siaran Pers disusun & dikirim ke Balkon Lantai 2.', 'work');
+        addLog('[DRAFTER] Draf Siaran Pers selesai disusun & diserahkan ke Auditor.', 'work');
         updateAgentUI('drafter', 'DONE', 'Draf siaran pers selesai disusun.', 'Baru saja');
-        updateAgentUI('auditor', 'WORKING', 'Auditor memeriksa presisi angka di lantai 2...', 'Baru saja');
+        updateAgentUI('auditor', 'WORKING', 'Auditor memeriksa presisi angka y-on-y & q-to-q...', 'Baru saja');
       }, 8200);
 
       setTimeout(() => {
-        addLog('[AUDITOR] Validasi angka di lantai 2 lulus (zero margin of error). Siap rilis!', 'success');
-        updateAgentUI('auditor', 'DONE', 'Lolos audit angka Lantai 2.', 'Baru saja');
+        addLog('[AUDITOR] Validasi angka lulus (zero margin of error). Siap rilis!', 'success');
+        updateAgentUI('auditor', 'DONE', 'Lolos audit angka & siap publikasi.', 'Baru saja');
         btn.disabled = false;
         btn.classList.remove('opacity-50');
       }, 11500);
@@ -1962,7 +2148,7 @@
         ? 'py-2.5 text-center border-b-2 border-emerald-600 text-emerald-700 bg-white'
         : 'py-2.5 text-center border-b-2 border-transparent text-slate-500 hover:text-slate-800';
 
-      document.getElementById('panel-news').className = !isBrs
+      document.getElementById('tab-news').className = !isBrs
         ? 'py-2.5 text-center border-b-2 border-sky-600 text-sky-700 bg-white'
         : 'py-2.5 text-center border-b-2 border-transparent text-slate-500 hover:text-slate-800';
     }
