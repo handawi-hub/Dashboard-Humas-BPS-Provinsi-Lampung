@@ -84,13 +84,13 @@
                         <span class="text-slate-300">Database: <strong id="apiStatusText" class="text-amber-400 font-semibold">Menghubungkan...</strong></span>
                     </div>
 
-                    <a href="virtual-office.html" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-bps-orange hover:bg-bps-orangeDark text-white text-xs font-semibold transition whitespace-nowrap">
+                    <a href="virtual-office.html" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-bps-orange hover:bg-bps-orangeDark text-white text-xs font-semibold transition whitespace-nowrap shadow-sm">
                         <i data-lucide="monitor" class="w-3.5 h-3.5 shrink-0"></i>
                         <span class="hidden sm:inline">Ruang Kendali 3D</span>
                         <span class="sm:hidden">3D Office</span>
                     </a>
 
-                    <button onclick="fetchLiveMonitoringData(true)" id="syncBtn" class="inline-flex items-center gap-1.5 bg-bps-blue hover:bg-bps-blueDark text-white text-xs font-semibold px-3.5 py-2 rounded-lg transition whitespace-nowrap">
+                    <button onclick="fetchLiveMonitoringData(true)" id="syncBtn" class="inline-flex items-center gap-1.5 bg-bps-blue hover:bg-bps-blueDark text-white text-xs font-semibold px-3.5 py-2 rounded-lg transition whitespace-nowrap shadow-sm">
                         <i data-lucide="refresh-cw" id="syncIcon" class="w-3.5 h-3.5 shrink-0"></i>
                         <span class="hidden sm:inline">Sinkron Data</span>
                     </button>
@@ -250,7 +250,7 @@
                         <p class="text-xs text-slate-500">Arsip pemberitaan terverifikasi beserta analisis sentimen dan rekomendasi tindak lanjut</p>
                     </div>
                     <div class="flex flex-wrap items-center gap-2">
-                        <div class="relative min-w-[220px]">
+                        <div class="relative min-w-[210px]">
                             <i data-lucide="search" class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
                             <input type="text" id="searchInput" onkeyup="filterNewsTable()" placeholder="Cari judul atau media..." class="w-full pl-9 pr-3 py-1.5 text-xs bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-bps-blue">
                         </div>
@@ -269,6 +269,10 @@
                             <option value="Inflasi & Harga">Inflasi & Harga</option>
                             <option value="Isu Daerah & Umum">Isu Daerah & Umum</option>
                         </select>
+                        <button onclick="resetNewsFilters()" class="px-2.5 py-1.5 text-xs font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-lg transition inline-flex items-center gap-1" title="Reset semua filter">
+                            <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
+                            <span>Reset</span>
+                        </button>
                     </div>
                 </div>
 
@@ -324,7 +328,7 @@
                 </div>
 
                 <div class="p-6 space-y-5">
-                    <div class="border-2 border-dashed border-slate-300 hover:border-bps-blue rounded-xl py-10 px-6 text-center bg-slate-50/70 hover:bg-[#008FD5]/[0.02] transition relative group">
+                    <div id="dropZoneArea" class="border-2 border-dashed border-slate-300 hover:border-bps-blue rounded-xl py-10 px-6 text-center bg-slate-50/70 hover:bg-[#008FD5]/[0.02] transition relative group">
                         <input type="file" id="brsFileInput" accept=".pptx,.ppt,.pdf" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" onchange="handleFileSelected(this)">
                         <div class="flex flex-col items-center space-y-2.5 pointer-events-none">
                             <div class="w-12 h-12 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-bps-blue">
@@ -413,7 +417,7 @@
                             <span>Spreadsheet Internal</span>
                         </div>
                         <p class="text-xs text-slate-500 leading-relaxed">Database monitoring dan status agent disimpan secara tertutup di Google Drive BPS Provinsi Lampung.</p>
-                        <div class="bg-white p-2 rounded border border-slate-200 font-mono text-[11px] text-slate-700">🔒 Tab: Monitoring & Agent_State</div>
+                        <div class="bg-white p-2 rounded border border-slate-200 font-mono text-[11px] text-slate-700">🔒 Tab: Monitoring, Agent_State & Latest_BRS</div>
                     </div>
                     <div class="space-y-2 bg-[#008FD5]/[0.04] p-4 rounded-lg border border-[#008FD5]/20">
                         <div class="flex items-center space-x-2 text-slate-900 font-bold text-xs sm:text-sm">
@@ -504,17 +508,17 @@
                 <div class="flex items-center gap-1.5 bg-slate-50 px-2.5 py-1 border border-slate-200 rounded-md cursor-pointer hover:bg-slate-100 transition" onclick="alert('Agent Media Crawler: Memindai pembaruan berita media daring secara berkala.')">
                     <span class="w-2 h-2 rounded-full bg-bps-blue"></span>
                     <span class="font-medium text-slate-600">Crawler</span>
-                    <span class="bg-bps-blue text-white px-1.5 py-0.5 rounded text-[10px] font-bold" id="status-1">IDLE</span>
+                    <span class="bg-bps-blue text-white px-1.5 py-0.5 rounded text-[10px] font-bold" id="status-crawler">IDLE</span>
                 </div>
                 <div class="flex items-center gap-1.5 bg-slate-50 px-2.5 py-1 border border-slate-200 rounded-md cursor-pointer hover:bg-slate-100 transition" onclick="alert('Agent Drafter BRS: Menyusun draf siaran pers resmi sesuai tata naskah BPS.')">
                     <span class="w-2 h-2 rounded-full bg-bps-green"></span>
                     <span class="font-medium text-slate-600">Drafter</span>
-                    <span class="bg-bps-green text-white px-1.5 py-0.5 rounded text-[10px] font-bold" id="status-2">STANDBY</span>
+                    <span class="bg-bps-green text-white px-1.5 py-0.5 rounded text-[10px] font-bold" id="status-drafter">STANDBY</span>
                 </div>
                 <div class="flex items-center gap-1.5 bg-slate-50 px-2.5 py-1 border border-slate-200 rounded-md cursor-pointer hover:bg-slate-100 transition" onclick="alert('Agent Auditor & PR: Memantau sentimen dan mitigasi isu pemberitaan.')">
                     <span class="w-2 h-2 rounded-full bg-bps-orange"></span>
                     <span class="font-medium text-slate-600">Auditor</span>
-                    <span class="bg-bps-orange text-white px-1.5 py-0.5 rounded text-[10px] font-bold" id="status-3">ACTIVE</span>
+                    <span class="bg-bps-orange text-white px-1.5 py-0.5 rounded text-[10px] font-bold" id="status-auditor">ACTIVE</span>
                 </div>
             </div>
         </div>
@@ -544,6 +548,7 @@
 
         window.onload = function() {
             initAdminSecurityCheck();
+            initDropZoneDragEvents();
             fetchLiveMonitoringData(false);
             fetchAgentStates();
         };
@@ -576,6 +581,23 @@
             }
         }
 
+        function initDropZoneDragEvents() {
+            const dropZone = document.getElementById('dropZoneArea');
+            if (!dropZone) return;
+            ['dragenter', 'dragover'].forEach(evtName => {
+                dropZone.addEventListener(evtName, (e) => {
+                    e.preventDefault();
+                    dropZone.classList.add('border-bps-blue', 'bg-[#008FD5]/5');
+                });
+            });
+            ['dragleave', 'drop'].forEach(evtName => {
+                dropZone.addEventListener(evtName, (e) => {
+                    e.preventDefault();
+                    dropZone.classList.remove('border-bps-blue', 'bg-[#008FD5]/5');
+                });
+            });
+        }
+
         function switchTab(tabName) {
             document.querySelectorAll('.tab-btn').forEach(btn => {
                 btn.classList.remove('bg-bps-blue', 'text-white');
@@ -597,19 +619,34 @@
         function filterByCard(cardType) {
             switchTab('news');
             const sentimentSelect = document.getElementById('sentimentFilter');
+            const topicSelect = document.getElementById('topicFilter');
             const searchInput = document.getElementById('searchInput');
             if (searchInput) searchInput.value = '';
+            if (topicSelect) topicSelect.value = 'ALL';
+
             if (cardType === 'positif') {
                 if (sentimentSelect) sentimentSelect.value = 'Positif';
-            } else {
+                filterNewsTable();
+            } else if (cardType === 'atensi') {
                 if (sentimentSelect) sentimentSelect.value = 'ALL';
-            }
-            filterNewsTable();
-            if (cardType === 'atensi') {
                 const filtered = allNewsData.filter(item => item.sentiment === 'Netral' || item.sentiment === 'Negatif');
                 renderNewsTable(filtered);
+            } else {
+                if (sentimentSelect) sentimentSelect.value = 'ALL';
+                filterNewsTable();
             }
             showToast(`Menampilkan rilis data untuk kategori: ${cardType.toUpperCase()}`);
+        }
+
+        function resetNewsFilters() {
+            const searchInput = document.getElementById('searchInput');
+            const sentimentSelect = document.getElementById('sentimentFilter');
+            const topicSelect = document.getElementById('topicFilter');
+            if (searchInput) searchInput.value = '';
+            if (sentimentSelect) sentimentSelect.value = 'ALL';
+            if (topicSelect) topicSelect.value = 'ALL';
+            renderNewsTable(allNewsData);
+            showToast('Filter berita dikembalikan ke semua data.');
         }
 
         function handleFileSelected(input) {
@@ -679,10 +716,12 @@
                 const inProgressModal = document.getElementById('successUploadModal-progress');
                 if (inProgressModal) inProgressModal.remove();
 
-                if (result.status === 'success' || result.fileUrl) {
+                if (result.status === 'success' || result.fileUrl || result.docUrl) {
                     document.getElementById('uploadActionArea').classList.add('hidden');
                     document.getElementById('brsFileInput').value = '';
-                    showSuccessUploadModal(result.fileTitle || 'Draf Siaran Pers Resmi', result.fileUrl);
+                    selectedFileBase64 = null;
+                    showSuccessUploadModal(result.fileTitle || result.title || 'Draf Siaran Pers Resmi', result.fileUrl || result.docUrl);
+                    fetchAgentStates();
                 } else {
                     throw new Error(result.error || 'Gagal memproses di server.');
                 }
@@ -731,7 +770,13 @@
 
         function showSuccessUploadModal(docTitle, fileUrl) {
             document.getElementById('modalFileName').innerText = docTitle;
-            document.getElementById('modalDownloadBtn').href = fileUrl || '#';
+            const dlBtn = document.getElementById('modalDownloadBtn');
+            dlBtn.href = fileUrl || '#';
+            if (!fileUrl) {
+                dlBtn.classList.add('opacity-50', 'pointer-events-none');
+            } else {
+                dlBtn.classList.remove('opacity-50', 'pointer-events-none');
+            }
             const modal = document.getElementById('successUploadModal');
             modal.classList.remove('hidden');
             modal.classList.add('flex');
@@ -855,7 +900,7 @@
             } catch (err) {
                 console.error('Error fetch sheets:', err);
                 setConnectionStatus('error', 'Gagal Terhubung');
-                showToast(`Gagal menarik data: ${err.message}`);
+                if (isManual) showToast(`Gagal menarik data: ${err.message}`);
             } finally {
                 if (icon) icon.classList.remove('animate-spin');
             }
@@ -869,14 +914,16 @@
                 
                 if (data.agents && Array.isArray(data.agents)) {
                     data.agents.forEach(agent => {
-                        let badgeEl = document.getElementById(`status-${agent.id}`);
+                        const agentKey = String(agent.id || '').toLowerCase();
+                        const badgeEl = document.getElementById(`status-${agentKey}`);
                         if (badgeEl) {
-                            badgeEl.innerText = agent.status;
-                            if (agent.status === 'WORKING') {
+                            const st = String(agent.status || 'IDLE').toUpperCase();
+                            badgeEl.innerText = st;
+                            if (st === 'WORKING') {
                                 badgeEl.className = 'bg-bps-orange text-white px-1.5 py-0.5 rounded text-[10px] font-bold animate-pulse';
-                            } else if (agent.status === 'DONE') {
+                            } else if (st === 'DONE') {
                                 badgeEl.className = 'bg-bps-green text-white px-1.5 py-0.5 rounded text-[10px] font-bold';
-                            } else if (agent.status === 'ERROR') {
+                            } else if (st === 'ERROR') {
                                 badgeEl.className = 'bg-rose-600 text-white px-1.5 py-0.5 rounded text-[10px] font-bold';
                             } else {
                                 badgeEl.className = 'bg-slate-400 text-white px-1.5 py-0.5 rounded text-[10px] font-bold';
@@ -889,7 +936,9 @@
             }
         }
 
+        // Auto-sync status agen tiap 6 detik & data berita tiap 60 detik
         setInterval(fetchAgentStates, 6000);
+        setInterval(() => fetchLiveMonitoringData(false), 60000);
 
         function updateDashboardMetricsAndCharts(data) {
             const total = data.length;
@@ -941,6 +990,7 @@
             data.forEach(item => { if (topicCounts[item.topic] !== undefined) topicCounts[item.topic]++; });
 
             renderCharts(Object.keys(dateGroups), Object.keys(dateGroups).map(d => dateGroups[d].Positif), Object.keys(dateGroups).map(d => dateGroups[d].Netral), Object.keys(dateGroups).map(d => dateGroups[d].Negatif), mediaLabels, mediaValues, Object.keys(topicCounts), Object.values(topicCounts));
+            lucide.createIcons();
         }
 
         function renderCharts(trendLabels, trendPos, trendNet, trendNeg, mediaLabels, mediaValues, topicLabels, topicValues) {
@@ -988,14 +1038,14 @@
                 tr.className = 'hover:bg-slate-50 transition';
                 tr.innerHTML = `
                     <td class="px-4 py-3.5 whitespace-nowrap text-slate-500 font-medium">${item.date}</td>
-                    <td class="px-4 py-3.5 font-semibold text-slate-900 max-w-md"><a href="${item.link}" target="_blank" class="hover:text-bps-blue hover:underline transition">${item.title}</a></td>
+                    <td class="px-4 py-3.5 font-semibold text-slate-900 max-w-md"><a href="${item.link}" target="_blank" rel="noopener noreferrer" class="hover:text-bps-blue hover:underline transition">${item.title}</a></td>
                     <td class="px-4 py-3.5 whitespace-nowrap"><span class="font-semibold text-slate-700">${item.media}</span></td>
                     <td class="px-4 py-3.5 whitespace-nowrap"><span class="bg-[#008FD5]/10 text-bps-blue px-2 py-0.5 rounded text-[11px] font-semibold">${item.topic}</span></td>
                     <td class="px-4 py-3.5 whitespace-nowrap text-center"><span class="px-2.5 py-0.5 rounded-full text-[11px] font-semibold ${badgeColor}">${item.sentiment}</span></td>
                     <td class="px-4 py-3.5 whitespace-nowrap text-right">
                         <div class="inline-flex items-center gap-2">
                             <button onclick="openAnalysisModal(${item.id})" class="px-2.5 py-1 rounded-md bg-[#008FD5]/10 text-bps-blue hover:bg-[#008FD5]/20 font-semibold text-xs inline-flex items-center gap-1 transition"><i data-lucide="sparkles" class="w-3.5 h-3.5"></i><span>Analisis</span></button>
-                            <a href="${item.link}" target="_blank" class="text-slate-400 hover:text-bps-blue p-1 rounded hover:bg-slate-100 transition"><i data-lucide="external-link" class="w-3.5 h-3.5"></i></a>
+                            <a href="${item.link}" target="_blank" rel="noopener noreferrer" class="text-slate-400 hover:text-bps-blue p-1 rounded hover:bg-slate-100 transition"><i data-lucide="external-link" class="w-3.5 h-3.5"></i></a>
                         </div>
                     </td>
                 `;
