@@ -58,7 +58,7 @@
             <h1 class="text-sm sm:text-base font-extrabold text-slate-900 tracking-tight">SIGER Humas Hub (Ruang Kendali Humas)</h1>
             <span id="connectionBadge" class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-100 text-amber-800 border border-amber-300">
               <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
-              Mode Simulasi
+              Menghubungkan...
             </span>
           </div>
           <p class="text-[11px] text-slate-500 font-medium">Humas BPS Provinsi Lampung • Autonomous PR & Media Workspace</p>
@@ -205,14 +205,19 @@
 
     <!-- RIGHT: WALL PREVIEW BOARD INSPECTOR (5 COLS) -->
     <section id="previewBoardSection" class="lg:col-span-5 bg-white border border-stone-200 rounded-3xl flex flex-col overflow-hidden shadow-xl shadow-stone-200/60">
-      <div class="px-4 py-3.5 border-b border-stone-100 bg-stone-50/70 flex items-center justify-between">
+      <div class="px-4 py-3.5 border-b border-stone-100 bg-stone-50/70 flex items-center justify-between gap-2">
         <div>
           <h2 class="text-sm font-extrabold text-slate-900">Wall Preview Board</h2>
           <p class="text-[11px] text-slate-500 font-medium">Inspeksi Output Draf BRS & Hasil Crawling Media</p>
         </div>
-        <a id="btnOpenOutputDoc" href="#" target="_blank" rel="noopener noreferrer" class="hidden px-3 py-1.5 rounded-xl bg-emerald-600 text-white text-[11px] font-bold hover:bg-emerald-500 shadow-sm transition">
-          Buka Dokumen ↗
-        </a>
+        <div class="flex items-center gap-1.5">
+          <button onclick="manualRefreshBoard()" title="Sinkronkan ulang Wall Preview Board" class="p-1.5 rounded-xl bg-stone-100 hover:bg-stone-200 text-slate-700 text-xs font-bold transition">
+            🔄
+          </button>
+          <a id="btnOpenOutputDoc" href="#" target="_blank" rel="noopener noreferrer" class="hidden px-3 py-1.5 rounded-xl bg-emerald-600 text-white text-[11px] font-bold hover:bg-emerald-500 shadow-sm transition">
+            Buka Dokumen ↗
+          </a>
+        </div>
       </div>
 
       <div class="grid grid-cols-2 border-b border-stone-200 bg-stone-50 text-xs font-bold">
@@ -227,12 +232,12 @@
       <!-- TAB 1: DRAF SIARAN PERS -->
       <div id="panel-brs" class="p-4 flex-1 flex flex-col justify-between gap-4 overflow-y-auto">
         <div class="bg-[#fdfcfa] border border-stone-200 rounded-2xl p-4 space-y-3 text-xs leading-relaxed text-slate-700 shadow-inner">
-          <div class="border-b border-stone-200 pb-2.5 flex items-center justify-between">
+          <div class="border-b border-stone-200 pb-2.5 flex items-center justify-between gap-2">
             <div>
               <span class="text-[10px] uppercase tracking-wider text-emerald-700 font-extrabold">Template Resmi BPS Provinsi Lampung</span>
               <p id="brsNumber" class="font-mono-code text-[11px] text-slate-500">Nomor : B-2611/18000/HM.240/2026</p>
             </div>
-            <span id="brsStatusBadge" class="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-bold">Terverifikasi Auditor</span>
+            <span id="brsStatusBadge" class="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-bold shrink-0">Terverifikasi Auditor</span>
           </div>
 
           <h3 id="brsTitle" class="text-sm font-extrabold text-slate-900">
@@ -281,7 +286,7 @@
         <button onclick="closeApiModal()" class="text-slate-400 hover:text-slate-700 text-lg font-bold">✕</button>
       </div>
       <p class="text-xs text-slate-600 leading-relaxed">
-        Tempelkan <strong>URL Aplikasi Web</strong> (berakhiran <code class="text-sky-600 font-bold">/exec</code>) dari project Media Monitoring Anda. Sistem otomatis menyertakan parameter <code class="text-sky-600 font-bold">?mode=agents</code>.
+        Tempelkan <strong>URL Aplikasi Web</strong> (berakhiran <code class="text-sky-600 font-bold">/exec</code>) dari project Media Monitoring Anda. Sistem otomatis menyertakan parameter <code class="text-sky-600 font-bold">?mode=agents</code> dan token keamanan.
       </p>
       <div>
         <label class="block text-[11px] font-bold text-slate-700 mb-1">URL Web App Apps Script</label>
@@ -303,11 +308,15 @@
 
   <script>
     // =========================================================================
-    // 1. KONFIGURASI API BRIDGE, AUDIO PLAYER & STATE AGENT
+    // 1. KONFIGURASI API BRIDGE, SECURITY TOKEN, AUDIO PLAYER & STATE AGENT
     // =========================================================================
     const DEFAULT_API_URL = 'https://script.google.com/macros/s/AKfycbz6rjK1i0nCWf9i2ZgH6yblzCdeiz4Cq9hMeKbrEbEZImr5vRUEel8KIP4H2c0UWYMnAA/exec';
     const STORAGE_KEY = 'bps_lampung_virtual_office_api';
+    const _encT = ['QlA', 'Uy', 'X0xhbXB1bmc', 'X0h1bWFz', 'XzIwMjZf', 'U2VjdXJlS2V5'];
+    const getClientToken = () => atob(_encT[0]) + atob(_encT[1]) + atob(_encT[2]) + atob(_encT[3]) + atob(_encT[4]) + atob(_encT[5]);
+
     let pollingInterval = null;
+    let activePollingUrl = '';
     let isMusicPlaying = false;
     let isMoshPitActive = false;
     let lastRenderedBrsTitle = '';
@@ -369,7 +378,7 @@
           addLog('🔥 MOSH PIT MODE ON! Para agent mulai headbang & moshing mengikuti irama hardcore!', 'work');
         }).catch((err) => {
           console.warn("Gagal memutar audio:", err);
-          addLog('⚠️ Gagal memutar musik: Pastikan file hardcore_bgm.mp3 ada.', 'error');
+          addLog('⚠️ Gagal memutar musik: Pastikan file hardcore_bgm.mp3 tersedia di repositori.', 'error');
         });
       } else {
         audio.pause();
@@ -1901,9 +1910,10 @@
 
     window.addEventListener('DOMContentLoaded', () => {
       init3DOffice();
-      const savedUrl = localStorage.getItem(STORAGE_KEY) || normalizeApiUrl(DEFAULT_API_URL);
+      const rawSaved = localStorage.getItem(STORAGE_KEY) || DEFAULT_API_URL;
+      const savedUrl = normalizeApiUrl(rawSaved);
       if (savedUrl && savedUrl.startsWith('http')) {
-        document.getElementById('apiUrlInput').value = savedUrl;
+        document.getElementById('apiUrlInput').value = rawSaved;
         startLivePolling(savedUrl);
       }
     });
@@ -1929,15 +1939,16 @@
     }
 
     function updateAgentUI(agentId, status, pesan, updatedAt, outputUrl) {
+      const cleanId = String(agentId || '').toLowerCase();
       const cleanStatus = (status || 'IDLE').toUpperCase();
-      if (AGENT_META[agentId]) {
-        AGENT_META[agentId].status = cleanStatus;
-        if (pesan) AGENT_META[agentId].pesan = pesan;
+      if (AGENT_META[cleanId]) {
+        AGENT_META[cleanId].status = cleanStatus;
+        if (pesan) AGENT_META[cleanId].pesan = pesan;
       }
 
-      const badge = document.getElementById(`badge-${agentId}`);
-      const msgEl = document.getElementById(`msg-${agentId}`);
-      const timeEl = document.getElementById(`time-${agentId}`);
+      const badge = document.getElementById(`badge-${cleanId}`);
+      const msgEl = document.getElementById(`msg-${cleanId}`);
+      const timeEl = document.getElementById(`time-${cleanId}`);
 
       if (msgEl && pesan) msgEl.textContent = pesan;
       if (timeEl && updatedAt) timeEl.textContent = `Update: ${updatedAt}`;
@@ -2032,6 +2043,9 @@
       if (!url.includes('mode=agents')) {
         url += (url.includes('?') ? '&' : '?') + 'mode=agents';
       }
+      if (!url.includes('token=')) {
+        url += (url.includes('?') ? '&' : '?') + 'token=' + encodeURIComponent(getClientToken());
+      }
       return url;
     }
 
@@ -2039,9 +2053,10 @@
     function closeApiModal() { document.getElementById('apiModal').classList.add('hidden'); }
 
     function saveApiUrl() {
-      const finalUrl = normalizeApiUrl(document.getElementById('apiUrlInput').value);
+      const rawInput = document.getElementById('apiUrlInput').value.trim();
+      const finalUrl = normalizeApiUrl(rawInput);
       if (!finalUrl) return;
-      localStorage.setItem(STORAGE_KEY, finalUrl);
+      localStorage.setItem(STORAGE_KEY, rawInput);
       closeApiModal();
       startLivePolling(finalUrl);
     }
@@ -2049,6 +2064,7 @@
     function disconnectApi() {
       localStorage.removeItem(STORAGE_KEY);
       if (pollingInterval) clearInterval(pollingInterval);
+      activePollingUrl = '';
       const badge = document.getElementById('connectionBadge');
       badge.className = 'inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-100 text-amber-800 border border-amber-300';
       badge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span> Mode Simulasi';
@@ -2057,37 +2073,51 @@
       closeApiModal();
     }
 
+    async function fetchAgentStateOnce(url) {
+      if (!url) return;
+      try {
+        const res = await fetch(url);
+        const data = await res.json();
+        if (data.status === 'ok' && Array.isArray(data.agents)) {
+          data.agents.forEach(ag => {
+            updateAgentUI(ag.id, ag.status, ag.pesan, ag.updated_at, ag.output_url);
+          });
+          const newsList = data.recentNews || data.news;
+          if (Array.isArray(newsList) && newsList.length > 0) {
+            renderNewsList(newsList);
+          }
+          if (data.latestBrs) {
+            updateLatestBrsPreview(data.latestBrs);
+          }
+          const nowStr = new Date().toLocaleTimeString('id-ID', { hour12: false });
+          document.getElementById('lastSyncText').textContent = `Live Sync: ${nowStr}`;
+        } else if (data.error) {
+          addLog('Respon API Bridge: ' + data.error, 'error');
+        }
+      } catch (err) {
+        addLog('Gagal sinkronisasi API: ' + err.message, 'error');
+      }
+    }
+
+    function manualRefreshBoard() {
+      if (!activePollingUrl) {
+        addLog('Mode Simulasi aktif. Hubungkan API Bridge untuk menarik data live.', 'info');
+        return;
+      }
+      addLog('Menyegarkan Wall Preview Board & status agen secara manual...', 'work');
+      fetchAgentStateOnce(activePollingUrl);
+    }
+
     function startLivePolling(url) {
       if (pollingInterval) clearInterval(pollingInterval);
+      activePollingUrl = url;
       const badge = document.getElementById('connectionBadge');
       badge.className = 'inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300';
       badge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping"></span> Live Apps Script';
-      addLog('Terhubung ke Apps Script API Bridge...', 'work');
+      addLog('Terhubung ke Apps Script API Bridge (Secured Token)...', 'work');
 
-      const fetchState = async () => {
-        try {
-          const res = await fetch(url);
-          const data = await res.json();
-          if (data.status === 'ok' && Array.isArray(data.agents)) {
-            data.agents.forEach(ag => {
-              updateAgentUI(ag.id, ag.status, ag.pesan, ag.updated_at, ag.output_url);
-            });
-            if (Array.isArray(data.news) && data.news.length > 0) {
-              renderNewsList(data.news);
-            }
-            if (data.latestBrs) {
-              updateLatestBrsPreview(data.latestBrs);
-            }
-            const nowStr = new Date().toLocaleTimeString('id-ID', { hour12: false });
-            document.getElementById('lastSyncText').textContent = `Live Sync: ${nowStr}`;
-          }
-        } catch (err) {
-          addLog('Gagal sinkronisasi API: ' + err.message, 'error');
-        }
-      };
-
-      fetchState();
-      pollingInterval = setInterval(fetchState, 2000);
+      fetchAgentStateOnce(url);
+      pollingInterval = setInterval(() => fetchAgentStateOnce(url), 2000);
     }
 
     function formatTanggalID(rawDate) {
@@ -2116,10 +2146,10 @@
         const analisisText = String(item.analisis || '');
         let sentimen = 'Netral';
         let badgeStyle = 'bg-stone-100 text-slate-700';
-        if (/positif/i.test(analisisText)) {
+        if (/SENTIMEN:\s*Positif/i.test(analisisText) || /positif/i.test(analisisText)) {
           sentimen = 'Positif';
           badgeStyle = 'bg-emerald-100 text-emerald-800';
-        } else if (/negatif/i.test(analisisText)) {
+        } else if (/SENTIMEN:\s*Negatif/i.test(analisisText) || /negatif/i.test(analisisText)) {
           sentimen = 'Negatif';
           badgeStyle = 'bg-rose-100 text-rose-800';
         }
