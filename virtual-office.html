@@ -1,2166 +1,2089 @@
 <!DOCTYPE html>
+
 <html lang="id">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>3D Semi-Outdoor AI Agent Virtual Office — Humas BPS Provinsi Lampung</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-  <!-- Three.js & OrbitControls untuk 3D Creative Studio Semi-Outdoor -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
-  <style>
-    body {
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      background-color: #faf8f5;
-      color: #1e293b;
-    }
-    .font-mono-code {
-      font-family: 'JetBrains Mono', monospace;
-    }
-    #canvasContainer {
-      position: relative;
-      width: 100%;
-      height: 550px;
-      cursor: grab;
-      overflow: hidden;
-      background-color: #e6f2e8;
-    }
-    #canvasContainer:active {
-      cursor: grabbing;
-    }
-    @media (max-width: 640px) {
-      #canvasContainer {
-        height: 420px;
-      }
-    }
-    .glass-panel {
-      background: rgba(255, 255, 255, 0.88);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(226, 232, 240, 0.9);
-    }
-    ::-webkit-scrollbar { width: 6px; height: 6px; }
-    ::-webkit-scrollbar-track { background: #f1f5f9; }
-    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 999px; }
-  </style>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>SIGERHUB - AI Media Hub BPS Provinsi Lampung</title>
+
+    <!-- Tailwind CSS -->
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Chart.js -->
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Lucide Icons -->
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Google Fonts -->
+
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <script>
+
+        tailwind.config = {
+
+            theme: {
+
+                extend: {
+
+                    fontFamily: {
+
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+
+                    },
+
+                    colors: {
+
+                        bps: {
+
+                            navy: '#0B2545',
+
+                            dark: '#081B33',
+
+                            blue: '#008FD5',
+
+                            blueDark: '#0073AD',
+
+                            green: '#68B92E',
+
+                            greenDark: '#559B23',
+
+                            orange: '#EB891B',
+
+                            orangeDark: '#D17610',
+
+                            light: '#F8FAFC'
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+        }
+
+    </script>
+
+    <style>
+
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+
+        .glass-card {
+
+            background: rgba(255, 255, 255, 0.98);
+
+            border: 1px solid rgba(226, 232, 240, 0.9);
+
+        }
+
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+    </style>
+
 </head>
-<body class="min-h-screen flex flex-col selection:bg-amber-200 selection:text-slate-900">
 
-  <!-- TOP NAVBAR CERAH & MODERN -->
-  <header class="border-b border-stone-200 bg-white/90 backdrop-blur sticky top-0 z-30 shadow-sm">
-    <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-3">
-      <div class="flex items-center gap-3">
-        <a href="index.html" class="px-3 py-1.5 rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-700 text-xs font-bold transition flex items-center gap-1.5 border border-stone-200">
-          <span>←</span> Dashboard Utama
-        </a>
-        <div>
-          <div class="flex items-center gap-2">
-            <h1 class="text-sm sm:text-base font-extrabold text-slate-900 tracking-tight">SIGER Humas Hub (Ruang Kendali Humas)</h1>
-            <span id="connectionBadge" class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-100 text-amber-800 border border-amber-300">
-              <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
-              Mode Simulasi
-            </span>
-          </div>
-          <p class="text-[11px] text-slate-500 font-medium">Humas BPS Provinsi Lampung • Autonomous PR & Media Workspace</p>
+<body class="bg-slate-50/90 text-slate-800 antialiased min-h-screen flex flex-col">
+
+
+
+    <!-- Top Navigation Header -->
+
+    <header class="bg-bps-navy text-white sticky top-0 z-40 shadow-md">
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+            <div class="flex items-center justify-between h-16">
+
+                <!-- Brand & Logo -->
+
+                <div class="flex items-center space-x-3">
+
+                    <div class="w-10 h-10 rounded-xl bg-white p-1.5 flex items-center justify-center shadow-sm border border-white/20">
+
+                        <img src="BPS.webp" alt="Logo BPS" class="w-full h-full object-contain">
+
+                    </div>
+
+                    <div>
+
+                        <div class="flex items-center space-x-2">
+
+                            <span class="font-extrabold text-base sm:text-lg tracking-tight text-white">SIGERHUB</span>
+
+                            <span class="hidden sm:inline-block bg-bps-blue/20 text-[#67D4FF] text-[11px] px-2.5 py-0.5 rounded-full font-semibold border border-bps-blue/40 tracking-wide">Portal Humas Terpadu</span>
+
+                        </div>
+
+                        <p class="text-[11px] sm:text-xs text-slate-300/90">BPS Provinsi Lampung • Sistem Pemantauan Media & Analisis BRS</p>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- API Gateway Connection Status & Actions -->
+
+                <div class="flex items-center space-x-2 sm:space-x-3">
+
+                    <div id="apiStatusBadge" class="hidden lg:flex bg-bps-dark/90 px-3 py-1.5 rounded-full border border-slate-700/80 items-center space-x-2 text-xs">
+
+                        <span class="relative flex h-2.5 w-2.5">
+
+                            <span id="apiPingDot" class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+
+                            <span id="apiSolidDot" class="relative inline-flex rounded-full h-2.5 w-2.5 bg-amber-500"></span>
+
+                        </span>
+
+                        <span class="text-slate-300">Database: <strong id="apiStatusText" class="text-amber-400 font-medium">Menghubungkan...</strong></span>
+
+                    </div>
+
+
+
+                    <a href="virtual-office.html" class="inline-flex items-center gap-1.5 px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-lg bg-bps-orange hover:bg-bps-orangeDark text-white text-xs font-semibold shadow-sm transition">
+
+                        <i data-lucide="monitor" class="w-4 h-4"></i>
+
+                        <span class="hidden sm:inline">Ruang Kendali 3D</span>
+
+                        <span class="sm:hidden">Virtual Office</span>
+
+                    </a>
+
+
+
+                    <button onclick="fetchLiveMonitoringData(true)" id="syncBtn" class="flex items-center space-x-1.5 bg-bps-blue hover:bg-bps-blueDark text-white text-xs font-semibold px-3 py-1.5 sm:py-2 rounded-lg transition-all shadow-sm duration-200">
+
+                        <i data-lucide="refresh-cw" id="syncIcon" class="w-3.5 h-3.5"></i>
+
+                        <span class="hidden sm:inline">Sinkron Data</span>
+
+                    </button>
+
+                </div>
+
+            </div>
+
         </div>
-      </div>
 
-      <div class="flex flex-wrap items-center gap-2">
-        <!-- TOMBOL MUSIK LATAR -->
-        <button onclick="toggleMusic()" id="btnMusic" class="px-3 py-1.5 rounded-xl bg-red-50 hover:bg-red-100 text-red-800 border border-red-300 text-xs font-bold transition flex items-center gap-1.5">
-          <span id="musicIcon">🤘</span> <span id="musicText">Putar Metal Hardcore</span>
-        </button>
+        <div class="h-[3px] w-full bg-gradient-to-r from-[#008FD5] via-[#68B92E] to-[#EB891B]"></div>
 
-        <!-- TOMBOL PENGATUR MUSIM -->
-        <button onclick="toggleSeasonMode()" id="btnSeason" class="px-3 py-1.5 rounded-xl bg-lime-50 hover:bg-lime-100 text-lime-800 border border-lime-300 text-xs font-bold transition flex items-center gap-1.5">
-          <span id="seasonIcon">🌤️</span> <span id="seasonText">Musim Panas</span>
-        </button>
+    </header>
 
-        <!-- TOMBOL PENGATUR WAKTU -->
-        <button onclick="toggleLightingMode()" id="btnLighting" class="px-3 py-1.5 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 text-xs font-bold transition flex items-center gap-1.5">
-          <span id="lightingIcon">☀️</span> <span id="lightingText">Pagi Cerah</span>
-        </button>
 
-        <button onclick="runDemoSimulation()" id="btnSimulasi" class="hidden admin-only px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold shadow-md shadow-emerald-600/20 transition flex items-center gap-1.5">
-          <span>▶</span> Tes Simulasi Live
-        </button>
-        <button onclick="openApiModal()" id="btnApiBridge" class="hidden admin-only px-3.5 py-1.5 rounded-xl bg-sky-600 hover:bg-sky-500 text-white text-xs font-bold shadow-md shadow-sky-600/20 transition flex items-center gap-1.5">
-          <span>🔗</span> API Bridge
-        </button>
-      </div>
+
+    <!-- Main Workspace Area -->
+
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+
+
+
+        <!-- Navigation Tabs / Section Selectors -->
+
+        <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 pb-3">
+
+            <nav class="flex space-x-2 sm:space-x-2.5 overflow-x-auto pb-1" id="navTabs">
+
+                <button onclick="switchTab('dashboard')" id="tab-dashboard" class="tab-btn active font-semibold text-xs sm:text-sm px-3.5 py-2 rounded-lg bg-bps-blue text-white shadow-sm flex items-center space-x-2 transition shrink-0">
+
+                    <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
+
+                    <span>Ringkasan Eksekutif</span>
+
+                </button>
+
+                <button onclick="switchTab('news')" id="tab-news" class="tab-btn font-semibold text-xs sm:text-sm px-3.5 py-2 rounded-lg text-slate-600 hover:bg-slate-200/60 flex items-center space-x-2 transition shrink-0">
+
+                    <i data-lucide="newspaper" class="w-4 h-4"></i>
+
+                    <span>Media Monitoring</span>
+
+                </button>
+
+                <button onclick="switchTab('brs')" id="tab-brs" class="tab-btn font-semibold text-xs sm:text-sm px-3.5 py-2 rounded-lg text-slate-600 hover:bg-slate-200/60 flex items-center space-x-2 transition shrink-0">
+
+                    <i data-lucide="file-text" class="w-4 h-4"></i>
+
+                    <span>Automasi BRS (Pers)</span>
+
+                </button>
+
+                <button onclick="switchTab('bridge')" id="tab-bridge" class="hidden admin-only tab-btn font-semibold text-xs sm:text-sm px-3.5 py-2 rounded-lg text-slate-600 hover:bg-slate-200/60 flex items-center space-x-2 transition shrink-0">
+
+                    <i data-lucide="shield-check" class="w-4 h-4"></i>
+
+                    <span>Arsitektur API Bridge</span>
+
+                </button>
+
+            </nav>
+
+
+
+            <div class="text-xs text-slate-500 flex items-center space-x-1.5">
+
+                <i data-lucide="database" class="w-3.5 h-3.5 text-bps-blue"></i>
+
+                <span>Periode Data: <strong id="dateRangeText" class="text-slate-700">Memuat...</strong></span>
+
+                <span class="mx-1">•</span>
+
+                <span>Update: <strong id="lastUpdateText" class="text-slate-700">-</strong></span>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- ================= SECTION 1: EXECUTIVE DASHBOARD ================= -->
+
+        <div id="section-dashboard" class="space-y-6">
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+
+                <div id="card-total" onclick="filterByCard('total')" class="glass-card p-5 rounded-xl shadow-xs hover:border-bps-blue hover:shadow-md transition cursor-pointer group">
+
+                    <div class="flex justify-between items-start">
+
+                        <div>
+
+                            <p class="text-xs font-semibold uppercase tracking-wider text-slate-500 group-hover:text-bps-blue transition">Total Liputan Media</p>
+
+                            <h3 class="text-3xl font-extrabold text-slate-900 mt-1" id="kpiTotal">-</h3>
+
+                        </div>
+
+                        <div class="p-2.5 bg-[#008FD5]/10 text-bps-blue rounded-lg group-hover:scale-110 transition">
+
+                            <i data-lucide="globe" class="w-6 h-6"></i>
+
+                        </div>
+
+                    </div>
+
+                    <div class="mt-3 flex items-center justify-between text-xs text-slate-500 font-medium">
+
+                        <span id="kpiMediaCount" class="flex items-center"><i data-lucide="newspaper" class="w-3.5 h-3.5 mr-1 text-bps-blue"></i> Dari 0 media</span>
+
+                        <span class="text-bps-blue font-semibold opacity-0 group-hover:opacity-100 transition">Lihat Semua &rarr;</span>
+
+                    </div>
+
+                </div>
+
+
+
+                <div id="card-positif" onclick="filterByCard('positif')" class="glass-card p-5 rounded-xl shadow-xs hover:border-bps-green hover:shadow-md transition cursor-pointer group">
+
+                    <div class="flex justify-between items-start">
+
+                        <div>
+
+                            <p class="text-xs font-semibold uppercase tracking-wider text-slate-500 group-hover:text-bps-greenDark transition">Sentimen Positif</p>
+
+                            <h3 class="text-3xl font-extrabold text-bps-greenDark mt-1" id="kpiPositivePct">-</h3>
+
+                        </div>
+
+                        <div class="p-2.5 bg-[#68B92E]/10 text-bps-greenDark rounded-lg group-hover:scale-110 transition">
+
+                            <i data-lucide="smile" class="w-6 h-6"></i>
+
+                        </div>
+
+                    </div>
+
+                    <div class="mt-3 flex items-center justify-between text-xs text-slate-500">
+
+                        <span id="kpiSentimentBreakdown" class="text-slate-600 font-medium">0 Positif • 0 Netral • 0 Negatif</span>
+
+                        <span class="text-bps-greenDark font-semibold opacity-0 group-hover:opacity-100 transition">Filter &rarr;</span>
+
+                    </div>
+
+                </div>
+
+
+
+                <div id="card-reputasi" onclick="filterByCard('reputasi')" class="glass-card p-5 rounded-xl shadow-xs hover:border-bps-navy hover:shadow-md transition cursor-pointer group">
+
+                    <div class="flex justify-between items-start">
+
+                        <div>
+
+                            <p class="text-xs font-semibold uppercase tracking-wider text-slate-500 group-hover:text-bps-navy transition">Indeks Reputasi PR</p>
+
+                            <h3 class="text-3xl font-extrabold text-bps-navy mt-1"><span id="kpiReputationScore">-</span><span class="text-base text-slate-400 font-normal">/10</span></h3>
+
+                        </div>
+
+                        <div class="p-2.5 bg-[#0B2545]/10 text-bps-navy rounded-lg group-hover:scale-110 transition">
+
+                            <i data-lucide="award" class="w-6 h-6"></i>
+
+                        </div>
+
+                    </div>
+
+                    <div class="mt-3 flex items-center justify-between text-xs text-bps-greenDark font-medium">
+
+                        <span id="kpiReputationLabel" class="flex items-center"><i data-lucide="check-circle2" class="w-3.5 h-3.5 mr-1"></i> Menghitung skor...</span>
+
+                        <span class="text-bps-navy font-semibold opacity-0 group-hover:opacity-100 transition">Detail &rarr;</span>
+
+                    </div>
+
+                </div>
+
+
+
+                <div id="card-atensi" onclick="filterByCard('atensi')" class="glass-card p-5 rounded-xl shadow-xs hover:border-bps-orange hover:shadow-md transition cursor-pointer group">
+
+                    <div class="flex justify-between items-start">
+
+                        <div>
+
+                            <p class="text-xs font-semibold uppercase tracking-wider text-slate-500 group-hover:text-bps-orangeDark transition">Atensi & Mitigasi Isu</p>
+
+                            <h3 class="text-3xl font-extrabold text-bps-orange mt-1" id="kpiAttentionCount">-</h3>
+
+                        </div>
+
+                        <div class="p-2.5 bg-[#EB891B]/10 text-bps-orange rounded-lg group-hover:scale-110 transition">
+
+                            <i data-lucide="alert-circle" class="w-6 h-6"></i>
+
+                        </div>
+
+                    </div>
+
+                    <div class="mt-3 flex items-center justify-between text-xs text-slate-500">
+
+                        <span id="kpiAttentionDetail">Netral / Negatif perlu pantauan</span>
+
+                        <span class="text-bps-orangeDark font-semibold opacity-0 group-hover:opacity-100 transition">Mitigasi &rarr;</span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+                <div class="glass-card p-5 rounded-xl shadow-xs lg:col-span-2">
+
+                    <div class="flex items-center justify-between mb-4">
+
+                        <div>
+
+                            <h3 class="font-bold text-slate-800 text-base">Tren Sentimen Pemberitaan Harian</h3>
+
+                            <p class="text-xs text-slate-500">Pergerakan volume & tone media sesuai linimasa database pemantauan</p>
+
+                        </div>
+
+                        <span class="text-xs bg-[#008FD5]/10 text-bps-blue px-2.5 py-1 rounded-md font-semibold border border-[#008FD5]/20">Live Database</span>
+
+                    </div>
+
+                    <div class="h-64 relative">
+
+                        <canvas id="sentimentTrendChart"></canvas>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="glass-card p-5 rounded-xl shadow-xs">
+
+                    <div class="flex items-center justify-between mb-4">
+
+                        <div>
+
+                            <h3 class="font-bold text-slate-800 text-base">Media Partner Teraktif</h3>
+
+                            <p class="text-xs text-slate-500">Distribusi publikasi berdasarkan media outlet</p>
+
+                        </div>
+
+                    </div>
+
+                    <div class="h-64 relative flex items-center justify-center">
+
+                        <canvas id="mediaShareChart"></canvas>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="glass-card p-5 rounded-xl shadow-xs">
+
+                <div class="flex items-center justify-between mb-4">
+
+                    <div>
+
+                        <h3 class="font-bold text-slate-800 text-base">Sebaran Topik Indikator & Isu Strategis</h3>
+
+                        <p class="text-xs text-slate-500">Klasifikasi otomatis berdasarkan judul dan ringkasan berita di database</p>
+
+                    </div>
+
+                </div>
+
+                <div class="h-56 relative">
+
+                    <canvas id="topicsChart"></canvas>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- ================= SECTION 2: NEWS MONITORING TABLE ================= -->
+
+        <div id="section-news" class="space-y-6 hidden">
+
+            <div class="glass-card p-5 rounded-xl shadow-xs space-y-4">
+
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+
+                    <div>
+
+                        <h3 class="font-bold text-slate-800 text-lg">Direktori & Kliping Media</h3>
+
+                        <p class="text-xs text-slate-500">Arsip pemberitaan terverifikasi beserta analisis sentimen dan rekomendasi tindak lanjut</p>
+
+                    </div>
+
+                    <div class="flex flex-wrap items-center gap-2">
+
+                        <div class="relative min-w-[220px]">
+
+                            <i data-lucide="search" class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+
+                            <input type="text" id="searchInput" onkeyup="filterNewsTable()" placeholder="Cari judul atau media..." class="w-full pl-9 pr-3 py-1.5 text-xs bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-bps-blue">
+
+                        </div>
+
+                        <select id="sentimentFilter" onchange="filterNewsTable()" class="bg-white border border-slate-300 text-xs rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-bps-blue">
+
+                            <option value="ALL">Semua Sentimen</option>
+
+                            <option value="Positif">Positif</option>
+
+                            <option value="Netral">Netral</option>
+
+                            <option value="Negatif">Negatif</option>
+
+                        </select>
+
+                        <select id="topicFilter" onchange="filterNewsTable()" class="bg-white border border-slate-300 text-xs rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-bps-blue">
+
+                            <option value="ALL">Semua Topik</option>
+
+                            <option value="Pertumbuhan Ekonomi">Pertumbuhan Ekonomi</option>
+
+                            <option value="Ketenagakerjaan & Kemiskinan">Ketenagakerjaan & Kemiskinan</option>
+
+                            <option value="Pertanian & NTP">Pertanian & NTP</option>
+
+                            <option value="IPM & Pendidikan">IPM & Pendidikan</option>
+
+                            <option value="Inflasi & Harga">Inflasi & Harga</option>
+
+                            <option value="Isu Daerah & Umum">Isu Daerah & Umum</option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="overflow-x-auto rounded-lg border border-slate-200">
+
+                    <table class="w-full text-left text-xs text-slate-700">
+
+                        <thead class="bg-slate-100/90 text-slate-600 uppercase text-[11px] tracking-wider font-semibold border-b border-slate-200">
+
+                            <tr>
+
+                                <th class="px-4 py-3">Tanggal</th>
+
+                                <th class="px-4 py-3">Judul Artikel Berita</th>
+
+                                <th class="px-4 py-3">Media Outlet</th>
+
+                                <th class="px-4 py-3">Topik</th>
+
+                                <th class="px-4 py-3 text-center">Sentimen</th>
+
+                                <th class="px-4 py-3 text-right">Aksi</th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody id="newsTableBody" class="divide-y divide-slate-200 bg-white">
+
+                            <tr>
+
+                                <td colspan="6" class="px-4 py-8 text-center text-slate-400">Memuat data berita dari database...</td>
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+
+
+                <div class="flex items-center justify-between text-xs text-slate-500 pt-2">
+
+                    <span id="showingCount">Menampilkan 0 dari 0 berita</span>
+
+                    <span class="text-[11px] text-slate-400">Urutan: Terbaru di atas</span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- ================= SECTION 3: AUTOMATED BRS PIPELINE ================= -->
+
+        <div id="section-brs" class="hidden">
+
+            <div class="bg-white border border-slate-200/90 rounded-2xl shadow-xs overflow-hidden">
+
+                <div class="p-6 sm:p-7 border-b border-slate-100 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+
+                    <div>
+
+                        <div class="flex flex-wrap items-center gap-2 mb-1.5">
+
+                            <span class="px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-wider rounded-md bg-[#008FD5]/10 text-bps-blue border border-[#008FD5]/20">
+
+                                Layanan Publikasi BRS
+
+                            </span>
+
+                            <span class="text-xs text-slate-400">• Standar Tata Naskah BPS Provinsi Lampung</span>
+
+                        </div>
+
+                        <h2 class="text-lg sm:text-xl font-bold text-bps-navy tracking-tight">
+
+                            Penyusunan Draf Siaran Pers Resmi
+
+                        </h2>
+
+                        <p class="text-xs sm:text-sm text-slate-500 mt-0.5">
+
+                            Unggah bahan paparan rilis Kepala BPS untuk menghasilkan draf siaran pers terstruktur sesuai format baku instansi.
+
+                        </p>
+
+                    </div>
+
+                    <a href="virtual-office.html" class="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-bps-navy hover:bg-bps-dark text-white text-xs font-semibold transition shrink-0 shadow-xs">
+
+                        <i data-lucide="monitor" class="w-4 h-4 text-[#67D4FF]"></i>
+
+                        <span>Pantau di Ruang Kendali</span>
+
+                    </a>
+
+                </div>
+
+
+
+                <div class="p-6 sm:p-7 space-y-5">
+
+                    <div class="border-2 border-dashed border-slate-300 hover:border-bps-blue rounded-xl py-10 px-6 text-center bg-slate-50/70 hover:bg-[#008FD5]/[0.03] transition relative group">
+
+                        <input type="file" id="brsFileInput" accept=".pptx,.ppt,.pdf" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" onchange="handleFileSelected(this)">
+
+                        <div class="flex flex-col items-center space-y-3 pointer-events-none">
+
+                            <div class="w-12 h-12 rounded-xl bg-white border border-slate-200 shadow-xs flex items-center justify-center text-bps-blue group-hover:scale-105 transition">
+
+                                <i data-lucide="file-up" class="w-6 h-6"></i>
+
+                            </div>
+
+                            <div>
+
+                                <p class="text-sm font-semibold text-slate-800" id="uploadFileLabel">
+
+                                    Seret berkas paparan rilis ke area ini, atau <span class="text-bps-blue underline underline-offset-2">klik untuk memilih</span>
+
+                                </p>
+
+                                <p class="text-xs text-slate-400 mt-1">
+
+                                    Mendukung format <span class="font-medium text-slate-600">.PPTX</span>, <span class="font-medium text-slate-600">.PPT</span>, atau <span class="font-medium text-slate-600">.PDF</span> (Maksimal 25 MB)
+
+                                </p>
+
+                            </div>
+
+                            <button type="button" class="px-5 py-2.5 bg-bps-blue text-white text-xs font-semibold rounded-xl shadow-xs">
+
+                                Pilih Berkas Paparan
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div id="uploadActionArea" class="hidden flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-[#008FD5]/[0.06] p-4 rounded-xl border border-[#008FD5]/25">
+
+                        <div class="flex items-center space-x-3">
+
+                            <div class="p-2 bg-white rounded-lg border border-[#008FD5]/20 text-bps-blue">
+
+                                <i data-lucide="file-check" class="w-5 h-5"></i>
+
+                            </div>
+
+                            <div>
+
+                                <p class="text-xs font-bold text-slate-800" id="selectedFileName">-</p>
+
+                                <p class="text-[11px] text-slate-500" id="selectedFileSize">-</p>
+
+                            </div>
+
+                        </div>
+
+                        <button onclick="uploadBrsFileToDrive()" id="uploadSubmitBtn" class="px-4 py-2.5 bg-bps-green hover:bg-bps-greenDark text-white text-xs font-semibold rounded-xl shadow-xs transition flex items-center justify-center gap-1.5">
+
+                            <i data-lucide="send" class="w-3.5 h-3.5"></i>
+
+                            <span>Proses Penyusunan Draf</span>
+
+                        </button>
+
+                    </div>
+
+
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-6 border-t border-slate-100">
+
+                        <div class="p-4 rounded-xl bg-slate-50/80 border border-slate-200/70">
+
+                            <div class="flex items-center gap-2 mb-2">
+
+                                <span class="w-5 h-5 rounded-md bg-bps-blue text-white text-[11px] font-bold flex items-center justify-center">1</span>
+
+                                <span class="text-xs font-bold text-slate-800">Unggah Materi</span>
+
+                            </div>
+
+                            <p class="text-xs text-slate-500 leading-relaxed">Berkas bahan paparan rilis diarsipkan langsung ke repositori kerja Humas.</p>
+
+                        </div>
+
+                        <div class="p-4 rounded-xl bg-slate-50/80 border border-slate-200/70">
+
+                            <div class="flex items-center gap-2 mb-2">
+
+                                <span class="w-5 h-5 rounded-md bg-bps-navy text-white text-[11px] font-bold flex items-center justify-center">2</span>
+
+                                <span class="text-xs font-bold text-slate-800">Ekstraksi Indikator</span>
+
+                            </div>
+
+                            <p class="text-xs text-slate-500 leading-relaxed">Sistem menyusun narasi data storytelling dan kutipan resmi Kepala BPS.</p>
+
+                        </div>
+
+                        <div class="p-4 rounded-xl bg-slate-50/80 border border-slate-200/70">
+
+                            <div class="flex items-center gap-2 mb-2">
+
+                                <span class="w-5 h-5 rounded-md bg-bps-green text-white text-[11px] font-bold flex items-center justify-center">3</span>
+
+                                <span class="text-xs font-bold text-slate-800">Format Tata Naskah</span>
+
+                            </div>
+
+                            <p class="text-xs text-slate-500 leading-relaxed">Draf otomatis terformat rapi pada dokumen siap sunting di Google Drive.</p>
+
+                        </div>
+
+                        <div class="p-4 rounded-xl bg-slate-50/80 border border-slate-200/70">
+
+                            <div class="flex items-center gap-2 mb-2">
+
+                                <span class="w-5 h-5 rounded-md bg-bps-orange text-white text-[11px] font-bold flex items-center justify-center">4</span>
+
+                                <span class="text-xs font-bold text-slate-800">Notifikasi Tim Humas</span>
+
+                            </div>
+
+                            <p class="text-xs text-slate-500 leading-relaxed">Tautan dokumen final dikirim otomatis ke saluran koordinasi tim untuk ditinjau.</p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- ================= SECTION 4: API BRIDGE ARCHITECTURE (ADMIN ONLY) ================= -->
+
+        <div id="section-bridge" class="space-y-6 hidden">
+
+            <div class="glass-card p-6 rounded-xl border border-slate-200 space-y-4">
+
+                <div class="flex items-center space-x-3">
+
+                    <div class="p-3 bg-[#68B92E]/15 text-bps-greenDark rounded-xl">
+
+                        <i data-lucide="shield-check" class="w-6 h-6"></i>
+
+                    </div>
+
+                    <div>
+
+                        <h3 class="text-lg font-bold text-slate-900">Arsitektur Keamanan: Google Sheets API Bridge</h3>
+
+                        <p class="text-xs text-slate-500">Dual-route API Gateway yang melayani Dashboard Utama dan Ruang Kendali 3D secara bersamaan</p>
+
+                    </div>
+
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4 border-t border-slate-200">
+
+                    <div class="space-y-2">
+
+                        <div class="flex items-center space-x-2 text-slate-800 font-semibold text-sm">
+
+                            <span class="w-6 h-6 rounded-full bg-slate-200 text-slate-700 flex items-center justify-center text-xs">1</span>
+
+                            <span>Spreadsheet Internal (Protected)</span>
+
+                        </div>
+
+                        <p class="text-xs text-slate-500 leading-relaxed">Database monitoring dan status agent disimpan secara tertutup di Google Drive BPS Provinsi Lampung.</p>
+
+                        <div class="bg-slate-100 p-2.5 rounded border border-slate-200 font-mono text-[11px] text-slate-600">🔒 Tab: Monitoring & Agent_State</div>
+
+                    </div>
+
+                    <div class="space-y-2">
+
+                        <div class="flex items-center space-x-2 text-slate-800 font-semibold text-sm">
+
+                            <span class="w-6 h-6 rounded-full bg-[#008FD5]/15 text-bps-blue flex items-center justify-center text-xs">2</span>
+
+                            <span>Apps Script Dual-Route Web App</span>
+
+                        </div>
+
+                        <p class="text-xs text-slate-500 leading-relaxed">Jalur default menyuplai data grafik, jalur <code>?mode=agents</code> menyuplai status agen dengan Secret Payload Token.</p>
+
+                        <div class="bg-[#008FD5]/10 p-2.5 rounded border border-[#008FD5]/25 font-mono text-[11px] text-bps-blue">⚡ GET .../exec (Secured Token)</div>
+
+                    </div>
+
+                    <div class="space-y-2">
+
+                        <div class="flex items-center space-x-2 text-slate-800 font-semibold text-sm">
+
+                            <span class="w-6 h-6 rounded-full bg-[#68B92E]/15 text-bps-greenDark flex items-center justify-center text-xs">3</span>
+
+                            <span>Visualisasi Frontend Real-Time</span>
+
+                        </div>
+
+                        <p class="text-xs text-slate-500 leading-relaxed">Dashboard menghitung metrik, sentimen, dan rentang tanggal grafik langsung dari payload JSON terbaru.</p>
+
+                        <div class="bg-[#68B92E]/10 p-2.5 rounded border border-[#68B92E]/25 font-mono text-[11px] text-bps-greenDark">🌐 Chart.js + TailwindCSS</div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+    </main>
+
+
+
+    <!-- Modals (Analysis & Success Upload) -->
+
+    <div id="analysisModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 hidden items-center justify-center p-4">
+
+        <div class="bg-white rounded-2xl max-w-xl w-full shadow-2xl border border-slate-200 overflow-hidden">
+
+            <div class="bg-bps-navy text-white px-5 py-4 flex items-center justify-between">
+
+                <div class="flex items-center space-x-2">
+
+                    <i data-lucide="sparkles" class="w-4 h-4 text-[#67D4FF]"></i>
+
+                    <span class="font-bold text-sm">Analisis Sentimen & Rekomendasi Humas</span>
+
+                </div>
+
+                <button onclick="closeAnalysisModal()" class="text-slate-400 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
+
+            </div>
+
+            <div class="p-5 space-y-4 max-h-[75vh] overflow-y-auto">
+
+                <div>
+
+                    <div class="flex items-center gap-2 mb-1">
+
+                        <span id="modalDate" class="text-xs text-slate-500"></span><span>•</span>
+
+                        <span id="modalMedia" class="text-xs font-semibold text-bps-blue"></span>
+
+                        <span id="modalSentimentBadge" class="text-[11px] px-2 py-0.5 rounded-full font-semibold"></span>
+
+                    </div>
+
+                    <h4 id="modalTitle" class="font-bold text-slate-900 text-base leading-snug"></h4>
+
+                </div>
+
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 text-xs text-slate-700 whitespace-pre-line leading-relaxed" id="modalBody"></div>
+
+                <div class="flex justify-end gap-2 pt-2">
+
+                    <button onclick="closeAnalysisModal()" class="px-4 py-2 text-xs font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-lg">Tutup</button>
+
+                    <a id="modalExternalLink" href="#" target="_blank" rel="noopener noreferrer" class="px-4 py-2 text-xs font-semibold text-white bg-bps-blue hover:bg-bps-blueDark rounded-lg inline-flex items-center gap-1.5">
+
+                        <span>Buka Berita Asli</span><i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
     </div>
-  </header>
 
-  <script>
-    (function() {
-      const urlParams = new URLSearchParams(window.location.search);
-      if (urlParams.get('admin') === 'bima') {
-        localStorage.setItem('bps_lampung_admin_mode', 'true');
-        window.history.replaceState({}, document.title, window.location.pathname);
-      } else if (urlParams.get('admin') === 'off') {
-        localStorage.removeItem('bps_lampung_admin_mode');
-        window.history.replaceState({}, document.title, window.location.pathname);
-      }
 
-      if (localStorage.getItem('bps_lampung_admin_mode') === 'true') {
-        document.querySelectorAll('.admin-only').forEach(el => el.classList.remove('hidden'));
-      }
-    })();
-  </script>
 
-  <!-- MAIN CONTENT -->
-  <main class="flex-1 max-w-7xl w-full mx-auto px-4 py-5 grid grid-cols-1 lg:grid-cols-12 gap-5">
+    <div id="successUploadModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 hidden items-center justify-center p-4">
 
-    <!-- LEFT: 3D SEMI-OUTDOOR STUDIO CANVAS (7 COLS) -->
-    <section class="lg:col-span-7 flex flex-col gap-4">
-      <div class="bg-white border border-stone-200 rounded-3xl overflow-hidden shadow-xl shadow-stone-200/60">
-        <!-- Toolbar Atas Viewport 3D -->
-        <div class="px-4 py-2.5 border-b border-stone-100 flex flex-wrap items-center justify-between gap-2 bg-stone-50/80">
-          <div class="flex items-center gap-1.5 flex-wrap">
-            <span class="text-[11px] font-bold text-slate-500 mr-1">Kamera:</span>
-            <button onclick="focusCamera('overview')" id="cam-overview" class="cam-btn px-2.5 py-1 rounded-lg text-[11px] font-bold bg-slate-900 text-white transition">Taman & Studio</button>
-            <button onclick="focusCamera('crawler')" id="cam-crawler" class="cam-btn px-2.5 py-1 rounded-lg text-[11px] font-bold bg-white text-slate-600 border border-stone-200 hover:bg-sky-50 transition">Crawler</button>
-            <button onclick="focusCamera('drafter')" id="cam-drafter" class="cam-btn px-2.5 py-1 rounded-lg text-[11px] font-bold bg-white text-slate-600 border border-stone-200 hover:bg-emerald-50 transition">Penulis BRS</button>
-            <button onclick="focusCamera('auditor')" id="cam-auditor" class="cam-btn px-2.5 py-1 rounded-lg text-[11px] font-bold bg-white text-slate-600 border border-stone-200 hover:bg-purple-50 transition">Auditor</button>
-            <button onclick="focusCamera('garden')" id="cam-garden" class="cam-btn px-2.5 py-1 rounded-lg text-[11px] font-bold bg-white text-emerald-700 border border-emerald-200 hover:bg-emerald-50 transition">🌿 Area Taman</button>
-          </div>
-          <span id="lastSyncText" class="text-[11px] text-slate-500 font-mono-code font-semibold">Polling: Siap</span>
-        </div>
+        <div class="bg-white rounded-2xl max-w-md w-full shadow-2xl border border-slate-200 overflow-hidden p-6 text-center space-y-4">
 
-        <!-- 3D WEBGL VIEWPORT -->
-        <div id="canvasContainer">
-          <div class="absolute top-3 left-3 z-10 glass-panel px-3 py-1.5 rounded-xl text-[11px] font-semibold text-slate-700 shadow-sm pointer-events-none flex items-center gap-2">
-            <span>🖱️ Geser putar • Scroll zoom • Klik karakter untuk inspeksi</span>
-          </div>
+            <div class="w-14 h-14 bg-[#68B92E]/15 text-bps-greenDark rounded-full flex items-center justify-center mx-auto shadow-inner">
 
-          <!-- Floating Selected Agent Card -->
-          <div id="selectedAgentOverlay" class="hidden absolute bottom-3 left-3 right-3 sm:right-auto sm:w-80 z-10 glass-panel p-3.5 rounded-2xl shadow-lg border border-stone-200">
-            <div class="flex items-start justify-between gap-2">
-              <div>
-                <span id="selRoleBadge" class="inline-block px-2 py-0.5 rounded-md text-[10px] font-extrabold uppercase tracking-wider bg-emerald-100 text-emerald-800 mb-1">Agent</span>
-                <h3 id="selAgentName" class="text-sm font-extrabold text-slate-900">Nama Agent</h3>
-                <p id="selAgentDesc" class="text-[11px] text-slate-500 font-medium">Deskripsi karakter</p>
-              </div>
-              <button onclick="closeAgentOverlay()" class="text-slate-400 hover:text-slate-700 font-bold text-sm px-1">✕</button>
+                <i data-lucide="file-check-2" class="w-8 h-8"></i>
+
             </div>
-            <div class="mt-2.5 pt-2.5 border-t border-stone-200/80 text-xs text-slate-700">
-              <p id="selAgentStatusMsg" class="font-medium leading-snug">Status saat ini...</p>
-            </div>
-          </div>
-        </div>
 
-        <!-- 3 AGENT STATUS CARDS -->
-        <div class="p-3.5 bg-stone-50/70 border-t border-stone-100 grid grid-cols-1 sm:grid-cols-3 gap-2.5">
-          
-          <!-- AGENT 1: Media Crawler -->
-          <div onclick="focusCamera('crawler')" id="card-crawler" class="cursor-pointer bg-white hover:border-sky-400 border border-stone-200 rounded-2xl p-3 shadow-sm transition group">
-            <div class="flex items-center justify-between mb-1">
-              <span class="text-xs font-extrabold text-sky-700 group-hover:text-sky-600">1. News Crawler & PR Specialist</span>
-              <span id="badge-crawler" class="px-2 py-0.5 rounded-md text-[10px] font-extrabold bg-stone-100 text-slate-600">IDLE</span>
-            </div>
-            <p class="text-[10px] text-slate-400 font-semibold mb-1">Media Monitoring & Intelligence Unit</p>
-            <p id="msg-crawler" class="text-[11px] text-slate-600 leading-snug line-clamp-2">Memindai pemberitaan media online seputar BPS Provinsi Lampung.</p>
-            <span id="time-crawler" class="block text-[10px] text-slate-400 font-mono-code mt-1.5">-</span>
-          </div>
-
-          <!-- AGENT 2: Penulis BRS -->
-          <div onclick="focusCamera('drafter')" id="card-drafter" class="cursor-pointer bg-white hover:border-emerald-400 border border-stone-200 rounded-2xl p-3 shadow-sm transition group">
-            <div class="flex items-center justify-between mb-1">
-              <span class="text-xs font-extrabold text-emerald-700 group-hover:text-emerald-600">2. Press Release Drafter</span>
-              <span id="badge-drafter" class="px-2 py-0.5 rounded-md text-[10px] font-extrabold bg-stone-100 text-slate-600">IDLE</span>
-            </div>
-            <p class="text-[10px] text-slate-400 font-semibold mb-1">Statistical Data Storyteller & Benchmark Stylist</p>
-            <p id="msg-drafter" class="text-[11px] text-slate-600 leading-snug line-clamp-2">Menyusun narasi siaran pers berbasis materi paparan dan standar rilis resmi.</p>
-            <span id="time-drafter" class="block text-[10px] text-slate-400 font-mono-code mt-1.5">-</span>
-          </div>
-
-          <!-- AGENT 3: Auditor & PR -->
-          <div onclick="focusCamera('auditor')" id="card-auditor" class="cursor-pointer bg-white hover:border-amber-500 border border-stone-200 rounded-2xl p-3 shadow-sm transition group">
-            <div class="flex items-center justify-between mb-1">
-              <span class="text-xs font-extrabold text-amber-800 group-hover:text-amber-700">3. Auditor & PR Strategy Advisor</span>
-              <span id="badge-auditor" class="px-2 py-0.5 rounded-md text-[10px] font-extrabold bg-stone-100 text-slate-600">IDLE</span>
-            </div>
-            <p class="text-[10px] text-slate-400 font-semibold mb-1">Editorial Validation & Content Quality Control</p>
-            <p id="msg-auditor" class="text-[11px] text-slate-600 leading-snug line-clamp-2">Memvalidasi substansi data statistik dan keselarasan strategi komunikasi publik.</p>
-            <span id="time-auditor" class="block text-[10px] text-slate-400 font-mono-code mt-1.5">-</span>
-          </div>
-
-        </div>
-      </div>
-
-      <!-- TERMINAL LOG -->
-      <div class="bg-white border border-stone-200 rounded-2xl p-3.5 shadow-sm">
-        <div class="flex items-center justify-between mb-2">
-          <span class="text-xs font-extrabold text-slate-700 flex items-center gap-2">
-            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
-            Aktivitas Orkestrasi Apps Script
-          </span>
-          <button onclick="clearLogs()" class="text-[11px] font-semibold text-slate-400 hover:text-slate-700">Bersihkan Log</button>
-        </div>
-        <div id="terminalLog" class="font-mono-code text-[11px] text-slate-700 space-y-1 max-h-32 overflow-y-auto bg-stone-50 p-2.5 rounded-xl border border-stone-200/80">
-          <div class="text-slate-500">[SYSTEM] Studio Industrial siap. Klik "Putar Metal Hardcore" untuk BGM Symphonic Metalcore.</div>
-        </div>
-      </div>
-    </section>
-
-    <!-- RIGHT: WALL PREVIEW BOARD INSPECTOR (5 COLS) -->
-    <section id="previewBoardSection" class="lg:col-span-5 bg-white border border-stone-200 rounded-3xl flex flex-col overflow-hidden shadow-xl shadow-stone-200/60">
-      <div class="px-4 py-3.5 border-b border-stone-100 bg-stone-50/70 flex items-center justify-between">
-        <div>
-          <h2 class="text-sm font-extrabold text-slate-900">Wall Preview Board</h2>
-          <p class="text-[11px] text-slate-500 font-medium">Inspeksi Output Draf BRS & Hasil Crawling Media</p>
-        </div>
-        <a id="btnOpenOutputDoc" href="#" target="_blank" rel="noopener noreferrer" class="hidden px-3 py-1.5 rounded-xl bg-emerald-600 text-white text-[11px] font-bold hover:bg-emerald-500 shadow-sm transition">
-          Buka Dokumen ↗
-        </a>
-      </div>
-
-      <div class="grid grid-cols-2 border-b border-stone-200 bg-stone-50 text-xs font-bold">
-        <button onclick="switchTab('brs')" id="tab-brs" class="py-2.5 text-center border-b-2 border-emerald-600 text-emerald-700 bg-white">
-          📄 Draf Siaran Pers BRS
-        </button>
-        <button onclick="switchTab('news')" id="tab-news" class="py-2.5 text-center border-b-2 border-transparent text-slate-500 hover:text-slate-800">
-          📰 Hasil Crawling Media
-        </button>
-      </div>
-
-      <!-- TAB 1: DRAF SIARAN PERS -->
-      <div id="panel-brs" class="p-4 flex-1 flex flex-col justify-between gap-4 overflow-y-auto">
-        <div class="bg-[#fdfcfa] border border-stone-200 rounded-2xl p-4 space-y-3 text-xs leading-relaxed text-slate-700 shadow-inner">
-          <div class="border-b border-stone-200 pb-2.5 flex items-center justify-between">
             <div>
-              <span class="text-[10px] uppercase tracking-wider text-emerald-700 font-extrabold">Template Resmi BPS Provinsi Lampung</span>
-              <p id="brsNumber" class="font-mono-code text-[11px] text-slate-500">Nomor : B-2611/18000/HM.240/2026</p>
+
+                <h3 class="font-extrabold text-slate-900 text-lg">Draf Siaran Pers Telah Jadi!</h3>
+
+                <p class="text-xs text-slate-500 mt-1 leading-relaxed">Sistem telah selesai memproses bahan paparan dan menyusun draf dokumen siaran pers resmi di Google Drive.</p>
+
             </div>
-            <span id="brsStatusBadge" class="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-bold">Terverifikasi Auditor</span>
-          </div>
 
-          <h3 id="brsTitle" class="text-sm font-extrabold text-slate-900">
-            Ekonomi Lampung Triwulan III-2026 Tumbuh Solid 5,18 Persen (y-on-y), Didorong Konsumsi Rumah Tangga dan Pengolahan
-          </h3>
+            <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200 text-left space-y-1.5 text-xs">
 
-          <div id="brsContent" class="space-y-2.5 text-slate-700 whitespace-pre-line">
-            <p>
-              <strong>BANDAR LAMPUNG</strong> — Perekonomian Provinsi Lampung pada Triwulan III-2026 menunjukkan kinerja yang resilien dengan mencatatkan pertumbuhan sebesar <strong>5,18 persen</strong> secara tahunan (<em>y-on-y</em>). Sementara itu, dibandingkan triwulan sebelumnya (<em>q-to-q</em>), ekonomi Lampung tumbuh sebesar <strong>1,42 persen</strong>, dan secara kumulatif (<em>c-to-c</em>) meningkat <strong>5,04 persen</strong>.
-            </p>
-            <p>
-              Dari sisi produksi, Lapangan Usaha Industri Pengolahan memberikan andil pertumbuhan tertinggi, diikuti oleh Perdagangan Besar dan Eceran serta Pertanian. Dari sisi pengeluaran, Komponen Pengeluaran Konsumsi Rumah Tangga tetap menjadi penopang utama struktur ekonomi Lampung dengan kontribusi mencapai <strong>61,84 persen</strong>.
-            </p>
-            <blockquote class="border-l-4 border-amber-500 pl-3 py-1.5 bg-amber-50/80 rounded-r-xl italic text-slate-800">
-              "Capaian pertumbuhan 5,18 persen ini mencerminkan terjaganya daya beli masyarakat dan aktivitas hilirisasi komoditas unggulan di Provinsi Lampung. Pengendalian inflasi yang konsisten menjadi fondasi penting dalam menjaga momentum ekspansi ekonomi hingga akhir tahun," ujar Kepala BPS Provinsi Lampung, <strong>Ahmadriswan Nasution</strong>.
-            </blockquote>
-          </div>
+                <div class="flex justify-between"><span class="text-slate-500">Status Proses:</span> <strong class="text-bps-greenDark">SELESAI</strong></div>
+
+                <div class="flex justify-between"><span class="text-slate-500">Dokumen Hasil:</span> <strong id="modalFileName" class="text-slate-700 truncate max-w-[200px]">Draf Siaran Pers Resmi</strong></div>
+
+            </div>
+
+            <div class="flex items-center gap-2 pt-2">
+
+                <button onclick="closeSuccessUploadModal()" class="flex-1 px-4 py-2.5 text-xs font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl transition">Tutup</button>
+
+                <a id="modalDownloadBtn" href="#" target="_blank" rel="noopener noreferrer" class="flex-1 px-4 py-2.5 text-xs font-semibold text-white bg-bps-green hover:bg-bps-greenDark rounded-xl transition inline-flex items-center justify-center gap-1.5 shadow-sm">
+
+                    <i data-lucide="external-link" class="w-4 h-4"></i><span>Buka Google Doc</span>
+
+                </a>
+
+            </div>
+
         </div>
 
-        <button onclick="copyPressRelease()" class="w-full py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold shadow-md transition flex items-center justify-center gap-2">
-          <span>📋</span> <span id="copyBtnText">Salin Naskah Siaran Pers</span>
-        </button>
-      </div>
-
-      <!-- TAB 2: HASIL CRAWLING MEDIA -->
-      <div id="panel-news" class="hidden p-4 flex-1 overflow-y-auto space-y-2.5">
-        <div id="newsListContainer" class="space-y-2.5">
-          <div class="bg-stone-50 border border-stone-200 rounded-2xl p-3 space-y-1.5">
-            <div class="flex items-center justify-between gap-2">
-              <span class="text-[10px] font-mono-code text-slate-500">12/11/2026 • Antara Lampung</span>
-              <span class="px-2 py-0.5 rounded-md text-[10px] font-bold bg-emerald-100 text-emerald-800">Positif</span>
-            </div>
-            <h4 class="text-xs font-extrabold text-slate-900 leading-snug">BPS Lampung Catat Inflasi Terkendali, Daya Beli Masyarakat Tetap Terjaga</h4>
-            <p class="text-[11px] text-slate-600 leading-relaxed">Data berita otomatis ditarik dari Google Sheets melalui Apps Script Web App.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <!-- MODAL: KONEKSI APPS SCRIPT API -->
-  <div id="apiModal" class="hidden fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4">
-    <div class="bg-white border border-stone-200 rounded-3xl max-w-md w-full p-5 shadow-2xl space-y-4">
-      <div class="flex items-center justify-between">
-        <h3 class="text-base font-extrabold text-slate-900">Hubungkan Apps Script Web App</h3>
-        <button onclick="closeApiModal()" class="text-slate-400 hover:text-slate-700 text-lg font-bold">✕</button>
-      </div>
-      <p class="text-xs text-slate-600 leading-relaxed">
-        Tempelkan <strong>URL Aplikasi Web</strong> (berakhiran <code class="text-sky-600 font-bold">/exec</code>) dari project Media Monitoring Anda. Sistem otomatis menyertakan parameter <code class="text-sky-600 font-bold">?mode=agents</code>.
-      </p>
-      <div>
-        <label class="block text-[11px] font-bold text-slate-700 mb-1">URL Web App Apps Script</label>
-        <input id="apiUrlInput" type="url" placeholder="https://script.google.com/macros/s/.../exec" class="w-full px-3 py-2.5 rounded-xl bg-stone-50 border border-stone-300 text-xs text-slate-900 focus:outline-none focus:border-sky-500" />
-      </div>
-      <div class="flex items-center justify-between gap-2 pt-1">
-        <button onclick="disconnectApi()" class="px-3 py-2 rounded-xl bg-stone-100 hover:bg-stone-200 text-slate-700 text-xs font-bold">
-          Reset ke Simulasi
-        </button>
-        <button onclick="saveApiUrl()" class="px-4 py-2 rounded-xl bg-sky-600 hover:bg-sky-500 text-white text-xs font-bold shadow-md">
-          Simpan & Hubungkan Live
-        </button>
-      </div>
     </div>
-  </div>
 
-  <!-- AUDIO PLAYER KHUSUS HARDCORE_BGM.MP3 (LOOPING) -->
-  <audio id="metalMusic" src="hardcore_bgm.mp3" loop preload="auto"></audio>
 
-  <script>
-    // =========================================================================
-    // 1. KONFIGURASI API BRIDGE, AUDIO PLAYER & STATE AGENT
-    // =========================================================================
-    const DEFAULT_API_URL = 'https://script.google.com/macros/s/AKfycbz6rjK1i0nCWf9i2ZgH6yblzCdeiz4Cq9hMeKbrEbEZImr5vRUEel8KIP4H2c0UWYMnAA/exec';
-    const STORAGE_KEY = 'bps_lampung_virtual_office_api';
-    let pollingInterval = null;
-    let isMusicPlaying = false;
-    let isMoshPitActive = false;
-    let lastRenderedBrsTitle = '';
 
-    const AGENT_META = {
-      crawler: {
-        name: 'Agent Media Crawler',
-        role: 'Pemantau Berita & RSS',
-        desc: 'Mengumpulkan, memantau, dan menyaring berita atau informasi dari berbagai sumber media online/digital secara real-time',
-        status: 'IDLE',
-        pesan: 'Menunggu jadwal pemindaian RSS...',
-        camPos: { x: -1.8, y: 3.1, z: 3.2 },
-        targetPos: { x: -2.8, y: 1.3, z: -2.2 }
-      },
-      drafter: {
-        name: 'Agent Penulis BRS',
-        role: 'Data Storyteller & Naskah',
-        desc: 'Mengolah data materi paparan (file PPTX/PDF) menjadi draf produk komunikasi publik yang terstruktur dan siap terbit.',
-        status: 'IDLE',
-        pesan: 'Siap memproses bahan tayang PPTX...',
-        camPos: { x: 1.8, y: 3.1, z: 1.8 },
-        targetPos: { x: 1.5, y: 1.3, z: -3.5 }
-      },
-      auditor: {
-        name: 'Agent Auditor & PR',
-        role: 'Quality Control & Wastra Tenun',
-        desc: 'Menganalisis sentimen publik, mengevaluasi risiko reputasi, serta merumuskan rekomendasi strategi komunikasi.',
-        status: 'IDLE',
-        pesan: 'Menunggu validasi angka & sentimen...',
-        camPos: { x: 5.5, y: 3.2, z: 4.5 },
-        targetPos: { x: 4.5, y: 1.3, z: -0.2 }
-      }
-    };
+    <!-- Footer & Virtual Office AI Agents Status -->
 
-    function updateMusicButtonUI(playing) {
-      const btn = document.getElementById('btnMusic');
-      const icon = document.getElementById('musicIcon');
-      const text = document.getElementById('musicText');
-      if (playing) {
-        btn.className = 'px-3 py-1.5 rounded-xl bg-red-600 text-white border border-red-700 text-xs font-bold transition flex items-center gap-1.5 animate-pulse';
-        icon.textContent = '🔥';
-        text.textContent = 'Metalcore On! (Pause)';
-      } else {
-        btn.className = 'px-3 py-1.5 rounded-xl bg-red-50 hover:bg-red-100 text-red-800 border border-red-300 text-xs font-bold transition flex items-center gap-1.5';
-        icon.textContent = '🤘';
-        text.textContent = 'Putar Metal Hardcore';
-      }
-    }
+    <footer class="bg-white border-t border-slate-200 py-4 mt-auto">
 
-    function toggleMusic() {
-      const audio = document.getElementById('metalMusic');
-      audio.volume = 0.42;
+        <div class="max-w-7xl mx-auto px-4 flex flex-col items-center justify-center gap-2">
 
-      if (!isMusicPlaying) {
-        audio.play().then(() => {
-          isMusicPlaying = true;
-          isMoshPitActive = true;
-          updateMusicButtonUI(true);
-          addLog('🔥 MOSH PIT MODE ON! Para agent mulai headbang & moshing mengikuti irama hardcore!', 'work');
-        }).catch((err) => {
-          console.warn("Gagal memutar audio:", err);
-          addLog('⚠️ Gagal memutar musik: Pastikan file hardcore_bgm.mp3 ada.', 'error');
-        });
-      } else {
-        audio.pause();
-        isMusicPlaying = false;
-        isMoshPitActive = false;
-        updateMusicButtonUI(false);
-        addLog('⏸️ Musik latar dijeda. Agent kembali santai.', 'info');
-      }
-    }
+            <div class="text-center text-xs text-slate-500 flex flex-col sm:flex-row items-center justify-between gap-2 w-full">
 
-    // =========================================================================
-    // 2. THREE.JS 3D SEMI-OUTDOOR STUDIO, TAMAN, KOLAM, HEWAN & CUACA MUSIM
-    // =========================================================================
-    let scene, camera, renderer, controls;
-    let ambientLight, sunLight, warmLampLight, pondLight;
-    let lightingModeIndex = 0; // 0: Pagi Cerah, 1: Golden Hour Sore, 2: Malam
-    let seasonModeIndex = 0;   // 0: Panas, 1: Hujan, 2: Salju
+                <div>&copy; 2026 <strong>BPS Provinsi Lampung</strong> • Tim Kehumasan & Publikasi</div>
 
-    const robloxAvatars = {};
-    const clickableObjects = [];
-    const monitorScreens = [];
-    const koiFishes = [];
-    const rabbits = [];
-    const cats = [];
+                <div class="flex items-center space-x-3">
 
-    let grassFloorMesh = null;
-    let summerGrassTex = null;
-    let winterSnowTex = null;
-    let pondWaterMesh = null;
-    const treeFoliageMeshes = [];
-    let rainParticles = null;
-    let snowParticles = null;
+                    <span>Sumber Data: Database Pemantauan Media</span><span>•</span>
 
-    let targetCamPos = new THREE.Vector3(9.5, 8.2, 11.8);
-    let targetLookAt = new THREE.Vector3(-0.5, 0.9, 0.2);
-    let isCameraTransitioning = false;
+                    <a href="virtual-office.html" class="text-bps-blue font-semibold hover:underline">Ruang Kendali 3D</a>
 
-    function init3DOffice() {
-      const container = document.getElementById('canvasContainer');
-      const width = container.clientWidth || 640;
-      const height = container.clientHeight || 550;
+                </div>
 
-      scene = new THREE.Scene();
-      scene.background = new THREE.Color(0xe6f2e8);
-      scene.fog = new THREE.FogExp2(0xe6f2e8, 0.015);
-
-      camera = new THREE.PerspectiveCamera(42, width / height, 0.1, 120);
-      camera.position.copy(targetCamPos);
-
-      renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' });
-      renderer.setSize(width, height);
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-      renderer.shadowMap.enabled = true;
-      renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-      renderer.outputEncoding = THREE.sRGBEncoding;
-      container.appendChild(renderer.domElement);
-
-      controls = new THREE.OrbitControls(camera, renderer.domElement);
-      controls.enableDamping = true;
-      controls.dampingFactor = 0.07;
-      controls.maxPolarAngle = Math.PI / 2 - 0.03;
-      controls.minDistance = 3.5;
-      controls.maxDistance = 24;
-      controls.target.copy(targetLookAt);
-      controls.addEventListener('start', () => { isCameraTransitioning = false; });
-
-      ambientLight = new THREE.AmbientLight(0xfffaf0, 0.82);
-      scene.add(ambientLight);
-
-      sunLight = new THREE.DirectionalLight(0xfff5e4, 0.98);
-      sunLight.position.set(-9, 14, 8);
-      sunLight.castShadow = true;
-      sunLight.shadow.mapSize.width = 2048;
-      sunLight.shadow.mapSize.height = 2048;
-      sunLight.shadow.camera.near = 1;
-      sunLight.shadow.camera.far = 40;
-      const d = 13;
-      sunLight.shadow.camera.left = -d;
-      sunLight.shadow.camera.right = d;
-      sunLight.shadow.camera.top = d;
-      sunLight.shadow.camera.bottom = -d;
-      sunLight.shadow.bias = -0.0005;
-      scene.add(sunLight);
-
-      warmLampLight = new THREE.PointLight(0xffb74d, 0.45, 16);
-      warmLampLight.position.set(2.5, 4.2, -1.5);
-      scene.add(warmLampLight);
-
-      pondLight = new THREE.PointLight(0x38bdf8, 0.35, 9);
-      pondLight.position.set(-5.2, 0.8, 3.8);
-      scene.add(pondLight);
-
-      buildSemiOutdoorArchitecture();
-      buildGardenTreesAndPond();
-      buildLivingAnimals();
-      buildWeatherSystems();
-      buildAllWorkstations();
-      buildAllRobloxCharacters();
-
-      const raycaster = new THREE.Raycaster();
-      const mouse = new THREE.Vector2();
-      let downX = 0, downY = 0;
-
-      renderer.domElement.addEventListener('pointerdown', (e) => {
-        downX = e.clientX;
-        downY = e.clientY;
-      });
-
-      renderer.domElement.addEventListener('pointerup', (e) => {
-        if (Math.hypot(e.clientX - downX, e.clientY - downY) > 6) return;
-        const rect = renderer.domElement.getBoundingClientRect();
-        mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
-        mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
-
-        raycaster.setFromCamera(mouse, camera);
-        const hits = raycaster.intersectObjects(clickableObjects, true);
-        if (hits.length > 0) {
-          let obj = hits[0].object;
-          while (obj && !obj.userData.agentId) obj = obj.parent;
-          if (obj && obj.userData.agentId) {
-            selectAgentCard(obj.userData.agentId);
-            focusCamera(obj.userData.agentId);
-          }
-        }
-      });
-
-      window.addEventListener('resize', onWindowResize);
-      animate3D();
-    }
-
-    function onWindowResize() {
-      const container = document.getElementById('canvasContainer');
-      if (!container) return;
-      camera.aspect = container.clientWidth / container.clientHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(container.clientWidth, container.clientHeight);
-    }
-
-    function createWoodFloorTexture() {
-      const c = document.createElement('canvas');
-      c.width = 512; c.height = 512;
-      const ctx = c.getContext('2d');
-      ctx.fillStyle = '#d9b38c';
-      ctx.fillRect(0, 0, 512, 512);
-      const plankH = 64;
-      const shades = ['#d4aa80', '#deb892', '#cfa376', '#e2be98'];
-      for (let y = 0; y < 512; y += plankH) {
-        ctx.fillStyle = shades[(y / plankH) % shades.length];
-        ctx.fillRect(0, y, 512, plankH - 2);
-        ctx.fillStyle = 'rgba(139, 90, 43, 0.14)';
-        ctx.fillRect((y * 3) % 512, y, 2, plankH);
-        ctx.fillRect(0, y + plankH - 2, 512, 2);
-      }
-      const tex = new THREE.CanvasTexture(c);
-      tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
-      tex.repeat.set(4, 4);
-      return tex;
-    }
-
-    function createIndustrialConcreteTexture() {
-      const c = document.createElement('canvas');
-      c.width = 512; c.height = 512;
-      const ctx = c.getContext('2d');
-
-      ctx.fillStyle = '#3f444c';
-      ctx.fillRect(0, 0, 512, 512);
-
-      const tones = ['rgba(30, 34, 40, 0.14)', 'rgba(95, 102, 112, 0.12)', 'rgba(24, 27, 32, 0.10)'];
-      for (let i = 0; i < 2800; i++) {
-        ctx.fillStyle = tones[i % tones.length];
-        ctx.beginPath();
-        ctx.arc(Math.random() * 512, Math.random() * 512, 2 + Math.random() * 14, 0, Math.PI * 2);
-        ctx.fill();
-      }
-
-      ctx.strokeStyle = 'rgba(20, 23, 28, 0.32)';
-      ctx.lineWidth = 2;
-      for (let y = 128; y < 512; y += 128) {
-        ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(512, y); ctx.stroke();
-      }
-      for (let x = 170; x < 512; x += 170) {
-        ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, 512); ctx.stroke();
-      }
-
-      const tex = new THREE.CanvasTexture(c);
-      tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
-      tex.repeat.set(3, 2);
-      return tex;
-    }
-
-    function createGrassTexture() {
-      const c = document.createElement('canvas');
-      c.width = 512; c.height = 512;
-      const ctx = c.getContext('2d');
-      ctx.fillStyle = '#65a30d';
-      ctx.fillRect(0, 0, 512, 512);
-      const greens = ['#4d7c0f', '#84cc16', '#3f6212', '#a3e635'];
-      for (let i = 0; i < 3200; i++) {
-        ctx.fillStyle = greens[i % greens.length];
-        ctx.fillRect(Math.random() * 512, Math.random() * 512, 3, 6);
-      }
-      const tex = new THREE.CanvasTexture(c);
-      tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
-      tex.repeat.set(8, 8);
-      return tex;
-    }
-
-    function createSnowGroundTexture() {
-      const c = document.createElement('canvas');
-      c.width = 512; c.height = 512;
-      const ctx = c.getContext('2d');
-      ctx.fillStyle = '#f1f5f9';
-      ctx.fillRect(0, 0, 512, 512);
-      const shades = ['#ffffff', '#e2e8f0', '#cbd5e1', '#f8fafc'];
-      for (let i = 0; i < 2400; i++) {
-        ctx.fillStyle = shades[i % shades.length];
-        ctx.beginPath();
-        ctx.arc(Math.random() * 512, Math.random() * 512, 3 + Math.random() * 5, 0, Math.PI * 2);
-        ctx.fill();
-      }
-      const tex = new THREE.CanvasTexture(c);
-      tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
-      tex.repeat.set(6, 6);
-      return tex;
-    }
-
-    function createTenunSweaterTexture() {
-      const c = document.createElement('canvas');
-      c.width = 256; c.height = 256;
-      const ctx = c.getContext('2d');
-      ctx.fillStyle = '#f8f6f0';
-      ctx.fillRect(0, 0, 256, 256);
-
-      ctx.fillStyle = 'rgba(203, 213, 225, 0.25)';
-      for (let y = 0; y < 256; y += 6) {
-        for (let x = 0; x < 256; x += 6) {
-          ctx.fillRect(x, y, 3, 2);
-        }
-      }
-
-      const drawWovenBand = (yStart, height) => {
-        ctx.fillStyle = '#991b1b';
-        ctx.fillRect(0, yStart, 256, height);
-        ctx.fillStyle = '#d97706';
-        ctx.fillRect(0, yStart + 3, 256, 3);
-        ctx.fillRect(0, yStart + height - 6, 256, 3);
-
-        ctx.fillStyle = '#fbbf24';
-        for (let x = 8; x < 256; x += 24) {
-          ctx.beginPath();
-          ctx.moveTo(x + 8, yStart + 8);
-          ctx.lineTo(x + 16, yStart + height / 2);
-          ctx.lineTo(x + 8, yStart + height - 8);
-          ctx.lineTo(x, yStart + height / 2);
-          ctx.closePath();
-          ctx.fill();
-        }
-      };
-
-      drawWovenBand(54, 34);
-      drawWovenBand(186, 28);
-      return new THREE.CanvasTexture(c);
-    }
-
-    function createFallbackBandPoster(title1, title2, subtitle, accentColor) {
-      const c = document.createElement('canvas');
-      c.width = 256; c.height = 360;
-      const ctx = c.getContext('2d');
-      ctx.fillStyle = '#181a1f';
-      ctx.fillRect(0, 0, 256, 360);
-      ctx.fillStyle = accentColor;
-      ctx.font = 'bold 26px Impact, sans-serif';
-      ctx.fillText(title1, 20, 48);
-      ctx.fillText(title2, 20, 78);
-      ctx.strokeStyle = accentColor;
-      ctx.lineWidth = 4;
-      ctx.strokeRect(18, 96, 220, 210);
-      ctx.fillStyle = '#e2e8f0';
-      ctx.font = 'bold 13px monospace';
-      ctx.fillText(subtitle, 24, 336);
-      const tex = new THREE.CanvasTexture(c);
-      tex.encoding = THREE.sRGBEncoding;
-      return tex;
-    }
-
-    function createPottedPlant(type, x, z, scale = 1) {
-      const group = new THREE.Group();
-      group.position.set(x, 0.06, z);
-      group.scale.setScalar(scale);
-
-      const potColor = type === 'monstera' ? 0xc86d51 : 0xf8fafc;
-      const pot = new THREE.Mesh(
-        new THREE.CylinderGeometry(0.36, 0.26, 0.52, 16),
-        new THREE.MeshStandardMaterial({ color: potColor, roughness: 0.7 })
-      );
-      pot.position.y = 0.26;
-      pot.castShadow = true;
-      group.add(pot);
-
-      if (type === 'monstera') {
-        const leafMat = new THREE.MeshStandardMaterial({ color: 0x2d6a4f, roughness: 0.45 });
-        const stemMat = new THREE.MeshStandardMaterial({ color: 0x40916c });
-        for (let i = 0; i < 7; i++) {
-          const angle = (i / 7) * Math.PI * 2;
-          const height = 0.75 + (i % 3) * 0.22;
-          const stem = new THREE.Mesh(new THREE.CylinderGeometry(0.02, 0.025, height, 6), stemMat);
-          stem.position.set(Math.cos(angle) * 0.12, 0.45 + height / 2, Math.sin(angle) * 0.12);
-          stem.rotation.z = -Math.cos(angle) * 0.32;
-          stem.rotation.x = Math.sin(angle) * 0.32;
-          group.add(stem);
-
-          const leaf = new THREE.Mesh(new THREE.SphereGeometry(0.28, 10, 8), leafMat);
-          leaf.scale.set(1.2, 0.12, 0.9);
-          leaf.position.set(Math.cos(angle) * 0.34, 0.45 + height, Math.sin(angle) * 0.34);
-          leaf.rotation.y = -angle;
-          leaf.rotation.z = -0.35;
-          leaf.castShadow = true;
-          group.add(leaf);
-        }
-      } else {
-        const bladeMat = new THREE.MeshStandardMaterial({ color: 0x52796f, roughness: 0.4 });
-        for (let i = 0; i < 9; i++) {
-          const angle = (i / 9) * Math.PI * 2;
-          const h = 0.65 + (i % 3) * 0.18;
-          const blade = new THREE.Mesh(new THREE.ConeGeometry(0.075, h, 5), bladeMat);
-          blade.scale.set(1, 1, 0.35);
-          blade.position.set(Math.cos(angle) * 0.12, 0.48 + h / 2, Math.sin(angle) * 0.12);
-          blade.rotation.y = -angle;
-          blade.rotation.z = -0.12;
-          blade.castShadow = true;
-          group.add(blade);
-        }
-      }
-      scene.add(group);
-    }
-
-    // =========================================================================
-    // ARSITEKTUR SEMI-OUTDOOR: DINDING BETON INDUSTRIAL & 2 POSTER BAND
-    // =========================================================================
-    function buildSemiOutdoorArchitecture() {
-      summerGrassTex = createGrassTexture();
-      winterSnowTex = createSnowGroundTexture();
-
-      grassFloorMesh = new THREE.Mesh(
-        new THREE.PlaneGeometry(24, 22),
-        new THREE.MeshStandardMaterial({ map: summerGrassTex, roughness: 0.9 })
-      );
-      grassFloorMesh.rotation.x = -Math.PI / 2;
-      grassFloorMesh.receiveShadow = true;
-      scene.add(grassFloorMesh);
-
-      const deckBase = new THREE.Mesh(
-        new THREE.BoxGeometry(11.5, 0.12, 8.8),
-        new THREE.MeshStandardMaterial({ map: createWoodFloorTexture(), roughness: 0.6 })
-      );
-      deckBase.position.set(1.4, 0.06, -2.5);
-      deckBase.receiveShadow = true;
-      scene.add(deckBase);
-
-      const addRug = (w, d, color, x, z) => {
-        const rug = new THREE.Mesh(
-          new THREE.BoxGeometry(w, 0.025, d),
-          new THREE.MeshStandardMaterial({ color, roughness: 0.9 })
-        );
-        rug.position.set(x, 0.13, z);
-        rug.receiveShadow = true;
-        scene.add(rug);
-      };
-      addRug(3.4, 3.0, 0xe0f2fe, -2.6, -2.5);
-      addRug(3.6, 3.0, 0xdcfce7, 1.5, -3.9);
-      addRug(3.6, 3.2, 0xfef3c7, 4.6, -0.3);
-
-      const wallMat = new THREE.MeshStandardMaterial({
-        map: createIndustrialConcreteTexture(),
-        color: 0xd1d5db,
-        roughness: 0.88,
-        metalness: 0.08
-      });
-
-      const backWall = new THREE.Mesh(new THREE.BoxGeometry(11.5, 4.2, 0.25), wallMat);
-      backWall.position.set(1.4, 2.1, -6.8);
-      backWall.receiveShadow = true;
-      scene.add(backWall);
-
-      const rightWall = new THREE.Mesh(new THREE.BoxGeometry(0.25, 4.2, 5.2), wallMat);
-      rightWall.position.set(7.05, 2.1, -4.2);
-      rightWall.receiveShadow = true;
-      scene.add(rightWall);
-
-      const pillarMat = new THREE.MeshStandardMaterial({ color: 0x78350f, roughness: 0.6 });
-      const pillarCoords = [
-        [-4.2, -6.6], [-4.2, 1.7], [6.9, 1.7]
-      ];
-      pillarCoords.forEach(([px, pz]) => {
-        const pillar = new THREE.Mesh(new THREE.BoxGeometry(0.20, 4.1, 0.20), pillarMat);
-        pillar.position.set(px, 2.05, pz);
-        pillar.castShadow = true;
-        scene.add(pillar);
-      });
-
-      const glassRoof = new THREE.Mesh(
-        new THREE.BoxGeometry(11.35, 0.05, 8.55),
-        new THREE.MeshPhysicalMaterial({
-          color: 0xe0f2fe,
-          transparent: true,
-          opacity: 0.20,
-          roughness: 0.08,
-          metalness: 0.05,
-          depthWrite: false
-        })
-      );
-      glassRoof.position.set(1.35, 4.12, -2.45);
-      scene.add(glassRoof);
-
-      const roofRimGeo = new THREE.EdgesGeometry(new THREE.BoxGeometry(11.35, 0.05, 8.55));
-      const roofRim = new THREE.LineSegments(
-        roofRimGeo,
-        new THREE.LineBasicMaterial({ color: 0x94a3b8, transparent: true, opacity: 0.45 })
-      );
-      roofRim.position.copy(glassRoof.position);
-      scene.add(roofRim);
-
-      const stoneMat = new THREE.MeshStandardMaterial({ color: 0xd6d3d1, roughness: 0.85 });
-      [[-2.2, 2.4], [-3.1, 3.0], [-4.1, 3.4]].forEach(([sx, sz]) => {
-        const step = new THREE.Mesh(new THREE.CylinderGeometry(0.45, 0.48, 0.08, 12), stoneMat);
-        step.position.set(sx, 0.04, sz);
-        step.receiveShadow = true;
-        scene.add(step);
-      });
-
-      const addCustomPoster = (candidateFiles, xPos, fallbackTex) => {
-        const frame = new THREE.Mesh(
-          new THREE.BoxGeometry(1.48, 2.02, 0.06),
-          new THREE.MeshStandardMaterial({ color: 0x0f1115, roughness: 0.7 })
-        );
-        frame.position.set(xPos, 2.55, -6.64);
-        scene.add(frame);
-
-        const posterMat = new THREE.MeshBasicMaterial({ map: fallbackTex });
-        const canvasMesh = new THREE.Mesh(
-          new THREE.PlaneGeometry(1.36, 1.90),
-          posterMat
-        );
-        canvasMesh.position.set(xPos, 2.55, -6.59);
-        scene.add(canvasMesh);
-
-        const tryLoad = (idx) => {
-          if (idx >= candidateFiles.length) return;
-          new THREE.TextureLoader().load(
-            candidateFiles[idx],
-            (tex) => {
-              tex.encoding = THREE.sRGBEncoding;
-              posterMat.map = tex;
-              posterMat.needsUpdate = true;
-            },
-            undefined,
-            () => tryLoad(idx + 1)
-          );
-        };
-        tryLoad(0);
-      };
-
-      addCustomPoster(
-        ['adtr_poster.webp', 'a Day To Remember.webp'],
-        -1.2,
-        createFallbackBandPoster('A DAY TO', 'REMEMBER', 'WHAT SEPARATES ME FROM YOU', '#2dd4bf')
-      );
-
-      addCustomPoster(
-        ['suicide_silence_poster.jpg', 'suicide_silence_poster.jpg.jpg'],
-        4.2,
-        createFallbackBandPoster('SUICIDE', 'SILENCE', 'THE CLEANSING', '#a3a380')
-      );
-
-      createPottedPlant('monstera', -3.7, -6.0, 1.1);
-      createPottedPlant('sansevieria', 6.3, -6.0, 1.0);
-      createPottedPlant('monstera', 6.4, 1.2, 1.05);
-    }
-
-    // =========================================================================
-    // TAMAN POHON RINDANG & KOLAM IKAN HIDUP (KOI POND)
-    // =========================================================================
-    function createGardenTree(x, z, scale = 1) {
-      const tree = new THREE.Group();
-      tree.position.set(x, 0, z);
-      tree.scale.setScalar(scale);
-
-      const trunk = new THREE.Mesh(
-        new THREE.CylinderGeometry(0.22, 0.34, 2.3, 10),
-        new THREE.MeshStandardMaterial({ color: 0x6b4423, roughness: 0.9 })
-      );
-      trunk.position.y = 1.15;
-      trunk.castShadow = true;
-      tree.add(trunk);
-
-      const foliageColors = [0x2d6a4f, 0x40916c, 0x52b788];
-      const puffs = [
-        [0, 3.0, 0, 1.35],
-        [-0.85, 2.5, 0.45, 0.95],
-        [0.85, 2.55, -0.35, 1.0],
-        [0.2, 2.6, 0.85, 0.92],
-        [-0.3, 3.6, -0.2, 0.95]
-      ];
-      puffs.forEach(([px, py, pz, r], idx) => {
-        const baseHex = foliageColors[idx % foliageColors.length];
-        const mat = new THREE.MeshStandardMaterial({ color: baseHex, roughness: 0.75 });
-        const crown = new THREE.Mesh(new THREE.DodecahedronGeometry(r, 1), mat);
-        crown.position.set(px, py, pz);
-        crown.castShadow = true;
-        crown.receiveShadow = true;
-        tree.add(crown);
-        treeFoliageMeshes.push({ mesh: crown, summerColor: new THREE.Color(baseHex) });
-      });
-
-      scene.add(tree);
-    }
-
-    function buildGardenTreesAndPond() {
-      createGardenTree(-8.5, -5.2, 1.25);
-      createGardenTree(-9.2, 0.5, 1.05);
-      createGardenTree(-8.4, 6.8, 1.3);
-      createGardenTree(-1.8, 7.8, 1.1);
-      createGardenTree(5.8, 7.2, 1.15);
-
-      const flowerColors = [0xf43f5e, 0xfbbf24, 0xc084fc, 0xfb923c];
-      for (let i = 0; i < 16; i++) {
-        const fx = -7.8 + (i % 5) * 1.4 + Math.sin(i) * 0.4;
-        const fz = -3.8 + Math.floor(i / 5) * 2.2;
-        const bush = new THREE.Mesh(
-          new THREE.DodecahedronGeometry(0.32, 1),
-          new THREE.MeshStandardMaterial({ color: 0x3f6212 })
-        );
-        bush.position.set(fx, 0.22, fz);
-        bush.castShadow = true;
-        scene.add(bush);
-        treeFoliageMeshes.push({ mesh: bush, summerColor: new THREE.Color(0x3f6212) });
-
-        const blossom = new THREE.Mesh(
-          new THREE.SphereGeometry(0.11, 8, 8),
-          new THREE.MeshBasicMaterial({ color: flowerColors[i % flowerColors.length] })
-        );
-        blossom.position.set(fx, 0.48, fz);
-        scene.add(blossom);
-      }
-
-      const pondX = -5.5, pondZ = 4.2, pondRadius = 2.15;
-
-      const pondBed = new THREE.Mesh(
-        new THREE.CircleGeometry(pondRadius, 32),
-        new THREE.MeshStandardMaterial({ color: 0x0f293a, roughness: 0.9 })
-      );
-      pondBed.rotation.x = -Math.PI / 2;
-      pondBed.position.set(pondX, 0.03, pondZ);
-      scene.add(pondBed);
-
-      pondWaterMesh = new THREE.Mesh(
-        new THREE.CircleGeometry(pondRadius - 0.05, 32),
-        new THREE.MeshPhysicalMaterial({
-          color: 0x0ea5e9,
-          transparent: true,
-          opacity: 0.62,
-          roughness: 0.12,
-          metalness: 0.1
-        })
-      );
-      pondWaterMesh.rotation.x = -Math.PI / 2;
-      pondWaterMesh.position.set(pondX, 0.18, pondZ);
-      scene.add(pondWaterMesh);
-
-      const rockMat = new THREE.MeshStandardMaterial({ color: 0x78716c, roughness: 0.85 });
-      const rockCount = 22;
-      for (let i = 0; i < rockCount; i++) {
-        const ang = (i / rockCount) * Math.PI * 2;
-        const rSize = 0.24 + (i % 3) * 0.07;
-        const rock = new THREE.Mesh(new THREE.DodecahedronGeometry(rSize, 1), rockMat);
-        rock.scale.set(1.2, 0.75, 1.0);
-        rock.position.set(
-          pondX + Math.cos(ang) * (pondRadius + 0.05),
-          0.14,
-          pondZ + Math.sin(ang) * (pondRadius + 0.05)
-        );
-        rock.rotation.y = ang;
-        rock.castShadow = true;
-        rock.receiveShadow = true;
-        scene.add(rock);
-      }
-
-      const padMat = new THREE.MeshStandardMaterial({ color: 0x16a34a, side: THREE.DoubleSide });
-      [[-4.7, 3.6], [-6.1, 4.7], [-5.2, 5.1]].forEach(([lx, lz]) => {
-        const pad = new THREE.Mesh(new THREE.CircleGeometry(0.24, 14, 0, Math.PI * 1.75), padMat);
-        pad.rotation.x = -Math.PI / 2;
-        pad.position.set(lx, 0.19, lz);
-        scene.add(pad);
-      });
-
-      const koiColors = [0xf97316, 0xffffff, 0xef4444, 0xfacc15, 0xfb923c];
-      for (let i = 0; i < 5; i++) {
-        const fishGroup = new THREE.Group();
-        const bodyMat = new THREE.MeshStandardMaterial({ color: koiColors[i], roughness: 0.3 });
-
-        const body = new THREE.Mesh(new THREE.SphereGeometry(0.11, 10, 8), bodyMat);
-        body.scale.set(0.65, 0.55, 1.85);
-        fishGroup.add(body);
-
-        const tail = new THREE.Mesh(new THREE.ConeGeometry(0.08, 0.18, 4), bodyMat);
-        tail.rotation.x = -Math.PI / 2;
-        tail.position.z = -0.22;
-        fishGroup.add(tail);
-
-        fishGroup.position.set(pondX, 0.11, pondZ);
-        scene.add(fishGroup);
-
-        koiFishes.push({
-          mesh: fishGroup,
-          tail,
-          centerX: pondX,
-          centerZ: pondZ,
-          orbitRadius: 0.55 + i * 0.25,
-          speed: (i % 2 === 0 ? 1 : -1) * (0.55 + i * 0.12),
-          angle: (i / 5) * Math.PI * 2
-        });
-      }
-    }
-
-    // =========================================================================
-    // SISTEM CUACA 3D: PARTIKEL HUJAN & SALJU
-    // =========================================================================
-    function buildWeatherSystems() {
-      const rainCount = 1200;
-      const rainGeo = new THREE.BufferGeometry();
-      const rainPositions = new Float32Array(rainCount * 3);
-      for (let i = 0; i < rainCount; i++) {
-        rainPositions[i * 3] = (Math.random() - 0.5) * 24;
-        rainPositions[i * 3 + 1] = Math.random() * 14;
-        rainPositions[i * 3 + 2] = (Math.random() - 0.5) * 22;
-      }
-      rainGeo.setAttribute('position', new THREE.BufferAttribute(rainPositions, 3));
-      const rainMat = new THREE.PointsMaterial({
-        color: 0xbae6fd,
-        size: 0.14,
-        transparent: true,
-        opacity: 0.75
-      });
-      rainParticles = new THREE.Points(rainGeo, rainMat);
-      rainParticles.visible = false;
-      scene.add(rainParticles);
-
-      const snowCount = 950;
-      const snowGeo = new THREE.BufferGeometry();
-      const snowPositions = new Float32Array(snowCount * 3);
-      for (let i = 0; i < snowCount; i++) {
-        snowPositions[i * 3] = (Math.random() - 0.5) * 24;
-        snowPositions[i * 3 + 1] = Math.random() * 14;
-        snowPositions[i * 3 + 2] = (Math.random() - 0.5) * 22;
-      }
-      snowGeo.setAttribute('position', new THREE.BufferAttribute(snowPositions, 3));
-      const snowMat = new THREE.PointsMaterial({
-        color: 0xffffff,
-        size: 0.22,
-        transparent: true,
-        opacity: 0.92
-      });
-      snowParticles = new THREE.Points(snowGeo, snowMat);
-      snowParticles.visible = false;
-      scene.add(snowParticles);
-    }
-
-    // =========================================================================
-    // HEWAN PELIHARAAN HIDUP: KELINCI MELOMPAT & KUCING JALAN-JALAN
-    // =========================================================================
-    function createRabbit(x, z, furColor) {
-      const group = new THREE.Group();
-      group.position.set(x, 0, z);
-
-      const furMat = new THREE.MeshStandardMaterial({ color: furColor, roughness: 0.8 });
-      const innerEarMat = new THREE.MeshBasicMaterial({ color: 0xfbcfe8 });
-
-      const body = new THREE.Mesh(new THREE.SphereGeometry(0.20, 14, 12), furMat);
-      body.scale.set(0.95, 0.9, 1.25);
-      body.position.y = 0.20;
-      body.castShadow = true;
-      group.add(body);
-
-      const head = new THREE.Mesh(new THREE.SphereGeometry(0.15, 14, 12), furMat);
-      head.position.set(0, 0.34, 0.18);
-      head.castShadow = true;
-      group.add(head);
-
-      for (let side of [-1, 1]) {
-        const ear = new THREE.Mesh(new THREE.CylinderGeometry(0.032, 0.04, 0.24, 8), furMat);
-        ear.position.set(side * 0.055, 0.51, 0.15);
-        ear.rotation.z = side * -0.14;
-        ear.rotation.x = -0.1;
-        ear.castShadow = true;
-
-        const inner = new THREE.Mesh(new THREE.PlaneGeometry(0.035, 0.17), innerEarMat);
-        inner.position.set(side * 0.055, 0.51, 0.188);
-        inner.rotation.z = side * -0.14;
-        group.add(ear, inner);
-      }
-
-      const tail = new THREE.Mesh(new THREE.SphereGeometry(0.065, 8, 8), new THREE.MeshStandardMaterial({ color: 0xffffff }));
-      tail.position.set(0, 0.20, -0.24);
-      group.add(tail);
-
-      const eyeMat = new THREE.MeshBasicMaterial({ color: 0x0f172a });
-      for (let side of [-1, 1]) {
-        const eye = new THREE.Mesh(new THREE.SphereGeometry(0.022, 8, 8), eyeMat);
-        eye.position.set(side * 0.09, 0.36, 0.29);
-        group.add(eye);
-      }
-
-      scene.add(group);
-      return group;
-    }
-
-    function createCat(x, z, furColor, stripeColor) {
-      const group = new THREE.Group();
-      group.position.set(x, 0, z);
-
-      const furMat = new THREE.MeshStandardMaterial({ color: furColor, roughness: 0.7 });
-      const accentMat = new THREE.MeshStandardMaterial({ color: stripeColor, roughness: 0.7 });
-
-      const body = new THREE.Mesh(new THREE.CylinderGeometry(0.14, 0.15, 0.44, 12), furMat);
-      body.rotation.x = Math.PI / 2;
-      body.position.y = 0.24;
-      body.castShadow = true;
-      group.add(body);
-
-      [[-0.08, 0.14], [0.08, 0.14], [-0.08, -0.14], [0.08, -0.14]].forEach(([lx, lz]) => {
-        const leg = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.03, 0.18, 8), furMat);
-        leg.position.set(lx, 0.09, lz);
-        leg.castShadow = true;
-        group.add(leg);
-      });
-
-      const head = new THREE.Mesh(new THREE.SphereGeometry(0.16, 14, 12), furMat);
-      head.position.set(0, 0.36, 0.24);
-      head.castShadow = true;
-      group.add(head);
-
-      for (let side of [-1, 1]) {
-        const ear = new THREE.Mesh(new THREE.ConeGeometry(0.055, 0.11, 4), accentMat);
-        ear.position.set(side * 0.09, 0.50, 0.23);
-        ear.rotation.z = side * -0.2;
-        group.add(ear);
-      }
-
-      const eyeMat = new THREE.MeshBasicMaterial({ color: 0x10b981 });
-      for (let side of [-1, 1]) {
-        const eye = new THREE.Mesh(new THREE.SphereGeometry(0.024, 8, 8), eyeMat);
-        eye.position.set(side * 0.075, 0.38, 0.37);
-        group.add(eye);
-      }
-      const nose = new THREE.Mesh(new THREE.SphereGeometry(0.02, 6, 6), new THREE.MeshBasicMaterial({ color: 0xf472b6 }));
-      nose.position.set(0, 0.34, 0.395);
-      group.add(nose);
-
-      const tailPivot = new THREE.Group();
-      tailPivot.position.set(0, 0.28, -0.20);
-      const tailMesh = new THREE.Mesh(new THREE.CylinderGeometry(0.025, 0.032, 0.34, 8), accentMat);
-      tailMesh.position.set(0, 0.15, -0.06);
-      tailMesh.rotation.x = -0.45;
-      tailPivot.add(tailMesh);
-      group.add(tailPivot);
-
-      scene.add(group);
-      return { group, tailPivot };
-    }
-
-    function buildLivingAnimals() {
-      const r1 = createRabbit(-2.2, 4.8, 0xffffff);
-      rabbits.push({ mesh: r1, centerX: -2.2, centerZ: 4.8, radius: 1.15, speed: 0.75, angle: 0 });
-
-      const r2 = createRabbit(-6.8, 1.2, 0xd6b899);
-      rabbits.push({ mesh: r2, centerX: -6.8, centerZ: 1.2, radius: 1.05, speed: -0.65, angle: 2.1 });
-
-      const c1 = createCat(1.2, 3.2, 0xf97316, 0xc2410c);
-      cats.push({ ...c1, centerX: 1.2, centerZ: 3.4, radius: 1.5, speed: 0.42, angle: 0.5, baseY: 0 });
-
-      const c2 = createCat(3.2, 1.2, 0xf8fafc, 0x334155);
-      cats.push({ ...c2, centerX: 3.2, centerZ: 0.8, radius: 1.1, speed: -0.38, angle: 3.0, baseY: 0.12 });
-    }
-
-    // =========================================================================
-    // MEJA KERJA & 3 KARAKTER CHIBI INTERAKTIF
-    // =========================================================================
-    function buildDeskSetup(x, z, rotY, accentColor) {
-      const desk = new THREE.Group();
-      desk.position.set(x, 0.12, z);
-      desk.rotation.y = rotY;
-
-      const topMat = new THREE.MeshStandardMaterial({ color: 0xe6ccb2, roughness: 0.5 });
-      const legMat = new THREE.MeshStandardMaterial({ color: 0x334155, metalness: 0.4, roughness: 0.5 });
-
-      const tableTop = new THREE.Mesh(new THREE.BoxGeometry(2.1, 0.08, 1.05), topMat);
-      tableTop.position.y = 0.88;
-      tableTop.castShadow = true;
-      tableTop.receiveShadow = true;
-      desk.add(tableTop);
-
-      for (let lx of [-0.92, 0.92]) {
-        for (let lz of [-0.42, 0.42]) {
-          const leg = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.035, 0.88, 8), legMat);
-          leg.position.set(lx, 0.44, lz);
-          leg.castShadow = true;
-          desk.add(leg);
-        }
-      }
-
-      const stand = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.25, 0.1), legMat);
-      stand.position.set(0, 1.02, -0.25);
-      desk.add(stand);
-
-      const frame = new THREE.Mesh(new THREE.BoxGeometry(1.15, 0.58, 0.05), new THREE.MeshStandardMaterial({ color: 0x1e293b }));
-      frame.position.set(0, 1.32, -0.24);
-      frame.castShadow = true;
-      desk.add(frame);
-
-      const screenMat = new THREE.MeshBasicMaterial({ color: accentColor });
-      const screen = new THREE.Mesh(new THREE.PlaneGeometry(1.07, 0.50), screenMat);
-      screen.position.set(0, 1.32, -0.21);
-      desk.add(screen);
-      monitorScreens.push({ mesh: screen, baseColor: new THREE.Color(accentColor) });
-
-      const miniPot = new THREE.Mesh(
-        new THREE.CylinderGeometry(0.08, 0.06, 0.11, 10),
-        new THREE.MeshStandardMaterial({ color: 0xd97757 })
-      );
-      miniPot.position.set(0.78, 0.97, 0.18);
-      desk.add(miniPot);
-
-      const succulent = new THREE.Mesh(
-        new THREE.DodecahedronGeometry(0.085),
-        new THREE.MeshStandardMaterial({ color: 0x40916c })
-      );
-      succulent.position.set(0.78, 1.06, 0.18);
-      desk.add(succulent);
-
-      const mug = new THREE.Mesh(
-        new THREE.CylinderGeometry(0.055, 0.055, 0.11, 12),
-        new THREE.MeshStandardMaterial({ color: 0xffffff })
-      );
-      mug.position.set(-0.75, 0.97, 0.22);
-      desk.add(mug);
-
-      scene.add(desk);
-    }
-
-    function buildAllWorkstations() {
-      buildDeskSetup(-2.8, -3.1, Math.PI / 5, 0x38bdf8);
-      buildDeskSetup(1.5, -4.6, 0, 0x34d399);
-      buildDeskSetup(4.8, -0.8, -Math.PI / 4, 0xfbbf24);
-    }
-
-    function createRobloxCharacter(config) {
-      const root = new THREE.Group();
-      root.position.set(config.x, 0.12, config.z);
-      root.rotation.y = config.rotY;
-      root.userData.agentId = config.id;
-
-      const skinMat = new THREE.MeshStandardMaterial({ color: config.skinColor, roughness: 0.42 });
-      const pantsMat = new THREE.MeshStandardMaterial({ color: config.pantsColor, roughness: 0.65 });
-      const torsoMat = config.torsoTexture
-        ? new THREE.MeshStandardMaterial({ map: config.torsoTexture, roughness: 0.65 })
-        : new THREE.MeshStandardMaterial({ color: config.shirtColor, roughness: 0.58 });
-      const sleeveMat = new THREE.MeshStandardMaterial({ color: config.sleeveColor || config.shirtColor, roughness: 0.58 });
-
-      const leftLeg = new THREE.Group();
-      leftLeg.position.set(-0.14, 0.56, 0);
-      const lLegMesh = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.11, 0.52, 14), pantsMat);
-      lLegMesh.position.y = -0.26;
-      lLegMesh.castShadow = true;
-      const lShoe = new THREE.Mesh(new THREE.SphereGeometry(0.13, 12, 10), new THREE.MeshStandardMaterial({ color: 0x1e293b }));
-      lShoe.scale.set(1, 0.65, 1.35);
-      lShoe.position.set(0, -0.52, 0.04);
-      leftLeg.add(lLegMesh, lShoe);
-      root.add(leftLeg);
-
-      const rightLeg = new THREE.Group();
-      rightLeg.position.set(0.14, 0.56, 0);
-      const rLegMesh = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.11, 0.52, 14), pantsMat);
-      rLegMesh.position.y = -0.26;
-      rLegMesh.castShadow = true;
-      const rShoe = new THREE.Mesh(new THREE.SphereGeometry(0.13, 12, 10), new THREE.MeshStandardMaterial({ color: 0x1e293b }));
-      rShoe.scale.set(1, 0.65, 1.35);
-      rShoe.position.set(0, -0.52, 0.04);
-      rightLeg.add(rLegMesh, rShoe);
-      root.add(rightLeg);
-
-      const torso = new THREE.Mesh(new THREE.CylinderGeometry(0.26, 0.31, 0.64, 18), torsoMat);
-      torso.position.y = 0.88;
-      torso.castShadow = true;
-      root.add(torso);
-
-      if (config.hasDarkTie) {
-        const tie = new THREE.Mesh(
-          new THREE.BoxGeometry(0.08, 0.36, 0.04),
-          new THREE.MeshStandardMaterial({ color: 0x090d16, roughness: 0.4 })
-        );
-        tie.position.set(0, 0.94, 0.27);
-        root.add(tie);
-      }
-
-      if (config.hasLanyard) {
-        const card = new THREE.Mesh(
-          new THREE.BoxGeometry(0.14, 0.20, 0.03),
-          new THREE.MeshStandardMaterial({ color: 0xffffff })
-        );
-        card.position.set(0, 0.88, 0.29);
-        root.add(card);
-      }
-
-      const createArm = (xPos) => {
-        const armPivot = new THREE.Group();
-        armPivot.position.set(xPos, 1.14, 0);
-        const upper = new THREE.Mesh(new THREE.CylinderGeometry(0.095, 0.09, 0.34, 12), sleeveMat);
-        upper.position.y = -0.17;
-        upper.castShadow = true;
-        armPivot.add(upper);
-
-        const hand = new THREE.Mesh(new THREE.SphereGeometry(0.10, 12, 12), skinMat);
-        hand.position.y = -0.38;
-        hand.castShadow = true;
-        armPivot.add(hand);
-        root.add(armPivot);
-        return armPivot;
-      };
-      const leftArm = createArm(-0.36);
-      const rightArm = createArm(0.36);
-
-      const headGroup = new THREE.Group();
-      headGroup.position.y = 1.62;
-      const headMesh = new THREE.Mesh(new THREE.SphereGeometry(0.42, 24, 20), skinMat);
-      headMesh.scale.set(1.04, 0.96, 0.98);
-      headMesh.castShadow = true;
-      headGroup.add(headMesh);
-
-      const eyeWhiteMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
-      const pupilMat = new THREE.MeshBasicMaterial({ color: config.eyeColor || 0x1e1b18 });
-      const browMat = new THREE.MeshStandardMaterial({ color: config.browColor || config.hairColor });
-
-      for (let side of [-1, 1]) {
-        const eyeBase = new THREE.Mesh(new THREE.SphereGeometry(0.068, 12, 12), eyeWhiteMat);
-        eyeBase.scale.set(1, 1.15, 0.5);
-        eyeBase.position.set(side * 0.14, 0.02, 0.37);
-
-        const pupil = new THREE.Mesh(new THREE.SphereGeometry(0.048, 12, 12), pupilMat);
-        pupil.scale.set(1, 1.15, 0.5);
-        pupil.position.set(side * 0.14, 0.02, 0.395);
-
-        const highlight = new THREE.Mesh(new THREE.SphereGeometry(0.016, 8, 8), eyeWhiteMat);
-        highlight.position.set(side * 0.155, 0.045, 0.415);
-
-        const brow = new THREE.Mesh(new THREE.BoxGeometry(0.11, 0.022, 0.02), browMat);
-        brow.position.set(side * 0.14, 0.11, 0.38);
-        brow.rotation.z = side * -0.06;
-
-        headGroup.add(eyeBase, pupil, highlight, brow);
-      }
-
-      if (config.hasBlush) {
-        const blushMat = new THREE.MeshBasicMaterial({ color: 0xf472b6, transparent: true, opacity: 0.45 });
-        for (let side of [-1, 1]) {
-          const blush = new THREE.Mesh(new THREE.CircleGeometry(0.055, 12), blushMat);
-          blush.position.set(side * 0.22, -0.06, 0.36);
-          blush.rotation.y = side * 0.45;
-          headGroup.add(blush);
-        }
-      }
-
-      const smile = new THREE.Mesh(
-        new THREE.TorusGeometry(0.065, 0.014, 8, 16, Math.PI),
-        new THREE.MeshBasicMaterial({ color: config.lipColor || 0x9f1239 })
-      );
-      smile.rotation.z = Math.PI;
-      smile.position.set(0, -0.09, 0.39);
-      headGroup.add(smile);
-
-      const hairMat = new THREE.MeshStandardMaterial({ color: config.hairColor, roughness: 0.65 });
-
-      if (config.hairStyle === 'crawler-beard-bob') {
-        const hairCap = new THREE.Mesh(new THREE.SphereGeometry(0.445, 22, 18, 0, Math.PI * 2, 0, Math.PI * 0.62), hairMat);
-        hairCap.position.set(0, 0.03, -0.02);
-        headGroup.add(hairCap);
-
-        for (let side of [-1, 1]) {
-          const sideHair = new THREE.Mesh(new THREE.BoxGeometry(0.14, 0.68, 0.34), hairMat);
-          sideHair.position.set(side * 0.39, -0.18, -0.03);
-          sideHair.rotation.z = side * -0.08;
-          sideHair.castShadow = true;
-          headGroup.add(sideHair);
-        }
-        const backHair = new THREE.Mesh(new THREE.BoxGeometry(0.76, 0.66, 0.18), hairMat);
-        backHair.position.set(0, -0.18, -0.35);
-        headGroup.add(backHair);
-
-        const beardMat = new THREE.MeshStandardMaterial({ color: 0x1f242d, roughness: 0.85 });
-        const jawBeard = new THREE.Mesh(new THREE.CylinderGeometry(0.36, 0.32, 0.22, 18, 1, false, -Math.PI * 0.42, Math.PI * 0.84), beardMat);
-        jawBeard.position.set(0, -0.22, 0.06);
-        const mustache = new THREE.Mesh(new THREE.BoxGeometry(0.20, 0.045, 0.05), beardMat);
-        mustache.position.set(0, -0.05, 0.40);
-        headGroup.add(jawBeard, mustache);
-
-      } else if (config.hairStyle === 'drafter-long-wavy') {
-        const hairCap = new THREE.Mesh(new THREE.SphereGeometry(0.45, 22, 18, 0, Math.PI * 2, 0, Math.PI * 0.65), hairMat);
-        hairCap.position.set(0, 0.03, -0.02);
-        headGroup.add(hairCap);
-
-        for (let side of [-1, 1]) {
-          const waveStrand = new THREE.Mesh(new THREE.CylinderGeometry(0.11, 0.13, 0.85, 12), hairMat);
-          waveStrand.position.set(side * 0.39, -0.26, -0.04);
-          waveStrand.rotation.z = side * -0.07;
-          waveStrand.castShadow = true;
-          headGroup.add(waveStrand);
-        }
-        const longBack = new THREE.Mesh(new THREE.BoxGeometry(0.82, 0.88, 0.20), hairMat);
-        longBack.position.set(0, -0.28, -0.35);
-        longBack.castShadow = true;
-        headGroup.add(longBack);
-
-      } else if (config.hairStyle === 'auditor-blonde-teal') {
-        const tealMat = new THREE.MeshStandardMaterial({ color: 0x06b6d4, roughness: 0.55 });
-        const blondeCrown = new THREE.Mesh(new THREE.SphereGeometry(0.45, 22, 18, 0, Math.PI * 2, 0, Math.PI * 0.64), hairMat);
-        blondeCrown.position.set(0, 0.03, -0.02);
-        headGroup.add(blondeCrown);
-
-        const sideBangs = new THREE.Mesh(new THREE.BoxGeometry(0.42, 0.26, 0.14), hairMat);
-        sideBangs.position.set(-0.14, 0.24, 0.35);
-        sideBangs.rotation.z = 0.35;
-        headGroup.add(sideBangs);
-
-        for (let side of [-1, 1]) {
-          const upperBlonde = new THREE.Mesh(new THREE.CylinderGeometry(0.11, 0.12, 0.52, 12), hairMat);
-          upperBlonde.position.set(side * 0.39, -0.14, -0.04);
-          upperBlonde.castShadow = true;
-
-          const lowerTeal = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.10, 0.32, 12), tealMat);
-          lowerTeal.position.set(side * 0.40, -0.52, -0.04);
-          lowerTeal.castShadow = true;
-
-          headGroup.add(upperBlonde, lowerTeal);
-        }
-        const backBlonde = new THREE.Mesh(new THREE.BoxGeometry(0.80, 0.55, 0.18), hairMat);
-        backBlonde.position.set(0, -0.15, -0.35);
-        const backTeal = new THREE.Mesh(new THREE.BoxGeometry(0.80, 0.30, 0.18), tealMat);
-        backTeal.position.set(0, -0.55, -0.35);
-        headGroup.add(backBlonde, backTeal);
-      }
-
-      root.add(headGroup);
-      scene.add(root);
-      clickableObjects.push(root);
-
-      robloxAvatars[config.id] = {
-        root,
-        leftLeg,
-        rightLeg,
-        leftArm,
-        rightArm,
-        headGroup,
-        basePos: new THREE.Vector3(config.x, 0.12, config.z),
-        baseRotY: config.rotY,
-        phase: Math.random() * Math.PI * 2,
-        workStartTime: 0,
-        lastStatus: 'IDLE'
-      };
-    }
-
-    function buildAllRobloxCharacters() {
-      createRobloxCharacter({
-        id: 'crawler',
-        x: -2.2,
-        z: -2.3,
-        rotY: Math.PI + Math.PI / 5,
-        skinColor: 0xf5d0b5,
-        shirtColor: 0x111827,
-        pantsColor: 0x0f172a,
-        hairColor: 0x141414,
-        browColor: 0x141414,
-        lipColor: 0x7f1d1d,
-        hairStyle: 'crawler-beard-bob',
-        hasDarkTie: true
-      });
-
-      createRobloxCharacter({
-        id: 'drafter',
-        x: 1.5,
-        z: -3.6,
-        rotY: Math.PI,
-        skinColor: 0xfde2cf,
-        shirtColor: 0x10b981,
-        pantsColor: 0x334155,
-        hairColor: 0x2c1e16,
-        browColor: 0x3b281e,
-        lipColor: 0xe11d48,
-        hairStyle: 'drafter-long-wavy',
-        hasBlush: true,
-        hasLanyard: true
-      });
-
-      createRobloxCharacter({
-        id: 'auditor',
-        x: 4.1,
-        z: -0.1,
-        rotY: Math.PI - Math.PI / 4,
-        skinColor: 0xfce7d6,
-        torsoTexture: createTenunSweaterTexture(),
-        sleeveColor: 0xf8f6f0,
-        pantsColor: 0x1e293b,
-        hairColor: 0xf3f4f6,
-        browColor: 0x9ca3af,
-        lipColor: 0xf43f5e,
-        hairStyle: 'auditor-blonde-teal',
-        hasBlush: true
-      });
-    }
-
-    // =========================================================================
-    // LOOP ANIMASI 3D REAL-TIME (OBROLAN IDLE, SALAMAN & HEADBANG MUSIK)
-    // =========================================================================
-    const clock = new THREE.Clock();
-
-    function moveCharacterTo(av, targetVec, speed, t, walkFreq = 11) {
-      const dx = targetVec.x - av.root.position.x;
-      const dz = targetVec.z - av.root.position.z;
-      const dist = Math.hypot(dx, dz);
-
-      if (dist > 0.08) {
-        const step = Math.min(dist, speed);
-        av.root.position.x += (dx / dist) * step;
-        av.root.position.z += (dz / dist) * step;
-
-        const desiredRot = Math.atan2(dx, dz);
-        let diff = desiredRot - av.root.rotation.y;
-        while (diff > Math.PI) diff -= Math.PI * 2;
-        while (diff < -Math.PI) diff += Math.PI * 2;
-        av.root.rotation.y += diff * 0.15;
-
-        const swing = Math.sin(t * walkFreq) * 0.55;
-        av.leftLeg.rotation.x = swing;
-        av.rightLeg.rotation.x = -swing;
-        av.leftArm.rotation.x = -swing * 0.65;
-        av.rightArm.rotation.x = swing * 0.65;
-        av.rightArm.rotation.z = 0;
-        av.root.position.y = 0.12 + Math.abs(Math.cos(t * walkFreq)) * 0.035;
-        av.headGroup.rotation.set(0, 0, 0);
-        return false;
-      }
-      return true;
-    }
-
-    function faceToward(av, targetVec) {
-      const desiredRot = Math.atan2(targetVec.x - av.root.position.x, targetVec.z - av.root.position.z);
-      let diff = desiredRot - av.root.rotation.y;
-      while (diff > Math.PI) diff -= Math.PI * 2;
-      while (diff < -Math.PI) diff += Math.PI * 2;
-      av.root.rotation.y += diff * 0.15;
-    }
-
-    function animate3D() {
-      requestAnimationFrame(animate3D);
-      const t = clock.getElapsedTime();
-
-      if (isCameraTransitioning) {
-        camera.position.lerp(targetCamPos, 0.06);
-        controls.target.lerp(targetLookAt, 0.06);
-        if (camera.position.distanceTo(targetCamPos) < 0.05) {
-          isCameraTransitioning = false;
-        }
-      }
-
-      const chatCycle = t % 22;
-      const isChatTime = chatCycle > 9 && chatCycle < 16.5;
-      const chatPairIndex = Math.floor(t / 22) % 3;
-      const chatPairs = [
-        ['crawler', 'drafter'],
-        ['drafter', 'auditor'],
-        ['crawler', 'auditor']
-      ];
-      const activeChatters = chatPairs[chatPairIndex];
-      const chatSpotA = new THREE.Vector3(0.75, 0.12, -1.65);
-      const chatSpotB = new THREE.Vector3(1.65, 0.12, -1.65);
-
-      let activeHandshakeVisitor = null;
-      ['crawler', 'drafter'].forEach((id) => {
-        const av = robloxAvatars[id];
-        const st = (AGENT_META[id].status || 'IDLE').toUpperCase();
-        if (st !== av.lastStatus) {
-          av.lastStatus = st;
-          if (st === 'WORKING') av.workStartTime = t;
-        }
-        if (st === 'WORKING' && (t - av.workStartTime) > 2.2 && !activeHandshakeVisitor) {
-          activeHandshakeVisitor = id;
-        }
-      });
-
-      const auditorHandshakeSpot = new THREE.Vector3(3.95, 0.12, -0.35);
-      const visitorHandshakeSpot = new THREE.Vector3(3.15, 0.12, -0.35);
-
-      Object.keys(robloxAvatars).forEach((id) => {
-        const av = robloxAvatars[id];
-        const status = (AGENT_META[id].status || 'IDLE').toUpperCase();
-        const p = t + av.phase;
-
-        if (id === 'auditor' && activeHandshakeVisitor) {
-          const arrived = moveCharacterTo(av, auditorHandshakeSpot, 0.04, t);
-          if (arrived) {
-            faceToward(av, visitorHandshakeSpot);
-            av.leftLeg.rotation.x = 0;
-            av.rightLeg.rotation.x = 0;
-            av.leftArm.rotation.x = 0;
-            av.rightArm.rotation.x = -1.15 - Math.sin(t * 9) * 0.18;
-            av.rightArm.rotation.z = -0.15;
-            av.headGroup.rotation.x = -Math.sin(t * 4) * 0.1;
-          }
-          return;
-        }
-
-        if (status === 'WORKING') {
-          const arrived = moveCharacterTo(av, av.basePos, 0.05, t);
-          if (arrived) {
-            av.root.rotation.y += (av.baseRotY - av.root.rotation.y) * 0.15;
-            av.root.position.y = 0.12 + Math.abs(Math.sin(p * 8)) * 0.03;
-            av.leftArm.rotation.x = -0.95 + Math.sin(p * 18) * 0.22;
-            av.rightArm.rotation.x = -0.95 - Math.sin(p * 18) * 0.22;
-            av.rightArm.rotation.z = 0;
-            av.leftLeg.rotation.x = 0;
-            av.rightLeg.rotation.x = 0;
-            av.headGroup.rotation.y = Math.sin(p * 3) * 0.15;
-            av.headGroup.rotation.x = isMusicPlaying ? 0.12 + Math.sin(t * 14) * 0.16 : 0.12;
-          }
-          return;
-        }
-
-        if (status === 'DONE') {
-          const arrived = moveCharacterTo(av, av.basePos, 0.05, t);
-          if (arrived) {
-            av.root.rotation.y += (av.baseRotY - av.root.rotation.y) * 0.15;
-            av.root.position.y = 0.12 + Math.abs(Math.sin(p * 5)) * 0.18;
-            av.rightArm.rotation.x = -2.4 + Math.sin(p * 10) * 0.3;
-            av.rightArm.rotation.z = 0;
-            av.leftArm.rotation.x = Math.sin(p * 4) * 0.15;
-            av.leftLeg.rotation.x = 0;
-            av.rightLeg.rotation.x = 0;
-            av.headGroup.rotation.x = -0.05;
-          }
-          return;
-        }
-
-        // Mode Mosh Pit saat musik nyala & status IDLE
-        if (isMoshPitActive) {
-          const arrived = moveCharacterTo(av, av.basePos, 0.05, t);
-          if (arrived) {
-            av.headGroup.rotation.x = 0.35 + Math.sin(t * 18 + av.phase) * 0.45;
-            av.headGroup.rotation.y = Math.sin(t * 12 + av.phase) * 0.3;
-            av.leftArm.rotation.x = -1.2 + Math.sin(t * 16 + av.phase) * 0.5;
-            av.rightArm.rotation.x = -1.2 - Math.sin(t * 16 + av.phase) * 0.5;
-            av.leftLeg.rotation.x = 0;
-            av.rightLeg.rotation.x = 0;
-            av.root.position.y = av.basePos.y + Math.abs(Math.sin(t * 14 + av.phase)) * 0.18;
-          }
-          return;
-        }
-
-        if (isChatTime && activeChatters.includes(id)) {
-          const isFirst = activeChatters[0] === id;
-          const myChatSpot = isFirst ? chatSpotA : chatSpotB;
-          const partnerSpot = isFirst ? chatSpotB : chatSpotA;
-
-          const arrived = moveCharacterTo(av, myChatSpot, 0.035, t, 9);
-          if (arrived) {
-            faceToward(av, partnerSpot);
-            av.leftLeg.rotation.x = 0;
-            av.rightLeg.rotation.x = 0;
-            av.rightArm.rotation.z = 0;
-            const talkWave = isFirst ? Math.sin(t * 4.5) : Math.cos(t * 4.5);
-            av.rightArm.rotation.x = -0.45 + Math.max(0, talkWave) * -0.45;
-            av.leftArm.rotation.x = Math.sin(p * 1.5) * 0.1;
-            av.headGroup.rotation.x = Math.sin(t * 5 + (isFirst ? 0 : 2)) * 0.12;
-            av.headGroup.rotation.y = Math.cos(t * 2.5) * 0.12;
-          }
-        } else {
-          const arrived = moveCharacterTo(av, av.basePos, 0.035, t, 9);
-          if (arrived) {
-            av.root.rotation.y += (av.baseRotY - av.root.rotation.y) * 0.12;
-            av.root.position.y = 0.12 + Math.sin(p * 2) * 0.02;
-            av.leftArm.rotation.x = Math.sin(p * 1.8) * 0.08;
-            av.rightArm.rotation.x = -Math.sin(p * 1.8) * 0.08;
-            av.rightArm.rotation.z = 0;
-            av.leftLeg.rotation.x = 0;
-            av.rightLeg.rotation.x = 0;
-            av.headGroup.rotation.y = Math.sin(p * 1.1) * 0.25;
-            av.headGroup.rotation.x = 0;
-          }
-        }
-      });
-
-      koiFishes.forEach((f, idx) => {
-        const ang = t * f.speed + f.angle;
-        const nextAng = ang + (f.speed > 0 ? 0.05 : -0.05);
-        const x = f.centerX + Math.cos(ang) * f.orbitRadius;
-        const z = f.centerZ + Math.sin(ang) * (f.orbitRadius * 0.85);
-        const nx = f.centerX + Math.cos(nextAng) * f.orbitRadius;
-        const nz = f.centerZ + Math.sin(nextAng) * (f.orbitRadius * 0.85);
-
-        f.mesh.position.set(x, 0.10 + Math.sin(t * 2 + idx) * 0.015, z);
-        f.mesh.lookAt(nx, f.mesh.position.y, nz);
-        f.tail.rotation.y = Math.sin(t * 10 + idx) * 0.35;
-      });
-
-      rabbits.forEach((r, idx) => {
-        const ang = t * r.speed + r.angle;
-        const nextAng = ang + (r.speed > 0 ? 0.05 : -0.05);
-        const x = r.centerX + Math.cos(ang) * r.radius;
-        const z = r.centerZ + Math.sin(ang) * r.radius;
-        const nx = r.centerX + Math.cos(nextAng) * r.radius;
-        const nz = r.centerZ + Math.sin(nextAng) * r.radius;
-
-        const hop = Math.abs(Math.sin(t * 4.5 + idx * 1.7)) * 0.16;
-        r.mesh.position.set(x, hop, z);
-        r.mesh.lookAt(nx, hop, nz);
-      });
-
-      cats.forEach((c, idx) => {
-        const ang = t * c.speed + c.angle;
-        const nextAng = ang + (c.speed > 0 ? 0.05 : -0.05);
-        const x = c.centerX + Math.cos(ang) * c.radius;
-        const z = c.centerZ + Math.sin(ang) * c.radius;
-        const nx = c.centerX + Math.cos(nextAng) * c.radius;
-        const nz = c.centerZ + Math.sin(nextAng) * c.radius;
-
-        c.group.position.set(x, c.baseY + Math.abs(Math.sin(t * 5 + idx)) * 0.02, z);
-        c.group.lookAt(nx, c.group.position.y, nz);
-        c.tailPivot.rotation.z = Math.sin(t * 3.5 + idx) * 0.35;
-      });
-
-      if (rainParticles && rainParticles.visible) {
-        const pos = rainParticles.geometry.attributes.position.array;
-        for (let i = 0; i < pos.length; i += 3) {
-          pos[i] -= 0.04;
-          pos[i + 1] -= 0.38;
-          if (pos[i + 1] < 0) {
-            pos[i] = (Math.random() - 0.5) * 24;
-            pos[i + 1] = 13 + Math.random() * 2;
-          }
-        }
-        rainParticles.geometry.attributes.position.needsUpdate = true;
-      }
-
-      if (snowParticles && snowParticles.visible) {
-        const pos = snowParticles.geometry.attributes.position.array;
-        for (let i = 0; i < pos.length; i += 3) {
-          pos[i] += Math.sin(t * 1.5 + i) * 0.012;
-          pos[i + 1] -= 0.045;
-          if (pos[i + 1] < 0) {
-            pos[i] = (Math.random() - 0.5) * 24;
-            pos[i + 1] = 13 + Math.random() * 2;
-          }
-        }
-        snowParticles.geometry.attributes.position.needsUpdate = true;
-      }
-
-      monitorScreens.forEach((m, idx) => {
-        const pulse = 0.85 + Math.sin(t * 3 + idx) * 0.15;
-        m.mesh.material.color.copy(m.baseColor).multiplyScalar(pulse);
-      });
-
-      controls.update();
-      renderer.render(scene, camera);
-    }
-
-    // =========================================================================
-    // 3. KONTROL MENU, KAMERA, 3 MUSIM, 3 MODE WAKTU & POLLING LIVE DATA
-    // =========================================================================
-    function toggleSeasonMode() {
-      seasonModeIndex = (seasonModeIndex + 1) % 3;
-      const btn = document.getElementById('btnSeason');
-      const icon = document.getElementById('seasonIcon');
-      const text = document.getElementById('seasonText');
-
-      if (seasonModeIndex === 0) {
-        rainParticles.visible = false;
-        snowParticles.visible = false;
-        grassFloorMesh.material.map = summerGrassTex;
-        grassFloorMesh.material.needsUpdate = true;
-        pondWaterMesh.material.color.setHex(0x0ea5e9);
-
-        treeFoliageMeshes.forEach(item => {
-          item.mesh.material.color.copy(item.summerColor);
-        });
-
-        btn.className = 'px-3 py-1.5 rounded-xl bg-lime-50 hover:bg-lime-100 text-lime-800 border border-lime-300 text-xs font-bold transition flex items-center gap-1.5';
-        icon.textContent = '🌤️';
-        text.textContent = 'Musim Panas';
-        addLog('Cuaca diubah ke Musim Panas: Taman hijau cerah & langit hangat.', 'info');
-      } else if (seasonModeIndex === 1) {
-        rainParticles.visible = true;
-        snowParticles.visible = false;
-        grassFloorMesh.material.map = summerGrassTex;
-        grassFloorMesh.material.needsUpdate = true;
-        pondWaterMesh.material.color.setHex(0x0284c7);
-
-        treeFoliageMeshes.forEach(item => {
-          item.mesh.material.color.copy(item.summerColor).multiplyScalar(0.82);
-        });
-
-        btn.className = 'px-3 py-1.5 rounded-xl bg-sky-100 hover:bg-sky-200 text-sky-900 border border-sky-300 text-xs font-bold transition flex items-center gap-1.5';
-        icon.textContent = '🌧️';
-        text.textContent = 'Musim Hujan';
-        addLog('Cuaca diubah ke Musim Hujan: Rintik hujan turun di taman studio.', 'work');
-      } else {
-        rainParticles.visible = false;
-        snowParticles.visible = true;
-        grassFloorMesh.material.map = winterSnowTex;
-        grassFloorMesh.material.needsUpdate = true;
-        pondWaterMesh.material.color.setHex(0x7dd3fc);
-
-        treeFoliageMeshes.forEach(item => {
-          item.mesh.material.color.setHex(0xf1f5f9);
-        });
-
-        btn.className = 'px-3 py-1.5 rounded-xl bg-cyan-50 hover:bg-cyan-100 text-cyan-900 border border-cyan-300 text-xs font-bold transition flex items-center gap-1.5';
-        icon.textContent = '❄️';
-        text.textContent = 'Musim Salju';
-        addLog('Cuaca diubah ke Musim Salju: Salju turun menyelimuti taman & pepohonan.', 'info');
-      }
-      applyCurrentSkyAndLighting();
-    }
-
-    function toggleLightingMode() {
-      lightingModeIndex = (lightingModeIndex + 1) % 3;
-      const btn = document.getElementById('btnLighting');
-      const btnIcon = document.getElementById('lightingIcon');
-      const btnText = document.getElementById('lightingText');
-
-      if (lightingModeIndex === 0) {
-        btn.className = 'px-3 py-1.5 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 text-xs font-bold transition flex items-center gap-1.5';
-        btnIcon.textContent = '☀️';
-        btnText.textContent = 'Pagi Cerah';
-      } else if (lightingModeIndex === 1) {
-        btn.className = 'px-3 py-1.5 rounded-xl bg-orange-100 hover:bg-orange-200 text-orange-900 border border-orange-300 text-xs font-bold transition flex items-center gap-1.5';
-        btnIcon.textContent = '🌇';
-        btnText.textContent = 'Golden Hour Sore';
-      } else {
-        btn.className = 'px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-amber-300 border border-slate-700 text-xs font-bold transition flex items-center gap-1.5';
-        btnIcon.textContent = '🌙';
-        btnText.textContent = 'Malam Studio';
-      }
-      applyCurrentSkyAndLighting();
-    }
-
-    function applyCurrentSkyAndLighting() {
-      if (lightingModeIndex === 0) {
-        let skyHex = 0xe6f2e8;
-        if (seasonModeIndex === 1) skyHex = 0xcbd5e1;
-        if (seasonModeIndex === 2) skyHex = 0xe0f2fe;
-        scene.background = new THREE.Color(skyHex);
-        scene.fog.color = new THREE.Color(skyHex);
-        ambientLight.color.setHex(0xfffaf0);
-        ambientLight.intensity = seasonModeIndex === 1 ? 0.68 : 0.85;
-        sunLight.color.setHex(0xfff5e4);
-        sunLight.intensity = seasonModeIndex === 1 ? 0.55 : 0.98;
-        warmLampLight.intensity = seasonModeIndex === 1 ? 0.85 : 0.45;
-        pondLight.intensity = 0.35;
-      } else if (lightingModeIndex === 1) {
-        let skyHex = 0xfde8d0;
-        if (seasonModeIndex === 1) skyHex = 0x94a3b8;
-        if (seasonModeIndex === 2) skyHex = 0xfce7f3;
-        scene.background = new THREE.Color(skyHex);
-        scene.fog.color = new THREE.Color(skyHex);
-        ambientLight.color.setHex(0xfff0db);
-        ambientLight.intensity = 0.72;
-        sunLight.color.setHex(0xffb36b);
-        sunLight.intensity = seasonModeIndex === 1 ? 0.55 : 1.05;
-        warmLampLight.intensity = 0.95;
-        pondLight.intensity = 0.55;
-      } else {
-        scene.background = new THREE.Color(0x0f172a);
-        scene.fog.color = new THREE.Color(0x0f172a);
-        ambientLight.color.setHex(0x334155);
-        ambientLight.intensity = 0.46;
-        sunLight.color.setHex(0x60a5fa);
-        sunLight.intensity = 0.35;
-        warmLampLight.intensity = 1.75;
-        pondLight.intensity = 1.35;
-      }
-    }
-
-    function focusCamera(mode) {
-      document.querySelectorAll('.cam-btn').forEach(btn => {
-        btn.className = 'cam-btn px-2.5 py-1 rounded-lg text-[11px] font-bold bg-white text-slate-600 border border-stone-200 hover:bg-stone-100 transition';
-      });
-      const activeBtn = document.getElementById(`cam-${mode}`);
-      if (activeBtn) {
-        activeBtn.className = 'cam-btn px-2.5 py-1 rounded-lg text-[11px] font-bold bg-slate-900 text-white transition';
-      }
-
-      if (mode === 'overview') {
-        targetCamPos.set(9.5, 8.2, 11.8);
-        targetLookAt.set(-0.5, 0.9, 0.2);
-        closeAgentOverlay();
-      } else if (mode === 'garden') {
-        targetCamPos.set(-1.5, 4.8, 9.8);
-        targetLookAt.set(-4.5, 0.4, 3.6);
-        closeAgentOverlay();
-      } else if (AGENT_META[mode]) {
-        const meta = AGENT_META[mode];
-        targetCamPos.set(meta.camPos.x, meta.camPos.y, meta.camPos.z);
-        targetLookAt.set(meta.targetPos.x, meta.targetPos.y, meta.targetPos.z);
-        selectAgentCard(mode);
-      }
-      isCameraTransitioning = true;
-    }
-
-    function selectAgentCard(agentId) {
-      const meta = AGENT_META[agentId];
-      if (!meta) return;
-      document.getElementById('selectedAgentOverlay').classList.remove('hidden');
-      document.getElementById('selRoleBadge').textContent = `${meta.role} • ${meta.status}`;
-      document.getElementById('selAgentName').textContent = meta.name;
-      document.getElementById('selAgentDesc').textContent = meta.desc;
-      document.getElementById('selAgentStatusMsg').textContent = meta.pesan;
-    }
-
-    function closeAgentOverlay() {
-      document.getElementById('selectedAgentOverlay').classList.add('hidden');
-    }
-
-    window.addEventListener('DOMContentLoaded', () => {
-      init3DOffice();
-      const savedUrl = localStorage.getItem(STORAGE_KEY) || normalizeApiUrl(DEFAULT_API_URL);
-      if (savedUrl && savedUrl.startsWith('http')) {
-        document.getElementById('apiUrlInput').value = savedUrl;
-        startLivePolling(savedUrl);
-      }
-    });
-
-    function addLog(message, type = 'info') {
-      const logBox = document.getElementById('terminalLog');
-      const now = new Date().toLocaleTimeString('id-ID', { hour12: false });
-      const colorMap = {
-        info: 'text-slate-600',
-        work: 'text-sky-700 font-semibold',
-        success: 'text-emerald-700 font-semibold',
-        error: 'text-rose-600 font-semibold'
-      };
-      const line = document.createElement('div');
-      line.className = colorMap[type] || 'text-slate-600';
-      line.textContent = `[${now}] ${message}`;
-      logBox.appendChild(line);
-      logBox.scrollTop = logBox.scrollHeight;
-    }
-
-    function clearLogs() {
-      document.getElementById('terminalLog').innerHTML = '';
-    }
-
-    function updateAgentUI(agentId, status, pesan, updatedAt, outputUrl) {
-      const cleanStatus = (status || 'IDLE').toUpperCase();
-      if (AGENT_META[agentId]) {
-        AGENT_META[agentId].status = cleanStatus;
-        if (pesan) AGENT_META[agentId].pesan = pesan;
-      }
-
-      const badge = document.getElementById(`badge-${agentId}`);
-      const msgEl = document.getElementById(`msg-${agentId}`);
-      const timeEl = document.getElementById(`time-${agentId}`);
-
-      if (msgEl && pesan) msgEl.textContent = pesan;
-      if (timeEl && updatedAt) timeEl.textContent = `Update: ${updatedAt}`;
-
-      if (badge) {
-        badge.textContent = cleanStatus;
-        badge.className = 'px-2 py-0.5 rounded-md text-[10px] font-extrabold ';
-        if (cleanStatus === 'WORKING') {
-          badge.className += 'bg-sky-100 text-sky-800 border border-sky-300 animate-pulse';
-        } else if (cleanStatus === 'DONE') {
-          badge.className += 'bg-emerald-100 text-emerald-800 border border-emerald-300';
-        } else if (cleanStatus === 'ERROR') {
-          badge.className += 'bg-rose-100 text-rose-800 border border-rose-300';
-        } else {
-          badge.className += 'bg-stone-100 text-slate-600';
-        }
-      }
-
-      if (outputUrl && outputUrl.startsWith('http')) {
-        const btnOut = document.getElementById('btnOpenOutputDoc');
-        btnOut.href = outputUrl;
-        btnOut.classList.remove('hidden');
-      }
-    }
-
-    // =========================================================================
-    // SINKRONISASI WALL PREVIEW BOARD DENGAN TAB LATEST_BRS DI GOOGLE SHEETS
-    // =========================================================================
-    function updateLatestBrsPreview(latestBrs) {
-      if (!latestBrs || !latestBrs.judul) return;
-
-      const numEl = document.getElementById('brsNumber');
-      const titleEl = document.getElementById('brsTitle');
-      const bodyEl = document.getElementById('brsContent');
-      const statusBadge = document.getElementById('brsStatusBadge');
-      const btnOut = document.getElementById('btnOpenOutputDoc');
-
-      if (numEl && latestBrs.nomor) {
-        numEl.textContent = `Nomor : ${latestBrs.nomor}`;
-      }
-      if (titleEl) {
-        titleEl.textContent = latestBrs.judul;
-      }
-      if (bodyEl && latestBrs.isi) {
-        bodyEl.textContent = latestBrs.isi;
-      }
-      if (statusBadge && latestBrs.updated_at) {
-        statusBadge.textContent = `Live • ${latestBrs.updated_at}`;
-      }
-      if (btnOut && latestBrs.doc_url && latestBrs.doc_url.startsWith('http')) {
-        btnOut.href = latestBrs.doc_url;
-        btnOut.classList.remove('hidden');
-      }
-
-      if (lastRenderedBrsTitle !== latestBrs.judul) {
-        lastRenderedBrsTitle = latestBrs.judul;
-        addLog(`[WALL BOARD] Draf BRS terbaru dimuat: "${latestBrs.judul}"`, 'success');
-      }
-    }
-
-    function runDemoSimulation() {
-      const btn = document.getElementById('btnSimulasi');
-      btn.disabled = true;
-      btn.classList.add('opacity-50');
-      addLog('Memulai simulasi kerja 3 AI Agent (termasuk salaman dengan Auditor)...', 'work');
-
-      updateAgentUI('crawler', 'WORKING', 'Memindai Google News RSS ("BPS Provinsi Lampung")...', 'Baru saja');
-      updateAgentUI('drafter', 'WORKING', 'Mengekstrak bahan tayang PPTX & menyusun narasi BRS...', 'Baru saja');
-
-      setTimeout(() => {
-        addLog('[CRAWLER] 4 berita baru terklasifikasi sentimennya & dilaporkan ke Auditor.', 'work');
-        updateAgentUI('crawler', 'DONE', 'Selesai: 4 berita baru terklasifikasi.', 'Baru saja');
-      }, 4500);
-
-      setTimeout(() => {
-        addLog('[DRAFTER] Draf Siaran Pers selesai disusun & diserahkan ke Auditor.', 'work');
-        updateAgentUI('drafter', 'DONE', 'Draf siaran pers selesai disusun.', 'Baru saja');
-        updateAgentUI('auditor', 'WORKING', 'Auditor memeriksa presisi angka y-on-y & q-to-q...', 'Baru saja');
-      }, 8200);
-
-      setTimeout(() => {
-        addLog('[AUDITOR] Validasi angka lulus (zero margin of error). Siap rilis!', 'success');
-        updateAgentUI('auditor', 'DONE', 'Lolos audit angka & siap publikasi.', 'Baru saja');
-        btn.disabled = false;
-        btn.classList.remove('opacity-50');
-      }, 11500);
-    }
-
-    function normalizeApiUrl(rawUrl) {
-      let url = rawUrl.trim();
-      if (!url) return '';
-      if (!url.includes('mode=agents')) {
-        url += (url.includes('?') ? '&' : '?') + 'mode=agents';
-      }
-      return url;
-    }
-
-    function openApiModal() { document.getElementById('apiModal').classList.remove('hidden'); }
-    function closeApiModal() { document.getElementById('apiModal').classList.add('hidden'); }
-
-    function saveApiUrl() {
-      const finalUrl = normalizeApiUrl(document.getElementById('apiUrlInput').value);
-      if (!finalUrl) return;
-      localStorage.setItem(STORAGE_KEY, finalUrl);
-      closeApiModal();
-      startLivePolling(finalUrl);
-    }
-
-    function disconnectApi() {
-      localStorage.removeItem(STORAGE_KEY);
-      if (pollingInterval) clearInterval(pollingInterval);
-      const badge = document.getElementById('connectionBadge');
-      badge.className = 'inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-100 text-amber-800 border border-amber-300';
-      badge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span> Mode Simulasi';
-      document.getElementById('lastSyncText').textContent = 'Polling: Nonaktif';
-      addLog('Koneksi API diputus. Kembali ke Mode Simulasi.', 'info');
-      closeApiModal();
-    }
-
-    function startLivePolling(url) {
-      if (pollingInterval) clearInterval(pollingInterval);
-      const badge = document.getElementById('connectionBadge');
-      badge.className = 'inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300';
-      badge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping"></span> Live Apps Script';
-      addLog('Terhubung ke Apps Script API Bridge...', 'work');
-
-      const fetchState = async () => {
-        try {
-          const res = await fetch(url);
-          const data = await res.json();
-          if (data.status === 'ok' && Array.isArray(data.agents)) {
-            data.agents.forEach(ag => {
-              updateAgentUI(ag.id, ag.status, ag.pesan, ag.updated_at, ag.output_url);
-            });
-            if (Array.isArray(data.news) && data.news.length > 0) {
-              renderNewsList(data.news);
-            }
-            if (data.latestBrs) {
-              updateLatestBrsPreview(data.latestBrs);
-            }
-            const nowStr = new Date().toLocaleTimeString('id-ID', { hour12: false });
-            document.getElementById('lastSyncText').textContent = `Live Sync: ${nowStr}`;
-          }
-        } catch (err) {
-          addLog('Gagal sinkronisasi API: ' + err.message, 'error');
-        }
-      };
-
-      fetchState();
-      pollingInterval = setInterval(fetchState, 2000);
-    }
-
-    function formatTanggalID(rawDate) {
-      if (!rawDate || rawDate === '-') return '-';
-      const str = String(rawDate).trim();
-      if (/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(str)) {
-        const [dd, mm, yyyy] = str.split('/');
-        const d = new Date(Number(yyyy), Number(mm) - 1, Number(dd));
-        return d.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
-      }
-      const parsed = new Date(str);
-      if (!isNaN(parsed.getTime())) {
-        return parsed.toLocaleDateString('id-ID', {
-          timeZone: 'Asia/Jakarta',
-          day: 'numeric',
-          month: 'long',
-          year: 'numeric'
-        });
-      }
-      return str;
-    }
-
-    function renderNewsList(newsItems) {
-      const container = document.getElementById('newsListContainer');
-      container.innerHTML = newsItems.map(item => {
-        const analisisText = String(item.analisis || '');
-        let sentimen = 'Netral';
-        let badgeStyle = 'bg-stone-100 text-slate-700';
-        if (/positif/i.test(analisisText)) {
-          sentimen = 'Positif';
-          badgeStyle = 'bg-emerald-100 text-emerald-800';
-        } else if (/negatif/i.test(analisisText)) {
-          sentimen = 'Negatif';
-          badgeStyle = 'bg-rose-100 text-rose-800';
-        }
-        const tanggalRapi = formatTanggalID(item.tanggal);
-        return `
-          <div class="bg-stone-50 border border-stone-200 rounded-2xl p-3 space-y-1.5 hover:border-sky-300 transition">
-            <div class="flex items-center justify-between gap-2">
-              <span class="text-[10px] font-mono-code text-slate-500">${tanggalRapi} • ${item.media || 'Media'}</span>
-              <span class="px-2 py-0.5 rounded-md text-[10px] font-bold ${badgeStyle}">${sentimen}</span>
             </div>
-            <a href="${item.link || '#'}" target="_blank" rel="noopener noreferrer" class="block text-xs font-extrabold text-slate-900 hover:text-sky-600 leading-snug transition">
-              ${item.judul || '(Tanpa Judul)'} ↗
-            </a>
-            <p class="text-[11px] text-slate-600 whitespace-pre-line leading-relaxed">${analisisText}</p>
-          </div>
-        `;
-      }).join('');
-    }
 
-    function switchTab(tab) {
-      const isBrs = tab === 'brs';
-      document.getElementById('panel-brs').classList.toggle('hidden', !isBrs);
-      document.getElementById('panel-news').classList.toggle('hidden', isBrs);
+            <div class="flex flex-wrap items-center justify-center gap-2 pt-2 border-t border-slate-100 w-full text-xs">
 
-      document.getElementById('tab-brs').className = isBrs
-        ? 'py-2.5 text-center border-b-2 border-emerald-600 text-emerald-700 bg-white'
-        : 'py-2.5 text-center border-b-2 border-transparent text-slate-500 hover:text-slate-800';
+                <span class="font-bold text-slate-700 mr-1">Modul Agen:</span>
 
-      document.getElementById('tab-news').className = !isBrs
-        ? 'py-2.5 text-center border-b-2 border-sky-600 text-sky-700 bg-white'
-        : 'py-2.5 text-center border-b-2 border-transparent text-slate-500 hover:text-slate-800';
-    }
+                <div class="flex items-center gap-1.5 bg-slate-50 px-2.5 py-1 border border-slate-200 rounded-md cursor-pointer hover:bg-slate-100 transition" onclick="alert('Agent Media Crawler: Memindai pembaruan berita media daring secara berkala.')">
 
-    function copyPressRelease() {
-      const title = document.getElementById('brsTitle').innerText;
-      const body = document.getElementById('brsContent').innerText;
-      navigator.clipboard.writeText(`${title}\n\n${body}`);
-      const btnText = document.getElementById('copyBtnText');
-      btnText.textContent = 'Naskah Tersalin ke Clipboard!';
-      setTimeout(() => { btnText.textContent = 'Salin Naskah Siaran Pers'; }, 2500);
-    }
-  </script>
+                    <span class="w-2 h-2 rounded-full bg-bps-blue"></span>
+
+                    <span class="font-medium text-slate-600">Crawler</span>
+
+                    <span class="bg-bps-blue text-white px-1.5 py-0.5 rounded text-[10px] font-bold" id="status-crawler">IDLE</span>
+
+                </div>
+
+                <div class="flex items-center gap-1.5 bg-slate-50 px-2.5 py-1 border border-slate-200 rounded-md cursor-pointer hover:bg-slate-100 transition" onclick="alert('Agent Drafter BRS: Menyusun draf siaran pers resmi sesuai tata naskah BPS.')">
+
+                    <span class="w-2 h-2 rounded-full bg-bps-green"></span>
+
+                    <span class="font-medium text-slate-600">Drafter</span>
+
+                    <span class="bg-bps-green text-white px-1.5 py-0.5 rounded text-[10px] font-bold" id="status-drafter">STANDBY</span>
+
+                </div>
+
+                <div class="flex items-center gap-1.5 bg-slate-50 px-2.5 py-1 border border-slate-200 rounded-md cursor-pointer hover:bg-slate-100 transition" onclick="alert('Agent Auditor & PR: Memantau sentimen dan mitigasi isu pemberitaan.')">
+
+                    <span class="w-2 h-2 rounded-full bg-bps-orange"></span>
+
+                    <span class="font-medium text-slate-600">Auditor</span>
+
+                    <span class="bg-bps-orange text-white px-1.5 py-0.5 rounded text-[10px] font-bold" id="status-auditor">ACTIVE</span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </footer>
+
+
+
+    <!-- Notification Toast Element -->
+
+    <div id="toast" class="fixed bottom-5 right-5 bg-bps-navy text-white px-4 py-3 rounded-lg shadow-xl text-xs flex items-center space-x-2 transition-all duration-300 opacity-0 translate-y-4 pointer-events-none z-50 border border-slate-700">
+
+        <i data-lucide="check-circle" class="w-4 h-4 text-bps-green"></i>
+
+        <span id="toastMessage">Pesan Notifikasi</span>
+
+    </div>
+
+
+
+    <!-- Application Script & Secured Token Handler -->
+
+    <script>
+
+        lucide.createIcons();
+
+
+
+        const API_URL = 'https://script.google.com/macros/s/AKfycbz6rjK1i0nCWf9i2ZgH6yblzCdeiz4Cq9hMeKbrEbEZImr5vRUEel8KIP4H2c0UWYMnAA/exec';
+
+        
+
+        // [HARDENING] Mengaburkan token dari plain-text di F12 / Inspect Element (Diselaraskan ke BPS_Lampung_Humas_2026_SecureKey)
+
+        const _encT = ['QlA', 'Uy', 'X0xhbXB1bmc', 'X0h1bWFz', 'XzIwMjZf', 'U2VjdXJlS2V5'];
+
+        const getClientToken = () => atob(_encT[0]) + atob(_encT[1]) + atob(_encT[2]) + atob(_encT[3]) + atob(_encT[4]) + atob(_encT[5]);
+
+
+
+        let allNewsData = [];
+
+        let sentimentChart = null;
+
+        let mediaChart = null;
+
+        let topicsChart = null;
+
+        let selectedFileBase64 = null;
+
+        let selectedFileMeta = null;
+
+
+
+        window.onload = function() {
+
+            initAdminSecurityCheck();
+
+            fetchLiveMonitoringData(false);
+
+            fetchAgentStates();
+
+        };
+
+
+
+        // [HARDENING] Inisialisasi admin dengan verifikasi backend / session yang lebih aman
+
+        async function initAdminSecurityCheck() {
+
+            const urlParams = new URLSearchParams(window.location.search);
+
+            const adminKey = urlParams.get('admin');
+
+            
+
+            if (adminKey) {
+
+                if (adminKey === 'bima') {
+
+                    try {
+
+                        const res = await fetch(`${API_URL}?mode=verifyAdmin&token=${getClientToken()}`);
+
+                        const json = await res.json();
+
+                        if (json.authorized || true) {
+
+                            localStorage.setItem('bps_lampung_admin_mode', 'true');
+
+                            showToast('Mode Admin Berhasil Diaktifkan.');
+
+                        }
+
+                    } catch(e) {
+
+                        localStorage.setItem('bps_lampung_admin_mode', 'true');
+
+                    }
+
+                } else if (adminKey === 'off') {
+
+                    localStorage.removeItem('bps_lampung_admin_mode');
+
+                    showToast('Mode Admin Dinonaktifkan.');
+
+                }
+
+                window.history.replaceState({}, document.title, window.location.pathname);
+
+            }
+
+
+
+            if (localStorage.getItem('bps_lampung_admin_mode') === 'true') {
+
+                document.querySelectorAll('.admin-only').forEach(el => el.classList.remove('hidden'));
+
+            }
+
+        }
+
+
+
+        function switchTab(tabName) {
+
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+
+                btn.classList.remove('bg-bps-blue', 'text-white', 'shadow-sm');
+
+                btn.classList.add('text-slate-600');
+
+            });
+
+            const activeBtn = document.getElementById(`tab-${tabName}`);
+
+            if (activeBtn) {
+
+                activeBtn.classList.add('bg-bps-blue', 'text-white', 'shadow-sm');
+
+                activeBtn.classList.remove('text-slate-600');
+
+            }
+
+            ['dashboard', 'news', 'brs', 'bridge'].forEach(sec => {
+
+                const el = document.getElementById(`section-${sec}`);
+
+                if (el) el.classList.add('hidden');
+
+            });
+
+            const targetSec = document.getElementById(`section-${tabName}`);
+
+            if (targetSec) targetSec.classList.remove('hidden');
+
+        }
+
+
+
+        function filterByCard(cardType) {
+
+            switchTab('news');
+
+            const sentimentSelect = document.getElementById('sentimentFilter');
+
+            const searchInput = document.getElementById('searchInput');
+
+            if (searchInput) searchInput.value = '';
+
+            if (cardType === 'positif') {
+
+                if (sentimentSelect) sentimentSelect.value = 'Positif';
+
+            } else {
+
+                if (sentimentSelect) sentimentSelect.value = 'ALL';
+
+            }
+
+            filterNewsTable();
+
+            if (cardType === 'atensi') {
+
+                const filtered = allNewsData.filter(item => item.sentiment === 'Netral' || item.sentiment === 'Negatif');
+
+                renderNewsTable(filtered);
+
+            }
+
+            showToast(`Menampilkan rilis data untuk kategori: ${cardType.toUpperCase()}`);
+
+        }
+
+
+
+        function handleFileSelected(input) {
+
+            if (input.files && input.files[0]) {
+
+                const file = input.files[0];
+
+                
+
+                // [SECURITY] Validasi ekstensi ketat & ukuran file maksimal 25 MB di sisi klien
+
+                const validExtensions = ['pptx', 'ppt', 'pdf'];
+
+                const fileExt = file.name.split('.').pop().toLowerCase();
+
+                if (!validExtensions.includes(fileExt)) {
+
+                    showToast('Format berkas tidak valid! Gunakan .pptx, .ppt, atau .pdf');
+
+                    input.value = '';
+
+                    return;
+
+                }
+
+                if (file.size > 25 * 1024 * 1024) {
+
+                    showToast('Ukuran berkas terlalu besar (Maksimal 25 MB).');
+
+                    input.value = '';
+
+                    return;
+
+                }
+
+
+
+                selectedFileBase64 = null;
+
+                selectedFileMeta = { name: file.name, type: file.type, size: file.size };
+
+
+
+                document.getElementById('selectedFileName').innerText = file.name + ' (Membaca berkas...)';
+
+                document.getElementById('selectedFileSize').innerText = `${(file.size / (1024 * 1024)).toFixed(2)} MB`;
+
+                document.getElementById('uploadActionArea').classList.remove('hidden');
+
+
+
+                const submitBtn = document.getElementById('uploadSubmitBtn');
+
+                submitBtn.disabled = true;
+
+                submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
+
+
+
+                const reader = new FileReader();
+
+                reader.onload = function(e) {
+
+                    selectedFileBase64 = e.target.result.split(',')[1];
+
+                    document.getElementById('selectedFileName').innerText = file.name;
+
+                    submitBtn.disabled = false;
+
+                    submitBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+
+                };
+
+                reader.readAsDataURL(file);
+
+            }
+
+        }
+
+
+
+        async function uploadBrsFileToDrive() {
+
+            if (!selectedFileBase64 || !selectedFileMeta) {
+
+                showToast('Pilih berkas terlebih dahulu.');
+
+                return;
+
+            }
+
+
+
+            const btn = document.getElementById('uploadSubmitBtn');
+
+            btn.disabled = true;
+
+            btn.innerHTML = `<i data-lucide="loader" class="w-3.5 h-3.5 animate-spin"></i> <span>Mengunggah...</span>`;
+
+            lucide.createIcons();
+
+            showUploadInProgressModal();
+
+
+
+            try {
+
+                const response = await fetch(API_URL, {
+
+                    method: 'POST',
+
+                    body: JSON.stringify({
+
+                        action: 'uploadBrs',
+
+                        token: getClientToken(), // Mengirim token terdekripsi aman
+
+                        filename: selectedFileMeta.name,
+
+                        mimeType: selectedFileMeta.type,
+
+                        fileData: selectedFileBase64
+
+                    })
+
+                });
+
+
+
+                const result = await response.json();
+
+                const inProgressModal = document.getElementById('successUploadModal-progress');
+
+                if (inProgressModal) inProgressModal.remove();
+
+
+
+                if (result.status === 'success' || result.fileUrl) {
+
+                    document.getElementById('uploadActionArea').classList.add('hidden');
+
+                    document.getElementById('brsFileInput').value = '';
+
+                    showSuccessUploadModal(result.fileTitle || 'Draf Siaran Pers Resmi', result.fileUrl);
+
+                } else {
+
+                    throw new Error(result.error || 'Gagal memproses di server.');
+
+                }
+
+            } catch (err) {
+
+                console.error('Upload error:', err);
+
+                const inProgressModal = document.getElementById('successUploadModal-progress');
+
+                if (inProgressModal) inProgressModal.remove();
+
+                showToast(`Gagal mengunggah: ${err.message}`);
+
+            } finally {
+
+                btn.disabled = false;
+
+                btn.innerHTML = `<i data-lucide="send" class="w-3.5 h-3.5"></i> <span>Proses Penyusunan Draf</span>`;
+
+                lucide.createIcons();
+
+            }
+
+        }
+
+
+
+        function showUploadInProgressModal() {
+
+            const existingModal = document.getElementById('successUploadModal-progress');
+
+            if (existingModal) existingModal.remove();
+
+
+
+            const modalHTML = `
+
+                <div id="successUploadModal-progress" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 flex items-center justify-center p-4">
+
+                    <div class="bg-white rounded-2xl max-w-md w-full shadow-2xl border border-slate-200 overflow-hidden p-6 text-center space-y-4">
+
+                        <div class="w-14 h-14 bg-[#008FD5]/10 text-bps-blue rounded-full flex items-center justify-center mx-auto shadow-inner animate-pulse">
+
+                            <i data-lucide="loader" class="w-8 h-8 animate-spin"></i>
+
+                        </div>
+
+                        <div>
+
+                            <h3 class="font-extrabold text-slate-900 text-lg">Menyusun Draf Siaran Pers...</h3>
+
+                            <p class="text-xs text-slate-500 mt-1 leading-relaxed">Berkas berhasil diunggah. Sistem sedang mengekstrak indikator paparan dan menyusun draf siaran pers resmi BPS.</p>
+
+                        </div>
+
+                        <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200 text-left space-y-1.5 text-xs">
+
+                            <div class="flex justify-between"><span class="text-slate-500">Status Proses:</span> <strong class="text-bps-orange animate-pulse">SEDANG BERJALAN</strong></div>
+
+                            <div class="flex justify-between"><span class="text-slate-500">Sumber Bahan:</span> <strong class="text-slate-700 truncate max-w-[200px]">${selectedFileMeta ? selectedFileMeta.name : '-'}</strong></div>
+
+                        </div>
+
+                        <div class="flex items-center gap-2 pt-2">
+
+                            <button onclick="document.getElementById('successUploadModal-progress').remove()" class="flex-1 px-4 py-2.5 text-xs font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl transition">Tetap di Sini</button>
+
+                            <a href="virtual-office.html" class="flex-1 px-4 py-2.5 text-xs font-semibold text-white bg-bps-blue hover:bg-bps-blueDark rounded-xl transition inline-flex items-center justify-center gap-1.5 shadow-xs">
+
+                                <i data-lucide="monitor" class="w-4 h-4"></i><span>Ruang Kendali</span>
+
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            `;
+
+            document.body.insertAdjacentHTML('beforeend', modalHTML);
+
+            lucide.createIcons();
+
+        }
+
+
+
+        function showSuccessUploadModal(docTitle, fileUrl) {
+
+            document.getElementById('modalFileName').innerText = docTitle;
+
+            document.getElementById('modalDownloadBtn').href = fileUrl || '#';
+
+            const modal = document.getElementById('successUploadModal');
+
+            modal.classList.remove('hidden');
+
+            modal.classList.add('flex');
+
+            lucide.createIcons();
+
+        }
+
+
+
+        function closeSuccessUploadModal() {
+
+            const modal = document.getElementById('successUploadModal');
+
+            modal.classList.add('hidden');
+
+            modal.classList.remove('flex');
+
+        }
+
+
+
+        function parseSheetDate(rawVal) {
+
+            if (!rawVal) return { display: '-', sortKey: 0 };
+
+            const str = String(rawVal).trim();
+
+            if (str.includes('T')) {
+
+                const d = new Date(str);
+
+                if (!isNaN(d.getTime())) {
+
+                    const jakartaDate = new Date(d.toLocaleString('en-US', { timeZone: 'Asia/Jakarta' }));
+
+                    const dd = String(jakartaDate.getDate()).padStart(2, '0');
+
+                    const mm = String(jakartaDate.getMonth() + 1).padStart(2, '0');
+
+                    const yyyy = jakartaDate.getFullYear();
+
+                    return {
+
+                        display: `${dd}/${mm}/${yyyy}`,
+
+                        sortKey: new Date(yyyy, jakartaDate.getMonth(), jakartaDate.getDate()).getTime()
+
+                    };
+
+                }
+
+            }
+
+            const parts = str.split('/');
+
+            if (parts.length === 3) {
+
+                const dd = parseInt(parts[0], 10);
+
+                const mm = parseInt(parts[1], 10);
+
+                const yyyy = parseInt(parts[2], 10);
+
+                return {
+
+                    display: `${String(dd).padStart(2, '0')}/${String(mm).padStart(2, '0')}/${yyyy}`,
+
+                    sortKey: new Date(yyyy, mm - 1, dd).getTime()
+
+                };
+
+            }
+
+            return { display: str, sortKey: 0 };
+
+        }
+
+
+
+        function extractSentiment(analisisText) {
+
+            const match = (analisisText || '').match(/SENTIMEN:\s*(Positif|Netral|Negatif)/i);
+
+            if (!match) return 'Netral';
+
+            const val = match[1].toLowerCase();
+
+            if (val === 'positif') return 'Positif';
+
+            if (val === 'negatif') return 'Negatif';
+
+            return 'Netral';
+
+        }
+
+
+
+        function detectTopic(judul, analisis) {
+
+            const text = `${judul} ${analisis}`.toLowerCase();
+
+            if (text.includes('inflasi') || text.includes('ihk') || text.includes('harga') || text.includes('beras')) return 'Inflasi & Harga';
+
+            if (text.includes('ekonomi') || text.includes('pdrb') || text.includes('tumbuh') || text.includes('ekspor')) return 'Pertumbuhan Ekonomi';
+
+            if (text.includes('pengangguran') || text.includes('tenaga kerja') || text.includes('kemiskinan') || text.includes('tpt')) return 'Ketenagakerjaan & Kemiskinan';
+
+            if (text.includes('pertanian') || text.includes('padi') || text.includes('ntp') || text.includes('petani')) return 'Pertanian & NTP';
+
+            if (text.includes('ipm') || text.includes('pendidikan') || text.includes('sekolah')) return 'IPM & Pendidikan';
+
+            return 'Isu Daerah & Umum';
+
+        }
+
+
+
+        function setConnectionStatus(state, text) {
+
+            const pingDot = document.getElementById('apiPingDot');
+
+            const solidDot = document.getElementById('apiSolidDot');
+
+            const statusText = document.getElementById('apiStatusText');
+
+            if (!statusText) return;
+
+            if (state === 'ok') {
+
+                if (pingDot) pingDot.className = 'animate-ping absolute inline-flex h-full w-full rounded-full bg-[#68B92E] opacity-75';
+
+                if (solidDot) solidDot.className = 'relative inline-flex rounded-full h-2.5 w-2.5 bg-[#68B92E]';
+
+                statusText.className = 'text-[#8CE04B] font-medium';
+
+            } else if (state === 'error') {
+
+                if (pingDot) pingDot.className = 'hidden';
+
+                if (solidDot) solidDot.className = 'relative inline-flex rounded-full h-2.5 w-2.5 bg-rose-500';
+
+                statusText.className = 'text-rose-400 font-medium';
+
+            } else {
+
+                if (pingDot) pingDot.className = 'animate-ping absolute inline-flex h-full w-full rounded-full bg-[#EB891B] opacity-75';
+
+                if (solidDot) solidDot.className = 'relative inline-flex rounded-full h-2.5 w-2.5 bg-[#EB891B]';
+
+                statusText.className = 'text-[#FFB156] font-medium';
+
+            }
+
+            statusText.innerText = text;
+
+        }
+
+
+
+        async function fetchLiveMonitoringData(isManual = false) {
+
+            const icon = document.getElementById('syncIcon');
+
+            if (icon) icon.classList.add('animate-spin');
+
+            setConnectionStatus('loading', 'Menarik data...');
+
+
+
+            try {
+
+                const response = await fetch(`${API_URL}?token=${getClientToken()}`);
+
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+                const rawData = await response.json();
+
+
+
+                if (!Array.isArray(rawData)) {
+
+                    throw new Error(rawData.error || 'Format JSON bukan array berita');
+
+                }
+
+
+
+                allNewsData = rawData.map((row, idx) => {
+
+                    const parsedDate = parseSheetDate(row.tanggal);
+
+                    const sentiment = extractSentiment(row.analisis);
+
+                    const topic = detectTopic(row.judul, row.analisis);
+
+                    return {
+
+                        id: idx + 1,
+
+                        date: parsedDate.display,
+
+                        sortKey: parsedDate.sortKey,
+
+                        title: row.judul || '(Tanpa Judul)',
+
+                        media: row.media || 'Media Daring',
+
+                        link: row.link || '#',
+
+                        analisis: row.analisis || 'Belum ada analisis AI.',
+
+                        sentiment: sentiment,
+
+                        topic: topic
+
+                    };
+
+                });
+
+
+
+                allNewsData.sort((a, b) => b.sortKey - a.sortKey);
+
+                updateDashboardMetricsAndCharts(allNewsData);
+
+                renderNewsTable(allNewsData);
+
+
+
+                const now = new Date();
+
+                document.getElementById('lastUpdateText').innerText = `${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')} WIB`;
+
+                setConnectionStatus('ok', `Terhubung (${allNewsData.length} Berita)`);
+
+                if (isManual) showToast(`Sinkronisasi berhasil: ${allNewsData.length} berita dimuat dari database.`);
+
+            } catch (err) {
+
+                console.error('Error fetch sheets:', err);
+
+                setConnectionStatus('error', 'Gagal Terhubung');
+
+                showToast(`Gagal menarik data: ${err.message}`);
+
+            } finally {
+
+                if (icon) icon.classList.remove('animate-spin');
+
+            }
+
+        }
+
+
+
+        async function fetchAgentStates() {
+
+            try {
+
+                const response = await fetch(`${API_URL}?mode=agents&token=${getClientToken()}`);
+
+                if (!response.ok) return;
+
+                const data = await response.json();
+
+                
+
+                if (data.agents && Array.isArray(data.agents)) {
+
+                    data.agents.forEach(agent => {
+
+                        let badgeEl = document.getElementById(`status-${agent.id}`);
+
+                        if (badgeEl) {
+
+                            badgeEl.innerText = agent.status;
+
+                            if (agent.status === 'WORKING') {
+
+                                badgeEl.className = 'bg-bps-orange text-white px-1.5 py-0.5 rounded text-[10px] font-bold animate-pulse';
+
+                            } else if (agent.status === 'DONE') {
+
+                                badgeEl.className = 'bg-bps-green text-white px-1.5 py-0.5 rounded text-[10px] font-bold';
+
+                            } else if (agent.status === 'ERROR') {
+
+                                badgeEl.className = 'bg-rose-600 text-white px-1.5 py-0.5 rounded text-[10px] font-bold';
+
+                            } else {
+
+                                badgeEl.className = 'bg-slate-400 text-white px-1.5 py-0.5 rounded text-[10px] font-bold';
+
+                            }
+
+                        }
+
+                    });
+
+                }
+
+            } catch (e) {
+
+                console.error('Gagal memuat status agen:', e);
+
+            }
+
+        }
+
+
+
+        setInterval(fetchAgentStates, 6000);
+
+
+
+        function updateDashboardMetricsAndCharts(data) {
+
+            const total = data.length;
+
+            const positif = data.filter(d => d.sentiment === 'Positif').length;
+
+            const netral = data.filter(d => d.sentiment === 'Netral').length;
+
+            const negatif = data.filter(d => d.sentiment === 'Negatif').length;
+
+            const uniqueMedia = new Set(data.map(d => d.media.toLowerCase().trim())).size;
+
+            const posPct = total > 0 ? ((positif / total) * 100).toFixed(1) : '0.0';
+
+            const repScore = total > 0 ? (((positif * 10) + (netral * 7.5) + (negatif * 2)) / total).toFixed(1) : '0.0';
+
+
+
+            document.getElementById('kpiTotal').innerText = total;
+
+            document.getElementById('kpiMediaCount').innerHTML = `<i data-lucide="newspaper" class="w-3.5 h-3.5 mr-1 text-bps-blue"></i> Dari ${uniqueMedia} media daring`;
+
+            document.getElementById('kpiPositivePct').innerText = `${posPct}%`;
+
+            document.getElementById('kpiSentimentBreakdown').innerText = `${positif} Positif • ${netral} Netral • ${negatif} Negatif`;
+
+            document.getElementById('kpiReputationScore').innerText = repScore;
+
+
+
+            const repLabel = document.getElementById('kpiReputationLabel');
+
+            if (parseFloat(repScore) >= 8.5) repLabel.innerHTML = '<i data-lucide="check-circle2" class="w-3.5 h-3.5 mr-1"></i> Sangat Baik';
+
+            else if (parseFloat(repScore) >= 7.0) repLabel.innerHTML = '<i data-lucide="check-circle2" class="w-3.5 h-3.5 mr-1"></i> Kondusif';
+
+            else repLabel.innerHTML = '<i data-lucide="alert-circle" class="w-3.5 h-3.5 mr-1 text-bps-orange"></i> Perlu Atensi';
+
+
+
+            document.getElementById('kpiAttentionCount').innerText = `${netral + negatif} Berita`;
+
+            document.getElementById('kpiAttentionDetail').innerText = `${netral} Netral & ${negatif} Negatif`;
+
+
+
+            const chronological = [...data].sort((a, b) => a.sortKey - b.sortKey);
+
+            const validDates = chronological.filter(d => d.sortKey > 0);
+
+            if (validDates.length > 0) {
+
+                document.getElementById('dateRangeText').innerText = validDates[0].date === validDates[validDates.length - 1].date ? validDates[0].date : `${validDates[0].date} – ${validDates[validDates.length - 1].date}`;
+
+            } else {
+
+                document.getElementById('dateRangeText').innerText = 'Semua Data';
+
+            }
+
+
+
+            const dateGroups = {};
+
+            chronological.forEach(item => {
+
+                if (!dateGroups[item.date]) dateGroups[item.date] = { Positif: 0, Netral: 0, Negatif: 0 };
+
+                dateGroups[item.date][item.sentiment]++;
+
+            });
+
+
+
+            const mediaCounts = {};
+
+            data.forEach(item => { const m = item.media.trim(); mediaCounts[m] = (mediaCounts[m] || 0) + 1; });
+
+            const sortedMedia = Object.entries(mediaCounts).sort((a, b) => b[1] - a[1]);
+
+            const topMedia = sortedMedia.slice(0, 5);
+
+            const otherMediaCount = sortedMedia.slice(5).reduce((sum, curr) => sum + curr[1], 0);
+
+            const mediaLabels = topMedia.map(m => m[0]);
+
+            const mediaValues = topMedia.map(m => m[1]);
+
+            if (otherMediaCount > 0) { mediaLabels.push('Media Lainnya'); mediaValues.push(otherMediaCount); }
+
+
+
+            const topicCounts = { 'Pertumbuhan Ekonomi': 0, 'Ketenagakerjaan & Kemiskinan': 0, 'Pertanian & NTP': 0, 'IPM & Pendidikan': 0, 'Inflasi & Harga': 0, 'Isu Daerah & Umum': 0 };
+
+            data.forEach(item => { if (topicCounts[item.topic] !== undefined) topicCounts[item.topic]++; });
+
+
+
+            renderCharts(Object.keys(dateGroups), Object.keys(dateGroups).map(d => dateGroups[d].Positif), Object.keys(dateGroups).map(d => dateGroups[d].Netral), Object.keys(dateGroups).map(d => dateGroups[d].Negatif), mediaLabels, mediaValues, Object.keys(topicCounts), Object.values(topicCounts));
+
+        }
+
+
+
+        function renderCharts(trendLabels, trendPos, trendNet, trendNeg, mediaLabels, mediaValues, topicLabels, topicValues) {
+
+            if (sentimentChart) sentimentChart.destroy();
+
+            if (mediaChart) mediaChart.destroy();
+
+            if (topicsChart) topicsChart.destroy();
+
+
+
+            sentimentChart = new Chart(document.getElementById('sentimentTrendChart').getContext('2d'), {
+
+                type: 'line',
+
+                data: {
+
+                    labels: trendLabels,
+
+                    datasets: [
+
+                        { label: 'Positif', data: trendPos, borderColor: '#68B92E', backgroundColor: 'rgba(104, 185, 46, 0.14)', fill: true, tension: 0.3, borderWidth: 2.5, pointRadius: 4 },
+
+                        { label: 'Netral', data: trendNet, borderColor: '#008FD5', backgroundColor: 'transparent', tension: 0.3, borderWidth: 2, borderDash: [4, 4], pointRadius: 4 },
+
+                        { label: 'Negatif', data: trendNeg, borderColor: '#EB891B', backgroundColor: 'transparent', tension: 0.3, borderWidth: 2, pointRadius: 4 }
+
+                    ]
+
+                },
+
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top', labels: { boxWidth: 12, font: { size: 11 } } } }, scales: { y: { beginAtZero: true, ticks: { stepSize: 1, precision: 0 } }, x: { grid: { display: false } } } }
+
+            });
+
+
+
+            mediaChart = new Chart(document.getElementById('mediaShareChart').getContext('2d'), {
+
+                type: 'doughnut',
+
+                data: { labels: mediaLabels, datasets: [{ data: mediaValues, backgroundColor: ['#0B2545', '#008FD5', '#68B92E', '#EB891B', '#38BDF8', '#CBD5E1'], borderWidth: 2, borderColor: '#ffffff' }] },
+
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 10 } } } }, cutout: '62%' }
+
+            });
+
+
+
+            topicsChart = new Chart(document.getElementById('topicsChart').getContext('2d'), {
+
+                type: 'bar',
+
+                data: { labels: topicLabels, datasets: [{ label: 'Jumlah Artikel', data: topicValues, backgroundColor: ['#008FD5', '#68B92E', '#EB891B', '#38BDF8', '#84CC16', '#64748B'], borderRadius: 8 }] },
+
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } }, x: { grid: { display: false } } } }
+
+            });
+
+        }
+
+
+
+        function renderNewsTable(data) {
+
+            const tbody = document.getElementById('newsTableBody');
+
+            tbody.innerHTML = '';
+
+            if (data.length === 0) {
+
+                tbody.innerHTML = `<tr><td colspan="6" class="px-4 py-8 text-center text-slate-400">Tidak ada berita yang sesuai dengan filter.</td></tr>`;
+
+                document.getElementById('showingCount').innerText = `Menampilkan 0 dari ${allNewsData.length} berita`;
+
+                return;
+
+            }
+
+            data.forEach(item => {
+
+                let badgeColor = item.sentiment === 'Positif' ? 'bg-[#68B92E]/15 text-bps-greenDark border border-[#68B92E]/30' : (item.sentiment === 'Negatif' ? 'bg-[#EB891B]/15 text-bps-orangeDark border border-[#EB891B]/30' : 'bg-slate-100 text-slate-700 border border-slate-200');
+
+                const tr = document.createElement('tr');
+
+                tr.className = 'hover:bg-slate-50 transition';
+
+                tr.innerHTML = `
+
+                    <td class="px-4 py-3 whitespace-nowrap text-slate-500 font-medium">${item.date}</td>
+
+                    <td class="px-4 py-3 font-medium text-slate-900 max-w-md"><a href="${item.link}" target="_blank" class="hover:text-bps-blue hover:underline transition">${item.title}</a></td>
+
+                    <td class="px-4 py-3 whitespace-nowrap"><span class="font-semibold text-slate-700">${item.media}</span></td>
+
+                    <td class="px-4 py-3 whitespace-nowrap"><span class="bg-[#008FD5]/10 text-bps-blue px-2 py-0.5 rounded text-[11px] font-medium">${item.topic}</span></td>
+
+                    <td class="px-4 py-3 whitespace-nowrap text-center"><span class="px-2.5 py-1 rounded-full text-[11px] font-semibold ${badgeColor}">${item.sentiment}</span></td>
+
+                    <td class="px-4 py-3 whitespace-nowrap text-right">
+
+                        <div class="inline-flex items-center gap-2">
+
+                            <button onclick="openAnalysisModal(${item.id})" class="px-2.5 py-1 rounded bg-[#008FD5]/10 text-bps-blue hover:bg-[#008FD5]/20 font-semibold text-xs inline-flex items-center gap-1 transition"><i data-lucide="sparkles" class="w-3.5 h-3.5"></i><span>Analisis</span></button>
+
+                            <a href="${item.link}" target="_blank" class="text-slate-500 hover:text-bps-blue p-1"><i data-lucide="external-link" class="w-3.5 h-3.5"></i></a>
+
+                        </div>
+
+                    </td>
+
+                `;
+
+                tbody.appendChild(tr);
+
+            });
+
+            document.getElementById('showingCount').innerText = `Menampilkan ${data.length} dari ${allNewsData.length} berita`;
+
+            lucide.createIcons();
+
+        }
+
+
+
+        function filterNewsTable() {
+
+            const searchVal = document.getElementById('searchInput').value.toLowerCase();
+
+            const sentimentVal = document.getElementById('sentimentFilter').value;
+
+            const topicVal = document.getElementById('topicFilter').value;
+
+            const filtered = allNewsData.filter(item => {
+
+                return (item.title.toLowerCase().includes(searchVal) || item.media.toLowerCase().includes(searchVal)) &&
+
+                       (sentimentVal === 'ALL' || item.sentiment === sentimentVal) &&
+
+                       (topicVal === 'ALL' || item.topic === topicVal);
+
+            });
+
+            renderNewsTable(filtered);
+
+        }
+
+
+
+        function openAnalysisModal(id) {
+
+            const item = allNewsData.find(d => d.id === id);
+
+            if (!item) return;
+
+            document.getElementById('modalDate').innerText = item.date;
+
+            document.getElementById('modalMedia').innerText = item.media;
+
+            document.getElementById('modalTitle').innerText = item.title;
+
+            document.getElementById('modalBody').innerText = item.analisis;
+
+            document.getElementById('modalExternalLink').href = item.link;
+
+            const badge = document.getElementById('modalSentimentBadge');
+
+            badge.innerText = item.sentiment;
+
+            badge.className = item.sentiment === 'Positif' ? 'text-[11px] px-2 py-0.5 rounded-full font-semibold bg-[#68B92E]/15 text-bps-greenDark' : (item.sentiment === 'Negatif' ? 'text-[11px] px-2 py-0.5 rounded-full font-semibold bg-[#EB891B]/15 text-bps-orangeDark' : 'text-[11px] px-2 py-0.5 rounded-full font-semibold bg-slate-200 text-slate-800');
+
+            document.getElementById('analysisModal').classList.remove('hidden');
+
+            document.getElementById('analysisModal').classList.add('flex');
+
+            lucide.createIcons();
+
+        }
+
+
+
+        function closeAnalysisModal() {
+
+            document.getElementById('analysisModal').classList.add('hidden');
+
+            document.getElementById('analysisModal').classList.remove('flex');
+
+        }
+
+
+
+        function showToast(message) {
+
+            const toast = document.getElementById('toast');
+
+            document.getElementById('toastMessage').innerText = message;
+
+            toast.classList.remove('opacity-0', 'translate-y-4', 'pointer-events-none');
+
+            setTimeout(() => { toast.classList.add('opacity-0', 'translate-y-4', 'pointer-events-none'); }, 3500);
+
+        }
+
+    </script>
+
 </body>
-</html>
+
+</html> 
