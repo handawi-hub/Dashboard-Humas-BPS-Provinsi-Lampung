@@ -46,237 +46,268 @@
 </head>
 <body class="min-h-screen flex flex-col selection:bg-amber-200 selection:text-slate-900">
 
-  <!-- TOP NAVBAR CERAH & MODERN -->
-  <header class="border-b border-stone-200 bg-white/90 backdrop-blur sticky top-0 z-30 shadow-sm">
-    <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-3">
-      <div class="flex items-center gap-3">
-        <a href="index.html" class="px-3 py-1.5 rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-700 text-xs font-bold transition flex items-center gap-1.5 border border-stone-200">
-          <span>←</span> Dashboard Utama
-        </a>
-        <div>
-          <div class="flex items-center gap-2">
-            <h1 class="text-sm sm:text-base font-extrabold text-slate-900 tracking-tight">SIGER Humas Hub (Ruang Kendali Humas)</h1>
-            <span id="connectionBadge" class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-100 text-amber-800 border border-amber-300">
-              <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
-              Menghubungkan...
-            </span>
+  <!-- ===================================================================== -->
+  <!-- LOGIN GATE OVERLAY (JIKA LANGSUNG AKSES VIRTUAL-OFFICE.HTML)          -->
+  <!-- ===================================================================== -->
+  <div id="voLoginGate" class="fixed inset-0 z-50 bg-[#06182E] flex items-center justify-center p-4 overflow-y-auto">
+    <div class="relative w-full max-w-md bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden">
+      <div class="h-1.5 w-full bg-gradient-to-r from-[#008FD5] via-[#68B92E] to-[#EB891B]"></div>
+      <div class="p-6 sm:p-8 space-y-5">
+        <div class="text-center space-y-2">
+          <div class="w-16 h-16 rounded-2xl bg-slate-50 border border-slate-200 p-2.5 flex items-center justify-center mx-auto">
+            <img src="BPS.webp" alt="Logo BPS" class="w-full h-full object-contain">
           </div>
-          <p class="text-[11px] text-slate-500 font-medium">Humas BPS Provinsi Lampung • Autonomous PR & Media Workspace</p>
+          <div>
+            <span class="inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-amber-100 text-amber-800 border border-amber-300 mb-1">
+              Ruang Kendali 3D • Terkunci
+            </span>
+            <h1 class="text-xl font-extrabold text-[#06182E] tracking-tight">SIGER Humas Hub</h1>
+            <p class="text-xs text-slate-500 mt-0.5">Masuk untuk mengakses AI Agent Virtual Office</p>
+          </div>
         </div>
-      </div>
 
-      <div class="flex flex-wrap items-center gap-2">
-        <!-- TOMBOL MUSIK LATAR -->
-        <button onclick="toggleMusic()" id="btnMusic" class="px-3 py-1.5 rounded-xl bg-red-50 hover:bg-red-100 text-red-800 border border-red-300 text-xs font-bold transition flex items-center gap-1.5">
-          <span id="musicIcon">🤘</span> <span id="musicText">Putar Metal Hardcore</span>
-        </button>
+        <div id="voLoginError" class="hidden bg-rose-50 border border-rose-200 text-rose-700 px-3.5 py-2.5 rounded-xl text-xs font-medium">
+          Username atau kata sandi salah.
+        </div>
 
-        <!-- TOMBOL PENGATUR MUSIM -->
-        <button onclick="toggleSeasonMode()" id="btnSeason" class="px-3 py-1.5 rounded-xl bg-lime-50 hover:bg-lime-100 text-lime-800 border border-lime-300 text-xs font-bold transition flex items-center gap-1.5">
-          <span id="seasonIcon">🌤️</span> <span id="seasonText">Musim Panas</span>
-        </button>
+        <form onsubmit="handleVoLogin(event)" class="space-y-4">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Username</label>
+            <input type="text" id="voUsername" required autocomplete="username" placeholder="Masukkan username (misal: humas)"
+              class="w-full px-3.5 py-2.5 text-xs bg-slate-50 border border-slate-300 rounded-xl focus:outline-none focus:bg-white focus:border-[#008FD5]">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Kata Sandi</label>
+            <input type="password" id="voPassword" required autocomplete="current-password" placeholder="Masukkan kata sandi"
+              class="w-full px-3.5 py-2.5 text-xs bg-slate-50 border border-slate-300 rounded-xl focus:outline-none focus:bg-white focus:border-[#008FD5]">
+          </div>
+          <button type="submit" class="w-full py-2.5 px-4 bg-[#06182E] hover:bg-slate-800 text-white font-bold text-xs rounded-xl shadow-md transition">
+            Masuk ke Ruang Kendali 3D
+          </button>
+        </form>
 
-        <!-- TOMBOL PENGATUR WAKTU -->
-        <button onclick="toggleLightingMode()" id="btnLighting" class="px-3 py-1.5 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 text-xs font-bold transition flex items-center gap-1.5">
-          <span id="lightingIcon">☀️</span> <span id="lightingText">Pagi Cerah</span>
-        </button>
-
-        <button onclick="runDemoSimulation()" id="btnSimulasi" class="hidden admin-only px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold shadow-md shadow-emerald-600/20 transition flex items-center gap-1.5">
-          <span>▶</span> Tes Simulasi Live
-        </button>
-        <button onclick="openApiModal()" id="btnApiBridge" class="hidden admin-only px-3.5 py-1.5 rounded-xl bg-sky-600 hover:bg-sky-500 text-white text-xs font-bold shadow-md shadow-sky-600/20 transition flex items-center gap-1.5">
-          <span>🔗</span> API Bridge
-        </button>
+        <div class="pt-2 border-t border-slate-100 text-center">
+          <a href="index.html" class="text-xs font-semibold text-[#008FD5] hover:underline">← Kembali ke Halaman Login Utama</a>
+        </div>
       </div>
     </div>
-  </header>
+  </div>
 
-  <script>
-    (function() {
-      const urlParams = new URLSearchParams(window.location.search);
-      if (urlParams.get('admin') === 'bima') {
-        localStorage.setItem('bps_lampung_admin_mode', 'true');
-        window.history.replaceState({}, document.title, window.location.pathname);
-      } else if (urlParams.get('admin') === 'off') {
-        localStorage.removeItem('bps_lampung_admin_mode');
-        window.history.replaceState({}, document.title, window.location.pathname);
-      }
+  <!-- ===================================================================== -->
+  <!-- KONTEN VIRTUAL OFFICE (TERBUKA SETELAH LOGIN VALID)                   -->
+  <!-- ===================================================================== -->
+  <div id="voProtectedContent" class="hidden flex-1 flex flex-col">
 
-      if (localStorage.getItem('bps_lampung_admin_mode') === 'true') {
-        document.querySelectorAll('.admin-only').forEach(el => el.classList.remove('hidden'));
-      }
-    })();
-  </script>
-
-  <!-- MAIN CONTENT -->
-  <main class="flex-1 max-w-7xl w-full mx-auto px-4 py-5 grid grid-cols-1 lg:grid-cols-12 gap-5">
-
-    <!-- LEFT: 3D SEMI-OUTDOOR STUDIO CANVAS (7 COLS) -->
-    <section class="lg:col-span-7 flex flex-col gap-4">
-      <div class="bg-white border border-stone-200 rounded-3xl overflow-hidden shadow-xl shadow-stone-200/60">
-        <!-- Toolbar Atas Viewport 3D -->
-        <div class="px-4 py-2.5 border-b border-stone-100 flex flex-wrap items-center justify-between gap-2 bg-stone-50/80">
-          <div class="flex items-center gap-1.5 flex-wrap">
-            <span class="text-[11px] font-bold text-slate-500 mr-1">Kamera:</span>
-            <button onclick="focusCamera('overview')" id="cam-overview" class="cam-btn px-2.5 py-1 rounded-lg text-[11px] font-bold bg-slate-900 text-white transition">Taman & Studio</button>
-            <button onclick="focusCamera('crawler')" id="cam-crawler" class="cam-btn px-2.5 py-1 rounded-lg text-[11px] font-bold bg-white text-slate-600 border border-stone-200 hover:bg-sky-50 transition">Crawler</button>
-            <button onclick="focusCamera('drafter')" id="cam-drafter" class="cam-btn px-2.5 py-1 rounded-lg text-[11px] font-bold bg-white text-slate-600 border border-stone-200 hover:bg-emerald-50 transition">Penulis BRS</button>
-            <button onclick="focusCamera('auditor')" id="cam-auditor" class="cam-btn px-2.5 py-1 rounded-lg text-[11px] font-bold bg-white text-slate-600 border border-stone-200 hover:bg-purple-50 transition">Auditor</button>
-            <button onclick="focusCamera('garden')" id="cam-garden" class="cam-btn px-2.5 py-1 rounded-lg text-[11px] font-bold bg-white text-emerald-700 border border-emerald-200 hover:bg-emerald-50 transition">🌿 Area Taman</button>
-          </div>
-          <span id="lastSyncText" class="text-[11px] text-slate-500 font-mono-code font-semibold">Polling: Siap</span>
-        </div>
-
-        <!-- 3D WEBGL VIEWPORT -->
-        <div id="canvasContainer">
-          <div class="absolute top-3 left-3 z-10 glass-panel px-3 py-1.5 rounded-xl text-[11px] font-semibold text-slate-700 shadow-sm pointer-events-none flex items-center gap-2">
-            <span>🖱️ Geser putar • Scroll zoom • Klik karakter untuk inspeksi</span>
-          </div>
-
-          <!-- Floating Selected Agent Card -->
-          <div id="selectedAgentOverlay" class="hidden absolute bottom-3 left-3 right-3 sm:right-auto sm:w-80 z-10 glass-panel p-3.5 rounded-2xl shadow-lg border border-stone-200">
-            <div class="flex items-start justify-between gap-2">
-              <div>
-                <span id="selRoleBadge" class="inline-block px-2 py-0.5 rounded-md text-[10px] font-extrabold uppercase tracking-wider bg-emerald-100 text-emerald-800 mb-1">Agent</span>
-                <h3 id="selAgentName" class="text-sm font-extrabold text-slate-900">Nama Agent</h3>
-                <p id="selAgentDesc" class="text-[11px] text-slate-500 font-medium">Deskripsi karakter</p>
-              </div>
-              <button onclick="closeAgentOverlay()" class="text-slate-400 hover:text-slate-700 font-bold text-sm px-1">✕</button>
-            </div>
-            <div class="mt-2.5 pt-2.5 border-t border-stone-200/80 text-xs text-slate-700">
-              <p id="selAgentStatusMsg" class="font-medium leading-snug">Status saat ini...</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- 3 AGENT STATUS CARDS -->
-        <div class="p-3.5 bg-stone-50/70 border-t border-stone-100 grid grid-cols-1 sm:grid-cols-3 gap-2.5">
-          
-          <!-- AGENT 1: Media Crawler -->
-          <div onclick="focusCamera('crawler')" id="card-crawler" class="cursor-pointer bg-white hover:border-sky-400 border border-stone-200 rounded-2xl p-3 shadow-sm transition group">
-            <div class="flex items-center justify-between mb-1">
-              <span class="text-xs font-extrabold text-sky-700 group-hover:text-sky-600">1. News Crawler & PR Specialist</span>
-              <span id="badge-crawler" class="px-2 py-0.5 rounded-md text-[10px] font-extrabold bg-stone-100 text-slate-600">IDLE</span>
-            </div>
-            <p class="text-[10px] text-slate-400 font-semibold mb-1">Media Monitoring & Intelligence Unit</p>
-            <p id="msg-crawler" class="text-[11px] text-slate-600 leading-snug line-clamp-2">Memindai pemberitaan media online seputar BPS Provinsi Lampung.</p>
-            <span id="time-crawler" class="block text-[10px] text-slate-400 font-mono-code mt-1.5">-</span>
-          </div>
-
-          <!-- AGENT 2: Penulis BRS -->
-          <div onclick="focusCamera('drafter')" id="card-drafter" class="cursor-pointer bg-white hover:border-emerald-400 border border-stone-200 rounded-2xl p-3 shadow-sm transition group">
-            <div class="flex items-center justify-between mb-1">
-              <span class="text-xs font-extrabold text-emerald-700 group-hover:text-emerald-600">2. Press Release Drafter</span>
-              <span id="badge-drafter" class="px-2 py-0.5 rounded-md text-[10px] font-extrabold bg-stone-100 text-slate-600">IDLE</span>
-            </div>
-            <p class="text-[10px] text-slate-400 font-semibold mb-1">Statistical Data Storyteller & Benchmark Stylist</p>
-            <p id="msg-drafter" class="text-[11px] text-slate-600 leading-snug line-clamp-2">Menyusun narasi siaran pers berbasis materi paparan dan standar rilis resmi.</p>
-            <span id="time-drafter" class="block text-[10px] text-slate-400 font-mono-code mt-1.5">-</span>
-          </div>
-
-          <!-- AGENT 3: Auditor & PR -->
-          <div onclick="focusCamera('auditor')" id="card-auditor" class="cursor-pointer bg-white hover:border-amber-500 border border-stone-200 rounded-2xl p-3 shadow-sm transition group">
-            <div class="flex items-center justify-between mb-1">
-              <span class="text-xs font-extrabold text-amber-800 group-hover:text-amber-700">3. Auditor & PR Strategy Advisor</span>
-              <span id="badge-auditor" class="px-2 py-0.5 rounded-md text-[10px] font-extrabold bg-stone-100 text-slate-600">IDLE</span>
-            </div>
-            <p class="text-[10px] text-slate-400 font-semibold mb-1">Editorial Validation & Content Quality Control</p>
-            <p id="msg-auditor" class="text-[11px] text-slate-600 leading-snug line-clamp-2">Memvalidasi substansi data statistik dan keselarasan strategi komunikasi publik.</p>
-            <span id="time-auditor" class="block text-[10px] text-slate-400 font-mono-code mt-1.5">-</span>
-          </div>
-
-        </div>
-      </div>
-
-      <!-- TERMINAL LOG -->
-      <div class="bg-white border border-stone-200 rounded-2xl p-3.5 shadow-sm">
-        <div class="flex items-center justify-between mb-2">
-          <span class="text-xs font-extrabold text-slate-700 flex items-center gap-2">
-            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
-            Aktivitas Orkestrasi Apps Script
-          </span>
-          <button onclick="clearLogs()" class="text-[11px] font-semibold text-slate-400 hover:text-slate-700">Bersihkan Log</button>
-        </div>
-        <div id="terminalLog" class="font-mono-code text-[11px] text-slate-700 space-y-1 max-h-32 overflow-y-auto bg-stone-50 p-2.5 rounded-xl border border-stone-200/80">
-          <div class="text-slate-500">[SYSTEM] Studio Industrial siap. Klik "Putar Metal Hardcore" untuk BGM Symphonic Metalcore.</div>
-        </div>
-      </div>
-    </section>
-
-    <!-- RIGHT: WALL PREVIEW BOARD INSPECTOR (5 COLS) -->
-    <section id="previewBoardSection" class="lg:col-span-5 bg-white border border-stone-200 rounded-3xl flex flex-col overflow-hidden shadow-xl shadow-stone-200/60">
-      <div class="px-4 py-3.5 border-b border-stone-100 bg-stone-50/70 flex items-center justify-between gap-2">
-        <div>
-          <h2 class="text-sm font-extrabold text-slate-900">Wall Preview Board</h2>
-          <p class="text-[11px] text-slate-500 font-medium">Inspeksi Output Draf BRS & Hasil Crawling Media</p>
-        </div>
-        <div class="flex items-center gap-1.5">
-          <button onclick="manualRefreshBoard()" title="Sinkronkan ulang Wall Preview Board" class="p-1.5 rounded-xl bg-stone-100 hover:bg-stone-200 text-slate-700 text-xs font-bold transition">
-            🔄
-          </button>
-          <a id="btnOpenOutputDoc" href="#" target="_blank" rel="noopener noreferrer" class="hidden px-3 py-1.5 rounded-xl bg-emerald-600 text-white text-[11px] font-bold hover:bg-emerald-500 shadow-sm transition">
-            Buka Dokumen ↗
+    <!-- TOP NAVBAR CERAH & MODERN -->
+    <header class="border-b border-stone-200 bg-white/90 backdrop-blur sticky top-0 z-30 shadow-sm">
+      <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-3">
+        <div class="flex items-center gap-3">
+          <a href="index.html" class="px-3 py-1.5 rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-700 text-xs font-bold transition flex items-center gap-1.5 border border-stone-200">
+            <span>←</span> Dashboard Utama
           </a>
-        </div>
-      </div>
-
-      <div class="grid grid-cols-2 border-b border-stone-200 bg-stone-50 text-xs font-bold">
-        <button onclick="switchTab('brs')" id="tab-brs" class="py-2.5 text-center border-b-2 border-emerald-600 text-emerald-700 bg-white">
-          📄 Draf Siaran Pers BRS
-        </button>
-        <button onclick="switchTab('news')" id="tab-news" class="py-2.5 text-center border-b-2 border-transparent text-slate-500 hover:text-slate-800">
-          📰 Hasil Crawling Media
-        </button>
-      </div>
-
-      <!-- TAB 1: DRAF SIARAN PERS -->
-      <div id="panel-brs" class="p-4 flex-1 flex flex-col justify-between gap-4 overflow-y-auto">
-        <div class="bg-[#fdfcfa] border border-stone-200 rounded-2xl p-4 space-y-3 text-xs leading-relaxed text-slate-700 shadow-inner">
-          <div class="border-b border-stone-200 pb-2.5 flex items-center justify-between gap-2">
-            <div>
-              <span class="text-[10px] uppercase tracking-wider text-emerald-700 font-extrabold">Template Resmi BPS Provinsi Lampung</span>
-              <p id="brsNumber" class="font-mono-code text-[11px] text-slate-500">Nomor : B-2611/18000/HM.240/2026</p>
+          <div>
+            <div class="flex items-center gap-2">
+              <h1 class="text-sm sm:text-base font-extrabold text-slate-900 tracking-tight">SIGER Humas Hub (Ruang Kendali Humas)</h1>
+              <span id="connectionBadge" class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-100 text-amber-800 border border-amber-300">
+                <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
+                Menghubungkan...
+              </span>
             </div>
-            <span id="brsStatusBadge" class="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-bold shrink-0">Terverifikasi Auditor</span>
-          </div>
-
-          <h3 id="brsTitle" class="text-sm font-extrabold text-slate-900">
-            Ekonomi Lampung Triwulan III-2026 Tumbuh Solid 5,18 Persen (y-on-y), Didorong Konsumsi Rumah Tangga dan Pengolahan
-          </h3>
-
-          <div id="brsContent" class="space-y-2.5 text-slate-700 whitespace-pre-line">
-            <p>
-              <strong>BANDAR LAMPUNG</strong> — Perekonomian Provinsi Lampung pada Triwulan III-2026 menunjukkan kinerja yang resilien dengan mencatatkan pertumbuhan sebesar <strong>5,18 persen</strong> secara tahunan (<em>y-on-y</em>). Sementara itu, dibandingkan triwulan sebelumnya (<em>q-to-q</em>), ekonomi Lampung tumbuh sebesar <strong>1,42 persen</strong>, dan secara kumulatif (<em>c-to-c</em>) meningkat <strong>5,04 persen</strong>.
-            </p>
-            <p>
-              Dari sisi produksi, Lapangan Usaha Industri Pengolahan memberikan andil pertumbuhan tertinggi, diikuti oleh Perdagangan Besar dan Eceran serta Pertanian. Dari sisi pengeluaran, Komponen Pengeluaran Konsumsi Rumah Tangga tetap menjadi penopang utama struktur ekonomi Lampung dengan kontribusi mencapai <strong>61,84 persen</strong>.
-            </p>
-            <blockquote class="border-l-4 border-amber-500 pl-3 py-1.5 bg-amber-50/80 rounded-r-xl italic text-slate-800">
-              "Capaian pertumbuhan 5,18 persen ini mencerminkan terjaganya daya beli masyarakat dan aktivitas hilirisasi komoditas unggulan di Provinsi Lampung. Pengendalian inflasi yang konsisten menjadi fondasi penting dalam menjaga momentum ekspansi ekonomi hingga akhir tahun," ujar Kepala BPS Provinsi Lampung, <strong>Ahmadriswan Nasution</strong>.
-            </blockquote>
+            <p class="text-[11px] text-slate-500 font-medium">Humas BPS Provinsi Lampung • Autonomous PR & Media Workspace</p>
           </div>
         </div>
 
-        <button onclick="copyPressRelease()" class="w-full py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold shadow-md transition flex items-center justify-center gap-2">
-          <span>📋</span> <span id="copyBtnText">Salin Naskah Siaran Pers</span>
-        </button>
-      </div>
+        <div class="flex flex-wrap items-center gap-2">
+          <!-- TOMBOL MUSIK LATAR -->
+          <button onclick="toggleMusic()" id="btnMusic" class="px-3 py-1.5 rounded-xl bg-red-50 hover:bg-red-100 text-red-800 border border-red-300 text-xs font-bold transition flex items-center gap-1.5">
+            <span id="musicIcon">🤘</span> <span id="musicText">Putar Metal Hardcore</span>
+          </button>
 
-      <!-- TAB 2: HASIL CRAWLING MEDIA -->
-      <div id="panel-news" class="hidden p-4 flex-1 overflow-y-auto space-y-2.5">
-        <div id="newsListContainer" class="space-y-2.5">
-          <div class="bg-stone-50 border border-stone-200 rounded-2xl p-3 space-y-1.5">
-            <div class="flex items-center justify-between gap-2">
-              <span class="text-[10px] font-mono-code text-slate-500">12/11/2026 • Antara Lampung</span>
-              <span class="px-2 py-0.5 rounded-md text-[10px] font-bold bg-emerald-100 text-emerald-800">Positif</span>
+          <!-- TOMBOL PENGATUR MUSIM -->
+          <button onclick="toggleSeasonMode()" id="btnSeason" class="px-3 py-1.5 rounded-xl bg-lime-50 hover:bg-lime-100 text-lime-800 border border-lime-300 text-xs font-bold transition flex items-center gap-1.5">
+            <span id="seasonIcon">🌤️</span> <span id="seasonText">Musim Panas</span>
+          </button>
+
+          <!-- TOMBOL PENGATUR WAKTU -->
+          <button onclick="toggleLightingMode()" id="btnLighting" class="px-3 py-1.5 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 text-xs font-bold transition flex items-center gap-1.5">
+            <span id="lightingIcon">☀️</span> <span id="lightingText">Pagi Cerah</span>
+          </button>
+
+          <button onclick="runDemoSimulation()" id="btnSimulasi" class="hidden admin-only px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold shadow-md shadow-emerald-600/20 transition flex items-center gap-1.5">
+            <span>▶</span> Tes Simulasi Live
+          </button>
+          <button onclick="openApiModal()" id="btnApiBridge" class="hidden admin-only px-3.5 py-1.5 rounded-xl bg-sky-600 hover:bg-sky-500 text-white text-xs font-bold shadow-md shadow-sky-600/20 transition flex items-center gap-1.5">
+            <span>🔗</span> API Bridge
+          </button>
+          <button onclick="logoutVoSession()" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-rose-600 text-white text-xs font-bold transition">
+            Keluar
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 py-5 grid grid-cols-1 lg:grid-cols-12 gap-5">
+
+      <!-- LEFT: 3D SEMI-OUTDOOR STUDIO CANVAS (7 COLS) -->
+      <section class="lg:col-span-7 flex flex-col gap-4">
+        <div class="bg-white border border-stone-200 rounded-3xl overflow-hidden shadow-xl shadow-stone-200/60">
+          <div class="px-4 py-2.5 border-b border-stone-100 flex flex-wrap items-center justify-between gap-2 bg-stone-50/80">
+            <div class="flex items-center gap-1.5 flex-wrap">
+              <span class="text-[11px] font-bold text-slate-500 mr-1">Kamera:</span>
+              <button onclick="focusCamera('overview')" id="cam-overview" class="cam-btn px-2.5 py-1 rounded-lg text-[11px] font-bold bg-slate-900 text-white transition">Taman & Studio</button>
+              <button onclick="focusCamera('crawler')" id="cam-crawler" class="cam-btn px-2.5 py-1 rounded-lg text-[11px] font-bold bg-white text-slate-600 border border-stone-200 hover:bg-sky-50 transition">Crawler</button>
+              <button onclick="focusCamera('drafter')" id="cam-drafter" class="cam-btn px-2.5 py-1 rounded-lg text-[11px] font-bold bg-white text-slate-600 border border-stone-200 hover:bg-emerald-50 transition">Penulis BRS</button>
+              <button onclick="focusCamera('auditor')" id="cam-auditor" class="cam-btn px-2.5 py-1 rounded-lg text-[11px] font-bold bg-white text-slate-600 border border-stone-200 hover:bg-purple-50 transition">Auditor</button>
+              <button onclick="focusCamera('garden')" id="cam-garden" class="cam-btn px-2.5 py-1 rounded-lg text-[11px] font-bold bg-white text-emerald-700 border border-emerald-200 hover:bg-emerald-50 transition">🌿 Area Taman</button>
             </div>
-            <h4 class="text-xs font-extrabold text-slate-900 leading-snug">BPS Lampung Catat Inflasi Terkendali, Daya Beli Masyarakat Tetap Terjaga</h4>
-            <p class="text-[11px] text-slate-600 leading-relaxed">Data berita otomatis ditarik dari Google Sheets melalui Apps Script Web App.</p>
+            <span id="lastSyncText" class="text-[11px] text-slate-500 font-mono-code font-semibold">Polling: Siap</span>
+          </div>
+
+          <div id="canvasContainer">
+            <div class="absolute top-3 left-3 z-10 glass-panel px-3 py-1.5 rounded-xl text-[11px] font-semibold text-slate-700 shadow-sm pointer-events-none flex items-center gap-2">
+              <span>🖱️ Geser putar • Scroll zoom • Klik karakter untuk inspeksi</span>
+            </div>
+
+            <div id="selectedAgentOverlay" class="hidden absolute bottom-3 left-3 right-3 sm:right-auto sm:w-80 z-10 glass-panel p-3.5 rounded-2xl shadow-lg border border-stone-200">
+              <div class="flex items-start justify-between gap-2">
+                <div>
+                  <span id="selRoleBadge" class="inline-block px-2 py-0.5 rounded-md text-[10px] font-extrabold uppercase tracking-wider bg-emerald-100 text-emerald-800 mb-1">Agent</span>
+                  <h3 id="selAgentName" class="text-sm font-extrabold text-slate-900">Nama Agent</h3>
+                  <p id="selAgentDesc" class="text-[11px] text-slate-500 font-medium">Deskripsi karakter</p>
+                </div>
+                <button onclick="closeAgentOverlay()" class="text-slate-400 hover:text-slate-700 font-bold text-sm px-1">✕</button>
+              </div>
+              <div class="mt-2.5 pt-2.5 border-t border-stone-200/80 text-xs text-slate-700">
+                <p id="selAgentStatusMsg" class="font-medium leading-snug">Status saat ini...</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- 3 AGENT STATUS CARDS -->
+          <div class="p-3.5 bg-stone-50/70 border-t border-stone-100 grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+            <div onclick="focusCamera('crawler')" id="card-crawler" class="cursor-pointer bg-white hover:border-sky-400 border border-stone-200 rounded-2xl p-3 shadow-sm transition group">
+              <div class="flex items-center justify-between mb-1">
+                <span class="text-xs font-extrabold text-sky-700 group-hover:text-sky-600">1. News Crawler & PR Specialist</span>
+                <span id="badge-crawler" class="px-2 py-0.5 rounded-md text-[10px] font-extrabold bg-stone-100 text-slate-600">IDLE</span>
+              </div>
+              <p class="text-[10px] text-slate-400 font-semibold mb-1">Media Monitoring & Intelligence Unit</p>
+              <p id="msg-crawler" class="text-[11px] text-slate-600 leading-snug line-clamp-2">Memindai pemberitaan media online seputar BPS Provinsi Lampung.</p>
+              <span id="time-crawler" class="block text-[10px] text-slate-400 font-mono-code mt-1.5">-</span>
+            </div>
+
+            <div onclick="focusCamera('drafter')" id="card-drafter" class="cursor-pointer bg-white hover:border-emerald-400 border border-stone-200 rounded-2xl p-3 shadow-sm transition group">
+              <div class="flex items-center justify-between mb-1">
+                <span class="text-xs font-extrabold text-emerald-700 group-hover:text-emerald-600">2. Press Release Drafter</span>
+                <span id="badge-drafter" class="px-2 py-0.5 rounded-md text-[10px] font-extrabold bg-stone-100 text-slate-600">IDLE</span>
+              </div>
+              <p class="text-[10px] text-slate-400 font-semibold mb-1">Statistical Data Storyteller & Benchmark Stylist</p>
+              <p id="msg-drafter" class="text-[11px] text-slate-600 leading-snug line-clamp-2">Menyusun narasi siaran pers berbasis materi paparan dan standar rilis resmi.</p>
+              <span id="time-drafter" class="block text-[10px] text-slate-400 font-mono-code mt-1.5">-</span>
+            </div>
+
+            <div onclick="focusCamera('auditor')" id="card-auditor" class="cursor-pointer bg-white hover:border-amber-500 border border-stone-200 rounded-2xl p-3 shadow-sm transition group">
+              <div class="flex items-center justify-between mb-1">
+                <span class="text-xs font-extrabold text-amber-800 group-hover:text-amber-700">3. Auditor & PR Strategy Advisor</span>
+                <span id="badge-auditor" class="px-2 py-0.5 rounded-md text-[10px] font-extrabold bg-stone-100 text-slate-600">IDLE</span>
+              </div>
+              <p class="text-[10px] text-slate-400 font-semibold mb-1">Editorial Validation & Content Quality Control</p>
+              <p id="msg-auditor" class="text-[11px] text-slate-600 leading-snug line-clamp-2">Memvalidasi substansi data statistik dan keselarasan strategi komunikasi publik.</p>
+              <span id="time-auditor" class="block text-[10px] text-slate-400 font-mono-code mt-1.5">-</span>
+            </div>
           </div>
         </div>
-      </div>
-    </section>
-  </main>
+
+        <!-- TERMINAL LOG -->
+        <div class="bg-white border border-stone-200 rounded-2xl p-3.5 shadow-sm">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs font-extrabold text-slate-700 flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
+              Aktivitas Orkestrasi Apps Script
+            </span>
+            <button onclick="clearLogs()" class="text-[11px] font-semibold text-slate-400 hover:text-slate-700">Bersihkan Log</button>
+          </div>
+          <div id="terminalLog" class="font-mono-code text-[11px] text-slate-700 space-y-1 max-h-32 overflow-y-auto bg-stone-50 p-2.5 rounded-xl border border-stone-200/80">
+            <div class="text-slate-500">[SYSTEM] Studio Industrial siap. Klik "Putar Metal Hardcore" untuk BGM Symphonic Metalcore.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- RIGHT: WALL PREVIEW BOARD INSPECTOR (5 COLS) -->
+      <section id="previewBoardSection" class="lg:col-span-5 bg-white border border-stone-200 rounded-3xl flex flex-col overflow-hidden shadow-xl shadow-stone-200/60">
+        <div class="px-4 py-3.5 border-b border-stone-100 bg-stone-50/70 flex items-center justify-between gap-2">
+          <div>
+            <h2 class="text-sm font-extrabold text-slate-900">Wall Preview Board</h2>
+            <p class="text-[11px] text-slate-500 font-medium">Inspeksi Output Draf BRS & Hasil Crawling Media</p>
+          </div>
+          <div class="flex items-center gap-1.5">
+            <button onclick="manualRefreshBoard()" title="Sinkronkan ulang Wall Preview Board" class="p-1.5 rounded-xl bg-stone-100 hover:bg-stone-200 text-slate-700 text-xs font-bold transition">
+              🔄
+            </button>
+            <a id="btnOpenOutputDoc" href="#" target="_blank" rel="noopener noreferrer" class="hidden px-3 py-1.5 rounded-xl bg-emerald-600 text-white text-[11px] font-bold hover:bg-emerald-500 shadow-sm transition">
+              Buka Dokumen ↗
+            </a>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 border-b border-stone-200 bg-stone-50 text-xs font-bold">
+          <button onclick="switchTab('brs')" id="tab-brs" class="py-2.5 text-center border-b-2 border-emerald-600 text-emerald-700 bg-white">
+            📄 Draf Siaran Pers BRS
+          </button>
+          <button onclick="switchTab('news')" id="tab-news" class="py-2.5 text-center border-b-2 border-transparent text-slate-500 hover:text-slate-800">
+            📰 Hasil Crawling Media
+          </button>
+        </div>
+
+        <!-- TAB 1: DRAF SIARAN PERS -->
+        <div id="panel-brs" class="p-4 flex-1 flex flex-col justify-between gap-4 overflow-y-auto">
+          <div class="bg-[#fdfcfa] border border-stone-200 rounded-2xl p-4 space-y-3 text-xs leading-relaxed text-slate-700 shadow-inner">
+            <div class="border-b border-stone-200 pb-2.5 flex items-center justify-between gap-2">
+              <div>
+                <span class="text-[10px] uppercase tracking-wider text-emerald-700 font-extrabold">Template Resmi BPS Provinsi Lampung</span>
+                <p id="brsNumber" class="font-mono-code text-[11px] text-slate-500">Nomor : B-2611/18000/HM.240/2026</p>
+              </div>
+              <span id="brsStatusBadge" class="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-bold shrink-0">Terverifikasi Auditor</span>
+            </div>
+
+            <h3 id="brsTitle" class="text-sm font-extrabold text-slate-900">
+              Ekonomi Lampung Triwulan III-2026 Tumbuh Solid 5,18 Persen (y-on-y), Didorong Konsumsi Rumah Tangga dan Pengolahan
+            </h3>
+
+            <div id="brsContent" class="space-y-2.5 text-slate-700 whitespace-pre-line">
+              <p>
+                <strong>BANDAR LAMPUNG</strong> — Perekonomian Provinsi Lampung pada Triwulan III-2026 menunjukkan kinerja yang resilien dengan mencatatkan pertumbuhan sebesar <strong>5,18 persen</strong> secara tahunan (<em>y-on-y</em>). Sementara itu, dibandingkan triwulan sebelumnya (<em>q-to-q</em>), ekonomi Lampung tumbuh sebesar <strong>1,42 persen</strong>, dan secara kumulatif (<em>c-to-c</em>) meningkat <strong>5,04 persen</strong>.
+              </p>
+              <p>
+                Dari sisi produksi, Lapangan Usaha Industri Pengolahan memberikan andil pertumbuhan tertinggi, diikuti oleh Perdagangan Besar dan Eceran serta Pertanian. Dari sisi pengeluaran, Komponen Pengeluaran Konsumsi Rumah Tangga tetap menjadi penopang utama struktur ekonomi Lampung dengan kontribusi mencapai <strong>61,84 persen</strong>.
+              </p>
+              <blockquote class="border-l-4 border-amber-500 pl-3 py-1.5 bg-amber-50/80 rounded-r-xl italic text-slate-800">
+                "Capaian pertumbuhan 5,18 persen ini mencerminkan terjaganya daya beli masyarakat dan aktivitas hilirisasi komoditas unggulan di Provinsi Lampung. Pengendalian inflasi yang konsisten menjadi fondasi penting dalam menjaga momentum ekspansi ekonomi hingga akhir tahun," ujar Kepala BPS Provinsi Lampung, <strong>Ahmadriswan Nasution</strong>.
+              </blockquote>
+            </div>
+          </div>
+
+          <button onclick="copyPressRelease()" class="w-full py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold shadow-md transition flex items-center justify-center gap-2">
+            <span>📋</span> <span id="copyBtnText">Salin Naskah Siaran Pers</span>
+          </button>
+        </div>
+
+        <!-- TAB 2: HASIL CRAWLING MEDIA -->
+        <div id="panel-news" class="hidden p-4 flex-1 overflow-y-auto space-y-2.5">
+          <div id="newsListContainer" class="space-y-2.5">
+            <div class="bg-stone-50 border border-stone-200 rounded-2xl p-3 space-y-1.5">
+              <div class="flex items-center justify-between gap-2">
+                <span class="text-[10px] font-mono-code text-slate-500">12/11/2026 • Antara Lampung</span>
+                <span class="px-2 py-0.5 rounded-md text-[10px] font-bold bg-emerald-100 text-emerald-800">Positif</span>
+              </div>
+              <h4 class="text-xs font-extrabold text-slate-900 leading-snug">BPS Lampung Catat Inflasi Terkendali, Daya Beli Masyarakat Tetap Terjaga</h4>
+              <p class="text-[11px] text-slate-600 leading-relaxed">Data berita otomatis ditarik dari Google Sheets melalui Apps Script Web App.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
 
   <!-- MODAL: KONEKSI APPS SCRIPT API -->
   <div id="apiModal" class="hidden fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4">
@@ -308,7 +339,57 @@
 
   <script>
     // =========================================================================
-    // 1. KONFIGURASI API BRIDGE, SECURITY TOKEN, AUDIO PLAYER & STATE AGENT
+    // 1. GATE AUTENTIKASI SINKRON DENGAN INDEX.HTML
+    // =========================================================================
+    const SESSION_AUTH_KEY = 'sigerhub_bps_lampung_session';
+    let isVoBooted = false;
+
+    function handleVoLogin(e) {
+      e.preventDefault();
+      const u = document.getElementById('voUsername').value.trim().toLowerCase();
+      const p = document.getElementById('voPassword').value;
+      const errBox = document.getElementById('voLoginError');
+
+      if ((u === 'humas' && p === 'bps1800') || (u === 'bima' && p === 'sigerhub2026')) {
+        const isAdmin = u === 'bima';
+        const sessionPayload = { username: u, role: isAdmin ? 'Admin Utama' : 'Tim Humas BPS', isAdmin, loginAt: Date.now() };
+        sessionStorage.setItem(SESSION_AUTH_KEY, JSON.stringify(sessionPayload));
+        if (isAdmin) localStorage.setItem('bps_lampung_admin_mode', 'true');
+        else localStorage.removeItem('bps_lampung_admin_mode');
+        unlockVirtualOffice(sessionPayload);
+      } else {
+        errBox.classList.remove('hidden');
+      }
+    }
+
+    function unlockVirtualOffice(sessionData) {
+      document.getElementById('voLoginGate').classList.add('hidden');
+      document.getElementById('voProtectedContent').classList.remove('hidden');
+
+      if (sessionData.isAdmin || localStorage.getItem('bps_lampung_admin_mode') === 'true') {
+        document.querySelectorAll('.admin-only').forEach(el => el.classList.remove('hidden'));
+      }
+
+      if (!isVoBooted) {
+        isVoBooted = true;
+        init3DOffice();
+        const rawSaved = localStorage.getItem(STORAGE_KEY) || DEFAULT_API_URL;
+        const savedUrl = normalizeApiUrl(rawSaved);
+        if (savedUrl && savedUrl.startsWith('http')) {
+          document.getElementById('apiUrlInput').value = rawSaved;
+          startLivePolling(savedUrl);
+        }
+      }
+    }
+
+    function logoutVoSession() {
+      sessionStorage.removeItem(SESSION_AUTH_KEY);
+      localStorage.removeItem('bps_lampung_admin_mode');
+      window.location.href = 'index.html';
+    }
+
+    // =========================================================================
+    // 2. KONFIGURASI API BRIDGE, SECURITY TOKEN, AUDIO PLAYER & STATE AGENT
     // =========================================================================
     const DEFAULT_API_URL = 'https://script.google.com/macros/s/AKfycbz6rjK1i0nCWf9i2ZgH6yblzCdeiz4Cq9hMeKbrEbEZImr5vRUEel8KIP4H2c0UWYMnAA/exec';
     const STORAGE_KEY = 'bps_lampung_virtual_office_api';
@@ -390,12 +471,12 @@
     }
 
     // =========================================================================
-    // 2. THREE.JS 3D SEMI-OUTDOOR STUDIO, TAMAN, KOLAM, HEWAN & CUACA MUSIM
+    // 3. THREE.JS 3D SEMI-OUTDOOR STUDIO, TAMAN, KOLAM, HEWAN & CUACA MUSIM
     // =========================================================================
     let scene, camera, renderer, controls;
     let ambientLight, sunLight, warmLampLight, pondLight;
-    let lightingModeIndex = 0; // 0: Pagi Cerah, 1: Golden Hour Sore, 2: Malam
-    let seasonModeIndex = 0;   // 0: Panas, 1: Hujan, 2: Salju
+    let lightingModeIndex = 0;
+    let seasonModeIndex = 0;
 
     const robloxAvatars = {};
     const clickableObjects = [];
@@ -715,9 +796,6 @@
       scene.add(group);
     }
 
-    // =========================================================================
-    // ARSITEKTUR SEMI-OUTDOOR: DINDING BETON INDUSTRIAL & 2 POSTER BAND
-    // =========================================================================
     function buildSemiOutdoorArchitecture() {
       summerGrassTex = createGrassTexture();
       winterSnowTex = createSnowGroundTexture();
@@ -769,10 +847,7 @@
       scene.add(rightWall);
 
       const pillarMat = new THREE.MeshStandardMaterial({ color: 0x78350f, roughness: 0.6 });
-      const pillarCoords = [
-        [-4.2, -6.6], [-4.2, 1.7], [6.9, 1.7]
-      ];
-      pillarCoords.forEach(([px, pz]) => {
+      [[-4.2, -6.6], [-4.2, 1.7], [6.9, 1.7]].forEach(([px, pz]) => {
         const pillar = new THREE.Mesh(new THREE.BoxGeometry(0.20, 4.1, 0.20), pillarMat);
         pillar.position.set(px, 2.05, pz);
         pillar.castShadow = true;
@@ -858,9 +933,6 @@
       createPottedPlant('monstera', 6.4, 1.2, 1.05);
     }
 
-    // =========================================================================
-    // TAMAN POHON RINDANG & KOLAM IKAN HIDUP (KOI POND)
-    // =========================================================================
     function createGardenTree(x, z, scale = 1) {
       const tree = new THREE.Group();
       tree.position.set(x, 0, z);
@@ -1003,9 +1075,6 @@
       }
     }
 
-    // =========================================================================
-    // SISTEM CUACA 3D: PARTIKEL HUJAN & SALJU
-    // =========================================================================
     function buildWeatherSystems() {
       const rainCount = 1200;
       const rainGeo = new THREE.BufferGeometry();
@@ -1046,9 +1115,6 @@
       scene.add(snowParticles);
     }
 
-    // =========================================================================
-    // HEWAN PELIHARAAN HIDUP: KELINCI MELOMPAT & KUCING JALAN-JALAN
-    // =========================================================================
     function createRabbit(x, z, furColor) {
       const group = new THREE.Group();
       group.position.set(x, 0, z);
@@ -1163,9 +1229,6 @@
       cats.push({ ...c2, centerX: 3.2, centerZ: 0.8, radius: 1.1, speed: -0.38, angle: 3.0, baseY: 0.12 });
     }
 
-    // =========================================================================
-    // MEJA KERJA & 3 KARAKTER CHIBI INTERAKTIF
-    // =========================================================================
     function buildDeskSetup(x, z, rotY, accentColor) {
       const desk = new THREE.Group();
       desk.position.set(x, 0.12, z);
@@ -1497,9 +1560,6 @@
       });
     }
 
-    // =========================================================================
-    // LOOP ANIMASI 3D REAL-TIME (OBROLAN IDLE, SALAMAN & HEADBANG MUSIK)
-    // =========================================================================
     const clock = new THREE.Clock();
 
     function moveCharacterTo(av, targetVec, speed, t, walkFreq = 11) {
@@ -1629,7 +1689,6 @@
           return;
         }
 
-        // Mode Mosh Pit saat musik nyala & status IDLE
         if (isMoshPitActive) {
           const arrived = moveCharacterTo(av, av.basePos, 0.05, t);
           if (arrived) {
@@ -1751,9 +1810,6 @@
       renderer.render(scene, camera);
     }
 
-    // =========================================================================
-    // 3. KONTROL MENU, KAMERA, 3 MUSIM, 3 MODE WAKTU & POLLING LIVE DATA
-    // =========================================================================
     function toggleSeasonMode() {
       seasonModeIndex = (seasonModeIndex + 1) % 3;
       const btn = document.getElementById('btnSeason');
@@ -1909,13 +1965,20 @@
     }
 
     window.addEventListener('DOMContentLoaded', () => {
-      init3DOffice();
-      const rawSaved = localStorage.getItem(STORAGE_KEY) || DEFAULT_API_URL;
-      const savedUrl = normalizeApiUrl(rawSaved);
-      if (savedUrl && savedUrl.startsWith('http')) {
-        document.getElementById('apiUrlInput').value = rawSaved;
-        startLivePolling(savedUrl);
+      const rawSession = sessionStorage.getItem(SESSION_AUTH_KEY);
+      if (rawSession) {
+        try {
+          const parsed = JSON.parse(rawSession);
+          if (parsed && parsed.username) {
+            unlockVirtualOffice(parsed);
+            return;
+          }
+        } catch (e) {
+          sessionStorage.removeItem(SESSION_AUTH_KEY);
+        }
       }
+      const userField = document.getElementById('voUsername');
+      if (userField) userField.focus();
     });
 
     function addLog(message, type = 'info') {
@@ -1974,9 +2037,6 @@
       }
     }
 
-    // =========================================================================
-    // SINKRONISASI WALL PREVIEW BOARD DENGAN TAB LATEST_BRS DI GOOGLE SHEETS
-    // =========================================================================
     function updateLatestBrsPreview(latestBrs) {
       if (!latestBrs || !latestBrs.judul) return;
 
@@ -2074,7 +2134,7 @@
     }
 
     async function fetchAgentStateOnce(url) {
-      if (!url) return;
+      if (!url || !sessionStorage.getItem(SESSION_AUTH_KEY)) return;
       try {
         const res = await fetch(url);
         const data = await res.json();
