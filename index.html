@@ -47,62 +47,89 @@
         ::-webkit-scrollbar-track { background: #F1F5F9; }
         ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
-      /* ============================================================
-   MOBILE UI FIX (< 640px) — SIGERHUB INDEX.HTML (PRESISI)
+        /* ============================================================
+   MOBILE UI FIX (< 640px) — SIGERHUB INDEX.HTML
    ============================================================ */
 @media (max-width: 640px) {
-  /* 1. Header: Logo + Judul di baris atas, Baris tombol di baris bawah */
-  header > div > div {
+  /* 1. Rapikan Header agar Logo/Judul di atas & Tombol Aksi rapi di baris bawah */
+  header > div,
+  nav > div {
     flex-wrap: wrap !important;
     gap: 10px !important;
     padding-top: 12px !important;
     padding-bottom: 12px !important;
   }
 
-  /* Judul & subjudul BPS Provinsi Lampung tampil utuh */
-  header > div > div > div:first-child {
-    width: 100% !important;
-  }
-  header p {
+  /* Judul & subjudul BPS Provinsi Lampung tampil utuh tanpa terpotong (...) */
+  header h1,
+  header p,
+  header span {
     white-space: normal !important;
     overflow: visible !important;
     text-overflow: unset !important;
   }
 
-  /* Baris tombol kanan (3D Office, Sync, Keluar) turun ke baris 2 & rata */
-  header > div > div > div:last-child {
+  /* Lencana "Portal Humas Terpadu" mengecil proporsional agar tidak bertabrakan */
+  header .rounded-full,
+  header [class*="badge"] {
+    font-size: 10px !important;
+    padding: 2px 8px !important;
+  }
+
+  /* Baris tombol kanan (3D Office, Refresh, Logout) turun ke baris kedua penuh & rapi */
+  header > div > div:last-child,
+  nav > div > div:last-child {
     width: 100% !important;
     display: flex !important;
     justify-content: space-between !important;
     align-items: center !important;
     gap: 8px !important;
-    padding-top: 8px !important;
-    border-top: 1px solid rgba(255, 255, 255, 0.12) !important;
+    padding-top: 6px !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
   }
 
-  header > div > div > div:last-child > a {
+  header > div > div:last-child a,
+  header > div > div:last-child button:first-of-type {
     flex: 1 !important;
     justify-content: center !important;
   }
 
-  /* 2. Tab Navigasi (#navTabs): Rapi di-scroll horizontal tanpa kepotong kaku */
-  #navTabs {
-    width: 100% !important;
-    padding-bottom: 4px !important;
+  /* 2. Tab Menu (Ringkasan Eksekutif, Media Monitoring, dll) rapi & tidak kepotong */
+  [role="tablist"],
+  .tab-nav,
+  main > div:first-child {
+    display: flex !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
     scrollbar-width: none !important;
+    gap: 6px !important;
+    padding-bottom: 4px !important;
   }
-  #navTabs::-webkit-scrollbar {
+  [role="tablist"]::-webkit-scrollbar,
+  .tab-nav::-webkit-scrollbar {
     display: none !important;
   }
-
-  /* 3. Donut Chart (#mediaShareChart): Bebaskan tinggi h-64 agar legend bawah tampil penuh */
-  #mediaShareChart {
-    max-height: 290px !important;
+  [role="tablist"] button,
+  .tab-nav button {
+    flex-shrink: 0 !important;
+    font-size: 12px !important;
+    padding: 7px 12px !important;
   }
-  div:has(> #mediaShareChart) {
-    height: 310px !important;
+
+  /* 3. Beri ruang napas lebih untuk kartu Donut Chart agar legend tidak kepotong */
+  canvas {
+    max-height: 260px !important;
+  }
+  .chart-container,
+  [class*="chart"] {
+    height: auto !important;
+    min-height: 290px !important;
+    padding-bottom: 12px !important;
   }
 }
+    </style>
+</head>
+<body class="bg-[#F8FAFC] text-slate-800 antialiased min-h-screen flex flex-col">
 
     <!-- ===================================================================== -->
     <!-- LOGIN GATE OVERLAY (MUNCUL PERTAMA KALI SEBELUM PORTAL TERBUKA)       -->
@@ -1249,20 +1276,10 @@
                 options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top', labels: { boxWidth: 12, font: { size: 11, weight: '600' } } } }, scales: { y: { beginAtZero: true, ticks: { stepSize: 1, precision: 0 } }, x: { grid: { display: false } } } }
             });
 
-           mediaChart = new Chart(document.getElementById('mediaShareChart').getContext('2d'), {
+            mediaChart = new Chart(document.getElementById('mediaShareChart').getContext('2d'), {
                 type: 'doughnut',
                 data: { labels: mediaLabels, datasets: [{ data: mediaValues, backgroundColor: ['#06182E', '#008FD5', '#68B92E', '#EB891B', '#38BDF8', '#CBD5E1'], borderWidth: 2, borderColor: '#ffffff' }] },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            position: 'bottom',
-                            labels: { boxWidth: 10, padding: 10, font: { size: 10, weight: '500' } }
-                        }
-                    },
-                    cutout: '62%'
-                }
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 11, weight: '500' } } } }, cutout: '64%' }
             });
 
             topicsChart = new Chart(document.getElementById('topicsChart').getContext('2d'), {
