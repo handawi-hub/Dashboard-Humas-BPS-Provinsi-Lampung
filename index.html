@@ -47,6 +47,86 @@
         ::-webkit-scrollbar-track { background: #F1F5F9; }
         ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
+        /* ============================================================
+   MOBILE UI FIX (< 640px) — SIGERHUB INDEX.HTML
+   ============================================================ */
+@media (max-width: 640px) {
+  /* 1. Rapikan Header agar Logo/Judul di atas & Tombol Aksi rapi di baris bawah */
+  header > div,
+  nav > div {
+    flex-wrap: wrap !important;
+    gap: 10px !important;
+    padding-top: 12px !important;
+    padding-bottom: 12px !important;
+  }
+
+  /* Judul & subjudul BPS Provinsi Lampung tampil utuh tanpa terpotong (...) */
+  header h1,
+  header p,
+  header span {
+    white-space: normal !important;
+    overflow: visible !important;
+    text-overflow: unset !important;
+  }
+
+  /* Lencana "Portal Humas Terpadu" mengecil proporsional agar tidak bertabrakan */
+  header .rounded-full,
+  header [class*="badge"] {
+    font-size: 10px !important;
+    padding: 2px 8px !important;
+  }
+
+  /* Baris tombol kanan (3D Office, Refresh, Logout) turun ke baris kedua penuh & rapi */
+  header > div > div:last-child,
+  nav > div > div:last-child {
+    width: 100% !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    gap: 8px !important;
+    padding-top: 6px !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+  }
+
+  header > div > div:last-child a,
+  header > div > div:last-child button:first-of-type {
+    flex: 1 !important;
+    justify-content: center !important;
+  }
+
+  /* 2. Tab Menu (Ringkasan Eksekutif, Media Monitoring, dll) rapi & tidak kepotong */
+  [role="tablist"],
+  .tab-nav,
+  main > div:first-child {
+    display: flex !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    scrollbar-width: none !important;
+    gap: 6px !important;
+    padding-bottom: 4px !important;
+  }
+  [role="tablist"]::-webkit-scrollbar,
+  .tab-nav::-webkit-scrollbar {
+    display: none !important;
+  }
+  [role="tablist"] button,
+  .tab-nav button {
+    flex-shrink: 0 !important;
+    font-size: 12px !important;
+    padding: 7px 12px !important;
+  }
+
+  /* 3. Beri ruang napas lebih untuk kartu Donut Chart agar legend tidak kepotong */
+  canvas {
+    max-height: 260px !important;
+  }
+  .chart-container,
+  [class*="chart"] {
+    height: auto !important;
+    min-height: 290px !important;
+    padding-bottom: 12px !important;
+  }
+}
     </style>
 </head>
 <body class="bg-[#F8FAFC] text-slate-800 antialiased min-h-screen flex flex-col">
