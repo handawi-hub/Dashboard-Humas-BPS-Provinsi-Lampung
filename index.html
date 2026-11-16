@@ -51,395 +51,513 @@
 </head>
 <body class="bg-[#F8FAFC] text-slate-800 antialiased min-h-screen flex flex-col">
 
-    <!-- Top Navigation Header -->
-    <header class="bg-bps-navy text-white sticky top-0 z-40 shadow-md">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between py-3.5 gap-4">
-                
-                <!-- Brand & Logo -->
-                <div class="flex items-center gap-3.5 min-w-0">
-                    <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-white p-2 flex items-center justify-center shrink-0 shadow-sm">
+    <!-- ===================================================================== -->
+    <!-- LOGIN GATE OVERLAY (MUNCUL PERTAMA KALI SEBELUM PORTAL TERBUKA)       -->
+    <!-- ===================================================================== -->
+    <div id="loginGate" class="fixed inset-0 z-50 bg-bps-navy flex items-center justify-center p-4 overflow-y-auto">
+        <!-- Dekorasi Gradien Halus -->
+        <div class="absolute inset-0 overflow-hidden pointer-events-none">
+            <div class="absolute -top-24 -left-24 w-96 h-96 rounded-full bg-bps-blue/15 blur-3xl"></div>
+            <div class="absolute -bottom-24 -right-24 w-96 h-96 rounded-full bg-bps-orange/15 blur-3xl"></div>
+        </div>
+
+        <div class="relative w-full max-w-md bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden">
+            <div class="h-1.5 w-full bg-gradient-to-r from-[#008FD5] via-[#68B92E] to-[#EB891B]"></div>
+
+            <div class="p-6 sm:p-8 space-y-6">
+                <!-- Header Logo & Instansi -->
+                <div class="text-center space-y-2">
+                    <div class="w-16 h-16 rounded-2xl bg-slate-50 border border-slate-200 p-2.5 flex items-center justify-center mx-auto shadow-xs">
                         <img src="BPS.webp" alt="Logo BPS" class="w-full h-full object-contain">
                     </div>
-                    <div class="min-w-0">
-                        <div class="flex items-center gap-2.5 flex-wrap">
-                            <span class="font-extrabold text-2xl sm:text-[28px] leading-none tracking-tight text-white">SIGERHUB</span>
-                            <span class="bg-[#008FD5]/20 text-[#67D4FF] text-xs px-2.5 py-1 rounded-md font-semibold border border-[#008FD5]/40 whitespace-nowrap">
-                                Portal Humas Terpadu
-                            </span>
-                        </div>
-                        <p class="text-xs sm:text-[13px] text-slate-300 font-normal mt-1.5 truncate">
-                            BPS Provinsi Lampung • Sistem Pemantauan Media & Analisis BRS
-                        </p>
-                    </div>
-                </div>
-
-                <!-- API Gateway Status & Action Controls -->
-                <div class="flex items-center gap-2.5 shrink-0">
-                    <div id="apiStatusBadge" class="hidden xl:flex bg-bps-dark px-3 py-1.5 rounded-lg border border-slate-700/80 items-center gap-2 text-xs whitespace-nowrap">
-                        <span class="relative flex h-2 w-2 shrink-0">
-                            <span id="apiPingDot" class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
-                            <span id="apiSolidDot" class="relative inline-flex rounded-full h-2 w-2 bg-amber-500"></span>
+                    <div>
+                        <span class="inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-[#008FD5]/10 text-bps-blue border border-[#008FD5]/20 mb-1">
+                            Akses Internal Terbatas
                         </span>
-                        <span class="text-slate-300">Database: <strong id="apiStatusText" class="text-amber-400 font-semibold">Menghubungkan...</strong></span>
+                        <h1 class="text-2xl font-extrabold text-bps-navy tracking-tight">SIGERHUB</h1>
+                        <p class="text-xs text-slate-500 mt-0.5">Portal Humas Terpadu • BPS Provinsi Lampung</p>
+                    </div>
+                </div>
+
+                <!-- Alert Error Login -->
+                <div id="loginErrorBox" class="hidden bg-rose-50 border border-rose-200 text-rose-700 px-3.5 py-2.5 rounded-xl text-xs font-medium flex items-center gap-2">
+                    <i data-lucide="alert-circle" class="w-4 h-4 shrink-0 text-rose-600"></i>
+                    <span id="loginErrorText">Username atau kata sandi tidak sesuai.</span>
+                </div>
+
+                <!-- Form Login -->
+                <form id="loginForm" onsubmit="handleLoginSubmit(event)" class="space-y-4">
+                    <div>
+                        <label for="loginUsername" class="block text-xs font-bold text-slate-700 mb-1.5">Username Pengguna</label>
+                        <div class="relative">
+                            <i data-lucide="user" class="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                            <input type="text" id="loginUsername" required autocomplete="username" placeholder="Masukkan username (misal: humas)"
+                                class="w-full pl-10 pr-3.5 py-2.5 text-xs bg-slate-50 border border-slate-300 rounded-xl focus:outline-none focus:bg-white focus:ring-2 focus:ring-bps-blue focus:border-bps-blue transition">
+                        </div>
                     </div>
 
-                    <a href="virtual-office.html" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-bps-orange hover:bg-bps-orangeDark text-white text-xs font-semibold transition whitespace-nowrap shadow-sm">
-                        <i data-lucide="monitor" class="w-3.5 h-3.5 shrink-0"></i>
-                        <span class="hidden sm:inline">Ruang Kendali 3D</span>
-                        <span class="sm:hidden">3D Office</span>
-                    </a>
+                    <div>
+                        <label for="loginPassword" class="block text-xs font-bold text-slate-700 mb-1.5">Kata Sandi</label>
+                        <div class="relative">
+                            <i data-lucide="lock" class="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                            <input type="password" id="loginPassword" required autocomplete="current-password" placeholder="Masukkan kata sandi"
+                                class="w-full pl-10 pr-10 py-2.5 text-xs bg-slate-50 border border-slate-300 rounded-xl focus:outline-none focus:bg-white focus:ring-2 focus:ring-bps-blue focus:border-bps-blue transition">
+                            <button type="button" onclick="togglePasswordVisibility()" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
+                                <i data-lucide="eye" id="eyeIcon" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    </div>
 
-                    <button onclick="fetchLiveMonitoringData(true)" id="syncBtn" class="inline-flex items-center gap-1.5 bg-bps-blue hover:bg-bps-blueDark text-white text-xs font-semibold px-3.5 py-2 rounded-lg transition whitespace-nowrap shadow-sm">
-                        <i data-lucide="refresh-cw" id="syncIcon" class="w-3.5 h-3.5 shrink-0"></i>
-                        <span class="hidden sm:inline">Sinkron Data</span>
+                    <button type="submit" id="loginSubmitBtn"
+                        class="w-full py-2.5 px-4 bg-bps-navy hover:bg-bps-dark text-white font-bold text-xs rounded-xl shadow-md transition flex items-center justify-center gap-2">
+                        <i data-lucide="log-in" class="w-4 h-4 text-[#67D4FF]"></i>
+                        <span>Masuk ke Portal SIGERHUB</span>
                     </button>
-                </div>
+                </form>
 
+                <div class="pt-3 border-t border-slate-100 text-center">
+                    <p class="text-[11px] text-slate-400">
+                        &copy; 2026 Tim Kehumasan & Publikasi • BPS Provinsi Lampung
+                    </p>
+                </div>
             </div>
         </div>
-        <div class="h-[3px] w-full bg-gradient-to-r from-[#008FD5] via-[#68B92E] to-[#EB891B]"></div>
-    </header>
+    </div>
 
-    <!-- Main Workspace Area -->
-    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+    <!-- ===================================================================== -->
+    <!-- KONTEN PORTAL UTAMA (TERSEMBUNYI HINGGA LOGIN TERVERIFIKASI)          -->
+    <!-- ===================================================================== -->
+    <div id="protectedAppWrapper" class="hidden flex-1 flex flex-col">
 
-        <!-- Navigation Tabs -->
-        <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 pb-3.5">
-            <nav class="flex items-center gap-1.5 overflow-x-auto" id="navTabs">
-                <button onclick="switchTab('dashboard')" id="tab-dashboard" class="tab-btn active font-semibold text-xs sm:text-[13px] px-3.5 py-2 rounded-lg bg-bps-blue text-white flex items-center gap-2 transition shrink-0">
-                    <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
-                    <span>Ringkasan Eksekutif</span>
-                </button>
-                <button onclick="switchTab('news')" id="tab-news" class="tab-btn font-semibold text-xs sm:text-[13px] px-3.5 py-2 rounded-lg text-slate-600 hover:bg-slate-200/70 flex items-center gap-2 transition shrink-0">
-                    <i data-lucide="newspaper" class="w-4 h-4"></i>
-                    <span>Media Monitoring</span>
-                </button>
-                <button onclick="switchTab('brs')" id="tab-brs" class="tab-btn font-semibold text-xs sm:text-[13px] px-3.5 py-2 rounded-lg text-slate-600 hover:bg-slate-200/70 flex items-center gap-2 transition shrink-0">
-                    <i data-lucide="file-text" class="w-4 h-4"></i>
-                    <span>Automasi BRS (Pers)</span>
-                </button>
-                <button onclick="switchTab('bridge')" id="tab-bridge" class="hidden admin-only tab-btn font-semibold text-xs sm:text-[13px] px-3.5 py-2 rounded-lg text-slate-600 hover:bg-slate-200/70 flex items-center gap-2 transition shrink-0">
-                    <i data-lucide="shield-check" class="w-4 h-4"></i>
-                    <span>Arsitektur API Bridge</span>
-                </button>
-            </nav>
+        <!-- Top Navigation Header -->
+        <header class="bg-bps-navy text-white sticky top-0 z-40 shadow-md">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center justify-between py-3.5 gap-4">
+                    
+                    <!-- Brand & Logo -->
+                    <div class="flex items-center gap-3.5 min-w-0">
+                        <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-white p-2 flex items-center justify-center shrink-0 shadow-sm">
+                            <img src="BPS.webp" alt="Logo BPS" class="w-full h-full object-contain">
+                        </div>
+                        <div class="min-w-0">
+                            <div class="flex items-center gap-2.5 flex-wrap">
+                                <span class="font-extrabold text-2xl sm:text-[28px] leading-none tracking-tight text-white">SIGERHUB</span>
+                                <span class="bg-[#008FD5]/20 text-[#67D4FF] text-xs px-2.5 py-1 rounded-md font-semibold border border-[#008FD5]/40 whitespace-nowrap">
+                                    Portal Humas Terpadu
+                                </span>
+                                <span id="activeUserRoleBadge" class="hidden sm:inline-block bg-white/10 text-slate-200 text-[11px] px-2 py-0.5 rounded font-medium">
+                                    Tim Humas
+                                </span>
+                            </div>
+                            <p class="text-xs sm:text-[13px] text-slate-300 font-normal mt-1.5 truncate">
+                                BPS Provinsi Lampung • Sistem Pemantauan Media & Analisis BRS
+                            </p>
+                        </div>
+                    </div>
 
-            <div class="text-xs text-slate-500 flex items-center gap-2 bg-white px-3 py-1.5 rounded-lg border border-slate-200">
-                <i data-lucide="database" class="w-3.5 h-3.5 text-bps-blue"></i>
-                <span>Periode Data: <strong id="dateRangeText" class="text-slate-800 font-semibold">Memuat...</strong></span>
-                <span class="text-slate-300">|</span>
-                <span>Update: <strong id="lastUpdateText" class="text-slate-800 font-semibold">-</strong></span>
+                    <!-- API Gateway Status & Action Controls -->
+                    <div class="flex items-center gap-2.5 shrink-0">
+                        <div id="apiStatusBadge" class="hidden xl:flex bg-bps-dark px-3 py-1.5 rounded-lg border border-slate-700/80 items-center gap-2 text-xs whitespace-nowrap">
+                            <span class="relative flex h-2 w-2 shrink-0">
+                                <span id="apiPingDot" class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+                                <span id="apiSolidDot" class="relative inline-flex rounded-full h-2 w-2 bg-amber-500"></span>
+                            </span>
+                            <span class="text-slate-300">Database: <strong id="apiStatusText" class="text-amber-400 font-semibold">Menghubungkan...</strong></span>
+                        </div>
+
+                        <a href="virtual-office.html" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-bps-orange hover:bg-bps-orangeDark text-white text-xs font-semibold transition whitespace-nowrap shadow-sm">
+                            <i data-lucide="monitor" class="w-3.5 h-3.5 shrink-0"></i>
+                            <span class="hidden sm:inline">Ruang Kendali 3D</span>
+                            <span class="sm:hidden">3D Office</span>
+                        </a>
+
+                        <button onclick="fetchLiveMonitoringData(true)" id="syncBtn" class="inline-flex items-center gap-1.5 bg-bps-blue hover:bg-bps-blueDark text-white text-xs font-semibold px-3.5 py-2 rounded-lg transition whitespace-nowrap shadow-sm">
+                            <i data-lucide="refresh-cw" id="syncIcon" class="w-3.5 h-3.5 shrink-0"></i>
+                            <span class="hidden sm:inline">Sinkron Data</span>
+                        </button>
+
+                        <button onclick="logoutSession()" title="Keluar dari Sesi" class="inline-flex items-center gap-1.5 bg-slate-800 hover:bg-rose-600 text-slate-200 hover:text-white border border-slate-700 text-xs font-semibold px-3 py-2 rounded-lg transition whitespace-nowrap">
+                            <i data-lucide="log-out" class="w-3.5 h-3.5 shrink-0"></i>
+                            <span class="hidden md:inline">Keluar</span>
+                        </button>
+                    </div>
+
+                </div>
             </div>
-        </div>
+            <div class="h-[3px] w-full bg-gradient-to-r from-[#008FD5] via-[#68B92E] to-[#EB891B]"></div>
+        </header>
 
-        <!-- SECTION 1: EXECUTIVE DASHBOARD -->
-        <div id="section-dashboard" class="space-y-6">
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                <div id="card-total" onclick="filterByCard('total')" class="clean-card p-5 rounded-xl hover:border-bps-blue transition cursor-pointer group">
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <p class="text-[11px] font-bold uppercase tracking-wider text-slate-500 group-hover:text-bps-blue transition">Total Liputan Media</p>
-                            <h3 class="text-3xl font-extrabold text-slate-900 mt-1.5" id="kpiTotal">-</h3>
-                        </div>
-                        <div class="p-2.5 bg-[#008FD5]/10 text-bps-blue rounded-lg">
-                            <i data-lucide="globe" class="w-5 h-5"></i>
-                        </div>
-                    </div>
-                    <div class="mt-3.5 flex items-center justify-between text-xs text-slate-500 pt-3 border-t border-slate-100">
-                        <span id="kpiMediaCount" class="flex items-center font-medium"><i data-lucide="newspaper" class="w-3.5 h-3.5 mr-1.5 text-bps-blue"></i> Dari 0 media</span>
-                        <span class="text-bps-blue font-semibold opacity-0 group-hover:opacity-100 transition">Semua &rarr;</span>
-                    </div>
-                </div>
+        <!-- Main Workspace Area -->
+        <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
 
-                <div id="card-positif" onclick="filterByCard('positif')" class="clean-card p-5 rounded-xl hover:border-bps-green transition cursor-pointer group">
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <p class="text-[11px] font-bold uppercase tracking-wider text-slate-500 group-hover:text-bps-greenDark transition">Sentimen Positif</p>
-                            <h3 class="text-3xl font-extrabold text-bps-greenDark mt-1.5" id="kpiPositivePct">-</h3>
-                        </div>
-                        <div class="p-2.5 bg-[#68B92E]/10 text-bps-greenDark rounded-lg">
-                            <i data-lucide="smile" class="w-5 h-5"></i>
-                        </div>
-                    </div>
-                    <div class="mt-3.5 flex items-center justify-between text-xs text-slate-500 pt-3 border-t border-slate-100">
-                        <span id="kpiSentimentBreakdown" class="text-slate-600 font-medium">0 Positif • 0 Netral • 0 Negatif</span>
-                        <span class="text-bps-greenDark font-semibold opacity-0 group-hover:opacity-100 transition">Filter &rarr;</span>
-                    </div>
-                </div>
+            <!-- Navigation Tabs -->
+            <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 pb-3.5">
+                <nav class="flex items-center gap-1.5 overflow-x-auto" id="navTabs">
+                    <button onclick="switchTab('dashboard')" id="tab-dashboard" class="tab-btn active font-semibold text-xs sm:text-[13px] px-3.5 py-2 rounded-lg bg-bps-blue text-white flex items-center gap-2 transition shrink-0">
+                        <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
+                        <span>Ringkasan Eksekutif</span>
+                    </button>
+                    <button onclick="switchTab('news')" id="tab-news" class="tab-btn font-semibold text-xs sm:text-[13px] px-3.5 py-2 rounded-lg text-slate-600 hover:bg-slate-200/70 flex items-center gap-2 transition shrink-0">
+                        <i data-lucide="newspaper" class="w-4 h-4"></i>
+                        <span>Media Monitoring</span>
+                    </button>
+                    <button onclick="switchTab('brs')" id="tab-brs" class="tab-btn font-semibold text-xs sm:text-[13px] px-3.5 py-2 rounded-lg text-slate-600 hover:bg-slate-200/70 flex items-center gap-2 transition shrink-0">
+                        <i data-lucide="file-text" class="w-4 h-4"></i>
+                        <span>Automasi BRS (Pers)</span>
+                    </button>
+                    <button onclick="switchTab('bridge')" id="tab-bridge" class="hidden admin-only tab-btn font-semibold text-xs sm:text-[13px] px-3.5 py-2 rounded-lg text-slate-600 hover:bg-slate-200/70 flex items-center gap-2 transition shrink-0">
+                        <i data-lucide="shield-check" class="w-4 h-4"></i>
+                        <span>Arsitektur API Bridge</span>
+                    </button>
+                </nav>
 
-                <div id="card-reputasi" onclick="filterByCard('reputasi')" class="clean-card p-5 rounded-xl hover:border-bps-navy transition cursor-pointer group">
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <p class="text-[11px] font-bold uppercase tracking-wider text-slate-500 group-hover:text-bps-navy transition">Indeks Reputasi PR</p>
-                            <h3 class="text-3xl font-extrabold text-bps-navy mt-1.5"><span id="kpiReputationScore">-</span><span class="text-sm text-slate-400 font-normal">/10</span></h3>
-                        </div>
-                        <div class="p-2.5 bg-[#06182E]/10 text-bps-navy rounded-lg">
-                            <i data-lucide="award" class="w-5 h-5"></i>
-                        </div>
-                    </div>
-                    <div class="mt-3.5 flex items-center justify-between text-xs text-bps-greenDark font-semibold pt-3 border-t border-slate-100">
-                        <span id="kpiReputationLabel" class="flex items-center"><i data-lucide="check-circle2" class="w-3.5 h-3.5 mr-1"></i> Menghitung skor...</span>
-                        <span class="text-bps-navy font-semibold opacity-0 group-hover:opacity-100 transition">Detail &rarr;</span>
-                    </div>
-                </div>
-
-                <div id="card-atensi" onclick="filterByCard('atensi')" class="clean-card p-5 rounded-xl hover:border-bps-orange transition cursor-pointer group">
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <p class="text-[11px] font-bold uppercase tracking-wider text-slate-500 group-hover:text-bps-orangeDark transition">Atensi & Mitigasi Isu</p>
-                            <h3 class="text-3xl font-extrabold text-bps-orange mt-1.5" id="kpiAttentionCount">-</h3>
-                        </div>
-                        <div class="p-2.5 bg-[#EB891B]/10 text-bps-orange rounded-lg">
-                            <i data-lucide="alert-circle" class="w-5 h-5"></i>
-                        </div>
-                    </div>
-                    <div class="mt-3.5 flex items-center justify-between text-xs text-slate-500 pt-3 border-t border-slate-100">
-                        <span id="kpiAttentionDetail" class="font-medium text-slate-600">Netral / Negatif perlu pantauan</span>
-                        <span class="text-bps-orangeDark font-semibold opacity-0 group-hover:opacity-100 transition">Mitigasi &rarr;</span>
-                    </div>
+                <div class="text-xs text-slate-500 flex items-center gap-2 bg-white px-3 py-1.5 rounded-lg border border-slate-200">
+                    <i data-lucide="database" class="w-3.5 h-3.5 text-bps-blue"></i>
+                    <span>Periode Data: <strong id="dateRangeText" class="text-slate-800 font-semibold">Memuat...</strong></span>
+                    <span class="text-slate-300">|</span>
+                    <span>Update: <strong id="lastUpdateText" class="text-slate-800 font-semibold">-</strong></span>
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
-                <div class="clean-card p-5 rounded-xl lg:col-span-2">
-                    <div class="flex items-center justify-between mb-4">
-                        <div>
-                            <h3 class="font-bold text-slate-900 text-base">Tren Sentimen Pemberitaan Harian</h3>
-                            <p class="text-xs text-slate-500">Pergerakan volume & tone media sesuai linimasa database pemantauan</p>
+            <!-- SECTION 1: EXECUTIVE DASHBOARD -->
+            <div id="section-dashboard" class="space-y-6">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div id="card-total" onclick="filterByCard('total')" class="clean-card p-5 rounded-xl hover:border-bps-blue transition cursor-pointer group">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-[11px] font-bold uppercase tracking-wider text-slate-500 group-hover:text-bps-blue transition">Total Liputan Media</p>
+                                <h3 class="text-3xl font-extrabold text-slate-900 mt-1.5" id="kpiTotal">-</h3>
+                            </div>
+                            <div class="p-2.5 bg-[#008FD5]/10 text-bps-blue rounded-lg">
+                                <i data-lucide="globe" class="w-5 h-5"></i>
+                            </div>
                         </div>
-                        <span class="text-[11px] bg-[#008FD5]/10 text-bps-blue px-2.5 py-1 rounded-md font-semibold border border-[#008FD5]/20">Live Database</span>
+                        <div class="mt-3.5 flex items-center justify-between text-xs text-slate-500 pt-3 border-t border-slate-100">
+                            <span id="kpiMediaCount" class="flex items-center font-medium"><i data-lucide="newspaper" class="w-3.5 h-3.5 mr-1.5 text-bps-blue"></i> Dari 0 media</span>
+                            <span class="text-bps-blue font-semibold opacity-0 group-hover:opacity-100 transition">Semua &rarr;</span>
+                        </div>
                     </div>
-                    <div class="h-64 relative">
-                        <canvas id="sentimentTrendChart"></canvas>
+
+                    <div id="card-positif" onclick="filterByCard('positif')" class="clean-card p-5 rounded-xl hover:border-bps-green transition cursor-pointer group">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-[11px] font-bold uppercase tracking-wider text-slate-500 group-hover:text-bps-greenDark transition">Sentimen Positif</p>
+                                <h3 class="text-3xl font-extrabold text-bps-greenDark mt-1.5" id="kpiPositivePct">-</h3>
+                            </div>
+                            <div class="p-2.5 bg-[#68B92E]/10 text-bps-greenDark rounded-lg">
+                                <i data-lucide="smile" class="w-5 h-5"></i>
+                            </div>
+                        </div>
+                        <div class="mt-3.5 flex items-center justify-between text-xs text-slate-500 pt-3 border-t border-slate-100">
+                            <span id="kpiSentimentBreakdown" class="text-slate-600 font-medium">0 Positif • 0 Netral • 0 Negatif</span>
+                            <span class="text-bps-greenDark font-semibold opacity-0 group-hover:opacity-100 transition">Filter &rarr;</span>
+                        </div>
+                    </div>
+
+                    <div id="card-reputasi" onclick="filterByCard('reputasi')" class="clean-card p-5 rounded-xl hover:border-bps-navy transition cursor-pointer group">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-[11px] font-bold uppercase tracking-wider text-slate-500 group-hover:text-bps-navy transition">Indeks Reputasi PR</p>
+                                <h3 class="text-3xl font-extrabold text-bps-navy mt-1.5"><span id="kpiReputationScore">-</span><span class="text-sm text-slate-400 font-normal">/10</span></h3>
+                            </div>
+                            <div class="p-2.5 bg-[#06182E]/10 text-bps-navy rounded-lg">
+                                <i data-lucide="award" class="w-5 h-5"></i>
+                            </div>
+                        </div>
+                        <div class="mt-3.5 flex items-center justify-between text-xs text-bps-greenDark font-semibold pt-3 border-t border-slate-100">
+                            <span id="kpiReputationLabel" class="flex items-center"><i data-lucide="check-circle2" class="w-3.5 h-3.5 mr-1"></i> Menghitung skor...</span>
+                            <span class="text-bps-navy font-semibold opacity-0 group-hover:opacity-100 transition">Detail &rarr;</span>
+                        </div>
+                    </div>
+
+                    <div id="card-atensi" onclick="filterByCard('atensi')" class="clean-card p-5 rounded-xl hover:border-bps-orange transition cursor-pointer group">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-[11px] font-bold uppercase tracking-wider text-slate-500 group-hover:text-bps-orangeDark transition">Atensi & Mitigasi Isu</p>
+                                <h3 class="text-3xl font-extrabold text-bps-orange mt-1.5" id="kpiAttentionCount">-</h3>
+                            </div>
+                            <div class="p-2.5 bg-[#EB891B]/10 text-bps-orange rounded-lg">
+                                <i data-lucide="alert-circle" class="w-5 h-5"></i>
+                            </div>
+                        </div>
+                        <div class="mt-3.5 flex items-center justify-between text-xs text-slate-500 pt-3 border-t border-slate-100">
+                            <span id="kpiAttentionDetail" class="font-medium text-slate-600">Netral / Negatif perlu pantauan</span>
+                            <span class="text-bps-orangeDark font-semibold opacity-0 group-hover:opacity-100 transition">Mitigasi &rarr;</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+                    <div class="clean-card p-5 rounded-xl lg:col-span-2">
+                        <div class="flex items-center justify-between mb-4">
+                            <div>
+                                <h3 class="font-bold text-slate-900 text-base">Tren Sentimen Pemberitaan Harian</h3>
+                                <p class="text-xs text-slate-500">Pergerakan volume & tone media sesuai linimasa database pemantauan</p>
+                            </div>
+                            <span class="text-[11px] bg-[#008FD5]/10 text-bps-blue px-2.5 py-1 rounded-md font-semibold border border-[#008FD5]/20">Live Database</span>
+                        </div>
+                        <div class="h-64 relative">
+                            <canvas id="sentimentTrendChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="clean-card p-5 rounded-xl">
+                        <div class="flex items-center justify-between mb-4">
+                            <div>
+                                <h3 class="font-bold text-slate-900 text-base">Media Partner Teraktif</h3>
+                                <p class="text-xs text-slate-500">Distribusi publikasi berdasarkan media outlet</p>
+                            </div>
+                        </div>
+                        <div class="h-64 relative flex items-center justify-center">
+                            <canvas id="mediaShareChart"></canvas>
+                        </div>
                     </div>
                 </div>
 
                 <div class="clean-card p-5 rounded-xl">
                     <div class="flex items-center justify-between mb-4">
                         <div>
-                            <h3 class="font-bold text-slate-900 text-base">Media Partner Teraktif</h3>
-                            <p class="text-xs text-slate-500">Distribusi publikasi berdasarkan media outlet</p>
+                            <h3 class="font-bold text-slate-900 text-base">Sebaran Topik Indikator & Isu Strategis</h3>
+                            <p class="text-xs text-slate-500">Klasifikasi otomatis berdasarkan judul dan ringkasan berita di database</p>
                         </div>
                     </div>
-                    <div class="h-64 relative flex items-center justify-center">
-                        <canvas id="mediaShareChart"></canvas>
+                    <div class="h-56 relative">
+                        <canvas id="topicsChart"></canvas>
                     </div>
                 </div>
             </div>
 
-            <div class="clean-card p-5 rounded-xl">
-                <div class="flex items-center justify-between mb-4">
-                    <div>
-                        <h3 class="font-bold text-slate-900 text-base">Sebaran Topik Indikator & Isu Strategis</h3>
-                        <p class="text-xs text-slate-500">Klasifikasi otomatis berdasarkan judul dan ringkasan berita di database</p>
-                    </div>
-                </div>
-                <div class="h-56 relative">
-                    <canvas id="topicsChart"></canvas>
-                </div>
-            </div>
-        </div>
-
-        <!-- SECTION 2: NEWS MONITORING TABLE -->
-        <div id="section-news" class="space-y-5 hidden">
-            <div class="clean-card p-5 rounded-xl space-y-4">
-                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                    <div>
-                        <h3 class="font-bold text-slate-900 text-lg">Direktori & Kliping Media</h3>
-                        <p class="text-xs text-slate-500">Arsip pemberitaan terverifikasi beserta analisis sentimen dan rekomendasi tindak lanjut</p>
-                    </div>
-                    <div class="flex flex-wrap items-center gap-2">
-                        <div class="relative min-w-[210px]">
-                            <i data-lucide="search" class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                            <input type="text" id="searchInput" onkeyup="filterNewsTable()" placeholder="Cari judul atau media..." class="w-full pl-9 pr-3 py-1.5 text-xs bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-bps-blue">
+            <!-- SECTION 2: NEWS MONITORING TABLE -->
+            <div id="section-news" class="space-y-5 hidden">
+                <div class="clean-card p-5 rounded-xl space-y-4">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                        <div>
+                            <h3 class="font-bold text-slate-900 text-lg">Direktori & Kliping Media</h3>
+                            <p class="text-xs text-slate-500">Arsip pemberitaan terverifikasi beserta analisis sentimen dan rekomendasi tindak lanjut</p>
                         </div>
-                        <select id="sentimentFilter" onchange="filterNewsTable()" class="bg-white border border-slate-300 text-xs rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-bps-blue font-medium">
-                            <option value="ALL">Semua Sentimen</option>
-                            <option value="Positif">Positif</option>
-                            <option value="Netral">Netral</option>
-                            <option value="Negatif">Negatif</option>
-                        </select>
-                        <select id="topicFilter" onchange="filterNewsTable()" class="bg-white border border-slate-300 text-xs rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-bps-blue font-medium">
-                            <option value="ALL">Semua Topik</option>
-                            <option value="Pertumbuhan Ekonomi">Pertumbuhan Ekonomi</option>
-                            <option value="Ketenagakerjaan & Kemiskinan">Ketenagakerjaan & Kemiskinan</option>
-                            <option value="Pertanian & NTP">Pertanian & NTP</option>
-                            <option value="IPM & Pendidikan">IPM & Pendidikan</option>
-                            <option value="Inflasi & Harga">Inflasi & Harga</option>
-                            <option value="Isu Daerah & Umum">Isu Daerah & Umum</option>
-                        </select>
-                        <button onclick="resetNewsFilters()" class="px-2.5 py-1.5 text-xs font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-lg transition inline-flex items-center gap-1" title="Reset semua filter">
-                            <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
-                            <span>Reset</span>
-                        </button>
-                    </div>
-                </div>
-
-                <div class="overflow-x-auto rounded-lg border border-slate-200">
-                    <table class="w-full text-left text-xs text-slate-700">
-                        <thead class="bg-slate-50 text-slate-600 uppercase text-[11px] tracking-wider font-bold border-b border-slate-200">
-                            <tr>
-                                <th class="px-4 py-3">Tanggal</th>
-                                <th class="px-4 py-3">Judul Artikel Berita</th>
-                                <th class="px-4 py-3">Media Outlet</th>
-                                <th class="px-4 py-3">Topik</th>
-                                <th class="px-4 py-3 text-center">Sentimen</th>
-                                <th class="px-4 py-3 text-right">Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody id="newsTableBody" class="divide-y divide-slate-200 bg-white">
-                            <tr>
-                                <td colspan="6" class="px-4 py-8 text-center text-slate-400">Memuat data berita dari database...</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <div class="flex items-center justify-between text-xs text-slate-500 pt-1">
-                    <span id="showingCount">Menampilkan 0 dari 0 berita</span>
-                    <span class="text-slate-400">Urutan: Terbaru di atas</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- SECTION 3: AUTOMATED BRS PIPELINE -->
-        <div id="section-brs" class="hidden">
-            <div class="clean-card rounded-xl overflow-hidden">
-                <div class="p-6 border-b border-slate-100 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-                    <div>
-                        <div class="flex flex-wrap items-center gap-2 mb-1.5">
-                            <span class="px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wider rounded bg-[#008FD5]/10 text-bps-blue border border-[#008FD5]/20">
-                                Layanan Publikasi BRS
-                            </span>
-                            <span class="text-xs text-slate-400">• Standar Tata Naskah BPS Provinsi Lampung</span>
-                        </div>
-                        <h2 class="text-lg sm:text-xl font-bold text-bps-navy tracking-tight">
-                            Penyusunan Draf Siaran Pers Resmi
-                        </h2>
-                        <p class="text-xs sm:text-sm text-slate-500 mt-0.5">
-                            Unggah bahan paparan rilis Kepala BPS untuk menghasilkan draf siaran pers terstruktur sesuai format baku instansi.
-                        </p>
-                    </div>
-                    <a href="virtual-office.html" class="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-bps-navy hover:bg-bps-dark text-white text-xs font-semibold transition shrink-0">
-                        <i data-lucide="monitor" class="w-4 h-4 text-[#67D4FF]"></i>
-                        <span>Pantau di Ruang Kendali</span>
-                    </a>
-                </div>
-
-                <div class="p-6 space-y-5">
-                    <div id="dropZoneArea" class="border-2 border-dashed border-slate-300 hover:border-bps-blue rounded-xl py-10 px-6 text-center bg-slate-50/70 hover:bg-[#008FD5]/[0.02] transition relative group">
-                        <input type="file" id="brsFileInput" accept=".pptx,.ppt,.pdf" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" onchange="handleFileSelected(this)">
-                        <div class="flex flex-col items-center space-y-2.5 pointer-events-none">
-                            <div class="w-12 h-12 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-bps-blue">
-                                <i data-lucide="file-up" class="w-6 h-6"></i>
+                        <div class="flex flex-wrap items-center gap-2">
+                            <div class="relative min-w-[210px]">
+                                <i data-lucide="search" class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                                <input type="text" id="searchInput" onkeyup="filterNewsTable()" placeholder="Cari judul atau media..." class="w-full pl-9 pr-3 py-1.5 text-xs bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-bps-blue">
                             </div>
-                            <div>
-                                <p class="text-sm font-semibold text-slate-800" id="uploadFileLabel">
-                                    Seret berkas paparan rilis ke area ini, atau <span class="text-bps-blue underline underline-offset-2">klik untuk memilih</span>
-                                </p>
-                                <p class="text-xs text-slate-400 mt-1">
-                                    Mendukung format <span class="font-medium text-slate-600">.PPTX</span>, <span class="font-medium text-slate-600">.PPT</span>, atau <span class="font-medium text-slate-600">.PDF</span> (Maksimal 25 MB)
-                                </p>
-                            </div>
-                            <button type="button" class="px-5 py-2 bg-bps-blue text-white text-xs font-semibold rounded-lg">
-                                Pilih Berkas Paparan
+                            <select id="sentimentFilter" onchange="filterNewsTable()" class="bg-white border border-slate-300 text-xs rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-bps-blue font-medium">
+                                <option value="ALL">Semua Sentimen</option>
+                                <option value="Positif">Positif</option>
+                                <option value="Netral">Netral</option>
+                                <option value="Negatif">Negatif</option>
+                            </select>
+                            <select id="topicFilter" onchange="filterNewsTable()" class="bg-white border border-slate-300 text-xs rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-bps-blue font-medium">
+                                <option value="ALL">Semua Topik</option>
+                                <option value="Pertumbuhan Ekonomi">Pertumbuhan Ekonomi</option>
+                                <option value="Ketenagakerjaan & Kemiskinan">Ketenagakerjaan & Kemiskinan</option>
+                                <option value="Pertanian & NTP">Pertanian & NTP</option>
+                                <option value="IPM & Pendidikan">IPM & Pendidikan</option>
+                                <option value="Inflasi & Harga">Inflasi & Harga</option>
+                                <option value="Isu Daerah & Umum">Isu Daerah & Umum</option>
+                            </select>
+                            <button onclick="resetNewsFilters()" class="px-2.5 py-1.5 text-xs font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-lg transition inline-flex items-center gap-1" title="Reset semua filter">
+                                <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
+                                <span>Reset</span>
                             </button>
                         </div>
                     </div>
 
-                    <div id="uploadActionArea" class="hidden flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-[#008FD5]/[0.06] p-4 rounded-xl border border-[#008FD5]/25">
-                        <div class="flex items-center space-x-3">
-                            <div class="p-2 bg-white rounded-lg border border-[#008FD5]/20 text-bps-blue">
-                                <i data-lucide="file-check" class="w-5 h-5"></i>
-                            </div>
-                            <div>
-                                <p class="text-xs font-bold text-slate-800" id="selectedFileName">-</p>
-                                <p class="text-[11px] text-slate-500" id="selectedFileSize">-</p>
-                            </div>
-                        </div>
-                        <button onclick="uploadBrsFileToDrive()" id="uploadSubmitBtn" class="px-4 py-2 bg-bps-green hover:bg-bps-greenDark text-white text-xs font-semibold rounded-lg transition flex items-center justify-center gap-1.5">
-                            <i data-lucide="send" class="w-3.5 h-3.5"></i>
-                            <span>Proses Penyusunan Draf</span>
-                        </button>
+                    <div class="overflow-x-auto rounded-lg border border-slate-200">
+                        <table class="w-full text-left text-xs text-slate-700">
+                            <thead class="bg-slate-50 text-slate-600 uppercase text-[11px] tracking-wider font-bold border-b border-slate-200">
+                                <tr>
+                                    <th class="px-4 py-3">Tanggal</th>
+                                    <th class="px-4 py-3">Judul Artikel Berita</th>
+                                    <th class="px-4 py-3">Media Outlet</th>
+                                    <th class="px-4 py-3">Topik</th>
+                                    <th class="px-4 py-3 text-center">Sentimen</th>
+                                    <th class="px-4 py-3 text-right">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="newsTableBody" class="divide-y divide-slate-200 bg-white">
+                                <tr>
+                                    <td colspan="6" class="px-4 py-8 text-center text-slate-400">Memuat data berita dari database...</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
 
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-5 border-t border-slate-100">
-                        <div class="p-4 rounded-lg bg-slate-50 border border-slate-200/70">
-                            <div class="flex items-center gap-2 mb-1.5">
-                                <span class="w-5 h-5 rounded bg-bps-blue text-white text-[11px] font-bold flex items-center justify-center">1</span>
-                                <span class="text-xs font-bold text-slate-800">Unggah Materi</span>
+                    <div class="flex items-center justify-between text-xs text-slate-500 pt-1">
+                        <span id="showingCount">Menampilkan 0 dari 0 berita</span>
+                        <span class="text-slate-400">Urutan: Terbaru di atas</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 3: AUTOMATED BRS PIPELINE -->
+            <div id="section-brs" class="hidden">
+                <div class="clean-card rounded-xl overflow-hidden">
+                    <div class="p-6 border-b border-slate-100 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                        <div>
+                            <div class="flex flex-wrap items-center gap-2 mb-1.5">
+                                <span class="px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wider rounded bg-[#008FD5]/10 text-bps-blue border border-[#008FD5]/20">
+                                    Layanan Publikasi BRS
+                                </span>
+                                <span class="text-xs text-slate-400">• Standar Tata Naskah BPS Provinsi Lampung</span>
                             </div>
-                            <p class="text-xs text-slate-500 leading-relaxed">Berkas bahan paparan rilis diarsipkan langsung ke repositori kerja Humas.</p>
+                            <h2 class="text-lg sm:text-xl font-bold text-bps-navy tracking-tight">
+                                Penyusunan Draf Siaran Pers Resmi
+                            </h2>
+                            <p class="text-xs sm:text-sm text-slate-500 mt-0.5">
+                                Unggah bahan paparan rilis Kepala BPS untuk menghasilkan draf siaran pers terstruktur sesuai format baku instansi.
+                            </p>
                         </div>
-                        <div class="p-4 rounded-lg bg-slate-50 border border-slate-200/70">
-                            <div class="flex items-center gap-2 mb-1.5">
-                                <span class="w-5 h-5 rounded bg-bps-navy text-white text-[11px] font-bold flex items-center justify-center">2</span>
-                                <span class="text-xs font-bold text-slate-800">Ekstraksi Indikator</span>
+                        <a href="virtual-office.html" class="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-bps-navy hover:bg-bps-dark text-white text-xs font-semibold transition shrink-0">
+                            <i data-lucide="monitor" class="w-4 h-4 text-[#67D4FF]"></i>
+                            <span>Pantau di Ruang Kendali</span>
+                        </a>
+                    </div>
+
+                    <div class="p-6 space-y-5">
+                        <div id="dropZoneArea" class="border-2 border-dashed border-slate-300 hover:border-bps-blue rounded-xl py-10 px-6 text-center bg-slate-50/70 hover:bg-[#008FD5]/[0.02] transition relative group">
+                            <input type="file" id="brsFileInput" accept=".pptx,.ppt,.pdf" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" onchange="handleFileSelected(this)">
+                            <div class="flex flex-col items-center space-y-2.5 pointer-events-none">
+                                <div class="w-12 h-12 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-bps-blue">
+                                    <i data-lucide="file-up" class="w-6 h-6"></i>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-semibold text-slate-800" id="uploadFileLabel">
+                                        Seret berkas paparan rilis ke area ini, atau <span class="text-bps-blue underline underline-offset-2">klik untuk memilih</span>
+                                    </p>
+                                    <p class="text-xs text-slate-400 mt-1">
+                                        Mendukung format <span class="font-medium text-slate-600">.PPTX</span>, <span class="font-medium text-slate-600">.PPT</span>, atau <span class="font-medium text-slate-600">.PDF</span> (Maksimal 25 MB)
+                                    </p>
+                                </div>
+                                <button type="button" class="px-5 py-2 bg-bps-blue text-white text-xs font-semibold rounded-lg">
+                                    Pilih Berkas Paparan
+                                </button>
                             </div>
-                            <p class="text-xs text-slate-500 leading-relaxed">Sistem menyusun narasi data storytelling dan kutipan resmi Kepala BPS.</p>
                         </div>
-                        <div class="p-4 rounded-lg bg-slate-50 border border-slate-200/70">
-                            <div class="flex items-center gap-2 mb-1.5">
-                                <span class="w-5 h-5 rounded bg-bps-green text-white text-[11px] font-bold flex items-center justify-center">3</span>
-                                <span class="text-xs font-bold text-slate-800">Format Tata Naskah</span>
+
+                        <div id="uploadActionArea" class="hidden flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-[#008FD5]/[0.06] p-4 rounded-xl border border-[#008FD5]/25">
+                            <div class="flex items-center space-x-3">
+                                <div class="p-2 bg-white rounded-lg border border-[#008FD5]/20 text-bps-blue">
+                                    <i data-lucide="file-check" class="w-5 h-5"></i>
+                                </div>
+                                <div>
+                                    <p class="text-xs font-bold text-slate-800" id="selectedFileName">-</p>
+                                    <p class="text-[11px] text-slate-500" id="selectedFileSize">-</p>
+                                </div>
                             </div>
-                            <p class="text-xs text-slate-500 leading-relaxed">Draf otomatis terformat rapi pada dokumen siap sunting di Google Drive.</p>
+                            <button onclick="uploadBrsFileToDrive()" id="uploadSubmitBtn" class="px-4 py-2 bg-bps-green hover:bg-bps-greenDark text-white text-xs font-semibold rounded-lg transition flex items-center justify-center gap-1.5">
+                                <i data-lucide="send" class="w-3.5 h-3.5"></i>
+                                <span>Proses Penyusunan Draf</span>
+                            </button>
                         </div>
-                        <div class="p-4 rounded-lg bg-slate-50 border border-slate-200/70">
-                            <div class="flex items-center gap-2 mb-1.5">
-                                <span class="w-5 h-5 rounded bg-bps-orange text-white text-[11px] font-bold flex items-center justify-center">4</span>
-                                <span class="text-xs font-bold text-slate-800">Notifikasi Tim Humas</span>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-5 border-t border-slate-100">
+                            <div class="p-4 rounded-lg bg-slate-50 border border-slate-200/70">
+                                <div class="flex items-center gap-2 mb-1.5">
+                                    <span class="w-5 h-5 rounded bg-bps-blue text-white text-[11px] font-bold flex items-center justify-center">1</span>
+                                    <span class="text-xs font-bold text-slate-800">Unggah Materi</span>
+                                </div>
+                                <p class="text-xs text-slate-500 leading-relaxed">Berkas bahan paparan rilis diarsipkan langsung ke repositori kerja Humas.</p>
                             </div>
-                            <p class="text-xs text-slate-500 leading-relaxed">Tautan dokumen final dikirim otomatis ke saluran koordinasi tim.</p>
+                            <div class="p-4 rounded-lg bg-slate-50 border border-slate-200/70">
+                                <div class="flex items-center gap-2 mb-1.5">
+                                    <span class="w-5 h-5 rounded bg-bps-navy text-white text-[11px] font-bold flex items-center justify-center">2</span>
+                                    <span class="text-xs font-bold text-slate-800">Ekstraksi Indikator</span>
+                                </div>
+                                <p class="text-xs text-slate-500 leading-relaxed">Sistem menyusun narasi data storytelling dan kutipan resmi Kepala BPS.</p>
+                            </div>
+                            <div class="p-4 rounded-lg bg-slate-50 border border-slate-200/70">
+                                <div class="flex items-center gap-2 mb-1.5">
+                                    <span class="w-5 h-5 rounded bg-bps-green text-white text-[11px] font-bold flex items-center justify-center">3</span>
+                                    <span class="text-xs font-bold text-slate-800">Format Tata Naskah</span>
+                                </div>
+                                <p class="text-xs text-slate-500 leading-relaxed">Draf otomatis terformat rapi pada dokumen siap sunting di Google Drive.</p>
+                            </div>
+                            <div class="p-4 rounded-lg bg-slate-50 border border-slate-200/70">
+                                <div class="flex items-center gap-2 mb-1.5">
+                                    <span class="w-5 h-5 rounded bg-bps-orange text-white text-[11px] font-bold flex items-center justify-center">4</span>
+                                    <span class="text-xs font-bold text-slate-800">Notifikasi Tim Humas</span>
+                                </div>
+                                <p class="text-xs text-slate-500 leading-relaxed">Tautan dokumen final dikirim otomatis ke saluran koordinasi tim.</p>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!-- SECTION 4: API BRIDGE ARCHITECTURE (ADMIN ONLY) -->
-        <div id="section-bridge" class="space-y-6 hidden">
-            <div class="clean-card p-6 rounded-xl space-y-5">
-                <div class="flex items-center space-x-3">
-                    <div class="p-3 bg-[#68B92E]/15 text-bps-greenDark rounded-xl">
-                        <i data-lucide="shield-check" class="w-6 h-6"></i>
-                    </div>
-                    <div>
-                        <h3 class="text-lg font-bold text-slate-900">Arsitektur Keamanan: Google Sheets API Bridge</h3>
-                        <p class="text-xs text-slate-500">Dual-route API Gateway yang melayani Dashboard Utama dan Ruang Kendali 3D secara bersamaan</p>
-                    </div>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-5 pt-5 border-t border-slate-200">
-                    <div class="space-y-2 bg-slate-50 p-4 rounded-lg border border-slate-200">
-                        <div class="flex items-center space-x-2 text-slate-900 font-bold text-xs sm:text-sm">
-                            <span class="w-5 h-5 rounded-full bg-slate-200 text-slate-800 flex items-center justify-center text-xs">1</span>
-                            <span>Spreadsheet Internal</span>
+            <!-- SECTION 4: API BRIDGE ARCHITECTURE (ADMIN ONLY) -->
+            <div id="section-bridge" class="space-y-6 hidden">
+                <div class="clean-card p-6 rounded-xl space-y-5">
+                    <div class="flex items-center space-x-3">
+                        <div class="p-3 bg-[#68B92E]/15 text-bps-greenDark rounded-xl">
+                            <i data-lucide="shield-check" class="w-6 h-6"></i>
                         </div>
-                        <p class="text-xs text-slate-500 leading-relaxed">Database monitoring dan status agent disimpan secara tertutup di Google Drive BPS Provinsi Lampung.</p>
-                        <div class="bg-white p-2 rounded border border-slate-200 font-mono text-[11px] text-slate-700">🔒 Tab: Monitoring, Agent_State & Latest_BRS</div>
-                    </div>
-                    <div class="space-y-2 bg-[#008FD5]/[0.04] p-4 rounded-lg border border-[#008FD5]/20">
-                        <div class="flex items-center space-x-2 text-slate-900 font-bold text-xs sm:text-sm">
-                            <span class="w-5 h-5 rounded-full bg-[#008FD5]/20 text-bps-blue flex items-center justify-center text-xs">2</span>
-                            <span>Apps Script Web App</span>
+                        <div>
+                            <h3 class="text-lg font-bold text-slate-900">Arsitektur Keamanan: Google Sheets API Bridge</h3>
+                            <p class="text-xs text-slate-500">Dual-route API Gateway yang melayani Dashboard Utama dan Ruang Kendali 3D secara bersamaan</p>
                         </div>
-                        <p class="text-xs text-slate-500 leading-relaxed">Jalur default menyuplai data grafik, jalur <code>?mode=agents</code> menyuplai status agen dengan Secret Payload Token.</p>
-                        <div class="bg-white p-2 rounded border border-[#008FD5]/20 font-mono text-[11px] text-bps-blue">⚡ GET .../exec (Secured Token)</div>
                     </div>
-                    <div class="space-y-2 bg-[#68B92E]/[0.04] p-4 rounded-lg border border-[#68B92E]/20">
-                        <div class="flex items-center space-x-2 text-slate-900 font-bold text-xs sm:text-sm">
-                            <span class="w-5 h-5 rounded-full bg-[#68B92E]/20 text-bps-greenDark flex items-center justify-center text-xs">3</span>
-                            <span>Visualisasi Real-Time</span>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-5 pt-5 border-t border-slate-200">
+                        <div class="space-y-2 bg-slate-50 p-4 rounded-lg border border-slate-200">
+                            <div class="flex items-center space-x-2 text-slate-900 font-bold text-xs sm:text-sm">
+                                <span class="w-5 h-5 rounded-full bg-slate-200 text-slate-800 flex items-center justify-center text-xs">1</span>
+                                <span>Spreadsheet Internal</span>
+                            </div>
+                            <p class="text-xs text-slate-500 leading-relaxed">Database monitoring dan status agent disimpan secara tertutup di Google Drive BPS Provinsi Lampung.</p>
+                            <div class="bg-white p-2 rounded border border-slate-200 font-mono text-[11px] text-slate-700">🔒 Tab: Monitoring, Agent_State & Latest_BRS</div>
                         </div>
-                        <p class="text-xs text-slate-500 leading-relaxed">Dashboard menghitung metrik, sentimen, dan rentang tanggal grafik langsung dari payload JSON terbaru.</p>
-                        <div class="bg-white p-2 rounded border border-[#68B92E]/20 font-mono text-[11px] text-bps-greenDark">🌐 Chart.js + TailwindCSS</div>
+                        <div class="space-y-2 bg-[#008FD5]/[0.04] p-4 rounded-lg border border-[#008FD5]/20">
+                            <div class="flex items-center space-x-2 text-slate-900 font-bold text-xs sm:text-sm">
+                                <span class="w-5 h-5 rounded-full bg-[#008FD5]/20 text-bps-blue flex items-center justify-center text-xs">2</span>
+                                <span>Apps Script Web App</span>
+                            </div>
+                            <p class="text-xs text-slate-500 leading-relaxed">Jalur default menyuplai data grafik, jalur <code>?mode=agents</code> menyuplai status agen dengan Secret Payload Token.</p>
+                            <div class="bg-white p-2 rounded border border-[#008FD5]/20 font-mono text-[11px] text-bps-blue">⚡ GET .../exec (Secured Token)</div>
+                        </div>
+                        <div class="space-y-2 bg-[#68B92E]/[0.04] p-4 rounded-lg border border-[#68B92E]/20">
+                            <div class="flex items-center space-x-2 text-slate-900 font-bold text-xs sm:text-sm">
+                                <span class="w-5 h-5 rounded-full bg-[#68B92E]/20 text-bps-greenDark flex items-center justify-center text-xs">3</span>
+                                <span>Visualisasi Real-Time</span>
+                            </div>
+                            <p class="text-xs text-slate-500 leading-relaxed">Dashboard menghitung metrik, sentimen, dan rentang tanggal grafik langsung dari payload JSON terbaru.</p>
+                            <div class="bg-white p-2 rounded border border-[#68B92E]/20 font-mono text-[11px] text-bps-greenDark">🌐 Chart.js + TailwindCSS</div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-    </main>
+        </main>
+
+        <!-- Footer & Virtual Office AI Agents Status -->
+        <footer class="bg-white border-t border-slate-200 py-4 mt-auto">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-center gap-2.5">
+                <div class="text-center text-xs text-slate-500 flex flex-col sm:flex-row items-center justify-between gap-2 w-full">
+                    <div>&copy; 2026 <strong>BPS Provinsi Lampung</strong> • Tim Kehumasan & Publikasi</div>
+                    <div class="flex items-center space-x-3">
+                        <span>Sumber Data: Database Pemantauan Media</span><span>•</span>
+                        <a href="virtual-office.html" class="text-bps-blue font-semibold hover:underline">Ruang Kendali 3D</a>
+                    </div>
+                </div>
+                <div class="flex flex-wrap items-center justify-center gap-2 pt-2.5 border-t border-slate-100 w-full text-xs">
+                    <span class="font-bold text-slate-700 mr-1">Modul Agen:</span>
+                    <div class="flex items-center gap-1.5 bg-slate-50 px-2.5 py-1 border border-slate-200 rounded-md cursor-pointer hover:bg-slate-100 transition" onclick="alert('Agent Media Crawler: Memindai pembaruan berita media daring secara berkala.')">
+                        <span class="w-2 h-2 rounded-full bg-bps-blue"></span>
+                        <span class="font-medium text-slate-600">Crawler</span>
+                        <span class="bg-bps-blue text-white px-1.5 py-0.5 rounded text-[10px] font-bold" id="status-crawler">IDLE</span>
+                    </div>
+                    <div class="flex items-center gap-1.5 bg-slate-50 px-2.5 py-1 border border-slate-200 rounded-md cursor-pointer hover:bg-slate-100 transition" onclick="alert('Agent Drafter BRS: Menyusun draf siaran pers resmi sesuai tata naskah BPS.')">
+                        <span class="w-2 h-2 rounded-full bg-bps-green"></span>
+                        <span class="font-medium text-slate-600">Drafter</span>
+                        <span class="bg-bps-green text-white px-1.5 py-0.5 rounded text-[10px] font-bold" id="status-drafter">STANDBY</span>
+                    </div>
+                    <div class="flex items-center gap-1.5 bg-slate-50 px-2.5 py-1 border border-slate-200 rounded-md cursor-pointer hover:bg-slate-100 transition" onclick="alert('Agent Auditor & PR: Memantau sentimen dan mitigasi isu pemberitaan.')">
+                        <span class="w-2 h-2 rounded-full bg-bps-orange"></span>
+                        <span class="font-medium text-slate-600">Auditor</span>
+                        <span class="bg-bps-orange text-white px-1.5 py-0.5 rounded text-[10px] font-bold" id="status-auditor">ACTIVE</span>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
 
     <!-- Modals -->
     <div id="analysisModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 hidden items-center justify-center p-4">
@@ -493,49 +611,128 @@
         </div>
     </div>
 
-    <!-- Footer & Virtual Office AI Agents Status -->
-    <footer class="bg-white border-t border-slate-200 py-4 mt-auto">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-center gap-2.5">
-            <div class="text-center text-xs text-slate-500 flex flex-col sm:flex-row items-center justify-between gap-2 w-full">
-                <div>&copy; 2026 <strong>BPS Provinsi Lampung</strong> • Tim Kehumasan & Publikasi</div>
-                <div class="flex items-center space-x-3">
-                    <span>Sumber Data: Database Pemantauan Media</span><span>•</span>
-                    <a href="virtual-office.html" class="text-bps-blue font-semibold hover:underline">Ruang Kendali 3D</a>
-                </div>
-            </div>
-            <div class="flex flex-wrap items-center justify-center gap-2 pt-2.5 border-t border-slate-100 w-full text-xs">
-                <span class="font-bold text-slate-700 mr-1">Modul Agen:</span>
-                <div class="flex items-center gap-1.5 bg-slate-50 px-2.5 py-1 border border-slate-200 rounded-md cursor-pointer hover:bg-slate-100 transition" onclick="alert('Agent Media Crawler: Memindai pembaruan berita media daring secara berkala.')">
-                    <span class="w-2 h-2 rounded-full bg-bps-blue"></span>
-                    <span class="font-medium text-slate-600">Crawler</span>
-                    <span class="bg-bps-blue text-white px-1.5 py-0.5 rounded text-[10px] font-bold" id="status-crawler">IDLE</span>
-                </div>
-                <div class="flex items-center gap-1.5 bg-slate-50 px-2.5 py-1 border border-slate-200 rounded-md cursor-pointer hover:bg-slate-100 transition" onclick="alert('Agent Drafter BRS: Menyusun draf siaran pers resmi sesuai tata naskah BPS.')">
-                    <span class="w-2 h-2 rounded-full bg-bps-green"></span>
-                    <span class="font-medium text-slate-600">Drafter</span>
-                    <span class="bg-bps-green text-white px-1.5 py-0.5 rounded text-[10px] font-bold" id="status-drafter">STANDBY</span>
-                </div>
-                <div class="flex items-center gap-1.5 bg-slate-50 px-2.5 py-1 border border-slate-200 rounded-md cursor-pointer hover:bg-slate-100 transition" onclick="alert('Agent Auditor & PR: Memantau sentimen dan mitigasi isu pemberitaan.')">
-                    <span class="w-2 h-2 rounded-full bg-bps-orange"></span>
-                    <span class="font-medium text-slate-600">Auditor</span>
-                    <span class="bg-bps-orange text-white px-1.5 py-0.5 rounded text-[10px] font-bold" id="status-auditor">ACTIVE</span>
-                </div>
-            </div>
-        </div>
-    </footer>
-
     <!-- Notification Toast Element -->
     <div id="toast" class="fixed bottom-5 right-5 bg-bps-navy text-white px-4 py-3 rounded-lg shadow-xl text-xs font-semibold flex items-center space-x-2 transition-all duration-300 opacity-0 translate-y-4 pointer-events-none z-50 border border-slate-700">
         <i data-lucide="check-circle" class="w-4 h-4 text-bps-green"></i>
         <span id="toastMessage">Pesan Notifikasi</span>
     </div>
 
-    <!-- Application Script & Secured Token Handler -->
+    <!-- Application Script & Authentication Handler -->
     <script>
         lucide.createIcons();
 
+        // =========================================================================
+        // SISTEM AUTENTIKASI & ROLE AKSES (SHA-256)
+        // Default Akun:
+        // 1) Tim Humas : username = "humas" | password = "bps1800"
+        // 2) Admin     : username = "bima"  | password = "sigerhub2026"
+        // =========================================================================
+        const SESSION_AUTH_KEY = 'sigerhub_bps_lampung_session';
+        const AUTH_USERS = {
+            humas: {
+                hash: '6b8a093c2670709487790e26f904c2459829094466c405796e217e5b88c0f0e3', // bps1800
+                role: 'Tim Humas BPS',
+                isAdmin: false
+            },
+            bima: {
+                hash: '3f59907d57b9a43f91b86d6a68d76e95b45c7d2f2b788e1d962235d9f4898061', // sigerhub2026
+                role: 'Admin Utama',
+                isAdmin: true
+            }
+        };
+
+        async function sha256Hex(message) {
+            const msgBuffer = new TextEncoder().encode(message);
+            const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        }
+
+        function togglePasswordVisibility() {
+            const pwdInput = document.getElementById('loginPassword');
+            const eyeIcon = document.getElementById('eyeIcon');
+            if (pwdInput.type === 'password') {
+                pwdInput.type = 'text';
+                eyeIcon.setAttribute('data-lucide', 'eye-off');
+            } else {
+                pwdInput.type = 'password';
+                eyeIcon.setAttribute('data-lucide', 'eye');
+            }
+            lucide.createIcons();
+        }
+
+        async function handleLoginSubmit(e) {
+            e.preventDefault();
+            const username = document.getElementById('loginUsername').value.trim().toLowerCase();
+            const password = document.getElementById('loginPassword').value;
+            const errorBox = document.getElementById('loginErrorBox');
+            const errorText = document.getElementById('loginErrorText');
+
+            errorBox.classList.add('hidden');
+
+            const userRecord = AUTH_USERS[username];
+            if (!userRecord) {
+                errorText.innerText = 'Username tidak terdaftar di sistem SIGERHUB.';
+                errorBox.classList.remove('hidden');
+                return;
+            }
+
+            const inputHash = await sha256Hex(password);
+            // Fallback validasi jika browser non-HTTPS membatasi crypto.subtle
+            const fallbackValid = (username === 'humas' && password === 'bps1800') || (username === 'bima' && password === 'sigerhub2026');
+
+            if (inputHash === userRecord.hash || fallbackValid) {
+                const sessionPayload = {
+                    username: username,
+                    role: userRecord.role,
+                    isAdmin: userRecord.isAdmin,
+                    loginAt: Date.now()
+                };
+                sessionStorage.setItem(SESSION_AUTH_KEY, JSON.stringify(sessionPayload));
+                if (userRecord.isAdmin) {
+                    localStorage.setItem('bps_lampung_admin_mode', 'true');
+                } else {
+                    localStorage.removeItem('bps_lampung_admin_mode');
+                }
+                unlockPortal(sessionPayload);
+                showToast(`Selamat datang, ${userRecord.role}!`);
+            } else {
+                errorText.innerText = 'Kata sandi salah. Silakan periksa kembali.';
+                errorBox.classList.remove('hidden');
+            }
+        }
+
+        function unlockPortal(sessionData) {
+            document.getElementById('loginGate').classList.add('hidden');
+            document.getElementById('protectedAppWrapper').classList.remove('hidden');
+
+            const roleBadge = document.getElementById('activeUserRoleBadge');
+            if (roleBadge && sessionData.role) {
+                roleBadge.innerText = sessionData.role;
+            }
+
+            if (sessionData.isAdmin || localStorage.getItem('bps_lampung_admin_mode') === 'true') {
+                document.querySelectorAll('.admin-only').forEach(el => el.classList.remove('hidden'));
+            } else {
+                document.querySelectorAll('.admin-only').forEach(el => el.classList.add('hidden'));
+            }
+
+            initDropZoneDragEvents();
+            fetchLiveMonitoringData(false);
+            fetchAgentStates();
+            lucide.createIcons();
+        }
+
+        function logoutSession() {
+            sessionStorage.removeItem(SESSION_AUTH_KEY);
+            localStorage.removeItem('bps_lampung_admin_mode');
+            window.location.reload();
+        }
+
+        // =========================================================================
+        // API BRIDGE & LOGIKA DASHBOARD
+        // =========================================================================
         const API_URL = 'https://script.google.com/macros/s/AKfycbz6rjK1i0nCWf9i2ZgH6yblzCdeiz4Cq9hMeKbrEbEZImr5vRUEel8KIP4H2c0UWYMnAA/exec';
-        
         const _encT = ['QlA', 'Uy', 'X0xhbXB1bmc', 'X0h1bWFz', 'XzIwMjZf', 'U2VjdXJlS2V5'];
         const getClientToken = () => atob(_encT[0]) + atob(_encT[1]) + atob(_encT[2]) + atob(_encT[3]) + atob(_encT[4]) + atob(_encT[5]);
 
@@ -545,41 +742,25 @@
         let topicsChart = null;
         let selectedFileBase64 = null;
         let selectedFileMeta = null;
+        let intervalsStarted = false;
 
         window.onload = function() {
-            initAdminSecurityCheck();
-            initDropZoneDragEvents();
-            fetchLiveMonitoringData(false);
-            fetchAgentStates();
-        };
-
-        async function initAdminSecurityCheck() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const adminKey = urlParams.get('admin');
-            
-            if (adminKey) {
-                if (adminKey === 'bima') {
-                    try {
-                        const res = await fetch(`${API_URL}?mode=verifyAdmin&token=${getClientToken()}`);
-                        const json = await res.json();
-                        if (json.authorized || true) {
-                            localStorage.setItem('bps_lampung_admin_mode', 'true');
-                            showToast('Mode Admin Berhasil Diaktifkan.');
-                        }
-                    } catch(e) {
-                        localStorage.setItem('bps_lampung_admin_mode', 'true');
+            const rawSession = sessionStorage.getItem(SESSION_AUTH_KEY);
+            if (rawSession) {
+                try {
+                    const parsed = JSON.parse(rawSession);
+                    if (parsed && parsed.username) {
+                        unlockPortal(parsed);
+                        return;
                     }
-                } else if (adminKey === 'off') {
-                    localStorage.removeItem('bps_lampung_admin_mode');
-                    showToast('Mode Admin Dinonaktifkan.');
+                } catch (e) {
+                    sessionStorage.removeItem(SESSION_AUTH_KEY);
                 }
-                window.history.replaceState({}, document.title, window.location.pathname);
             }
-
-            if (localStorage.getItem('bps_lampung_admin_mode') === 'true') {
-                document.querySelectorAll('.admin-only').forEach(el => el.classList.remove('hidden'));
-            }
-        }
+            // Fokus otomatis ke input username saat login gate tampil
+            const userInput = document.getElementById('loginUsername');
+            if (userInput) userInput.focus();
+        };
 
         function initDropZoneDragEvents() {
             const dropZone = document.getElementById('dropZoneArea');
@@ -859,9 +1040,16 @@
         }
 
         async function fetchLiveMonitoringData(isManual = false) {
+            if (!sessionStorage.getItem(SESSION_AUTH_KEY)) return;
             const icon = document.getElementById('syncIcon');
             if (icon) icon.classList.add('animate-spin');
             setConnectionStatus('loading', 'Menarik data...');
+
+            if (!intervalsStarted) {
+                intervalsStarted = true;
+                setInterval(fetchAgentStates, 6000);
+                setInterval(() => fetchLiveMonitoringData(false), 60000);
+            }
 
             try {
                 const response = await fetch(`${API_URL}?token=${getClientToken()}`);
@@ -907,6 +1095,7 @@
         }
 
         async function fetchAgentStates() {
+            if (!sessionStorage.getItem(SESSION_AUTH_KEY)) return;
             try {
                 const response = await fetch(`${API_URL}?mode=agents&token=${getClientToken()}`);
                 if (!response.ok) return;
@@ -935,10 +1124,6 @@
                 console.error('Gagal memuat status agen:', e);
             }
         }
-
-        // Auto-sync status agen tiap 6 detik & data berita tiap 60 detik
-        setInterval(fetchAgentStates, 6000);
-        setInterval(() => fetchLiveMonitoringData(false), 60000);
 
         function updateDashboardMetricsAndCharts(data) {
             const total = data.length;
