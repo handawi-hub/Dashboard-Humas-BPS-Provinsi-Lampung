@@ -47,86 +47,69 @@
         ::-webkit-scrollbar-track { background: #F1F5F9; }
         ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
+
         /* ============================================================
-   MOBILE UI FIX (< 640px) — SIGERHUB INDEX.HTML
-   ============================================================ */
-@media (max-width: 640px) {
-  /* 1. Rapikan Header agar Logo/Judul di atas & Tombol Aksi rapi di baris bawah */
-  header > div,
-  nav > div {
-    flex-wrap: wrap !important;
-    gap: 10px !important;
-    padding-top: 12px !important;
-    padding-bottom: 12px !important;
-  }
-
-  /* Judul & subjudul BPS Provinsi Lampung tampil utuh tanpa terpotong (...) */
-  header h1,
-  header p,
-  header span {
-    white-space: normal !important;
-    overflow: visible !important;
-    text-overflow: unset !important;
-  }
-
-  /* Lencana "Portal Humas Terpadu" mengecil proporsional agar tidak bertabrakan */
-  header .rounded-full,
-  header [class*="badge"] {
-    font-size: 10px !important;
-    padding: 2px 8px !important;
-  }
-
-  /* Baris tombol kanan (3D Office, Refresh, Logout) turun ke baris kedua penuh & rapi */
-  header > div > div:last-child,
-  nav > div > div:last-child {
-    width: 100% !important;
-    display: flex !important;
-    justify-content: space-between !important;
-    align-items: center !important;
-    gap: 8px !important;
-    padding-top: 6px !important;
-    border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
-  }
-
-  header > div > div:last-child a,
-  header > div > div:last-child button:first-of-type {
-    flex: 1 !important;
-    justify-content: center !important;
-  }
-
-  /* 2. Tab Menu (Ringkasan Eksekutif, Media Monitoring, dll) rapi & tidak kepotong */
-  [role="tablist"],
-  .tab-nav,
-  main > div:first-child {
-    display: flex !important;
-    overflow-x: auto !important;
-    -webkit-overflow-scrolling: touch !important;
-    scrollbar-width: none !important;
-    gap: 6px !important;
-    padding-bottom: 4px !important;
-  }
-  [role="tablist"]::-webkit-scrollbar,
-  .tab-nav::-webkit-scrollbar {
-    display: none !important;
-  }
-  [role="tablist"] button,
-  .tab-nav button {
-    flex-shrink: 0 !important;
-    font-size: 12px !important;
-    padding: 7px 12px !important;
-  }
-
-  /* 3. Beri ruang napas lebih untuk kartu Donut Chart agar legend tidak kepotong */
-  canvas {
-    max-height: 260px !important;
-  }
-  .chart-container,
-  [class*="chart"] {
-    height: auto !important;
-    min-height: 290px !important;
-    padding-bottom: 12px !important;
-  }
-}
+           MOBILE UI FIX (< 640px) — SIGERHUB INDEX.HTML
+           ============================================================ */
+        @media (max-width: 640px) {
+            header > div,
+            nav > div {
+                flex-wrap: wrap !important;
+                gap: 10px !important;
+                padding-top: 12px !important;
+                padding-bottom: 12px !important;
+            }
+            header h1,
+            header p,
+            header span {
+                white-space: normal !important;
+                overflow: visible !important;
+                text-overflow: unset !important;
+            }
+            header .rounded-full,
+            header [class*="badge"] {
+                font-size: 10px !important;
+                padding: 2px 8px !important;
+            }
+            header > div > div:last-child,
+            nav > div > div:last-child {
+                width: 100% !important;
+                display: flex !important;
+                justify-content: space-between !important;
+                align-items: center !important;
+                gap: 8px !important;
+                padding-top: 6px !important;
+                border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+            }
+            header > div > div:last-child a,
+            header > div > div:last-child button:first-of-type {
+                flex: 1 !important;
+                justify-content: center !important;
+            }
+            [role="tablist"],
+            .tab-nav,
+            main > div:first-child {
+                display: flex !important;
+                overflow-x: auto !important;
+                -webkit-overflow-scrolling: touch !important;
+                scrollbar-width: none !important;
+                gap: 6px !important;
+                padding-bottom: 4px !important;
+            }
+            [role="tablist"]::-webkit-scrollbar,
+            .tab-nav::-webkit-scrollbar {
+                display: none !important;
+            }
+            [role="tablist"] button,
+            .tab-nav button {
+                flex-shrink: 0 !important;
+                font-size: 12px !important;
+                padding: 7px 12px !important;
+            }
+            canvas {
+                max-height: 270px !important;
+            }
+        }
     </style>
 </head>
 <body class="bg-[#F8FAFC] text-slate-800 antialiased min-h-screen flex flex-col">
@@ -135,7 +118,6 @@
     <!-- LOGIN GATE OVERLAY (MUNCUL PERTAMA KALI SEBELUM PORTAL TERBUKA)       -->
     <!-- ===================================================================== -->
     <div id="loginGate" class="fixed inset-0 z-50 bg-bps-navy flex items-center justify-center p-4 overflow-y-auto">
-        <!-- Dekorasi Gradien Halus -->
         <div class="absolute inset-0 overflow-hidden pointer-events-none">
             <div class="absolute -top-24 -left-24 w-96 h-96 rounded-full bg-bps-blue/15 blur-3xl"></div>
             <div class="absolute -bottom-24 -right-24 w-96 h-96 rounded-full bg-bps-orange/15 blur-3xl"></div>
@@ -145,7 +127,6 @@
             <div class="h-1.5 w-full bg-gradient-to-r from-[#008FD5] via-[#68B92E] to-[#EB891B]"></div>
 
             <div class="p-6 sm:p-8 space-y-6">
-                <!-- Header Logo & Instansi -->
                 <div class="text-center space-y-2">
                     <div class="w-16 h-16 rounded-2xl bg-slate-50 border border-slate-200 p-2.5 flex items-center justify-center mx-auto shadow-xs">
                         <img src="BPS.webp" alt="Logo BPS" class="w-full h-full object-contain">
@@ -159,13 +140,11 @@
                     </div>
                 </div>
 
-                <!-- Alert Error Login -->
                 <div id="loginErrorBox" class="hidden bg-rose-50 border border-rose-200 text-rose-700 px-3.5 py-2.5 rounded-xl text-xs font-medium flex items-center gap-2">
                     <i data-lucide="alert-circle" class="w-4 h-4 shrink-0 text-rose-600"></i>
                     <span id="loginErrorText">Username atau kata sandi tidak sesuai.</span>
                 </div>
 
-                <!-- Form Login -->
                 <form id="loginForm" onsubmit="handleLoginSubmit(event)" class="space-y-4">
                     <div>
                         <label for="loginUsername" class="block text-xs font-bold text-slate-700 mb-1.5">Username Pengguna</label>
@@ -213,7 +192,6 @@
         <header class="bg-bps-navy text-white sticky top-0 z-40 shadow-md">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex items-center justify-between py-3.5 gap-4">
-                    
                     <!-- Brand & Logo -->
                     <div class="flex items-center gap-3.5 min-w-0">
                         <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-white p-2 flex items-center justify-center shrink-0 shadow-sm">
@@ -261,7 +239,6 @@
                             <span class="hidden md:inline">Keluar</span>
                         </button>
                     </div>
-
                 </div>
             </div>
             <div class="h-[3px] w-full bg-gradient-to-r from-[#008FD5] via-[#68B92E] to-[#EB891B]"></div>
@@ -369,15 +346,18 @@
 
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
                     <div class="clean-card p-5 rounded-xl lg:col-span-2">
-                        <div class="flex items-center justify-between mb-4">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
                             <div>
                                 <h3 class="font-bold text-slate-900 text-base">Tren Sentimen Pemberitaan Harian</h3>
-                                <p class="text-xs text-slate-500">Pergerakan volume & tone media sesuai linimasa database pemantauan</p>
+                                <p class="text-xs text-slate-500">Pergerakan volume & tone media periode monitoring aktif (Mulai Nov 2026)</p>
                             </div>
                             <span class="text-[11px] bg-[#008FD5]/10 text-bps-blue px-2.5 py-1 rounded-md font-semibold border border-[#008FD5]/20">Live Database</span>
                         </div>
-                        <div class="h-64 relative">
-                            <canvas id="sentimentTrendChart"></canvas>
+                        <!-- Wrapper Horizontal Scroll agar jarak antar titik tanggal tetap lega -->
+                        <div id="sentimentScrollContainer" class="w-full overflow-x-auto pb-1">
+                            <div id="sentimentChartWrapper" class="h-64 relative" style="min-width: 100%;">
+                                <canvas id="sentimentTrendChart"></canvas>
+                            </div>
                         </div>
                     </div>
 
@@ -703,9 +683,6 @@
 
         // =========================================================================
         // SISTEM AUTENTIKASI & ROLE AKSES (SHA-256)
-        // Default Akun:
-        // 1) Tim Humas : username = "humas" | password = "bps1800"
-        // 2) Admin     : username = "bima"  | password = "sigerhub2026"
         // =========================================================================
         const SESSION_AUTH_KEY = 'sigerhub_bps_lampung_session';
         const AUTH_USERS = {
@@ -758,7 +735,6 @@
             }
 
             const inputHash = await sha256Hex(password);
-            // Fallback validasi jika browser non-HTTPS membatasi crypto.subtle
             const fallbackValid = (username === 'humas' && password === 'bps1800') || (username === 'bima' && password === 'sigerhub2026');
 
             if (inputHash === userRecord.hash || fallbackValid) {
@@ -816,6 +792,9 @@
         const _encT = ['QlA', 'Uy', 'X0xhbXB1bmc', 'X0h1bWFz', 'XzIwMjZf', 'U2VjdXJlS2V5'];
         const getClientToken = () => atob(_encT[0]) + atob(_encT[1]) + atob(_encT[2]) + atob(_encT[3]) + atob(_encT[4]) + atob(_encT[5]);
 
+        // Batas awal periode monitoring aktif: 1 November 2026
+        const START_MONITORING_TS = new Date(2026, 10, 1).getTime();
+
         let allNewsData = [];
         let sentimentChart = null;
         let mediaChart = null;
@@ -837,7 +816,6 @@
                     sessionStorage.removeItem(SESSION_AUTH_KEY);
                 }
             }
-            // Fokus otomatis ke input username saat login gate tampil
             const userInput = document.getElementById('loginUsername');
             if (userInput) userInput.focus();
         };
@@ -1140,22 +1118,25 @@
                     throw new Error(rawData.error || 'Format JSON bukan array berita');
                 }
 
-                allNewsData = rawData.map((row, idx) => {
-                    const parsedDate = parseSheetDate(row.tanggal);
-                    const sentiment = extractSentiment(row.analisis);
-                    const topic = detectTopic(row.judul, row.analisis);
-                    return {
-                        id: idx + 1,
-                        date: parsedDate.display,
-                        sortKey: parsedDate.sortKey,
-                        title: row.judul || '(Tanpa Judul)',
-                        media: row.media || 'Media Daring',
-                        link: row.link || '#',
-                        analisis: row.analisis || 'Belum ada analisis AI.',
-                        sentiment: sentiment,
-                        topic: topic
-                    };
-                });
+                // Filter hanya berita mulai periode aktif monitoring (01/11/2026)
+                allNewsData = rawData
+                    .map((row, idx) => {
+                        const parsedDate = parseSheetDate(row.tanggal);
+                        const sentiment = extractSentiment(row.analisis);
+                        const topic = detectTopic(row.judul, row.analisis);
+                        return {
+                            id: idx + 1,
+                            date: parsedDate.display,
+                            sortKey: parsedDate.sortKey,
+                            title: row.judul || '(Tanpa Judul)',
+                            media: row.media || 'Media Daring',
+                            link: row.link || '#',
+                            analisis: row.analisis || 'Belum ada analisis AI.',
+                            sentiment: sentiment,
+                            topic: topic
+                        };
+                    })
+                    .filter(item => item.sortKey >= START_MONITORING_TS);
 
                 allNewsData.sort((a, b) => b.sortKey - a.sortKey);
                 updateDashboardMetricsAndCharts(allNewsData);
@@ -1164,7 +1145,7 @@
                 const now = new Date();
                 document.getElementById('lastUpdateText').innerText = `${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')} WIB`;
                 setConnectionStatus('ok', `Terhubung (${allNewsData.length} Berita)`);
-                if (isManual) showToast(`Sinkronisasi berhasil: ${allNewsData.length} berita dimuat dari database.`);
+                if (isManual) showToast(`Sinkronisasi berhasil: ${allNewsData.length} berita aktif dimuat.`);
             } catch (err) {
                 console.error('Error fetch sheets:', err);
                 setConnectionStatus('error', 'Gagal Terhubung');
@@ -1180,7 +1161,7 @@
                 const response = await fetch(`${API_URL}?mode=agents&token=${getClientToken()}`);
                 if (!response.ok) return;
                 const data = await response.json();
-                
+
                 if (data.agents && Array.isArray(data.agents)) {
                     data.agents.forEach(agent => {
                         const agentKey = String(agent.id || '').toLowerCase();
@@ -1231,9 +1212,11 @@
             const chronological = [...data].sort((a, b) => a.sortKey - b.sortKey);
             const validDates = chronological.filter(d => d.sortKey > 0);
             if (validDates.length > 0) {
-                document.getElementById('dateRangeText').innerText = validDates[0].date === validDates[validDates.length - 1].date ? validDates[0].date : `${validDates[0].date} – ${validDates[validDates.length - 1].date}`;
+                document.getElementById('dateRangeText').innerText = validDates[0].date === validDates[validDates.length - 1].date
+                    ? validDates[0].date
+                    : `${validDates[0].date} – ${validDates[validDates.length - 1].date}`;
             } else {
-                document.getElementById('dateRangeText').innerText = 'Semua Data';
+                document.getElementById('dateRangeText').innerText = '01/11/2026 – Sekarang';
             }
 
             const dateGroups = {};
@@ -1251,10 +1234,26 @@
             const mediaValues = topMedia.map(m => m[1]);
             if (otherMediaCount > 0) { mediaLabels.push('Media Lainnya'); mediaValues.push(otherMediaCount); }
 
-            const topicCounts = { 'Pertumbuhan Ekonomi': 0, 'Ketenagakerjaan & Kemiskinan': 0, 'Pertanian & NTP': 0, 'IPM & Pendidikan': 0, 'Inflasi & Harga': 0, 'Isu Daerah & Umum': 0 };
+            const topicCounts = {
+                'Pertumbuhan Ekonomi': 0,
+                'Ketenagakerjaan & Kemiskinan': 0,
+                'Pertanian & NTP': 0,
+                'IPM & Pendidikan': 0,
+                'Inflasi & Harga': 0,
+                'Isu Daerah & Umum': 0
+            };
             data.forEach(item => { if (topicCounts[item.topic] !== undefined) topicCounts[item.topic]++; });
 
-            renderCharts(Object.keys(dateGroups), Object.keys(dateGroups).map(d => dateGroups[d].Positif), Object.keys(dateGroups).map(d => dateGroups[d].Netral), Object.keys(dateGroups).map(d => dateGroups[d].Negatif), mediaLabels, mediaValues, Object.keys(topicCounts), Object.values(topicCounts));
+            renderCharts(
+                Object.keys(dateGroups),
+                Object.keys(dateGroups).map(d => dateGroups[d].Positif),
+                Object.keys(dateGroups).map(d => dateGroups[d].Netral),
+                Object.keys(dateGroups).map(d => dateGroups[d].Negatif),
+                mediaLabels,
+                mediaValues,
+                Object.keys(topicCounts),
+                Object.values(topicCounts)
+            );
             lucide.createIcons();
         }
 
@@ -1263,41 +1262,148 @@
             if (mediaChart) mediaChart.destroy();
             if (topicsChart) topicsChart.destroy();
 
+            // Atur lebar dinamis minimal 65px per tanggal agar titik-titik tidak berhimpitan
+            const wrapper = document.getElementById('sentimentChartWrapper');
+            const scrollContainer = document.getElementById('sentimentScrollContainer');
+            if (wrapper && scrollContainer) {
+                const minWidth = Math.max(scrollContainer.clientWidth, trendLabels.length * 65);
+                wrapper.style.width = `${minWidth}px`;
+            }
+
+            const peakVal = Math.max(...trendPos, ...trendNet, ...trendNeg, 3);
+
             sentimentChart = new Chart(document.getElementById('sentimentTrendChart').getContext('2d'), {
                 type: 'line',
                 data: {
                     labels: trendLabels,
                     datasets: [
-                        { label: 'Positif', data: trendPos, borderColor: '#68B92E', backgroundColor: 'rgba(104, 185, 46, 0.1)', fill: true, tension: 0.3, borderWidth: 2.5, pointRadius: 3.5 },
-                        { label: 'Netral', data: trendNet, borderColor: '#008FD5', backgroundColor: 'transparent', tension: 0.3, borderWidth: 2, borderDash: [4, 4], pointRadius: 3.5 },
-                        { label: 'Negatif', data: trendNeg, borderColor: '#EB891B', backgroundColor: 'transparent', tension: 0.3, borderWidth: 2, pointRadius: 3.5 }
+                        {
+                            label: 'Positif',
+                            data: trendPos,
+                            borderColor: '#68B92E',
+                            backgroundColor: 'rgba(104, 185, 46, 0.12)',
+                            fill: true,
+                            tension: 0.35,
+                            borderWidth: 2.5,
+                            pointRadius: 3.5,
+                            pointHoverRadius: 6
+                        },
+                        {
+                            label: 'Netral',
+                            data: trendNet,
+                            borderColor: '#008FD5',
+                            backgroundColor: 'transparent',
+                            tension: 0.35,
+                            borderWidth: 2,
+                            borderDash: [5, 5],
+                            pointRadius: 3,
+                            pointHoverRadius: 6
+                        },
+                        {
+                            label: 'Negatif',
+                            data: trendNeg,
+                            borderColor: '#EB891B',
+                            backgroundColor: 'transparent',
+                            tension: 0.35,
+                            borderWidth: 2,
+                            pointRadius: 3,
+                            pointHoverRadius: 6
+                        }
                     ]
                 },
-                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top', labels: { boxWidth: 12, font: { size: 11, weight: '600' } } } }, scales: { y: { beginAtZero: true, ticks: { stepSize: 1, precision: 0 } }, x: { grid: { display: false } } } }
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: {
+                        mode: 'index',
+                        intersect: false
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                padding: 18,
+                                usePointStyle: true,
+                                boxWidth: 8,
+                                font: { size: 11, weight: '600' }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            suggestedMax: peakVal + 2,
+                            ticks: {
+                                stepSize: 1,
+                                precision: 0,
+                                padding: 10
+                            },
+                            grid: {
+                                color: '#F1F5F9'
+                            }
+                        },
+                        x: {
+                            offset: true,
+                            grid: { display: false },
+                            ticks: {
+                                maxRotation: 0,
+                                padding: 10,
+                                font: { size: 11 }
+                            }
+                        }
+                    }
+                }
             });
 
-            // Filter data hanya mulai periode aktif monitoring (November 2026)
-const START_MONITORING = new Date('2026-11-01T00:00:00');
-
-const filteredData = rawNewsData.filter(item => {
-  // Sesuaikan parsing tanggal dengan format di sheet (misal DD/MM/YYYY atau ISO)
-  const parts = item.tanggal.split('/');
-  const itemDate = parts.length === 3 
-    ? new Date(`${parts[2]}-${parts[1]}-${parts[0]}`) 
-    : new Date(item.tanggal);
-  return itemDate >= START_MONITORING;
-});
+            // Auto-scroll ke ujung kanan (tanggal terbaru) jika grafik melebar
+            if (scrollContainer) {
+                scrollContainer.scrollLeft = scrollContainer.scrollWidth;
+            }
 
             mediaChart = new Chart(document.getElementById('mediaShareChart').getContext('2d'), {
                 type: 'doughnut',
-                data: { labels: mediaLabels, datasets: [{ data: mediaValues, backgroundColor: ['#06182E', '#008FD5', '#68B92E', '#EB891B', '#38BDF8', '#CBD5E1'], borderWidth: 2, borderColor: '#ffffff' }] },
-                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 11, weight: '500' } } } }, cutout: '64%' }
+                data: {
+                    labels: mediaLabels,
+                    datasets: [{
+                        data: mediaValues,
+                        backgroundColor: ['#06182E', '#008FD5', '#68B92E', '#EB891B', '#38BDF8', '#CBD5E1'],
+                        borderWidth: 2,
+                        borderColor: '#ffffff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: { boxWidth: 10, padding: 12, font: { size: 11, weight: '500' } }
+                        }
+                    },
+                    cutout: '64%'
+                }
             });
 
             topicsChart = new Chart(document.getElementById('topicsChart').getContext('2d'), {
                 type: 'bar',
-                data: { labels: topicLabels, datasets: [{ label: 'Jumlah Artikel', data: topicValues, backgroundColor: ['#008FD5', '#68B92E', '#EB891B', '#38BDF8', '#84CC16', '#64748B'], borderRadius: 6 }] },
-                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } }, x: { grid: { display: false } } } }
+                data: {
+                    labels: topicLabels,
+                    datasets: [{
+                        label: 'Jumlah Artikel',
+                        data: topicValues,
+                        backgroundColor: ['#008FD5', '#68B92E', '#EB891B', '#38BDF8', '#84CC16', '#64748B'],
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { beginAtZero: true, ticks: { stepSize: 1 } },
+                        x: { grid: { display: false } }
+                    }
+                }
             });
         }
 
@@ -1310,7 +1416,11 @@ const filteredData = rawNewsData.filter(item => {
                 return;
             }
             data.forEach(item => {
-                let badgeColor = item.sentiment === 'Positif' ? 'bg-[#68B92E]/15 text-bps-greenDark border border-[#68B92E]/30' : (item.sentiment === 'Negatif' ? 'bg-[#EB891B]/15 text-bps-orangeDark border border-[#EB891B]/30' : 'bg-slate-100 text-slate-700 border border-slate-200');
+                let badgeColor = item.sentiment === 'Positif'
+                    ? 'bg-[#68B92E]/15 text-bps-greenDark border border-[#68B92E]/30'
+                    : (item.sentiment === 'Negatif'
+                        ? 'bg-[#EB891B]/15 text-bps-orangeDark border border-[#EB891B]/30'
+                        : 'bg-slate-100 text-slate-700 border border-slate-200');
                 const tr = document.createElement('tr');
                 tr.className = 'hover:bg-slate-50 transition';
                 tr.innerHTML = `
@@ -1354,7 +1464,11 @@ const filteredData = rawNewsData.filter(item => {
             document.getElementById('modalExternalLink').href = item.link;
             const badge = document.getElementById('modalSentimentBadge');
             badge.innerText = item.sentiment;
-            badge.className = item.sentiment === 'Positif' ? 'text-[11px] px-2 py-0.5 rounded-full font-semibold bg-[#68B92E]/15 text-bps-greenDark' : (item.sentiment === 'Negatif' ? 'text-[11px] px-2 py-0.5 rounded-full font-semibold bg-[#EB891B]/15 text-bps-orangeDark' : 'text-[11px] px-2 py-0.5 rounded-full font-semibold bg-slate-200 text-slate-800');
+            badge.className = item.sentiment === 'Positif'
+                ? 'text-[11px] px-2 py-0.5 rounded-full font-semibold bg-[#68B92E]/15 text-bps-greenDark'
+                : (item.sentiment === 'Negatif'
+                    ? 'text-[11px] px-2 py-0.5 rounded-full font-semibold bg-[#EB891B]/15 text-bps-orangeDark'
+                    : 'text-[11px] px-2 py-0.5 rounded-full font-semibold bg-slate-200 text-slate-800');
             document.getElementById('analysisModal').classList.remove('hidden');
             document.getElementById('analysisModal').classList.add('flex');
             lucide.createIcons();
