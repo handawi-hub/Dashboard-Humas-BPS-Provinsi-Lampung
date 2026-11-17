@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SIGERHUB - Portal Humas Terpadu BPS Provinsi Lampung</title>
+    <title>SIGERHUB - Sistem Pemantauan Media & Analisis Berita BPS Provinsi Lampung</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Chart.js -->
@@ -49,10 +49,94 @@
         ::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
 
         /* ============================================================
+           LIQUID GLASS HEADER — MODERN INTERACTIVE REFRACTION
+           ============================================================ */
+        .liquid-glass-header {
+            position: sticky;
+            top: 0;
+            z-index: 40;
+            background: rgba(255, 255, 255, 0.68);
+            backdrop-filter: blur(22px) saturate(185%);
+            -webkit-backdrop-filter: blur(22px) saturate(185%);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.85);
+            box-shadow:
+                0 10px 30px -10px rgba(6, 24, 46, 0.08),
+                inset 0 1px 0 0 rgba(255, 255, 255, 0.95),
+                inset 0 -1px 0 0 rgba(148, 163, 184, 0.22);
+            overflow: hidden;
+            transition: background 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        /* Lapisan Bias Cahaya & Aura Halus Identitas BPS */
+        .liquid-glass-header::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(circle at 12% 20%, rgba(0, 143, 213, 0.14) 0%, transparent 45%),
+                radial-gradient(circle at 52% 85%, rgba(104, 185, 46, 0.11) 0%, transparent 48%),
+                radial-gradient(circle at 88% 15%, rgba(235, 137, 27, 0.12) 0%, transparent 45%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Spotlight Interaktif Mengikuti Kursor */
+        .liquid-glass-spotlight {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(
+                360px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+                rgba(0, 143, 213, 0.13),
+                rgba(255, 255, 255, 0.35) 45%,
+                transparent 75%
+            );
+            opacity: 0;
+            transition: opacity 0.35s ease;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .liquid-glass-header:hover .liquid-glass-spotlight {
+            opacity: 1;
+        }
+
+        /* Kapsul Kaca untuk Logo & Tombol Sekunder */
+        .glass-logo-pill {
+            background: rgba(255, 255, 255, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.95);
+            box-shadow:
+                0 4px 14px rgba(6, 24, 46, 0.06),
+                inset 0 1px 1px rgba(255, 255, 255, 1);
+            transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.25s ease;
+        }
+        .glass-logo-pill:hover {
+            transform: translateY(-1px) scale(1.02);
+            box-shadow: 0 8px 20px rgba(0, 143, 213, 0.14);
+        }
+
+        .glass-pill-surface {
+            background: rgba(255, 255, 255, 0.62);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(203, 213, 225, 0.65);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9);
+        }
+
+        .glass-btn-action {
+            transition: all 0.22s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .glass-btn-action:hover {
+            transform: translateY(-1px);
+        }
+        .glass-btn-action:active {
+            transform: translateY(0);
+        }
+
+        /* ============================================================
            MOBILE UI FIX (< 640px) — SIGERHUB INDEX.HTML
            ============================================================ */
         @media (max-width: 640px) {
-            header > div,
+            header > div > div,
             nav > div {
                 flex-wrap: wrap !important;
                 gap: 10px !important;
@@ -66,23 +150,17 @@
                 overflow: visible !important;
                 text-overflow: unset !important;
             }
-            header .rounded-full,
-            header [class*="badge"] {
-                font-size: 10px !important;
-                padding: 2px 8px !important;
-            }
-            header > div > div:last-child,
-            nav > div > div:last-child {
+            header > div > div > div:last-child {
                 width: 100% !important;
                 display: flex !important;
                 justify-content: space-between !important;
                 align-items: center !important;
                 gap: 8px !important;
-                padding-top: 6px !important;
-                border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+                padding-top: 8px !important;
+                border-top: 1px solid rgba(148, 163, 184, 0.22) !important;
             }
-            header > div > div:last-child a,
-            header > div > div:last-child button:first-of-type {
+            header > div > div > div:last-child a,
+            header > div > div > div:last-child button:first-of-type {
                 flex: 1 !important;
                 justify-content: center !important;
             }
@@ -112,7 +190,7 @@
         }
     </style>
 </head>
-<body class="bg-[#F8FAFC] text-slate-800 antialiased min-h-screen flex flex-col">
+<body class="bg-[#F4F7FB] text-slate-800 antialiased min-h-screen flex flex-col">
 
     <!-- ===================================================================== -->
     <!-- LOGIN GATE OVERLAY (MUNCUL PERTAMA KALI SEBELUM PORTAL TERBUKA)       -->
@@ -136,7 +214,7 @@
                             Akses Internal Terbatas
                         </span>
                         <h1 class="text-2xl font-extrabold text-bps-navy tracking-tight">SIGERHUB</h1>
-                        <p class="text-xs text-slate-500 mt-0.5">Portal Humas Terpadu • BPS Provinsi Lampung</p>
+                        <p class="text-xs text-slate-500 mt-0.5">Sistem Pemantauan Media & Analisis Berita BPS Provinsi Lampung</p>
                     </div>
                 </div>
 
@@ -176,7 +254,7 @@
 
                 <div class="pt-3 border-t border-slate-100 text-center">
                     <p class="text-[11px] text-slate-400">
-                        &copy; 2026 Tim Kehumasan & Publikasi • BPS Provinsi Lampung
+                        &copy; 2026 BPS Provinsi Lampung
                     </p>
                 </div>
             </div>
@@ -188,60 +266,54 @@
     <!-- ===================================================================== -->
     <div id="protectedAppWrapper" class="hidden flex-1 flex flex-col">
 
-        <!-- Top Navigation Header -->
-        <header class="bg-bps-navy text-white sticky top-0 z-40 shadow-md">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Liquid Glass Top Navigation Header -->
+        <header id="mainGlassHeader" class="liquid-glass-header">
+            <div class="liquid-glass-spotlight"></div>
+            <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex items-center justify-between py-3.5 gap-4">
                     <!-- Brand & Logo -->
                     <div class="flex items-center gap-3.5 min-w-0">
-                        <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-white p-2 flex items-center justify-center shrink-0 shadow-sm">
+                        <div class="glass-logo-pill w-12 h-12 sm:w-14 sm:h-14 rounded-2xl p-2 flex items-center justify-center shrink-0">
                             <img src="BPS.webp" alt="Logo BPS" class="w-full h-full object-contain">
                         </div>
                         <div class="min-w-0">
-                            <div class="flex items-center gap-2.5 flex-wrap">
-                                <span class="font-extrabold text-2xl sm:text-[28px] leading-none tracking-tight text-white">SIGERHUB</span>
-                                <span class="bg-[#008FD5]/20 text-[#67D4FF] text-xs px-2.5 py-1 rounded-md font-semibold border border-[#008FD5]/40 whitespace-nowrap">
-                                    Portal Humas Terpadu
-                                </span>
-                                <span id="activeUserRoleBadge" class="hidden sm:inline-block bg-white/10 text-slate-200 text-[11px] px-2 py-0.5 rounded font-medium">
-                                    Tim Humas
-                                </span>
-                            </div>
-                            <p class="text-xs sm:text-[13px] text-slate-300 font-normal mt-1.5 truncate">
-                                BPS Provinsi Lampung • Sistem Pemantauan Media & Analisis BRS
+                            <h1 class="font-extrabold text-2xl sm:text-[28px] leading-none tracking-tight text-bps-navy">
+                                SIGERHUB
+                            </h1>
+                            <p class="text-xs sm:text-[13px] text-slate-600 font-medium mt-1.5 truncate">
+                                Sistem Pemantauan Media &amp; Analisis Berita BPS Provinsi Lampung
                             </p>
                         </div>
                     </div>
 
                     <!-- API Gateway Status & Action Controls -->
                     <div class="flex items-center gap-2.5 shrink-0">
-                        <div id="apiStatusBadge" class="hidden xl:flex bg-bps-dark px-3 py-1.5 rounded-lg border border-slate-700/80 items-center gap-2 text-xs whitespace-nowrap">
+                        <div id="apiStatusBadge" class="hidden xl:flex glass-pill-surface px-3 py-1.5 rounded-xl items-center gap-2 text-xs whitespace-nowrap">
                             <span class="relative flex h-2 w-2 shrink-0">
                                 <span id="apiPingDot" class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
                                 <span id="apiSolidDot" class="relative inline-flex rounded-full h-2 w-2 bg-amber-500"></span>
                             </span>
-                            <span class="text-slate-300">Database: <strong id="apiStatusText" class="text-amber-400 font-semibold">Menghubungkan...</strong></span>
+                            <span class="text-slate-600">Database: <strong id="apiStatusText" class="text-amber-600 font-semibold">Menghubungkan...</strong></span>
                         </div>
 
-                        <a href="virtual-office.html" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-bps-orange hover:bg-bps-orangeDark text-white text-xs font-semibold transition whitespace-nowrap shadow-sm">
+                        <a href="virtual-office.html" class="glass-btn-action inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-bps-orange hover:bg-bps-orangeDark text-white text-xs font-semibold whitespace-nowrap shadow-sm shadow-bps-orange/25">
                             <i data-lucide="monitor" class="w-3.5 h-3.5 shrink-0"></i>
                             <span class="hidden sm:inline">Ruang Kendali 3D</span>
                             <span class="sm:hidden">3D Office</span>
                         </a>
 
-                        <button onclick="fetchLiveMonitoringData(true)" id="syncBtn" class="inline-flex items-center gap-1.5 bg-bps-blue hover:bg-bps-blueDark text-white text-xs font-semibold px-3.5 py-2 rounded-lg transition whitespace-nowrap shadow-sm">
+                        <button onclick="fetchLiveMonitoringData(true)" id="syncBtn" class="glass-btn-action inline-flex items-center gap-1.5 bg-bps-blue hover:bg-bps-blueDark text-white text-xs font-semibold px-3.5 py-2 rounded-xl whitespace-nowrap shadow-sm shadow-bps-blue/25">
                             <i data-lucide="refresh-cw" id="syncIcon" class="w-3.5 h-3.5 shrink-0"></i>
                             <span class="hidden sm:inline">Sinkron Data</span>
                         </button>
 
-                        <button onclick="logoutSession()" title="Keluar dari Sesi" class="inline-flex items-center gap-1.5 bg-slate-800 hover:bg-rose-600 text-slate-200 hover:text-white border border-slate-700 text-xs font-semibold px-3 py-2 rounded-lg transition whitespace-nowrap">
+                        <button onclick="logoutSession()" title="Keluar dari Sesi" class="glass-btn-action glass-pill-surface inline-flex items-center gap-1.5 hover:bg-rose-50 hover:border-rose-200 text-slate-700 hover:text-rose-600 text-xs font-semibold px-3 py-2 rounded-xl whitespace-nowrap">
                             <i data-lucide="log-out" class="w-3.5 h-3.5 shrink-0"></i>
                             <span class="hidden md:inline">Keluar</span>
                         </button>
                     </div>
                 </div>
             </div>
-            <div class="h-[3px] w-full bg-gradient-to-r from-[#008FD5] via-[#68B92E] to-[#EB891B]"></div>
         </header>
 
         <!-- Main Workspace Area -->
@@ -349,11 +421,10 @@
                         <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
                             <div>
                                 <h3 class="font-bold text-slate-900 text-base">Tren Sentimen Pemberitaan Harian</h3>
-                             <p class="text-xs text-slate-500">Pergerakan volume & tone media periode monitoring aktif (Mulai Jan 2026)</p>
+                                <p class="text-xs text-slate-500">Pergerakan volume &amp; tone media periode pemantauan aktif (Mulai Jan 2026)</p>
                             </div>
                             <span class="text-[11px] bg-[#008FD5]/10 text-bps-blue px-2.5 py-1 rounded-md font-semibold border border-[#008FD5]/20">Live Database</span>
                         </div>
-                        <!-- Wrapper Horizontal Scroll agar jarak antar titik tanggal tetap lega -->
                         <div id="sentimentScrollContainer" class="w-full overflow-x-auto pb-1">
                             <div id="sentimentChartWrapper" class="h-64 relative" style="min-width: 100%;">
                                 <canvas id="sentimentTrendChart"></canvas>
@@ -377,7 +448,7 @@
                 <div class="clean-card p-5 rounded-xl">
                     <div class="flex items-center justify-between mb-4">
                         <div>
-                            <h3 class="font-bold text-slate-900 text-base">Sebaran Topik Indikator & Isu Strategis</h3>
+                            <h3 class="font-bold text-slate-900 text-base">Sebaran Topik Indikator &amp; Isu Strategis</h3>
                             <p class="text-xs text-slate-500">Klasifikasi otomatis berdasarkan judul dan ringkasan berita di database</p>
                         </div>
                     </div>
@@ -392,7 +463,7 @@
                 <div class="clean-card p-5 rounded-xl space-y-4">
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                         <div>
-                            <h3 class="font-bold text-slate-900 text-lg">Direktori & Kliping Media</h3>
+                            <h3 class="font-bold text-slate-900 text-lg">Direktori &amp; Kliping Media</h3>
                             <p class="text-xs text-slate-500">Arsip pemberitaan terverifikasi beserta analisis sentimen dan rekomendasi tindak lanjut</p>
                         </div>
                         <div class="flex flex-wrap items-center gap-2">
@@ -409,11 +480,11 @@
                             <select id="topicFilter" onchange="filterNewsTable()" class="bg-white border border-slate-300 text-xs rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-bps-blue font-medium">
                                 <option value="ALL">Semua Topik</option>
                                 <option value="Pertumbuhan Ekonomi">Pertumbuhan Ekonomi</option>
-                                <option value="Ketenagakerjaan & Kemiskinan">Ketenagakerjaan & Kemiskinan</option>
-                                <option value="Pertanian & NTP">Pertanian & NTP</option>
-                                <option value="IPM & Pendidikan">IPM & Pendidikan</option>
-                                <option value="Inflasi & Harga">Inflasi & Harga</option>
-                                <option value="Isu Daerah & Umum">Isu Daerah & Umum</option>
+                                <option value="Ketenagakerjaan & Kemiskinan">Ketenagakerjaan &amp; Kemiskinan</option>
+                                <option value="Pertanian & NTP">Pertanian &amp; NTP</option>
+                                <option value="IPM & Pendidikan">IPM &amp; Pendidikan</option>
+                                <option value="Inflasi & Harga">Inflasi &amp; Harga</option>
+                                <option value="Isu Daerah & Umum">Isu Daerah &amp; Umum</option>
                             </select>
                             <button onclick="resetNewsFilters()" class="px-2.5 py-1.5 text-xs font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-lg transition inline-flex items-center gap-1" title="Reset semua filter">
                                 <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
@@ -563,7 +634,7 @@
                                 <span>Spreadsheet Internal</span>
                             </div>
                             <p class="text-xs text-slate-500 leading-relaxed">Database monitoring dan status agent disimpan secara tertutup di Google Drive BPS Provinsi Lampung.</p>
-                            <div class="bg-white p-2 rounded border border-slate-200 font-mono text-[11px] text-slate-700">🔒 Tab: Monitoring, Agent_State & Latest_BRS</div>
+                            <div class="bg-white p-2 rounded border border-slate-200 font-mono text-[11px] text-slate-700">🔒 Tab: Monitoring, Agent_State &amp; Latest_BRS</div>
                         </div>
                         <div class="space-y-2 bg-[#008FD5]/[0.04] p-4 rounded-lg border border-[#008FD5]/20">
                             <div class="flex items-center space-x-2 text-slate-900 font-bold text-xs sm:text-sm">
@@ -591,7 +662,7 @@
         <footer class="bg-white border-t border-slate-200 py-4 mt-auto">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-center gap-2.5">
                 <div class="text-center text-xs text-slate-500 flex flex-col sm:flex-row items-center justify-between gap-2 w-full">
-                    <div>&copy; 2026 <strong>BPS Provinsi Lampung</strong> • Tim Kehumasan & Publikasi</div>
+                    <div>&copy; 2026 <strong>BPS Provinsi Lampung</strong></div>
                     <div class="flex items-center space-x-3">
                         <span>Sumber Data: Database Pemantauan Media</span><span>•</span>
                         <a href="virtual-office.html" class="text-bps-blue font-semibold hover:underline">Ruang Kendali 3D</a>
@@ -625,7 +696,7 @@
             <div class="bg-bps-navy text-white px-5 py-4 flex items-center justify-between">
                 <div class="flex items-center space-x-2">
                     <i data-lucide="sparkles" class="w-4 h-4 text-[#67D4FF]"></i>
-                    <span class="font-bold text-sm">Analisis Sentimen & Rekomendasi Humas</span>
+                    <span class="font-bold text-sm">Analisis Sentimen &amp; Rekomendasi Humas</span>
                 </div>
                 <button onclick="closeAnalysisModal()" class="text-slate-400 hover:text-white transition"><i data-lucide="x" class="w-5 h-5"></i></button>
             </div>
@@ -680,6 +751,21 @@
     <!-- Application Script & Authentication Handler -->
     <script>
         lucide.createIcons();
+
+        // =========================================================================
+        // INTERAKTIVITAS LIQUID GLASS HEADER (SPOTLIGHT CURSOR TRACKING)
+        // =========================================================================
+        (function initLiquidGlassHeader() {
+            const header = document.getElementById('mainGlassHeader');
+            if (!header) return;
+            header.addEventListener('mousemove', (e) => {
+                const rect = header.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                header.style.setProperty('--mouse-x', `${x}px`);
+                header.style.setProperty('--mouse-y', `${y}px`);
+            });
+        })();
 
         // =========================================================================
         // SISTEM AUTENTIKASI & ROLE AKSES (SHA-256)
@@ -751,7 +837,7 @@
                     localStorage.removeItem('bps_lampung_admin_mode');
                 }
                 unlockPortal(sessionPayload);
-                showToast(`Selamat datang, ${userRecord.role}!`);
+                showToast(`Selamat datang di SIGERHUB!`);
             } else {
                 errorText.innerText = 'Kata sandi salah. Silakan periksa kembali.';
                 errorBox.classList.remove('hidden');
@@ -761,11 +847,6 @@
         function unlockPortal(sessionData) {
             document.getElementById('loginGate').classList.add('hidden');
             document.getElementById('protectedAppWrapper').classList.remove('hidden');
-
-            const roleBadge = document.getElementById('activeUserRoleBadge');
-            if (roleBadge && sessionData.role) {
-                roleBadge.innerText = sessionData.role;
-            }
 
             if (sessionData.isAdmin || localStorage.getItem('bps_lampung_admin_mode') === 'true') {
                 document.querySelectorAll('.admin-only').forEach(el => el.classList.remove('hidden'));
@@ -792,8 +873,8 @@
         const _encT = ['QlA', 'Uy', 'X0xhbXB1bmc', 'X0h1bWFz', 'XzIwMjZf', 'U2VjdXJlS2V5'];
         const getClientToken = () => atob(_encT[0]) + atob(_encT[1]) + atob(_encT[2]) + atob(_encT[3]) + atob(_encT[4]) + atob(_encT[5]);
 
-       // Batas awal periode monitoring aktif: 1 Januari 2026
-const START_MONITORING_TS = new Date(2026, 0, 1).getTime();
+        // Batas awal periode monitoring aktif: 1 Januari 2026
+        const START_MONITORING_TS = new Date(2026, 0, 1).getTime();
 
         let allNewsData = [];
         let sentimentChart = null;
@@ -1084,15 +1165,15 @@ const START_MONITORING_TS = new Date(2026, 0, 1).getTime();
             if (state === 'ok') {
                 if (pingDot) pingDot.className = 'animate-ping absolute inline-flex h-full w-full rounded-full bg-[#68B92E] opacity-75';
                 if (solidDot) solidDot.className = 'relative inline-flex rounded-full h-2 w-2 bg-[#68B92E]';
-                statusText.className = 'text-[#8CE04B] font-semibold';
+                statusText.className = 'text-bps-greenDark font-semibold';
             } else if (state === 'error') {
                 if (pingDot) pingDot.className = 'hidden';
                 if (solidDot) solidDot.className = 'relative inline-flex rounded-full h-2 w-2 bg-rose-500';
-                statusText.className = 'text-rose-400 font-semibold';
+                statusText.className = 'text-rose-600 font-semibold';
             } else {
                 if (pingDot) pingDot.className = 'animate-ping absolute inline-flex h-full w-full rounded-full bg-[#EB891B] opacity-75';
                 if (solidDot) solidDot.className = 'relative inline-flex rounded-full h-2 w-2 bg-[#EB891B]';
-                statusText.className = 'text-[#FFB156] font-semibold';
+                statusText.className = 'text-amber-600 font-semibold';
             }
             statusText.innerText = text;
         }
@@ -1118,7 +1199,6 @@ const START_MONITORING_TS = new Date(2026, 0, 1).getTime();
                     throw new Error(rawData.error || 'Format JSON bukan array berita');
                 }
 
-                // Filter hanya berita mulai periode aktif monitoring (01/11/2026)
                 allNewsData = rawData
                     .map((row, idx) => {
                         const parsedDate = parseSheetDate(row.tanggal);
@@ -1216,7 +1296,7 @@ const START_MONITORING_TS = new Date(2026, 0, 1).getTime();
                     ? validDates[0].date
                     : `${validDates[0].date} – ${validDates[validDates.length - 1].date}`;
             } else {
-               document.getElementById('dateRangeText').innerText = '01/01/2026 – Sekarang';
+                document.getElementById('dateRangeText').innerText = '01/01/2026 – Sekarang';
             }
 
             const dateGroups = {};
@@ -1262,7 +1342,6 @@ const START_MONITORING_TS = new Date(2026, 0, 1).getTime();
             if (mediaChart) mediaChart.destroy();
             if (topicsChart) topicsChart.destroy();
 
-            // Atur lebar dinamis minimal 65px per tanggal agar titik-titik tidak berhimpitan
             const wrapper = document.getElementById('sentimentChartWrapper');
             const scrollContainer = document.getElementById('sentimentScrollContainer');
             if (wrapper && scrollContainer) {
@@ -1355,7 +1434,6 @@ const START_MONITORING_TS = new Date(2026, 0, 1).getTime();
                 }
             });
 
-            // Auto-scroll ke ujung kanan (tanggal terbaru) jika grafik melebar
             if (scrollContainer) {
                 scrollContainer.scrollLeft = scrollContainer.scrollWidth;
             }
