@@ -349,7 +349,7 @@
                         <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
                             <div>
                                 <h3 class="font-bold text-slate-900 text-base">Tren Sentimen Pemberitaan Harian</h3>
-                                <p class="text-xs text-slate-500">Pergerakan volume & tone media periode monitoring aktif (Mulai Nov 2026)</p>
+                             <p class="text-xs text-slate-500">Pergerakan volume & tone media periode monitoring aktif (Mulai Jan 2026)</p>
                             </div>
                             <span class="text-[11px] bg-[#008FD5]/10 text-bps-blue px-2.5 py-1 rounded-md font-semibold border border-[#008FD5]/20">Live Database</span>
                         </div>
@@ -792,8 +792,8 @@
         const _encT = ['QlA', 'Uy', 'X0xhbXB1bmc', 'X0h1bWFz', 'XzIwMjZf', 'U2VjdXJlS2V5'];
         const getClientToken = () => atob(_encT[0]) + atob(_encT[1]) + atob(_encT[2]) + atob(_encT[3]) + atob(_encT[4]) + atob(_encT[5]);
 
-        // Batas awal periode monitoring aktif: 1 November 2026
-        const START_MONITORING_TS = new Date(2026, 10, 1).getTime();
+       // Batas awal periode monitoring aktif: 1 Januari 2026
+const START_MONITORING_TS = new Date(2026, 0, 1).getTime();
 
         let allNewsData = [];
         let sentimentChart = null;
@@ -1216,7 +1216,7 @@
                     ? validDates[0].date
                     : `${validDates[0].date} – ${validDates[validDates.length - 1].date}`;
             } else {
-                document.getElementById('dateRangeText').innerText = '01/11/2026 – Sekarang';
+               document.getElementById('dateRangeText').innerText = '01/01/2026 – Sekarang';
             }
 
             const dateGroups = {};
