@@ -1276,6 +1276,18 @@
                 options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top', labels: { boxWidth: 12, font: { size: 11, weight: '600' } } } }, scales: { y: { beginAtZero: true, ticks: { stepSize: 1, precision: 0 } }, x: { grid: { display: false } } } }
             });
 
+            // Filter data hanya mulai periode aktif monitoring (November 2026)
+const START_MONITORING = new Date('2026-11-01T00:00:00');
+
+const filteredData = rawNewsData.filter(item => {
+  // Sesuaikan parsing tanggal dengan format di sheet (misal DD/MM/YYYY atau ISO)
+  const parts = item.tanggal.split('/');
+  const itemDate = parts.length === 3 
+    ? new Date(`${parts[2]}-${parts[1]}-${parts[0]}`) 
+    : new Date(item.tanggal);
+  return itemDate >= START_MONITORING;
+});
+
             mediaChart = new Chart(document.getElementById('mediaShareChart').getContext('2d'), {
                 type: 'doughnut',
                 data: { labels: mediaLabels, datasets: [{ data: mediaValues, backgroundColor: ['#06182E', '#008FD5', '#68B92E', '#EB891B', '#38BDF8', '#CBD5E1'], borderWidth: 2, borderColor: '#ffffff' }] },
