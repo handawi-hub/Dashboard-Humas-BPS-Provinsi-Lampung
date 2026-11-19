@@ -1184,8 +1184,12 @@
             statusText.innerText = text;
         }
 
+        let isFetchingMonitoring = false;
         async function fetchLiveMonitoringData(isManual = false) {
             if (!sessionStorage.getItem(SESSION_AUTH_KEY)) return;
+            if (isFetchingMonitoring) return;
+            isFetchingMonitoring = true;
+
             const icon = document.getElementById('syncIcon');
             if (icon) icon.classList.add('animate-spin');
             setConnectionStatus('loading', 'Menarik data...');
@@ -1196,8 +1200,12 @@
                 setInterval(() => fetchLiveMonitoringData(false), 60000);
             }
 
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 15000);
+
             try {
-                const response = await fetch(`${API_URL}?token=${getClientToken()}`);
+                const response = await fetch(`${API_URL}?token=${getClientToken()}`, { signal: controller.signal, cache: 'no-cache' });
+                clearTimeout(timeoutId);
                 if (!response.ok) throw new Error(`HTTP ${response.status}`);
                 const rawData = await response.json();
 
@@ -1233,18 +1241,30 @@
                 setConnectionStatus('ok', `Terhubung (${allNewsData.length} Berita)`);
                 if (isManual) showToast(`Sinkronisasi berhasil: ${allNewsData.length} berita aktif dimuat.`);
             } catch (err) {
+                clearTimeout(timeoutId);
                 console.error('Error fetch sheets:', err);
+                const isAbort = err.name === 'AbortError';
+                const errMsg = isAbort ? 'Koneksi Timeout (15 detik)' : err.message;
                 setConnectionStatus('error', 'Gagal Terhubung');
-                if (isManual) showToast(`Gagal menarik data: ${err.message}`);
+                if (isManual) showToast(`Gagal menarik data: ${errMsg}`);
             } finally {
+                isFetchingMonitoring = false;
                 if (icon) icon.classList.remove('animate-spin');
             }
         }
 
+        let isFetchingAgents = false;
         async function fetchAgentStates() {
             if (!sessionStorage.getItem(SESSION_AUTH_KEY)) return;
+            if (isFetchingAgents) return;
+            isFetchingAgents = true;
+
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 12000);
+
             try {
-                const response = await fetch(`${API_URL}?mode=agents&token=${getClientToken()}`);
+                const response = await fetch(`${API_URL}?mode=agents&token=${getClientToken()}`, { signal: controller.signal, cache: 'no-cache' });
+                clearTimeout(timeoutId);
                 if (!response.ok) return;
                 const data = await response.json();
 
@@ -1268,7 +1288,10 @@
                     });
                 }
             } catch (e) {
+                clearTimeout(timeoutId);
                 console.error('Gagal memuat status agen:', e);
+            } finally {
+                isFetchingAgents = false;
             }
         }
 

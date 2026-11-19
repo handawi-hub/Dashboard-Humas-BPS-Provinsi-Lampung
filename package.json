@@ -1,0 +1,14 @@
+{
+  "name": "dashboard-humas",
+  "version": "1.0.0",
+  "description": "Dashboard Humas BPS Provinsi Lampung",
+  "scripts": {
+    "push:gas": "cd backend && clasp push",
+    "sync:live": "cd backend && clasp push",
+    "push:git": "git push origin main",
+    "sync": "npm run push:gas && npm run push:git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

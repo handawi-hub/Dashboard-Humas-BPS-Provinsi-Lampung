@@ -2098,8 +2098,17 @@
     }
 
     function normalizeApiUrl(rawUrl) {
-      let url = rawUrl.trim();
+      let url = (rawUrl || '').trim();
       if (!url) return '';
+      // Jika URL adalah link editor (/edit) atau dokumen Apps Script, ubah ke /exec
+      if (url.includes('/edit')) {
+        url = url.replace(/\/edit(\?.*)?$/, '/exec');
+      }
+      // Pastikan berakhiran /exec jika itu endpoint script.google.com/macros/s/...
+      if (url.includes('script.google.com/macros/s/') && !url.includes('/exec')) {
+        const [base, query] = url.split('?');
+        url = base.replace(/\/+$/, '') + '/exec' + (query ? '?' + query : '');
+      }
       if (!url.includes('mode=agents')) {
         url += (url.includes('?') ? '&' : '?') + 'mode=agents';
       }
@@ -2133,12 +2142,28 @@
       closeApiModal();
     }
 
+    let isFetchingAgentState = false;
+    let consecutiveSyncErrors = 0;
+
     async function fetchAgentStateOnce(url) {
       if (!url || !sessionStorage.getItem(SESSION_AUTH_KEY)) return;
+      if (isFetchingAgentState) return; // Mencegah request tumpang tindih (concurrency overload)
+      isFetchingAgentState = true;
+
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 12000); // 12 detik batas timeout
+
       try {
-        const res = await fetch(url);
+        const res = await fetch(url, { signal: controller.signal, cache: 'no-cache' });
+        clearTimeout(timeoutId);
+
+        if (!res.ok) {
+          throw new Error(`HTTP ${res.status} (${res.statusText || 'Error'})`);
+        }
+
         const data = await res.json();
         if (data.status === 'ok' && Array.isArray(data.agents)) {
+          consecutiveSyncErrors = 0;
           data.agents.forEach(ag => {
             updateAgentUI(ag.id, ag.status, ag.pesan, ag.updated_at, ag.output_url);
           });
@@ -2150,12 +2175,46 @@
             updateLatestBrsPreview(data.latestBrs);
           }
           const nowStr = new Date().toLocaleTimeString('id-ID', { hour12: false });
-          document.getElementById('lastSyncText').textContent = `Live Sync: ${nowStr}`;
+          document.getElementById('lastSyncText').textContent = `Live Sync: ${nowStr} WIB`;
+
+          // Pastikan badge hijau aktif
+          const badge = document.getElementById('connectionBadge');
+          if (badge && !badge.innerHTML.includes('Live Apps Script')) {
+            badge.className = 'inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300';
+            badge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping"></span> Live Apps Script';
+          }
         } else if (data.error) {
           addLog('Respon API Bridge: ' + data.error, 'error');
         }
       } catch (err) {
-        addLog('Gagal sinkronisasi API: ' + err.message, 'error');
+        clearTimeout(timeoutId);
+        consecutiveSyncErrors++;
+
+        const isAbort = err.name === 'AbortError';
+        const errMsg = isAbort ? 'Request Timeout (12s)' : (err.message || 'Network Error');
+
+        document.getElementById('lastSyncText').textContent = `Sync Tertunda (${errMsg})`;
+        const badge = document.getElementById('connectionBadge');
+        if (badge) {
+          badge.className = 'inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-rose-100 text-rose-800 border border-rose-300';
+          badge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse"></span> Reconnecting...';
+        }
+
+        // Catat ke terminal hanya pada kegagalan pertama atau setiap 5 kali agar tidak spam log
+        if (consecutiveSyncErrors === 1 || consecutiveSyncErrors % 5 === 0) {
+          addLog(`Gagal sinkronisasi API: ${errMsg} (Percobaan #${consecutiveSyncErrors})`, 'error');
+        }
+
+        // Jika error berulang 3x pada URL custom localStorage, pulihkan otomatis ke DEFAULT_API_URL
+        const defaultNormalized = normalizeApiUrl(DEFAULT_API_URL);
+        if (consecutiveSyncErrors >= 3 && url !== defaultNormalized) {
+          addLog('Mendeteksi kegagalan koneksi URL kustom. Memulihkan otomatis ke Default API Bridge resmi...', 'error');
+          localStorage.removeItem(STORAGE_KEY);
+          consecutiveSyncErrors = 0;
+          startLivePolling(defaultNormalized);
+        }
+      } finally {
+        isFetchingAgentState = false;
       }
     }
 
@@ -2171,13 +2230,14 @@
     function startLivePolling(url) {
       if (pollingInterval) clearInterval(pollingInterval);
       activePollingUrl = url;
+      consecutiveSyncErrors = 0;
       const badge = document.getElementById('connectionBadge');
       badge.className = 'inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300';
       badge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping"></span> Live Agent Workspace';
       addLog('Terhubung ke Apps Script API Bridge (Secured Token)...', 'work');
 
       fetchAgentStateOnce(url);
-      pollingInterval = setInterval(() => fetchAgentStateOnce(url), 2000);
+      pollingInterval = setInterval(() => fetchAgentStateOnce(url), 6000);
     }
 
     function formatTanggalID(rawDate) {
