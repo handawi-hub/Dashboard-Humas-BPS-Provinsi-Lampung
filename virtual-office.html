@@ -107,20 +107,20 @@
           </a>
           <div>
             <div class="flex items-center gap-2">
-              <h1 class="text-sm sm:text-base font-extrabold text-slate-900 tracking-tight">LIVE AGENT WORKSPACE</h1>
+              <h1 class="text-sm sm:text-base font-extrabold text-slate-900 tracking-tight">PUSAT AUTOMASI HUMAS</h1>
               <span id="connectionBadge" class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-100 text-amber-800 border border-amber-300">
                 <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
                 Menghubungkan...
               </span>
             </div>
-            <p class="text-[11px] text-slate-500 font-medium">Humas BPS Provinsi Lampung • Autonomous PR & Media Workspace</p>
+            <p class="text-[11px] text-slate-500 font-medium">BPS Provinsi Lampung • Autonomous PR & Media Workspace</p>
           </div>
         </div>
 
         <div class="flex flex-wrap items-center gap-2">
           <!-- TOMBOL MUSIK LATAR -->
           <button onclick="toggleMusic()" id="btnMusic" class="px-3 py-1.5 rounded-xl bg-red-50 hover:bg-red-100 text-red-800 border border-red-300 text-xs font-bold transition flex items-center gap-1.5">
-            <span id="musicIcon">🤘</span> <span id="musicText">Putar Metal Hardcore</span>
+            <span id="musicIcon">🤘</span> <span id="musicText">Musik Latar</span>
           </button>
 
           <!-- TOMBOL PENGATUR MUSIM -->
@@ -159,7 +159,7 @@
               <button onclick="focusCamera('crawler')" id="cam-crawler" class="cam-btn px-2.5 py-1 rounded-lg text-[11px] font-bold bg-white text-slate-600 border border-stone-200 hover:bg-sky-50 transition">Crawler</button>
               <button onclick="focusCamera('drafter')" id="cam-drafter" class="cam-btn px-2.5 py-1 rounded-lg text-[11px] font-bold bg-white text-slate-600 border border-stone-200 hover:bg-emerald-50 transition">Penulis BRS</button>
               <button onclick="focusCamera('auditor')" id="cam-auditor" class="cam-btn px-2.5 py-1 rounded-lg text-[11px] font-bold bg-white text-slate-600 border border-stone-200 hover:bg-purple-50 transition">Auditor</button>
-              <button onclick="focusCamera('garden')" id="cam-garden" class="cam-btn px-2.5 py-1 rounded-lg text-[11px] font-bold bg-white text-emerald-700 border border-emerald-200 hover:bg-emerald-50 transition">🌿 Area Taman</button>
+              <button onclick="focusCamera('garden')" id="cam-garden" class="cam-btn px-2.5 py-1 rounded-lg text-[11px] font-bold bg-white text-emerald-700 border border-emerald-200 hover:bg-emerald-50 transition">Area Taman</button>
             </div>
             <span id="lastSyncText" class="text-[11px] text-slate-500 font-mono-code font-semibold">Polling: Siap</span>
           </div>
@@ -2173,7 +2173,7 @@
       activePollingUrl = url;
       const badge = document.getElementById('connectionBadge');
       badge.className = 'inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300';
-      badge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping"></span> Live Apps Script';
+      badge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping"></span> Live Agent Workspace';
       addLog('Terhubung ke Apps Script API Bridge (Secured Token)...', 'work');
 
       fetchAgentStateOnce(url);
