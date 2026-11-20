@@ -149,17 +149,18 @@
     <!-- MAIN CONTENT -->
     <main class="flex-1 max-w-7xl w-full mx-auto px-4 py-5 grid grid-cols-1 lg:grid-cols-12 gap-5">
 
-      <!-- LEFT: 3D GREEN STUDIO CANVAS + 2D PAPER-CUT AGENTS (7 COLS) -->
+      <!-- LEFT: 3D EXPANDED CAMPUS CANVAS + 2D PAPER-CUT AGENTS (7 COLS) -->
       <section class="lg:col-span-7 flex flex-col gap-4">
         <div class="bg-white border border-stone-200 rounded-3xl overflow-hidden shadow-xl shadow-stone-200/60">
           <div class="px-4 py-2.5 border-b border-stone-100 flex flex-wrap items-center justify-between gap-2 bg-stone-50/80">
             <div class="flex items-center gap-1.5 flex-wrap">
               <span class="text-[11px] font-bold text-slate-500 mr-1">Kamera:</span>
-              <button onclick="focusCamera('overview')" id="cam-overview" class="cam-btn px-2.5 py-1 rounded-lg text-[11px] font-bold bg-slate-900 text-white transition">Taman & Studio</button>
+              <button onclick="focusCamera('overview')" id="cam-overview" class="cam-btn px-2.5 py-1 rounded-lg text-[11px] font-bold bg-slate-900 text-white transition">Kampus & Sungai</button>
               <button onclick="focusCamera('crawler')" id="cam-crawler" class="cam-btn px-2.5 py-1 rounded-lg text-[11px] font-bold bg-white text-slate-600 border border-stone-200 hover:bg-sky-50 transition">Crawler</button>
               <button onclick="focusCamera('drafter')" id="cam-drafter" class="cam-btn px-2.5 py-1 rounded-lg text-[11px] font-bold bg-white text-slate-600 border border-stone-200 hover:bg-emerald-50 transition">Penulis BRS</button>
               <button onclick="focusCamera('auditor')" id="cam-auditor" class="cam-btn px-2.5 py-1 rounded-lg text-[11px] font-bold bg-white text-slate-600 border border-stone-200 hover:bg-purple-50 transition">Auditor</button>
-              <button onclick="focusCamera('garden')" id="cam-garden" class="cam-btn px-2.5 py-1 rounded-lg text-[11px] font-bold bg-white text-emerald-700 border border-emerald-200 hover:bg-emerald-50 transition">Area Taman</button>
+              <button onclick="focusCamera('bridge')" id="cam-bridge" class="cam-btn px-2.5 py-1 rounded-lg text-[11px] font-bold bg-white text-rose-700 border border-rose-200 hover:bg-rose-50 transition">⛩️ Jembatan & Sungai</button>
+              <button onclick="focusCamera('expansion')" id="cam-expansion" class="cam-btn px-2.5 py-1 rounded-lg text-[11px] font-bold bg-white text-amber-800 border border-amber-200 hover:bg-amber-50 transition">🌿 Paviliun Agen Baru</button>
             </div>
             <span id="lastSyncText" class="text-[11px] text-slate-500 font-mono-code font-semibold">Polling: Siap</span>
           </div>
@@ -228,7 +229,7 @@
             <button onclick="clearLogs()" class="text-[11px] font-semibold text-slate-400 hover:text-slate-700">Bersihkan Log</button>
           </div>
           <div id="terminalLog" class="font-mono-code text-[11px] text-slate-700 space-y-1 max-h-32 overflow-y-auto bg-stone-50 p-2.5 rounded-xl border border-stone-200/80">
-            <div class="text-slate-500">[SYSTEM] Green Office Biophilic & Aurora Borealis Sky siap!</div>
+            <div class="text-slate-500">[SYSTEM] Lahan Green Office diperluas: Jembatan Jepang, Sungai Koi, & Paviliun Agen Baru siap!</div>
           </div>
         </div>
       </section>
@@ -402,6 +403,7 @@
     let isMoshPitActive = false;
     let lastRenderedBrsTitle = '';
 
+    // Koordinat kamera yang menyesuaikan perluasan area kampus
     const AGENT_META = {
       crawler: {
         name: 'Agent Media Crawler',
@@ -409,8 +411,8 @@
         desc: 'Mengumpulkan, memantau, dan menyaring berita atau informasi dari berbagai sumber media online/digital secara real-time',
         status: 'IDLE',
         pesan: 'Menunggu jadwal pemindaian RSS...',
-        camPos: { x: -1.8, y: 3.1, z: 3.2 },
-        targetPos: { x: -2.8, y: 1.3, z: -2.2 }
+        camPos: { x: -7.5, y: 3.3, z: 3.2 },
+        targetPos: { x: -8.6, y: 1.3, z: -2.2 }
       },
       drafter: {
         name: 'Agent Penulis BRS',
@@ -418,8 +420,8 @@
         desc: 'Mengolah data materi paparan (file PPTX/PDF) menjadi draf produk komunikasi publik yang terstruktur dan siap terbit.',
         status: 'IDLE',
         pesan: 'Siap memproses bahan tayang PPTX...',
-        camPos: { x: 1.8, y: 3.1, z: 1.8 },
-        targetPos: { x: 1.5, y: 1.3, z: -3.5 }
+        camPos: { x: -4.2, y: 3.3, z: 1.8 },
+        targetPos: { x: -4.5, y: 1.3, z: -3.5 }
       },
       auditor: {
         name: 'Agent Auditor & PR',
@@ -427,8 +429,8 @@
         desc: 'Menganalisis sentimen publik, mengevaluasi risiko reputasi, serta merumuskan rekomendasi strategi komunikasi.',
         status: 'IDLE',
         pesan: 'Menunggu validasi angka & sentimen...',
-        camPos: { x: 5.5, y: 3.2, z: 4.5 },
-        targetPos: { x: 4.5, y: 1.3, z: -0.2 }
+        camPos: { x: -0.5, y: 3.4, z: 4.5 },
+        targetPos: { x: -1.6, y: 1.3, z: -0.2 }
       }
     };
 
@@ -471,10 +473,10 @@
     }
 
     // =========================================================================
-    // 3. THREE.JS 3D GREEN OFFICE STUDIO + AURORA BOREALIS + 2D AGENTS
+    // 3. THREE.JS EXPANDED GREEN CAMPUS + JAPANESE BRIDGE + STREAM + AURORA
     // =========================================================================
     let scene, camera, renderer, controls;
-    let ambientLight, sunLight, warmLampLight, pondLight;
+    let ambientLight, sunLight, warmLampLight, pondLight, expansionLampLight;
     let lightingModeIndex = 0; // 0: Pagi, 1: Golden Hour, 2: Malam Aurora Norwegia
     let seasonModeIndex = 0;
 
@@ -482,6 +484,8 @@
     const clickableObjects = [];
     const monitorScreens = [];
     const koiFishes = [];
+    const streamFishes = [];
+    const streamRipples = [];
     const rabbits = [];
     const cats = [];
 
@@ -489,6 +493,7 @@
     let summerGrassTex = null;
     let winterSnowTex = null;
     let pondWaterMesh = null;
+    let streamWaterMesh = null;
     const treeFoliageMeshes = [];
     let rainParticles = null;
     let snowParticles = null;
@@ -498,8 +503,9 @@
     let auroraUniforms = null;
     let nightStars = null;
 
-    let targetCamPos = new THREE.Vector3(9.5, 8.2, 11.8);
-    let targetLookAt = new THREE.Vector3(-0.5, 0.9, 0.2);
+    // Kamera overview yang lebih luas agar mencakup studio utama, sungai, jembatan Jepang & paviliun baru
+    let targetCamPos = new THREE.Vector3(4.5, 11.8, 17.8);
+    let targetLookAt = new THREE.Vector3(1.5, 0.8, -0.5);
     let isCameraTransitioning = false;
 
     function init3DOffice() {
@@ -509,9 +515,9 @@
 
       scene = new THREE.Scene();
       scene.background = new THREE.Color(0xe6f2e8);
-      scene.fog = new THREE.FogExp2(0xe6f2e8, 0.014);
+      scene.fog = new THREE.FogExp2(0xe6f2e8, 0.009);
 
-      camera = new THREE.PerspectiveCamera(42, width / height, 0.1, 140);
+      camera = new THREE.PerspectiveCamera(42, width / height, 0.1, 180);
       camera.position.copy(targetCamPos);
 
       renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' });
@@ -527,7 +533,7 @@
       controls.dampingFactor = 0.07;
       controls.maxPolarAngle = Math.PI / 2 - 0.03;
       controls.minDistance = 3.5;
-      controls.maxDistance = 24;
+      controls.maxDistance = 36;
       controls.target.copy(targetLookAt);
       controls.addEventListener('start', () => { isCameraTransitioning = false; });
 
@@ -535,13 +541,13 @@
       scene.add(ambientLight);
 
       sunLight = new THREE.DirectionalLight(0xfff5e4, 0.98);
-      sunLight.position.set(-9, 14, 8);
+      sunLight.position.set(-10, 18, 12);
       sunLight.castShadow = true;
       sunLight.shadow.mapSize.width = 2048;
       sunLight.shadow.mapSize.height = 2048;
       sunLight.shadow.camera.near = 1;
-      sunLight.shadow.camera.far = 40;
-      const d = 13;
+      sunLight.shadow.camera.far = 55;
+      const d = 22;
       sunLight.shadow.camera.left = -d;
       sunLight.shadow.camera.right = d;
       sunLight.shadow.camera.top = d;
@@ -549,15 +555,20 @@
       sunLight.shadow.bias = -0.0005;
       scene.add(sunLight);
 
-      warmLampLight = new THREE.PointLight(0xffb74d, 0.45, 16);
-      warmLampLight.position.set(2.5, 4.2, -1.5);
+      warmLampLight = new THREE.PointLight(0xffb74d, 0.45, 18);
+      warmLampLight.position.set(-4.5, 4.2, -1.5);
       scene.add(warmLampLight);
 
-      pondLight = new THREE.PointLight(0x38bdf8, 0.35, 9);
-      pondLight.position.set(-5.2, 0.8, 3.8);
+      expansionLampLight = new THREE.PointLight(0xffb74d, 0.45, 18);
+      expansionLampLight.position.set(11.5, 4.2, -1.5);
+      scene.add(expansionLampLight);
+
+      pondLight = new THREE.PointLight(0x38bdf8, 0.4, 12);
+      pondLight.position.set(3.2, 0.9, -1.0);
       scene.add(pondLight);
 
-      buildSemiOutdoorArchitecture();
+      buildExpandedCampusArchitecture();
+      buildJapaneseStreamAndBridge();
       buildAuroraBorealisSky();
       buildGardenTreesAndPond();
       buildLivingAnimals();
@@ -608,21 +619,20 @@
     // AURORA BOREALIS SHADER & NIGHT STARS (NORWAY / ARCTIC SKY)
     // =========================================================================
     function buildAuroraBorealisSky() {
-      // 1. Taburan Bintang Malam Kutub
-      const starCount = 650;
+      const starCount = 850;
       const starGeo = new THREE.BufferGeometry();
       const starPos = new Float32Array(starCount * 3);
       for (let i = 0; i < starCount; i++) {
         const theta = Math.random() * Math.PI * 2;
-        const radius = 24 + Math.random() * 22;
+        const radius = 34 + Math.random() * 26;
         starPos[i * 3] = Math.cos(theta) * radius;
-        starPos[i * 3 + 1] = 4.5 + Math.random() * 22;
+        starPos[i * 3 + 1] = 5.5 + Math.random() * 26;
         starPos[i * 3 + 2] = Math.sin(theta) * radius;
       }
       starGeo.setAttribute('position', new THREE.BufferAttribute(starPos, 3));
       const starMat = new THREE.PointsMaterial({
         color: 0xf8fafc,
-        size: 0.24,
+        size: 0.28,
         transparent: true,
         opacity: 0.88,
         fog: false
@@ -631,7 +641,6 @@
       nightStars.visible = false;
       scene.add(nightStars);
 
-      // 2. Tirai Cahaya Aurora Borealis Melengkung di Langit Malam
       auroraUniforms = {
         uTime: { value: 0.0 },
         uOpacity: { value: 0.92 }
@@ -650,11 +659,10 @@
           void main() {
             vUv = uv;
             vec3 pos = position;
-            // Gelombang tirai aurora bergoyang perlahan di udara
-            float wave1 = sin(uv.x * 16.0 + uTime * 0.65) * 1.4;
-            float wave2 = cos(uv.x * 28.0 - uTime * 0.45) * 0.75;
+            float wave1 = sin(uv.x * 16.0 + uTime * 0.65) * 1.6;
+            float wave2 = cos(uv.x * 28.0 - uTime * 0.45) * 0.85;
             pos.z += (wave1 + wave2) * sin(uv.y * 3.14159);
-            pos.x += cos(uv.x * 12.0 + uTime * 0.4) * 0.8;
+            pos.x += cos(uv.x * 12.0 + uTime * 0.4) * 0.9;
             gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
           }
         `,
@@ -679,17 +687,13 @@
           }
 
           void main() {
-            // Garis-garis sinar vertikal khas aurora borealis Norwegia
-            float streaks = noise(vec2(vUv.x * 36.0 + uTime * 0.35, vUv.y * 2.2 - uTime * 0.15));
-            float fineRays = noise(vec2(vUv.x * 85.0 - uTime * 0.5, vUv.y * 3.5));
+            float streaks = noise(vec2(vUv.x * 38.0 + uTime * 0.35, vUv.y * 2.2 - uTime * 0.15));
+            float fineRays = noise(vec2(vUv.x * 88.0 - uTime * 0.5, vUv.y * 3.5));
             float curtain = smoothstep(0.24, 0.88, streaks * 0.68 + fineRays * 0.42);
 
-            // Fade halus di bagian bawah dan atas langit
             float vFade = smoothstep(0.0, 0.28, vUv.y) * smoothstep(1.0, 0.35, vUv.y);
-            // Fade di kedua ujung cakrawala
             float hFade = smoothstep(0.0, 0.12, vUv.x) * smoothstep(1.0, 0.88, vUv.x);
 
-            // Palet warna Aurora: Hijau Zamrud di bawah -> Cyan/Teal -> Violet/Magenta di puncak
             vec3 emerald = vec3(0.08, 0.98, 0.52);
             vec3 cyan = vec3(0.10, 0.85, 0.95);
             vec3 violet = vec3(0.68, 0.25, 0.95);
@@ -703,12 +707,278 @@
         `
       });
 
-      // Silinder terbuka raksasa di cakrawala utara-barat-timur
-      const auroraGeo = new THREE.CylinderGeometry(36, 36, 15, 96, 16, true, Math.PI * 0.55, Math.PI * 1.45);
+      const auroraGeo = new THREE.CylinderGeometry(48, 48, 18, 96, 16, true, Math.PI * 0.55, Math.PI * 1.45);
       auroraMesh = new THREE.Mesh(auroraGeo, auroraMat);
-      auroraMesh.position.set(0, 11.5, -2);
+      auroraMesh.position.set(1.5, 13.5, -2);
       auroraMesh.visible = false;
       scene.add(auroraMesh);
+    }
+
+    // =========================================================================
+    // SUNGAI KECIL ZEN & JEMBATAN LENGKUNG KAYU ALA JEPANG (TAIKO-BASHI)
+    // =========================================================================
+    function buildJapaneseStreamAndBridge() {
+      const streamX = 3.15;
+      const streamWidth = 2.65;
+      const streamLength = 28.0;
+
+      // 1. Dasar Sungai Berpasir & Batu Kali
+      const streamBed = new THREE.Mesh(
+        new THREE.PlaneGeometry(streamWidth, streamLength),
+        new THREE.MeshStandardMaterial({ color: 0x16384a, roughness: 0.9 })
+      );
+      streamBed.rotation.x = -Math.PI / 2;
+      streamBed.position.set(streamX, 0.02, 0.5);
+      scene.add(streamBed);
+
+      // Batu-batu kali di dasar sungai
+      const riverStoneMat = new THREE.MeshStandardMaterial({ color: 0x64748b, roughness: 0.8 });
+      for (let i = 0; i < 65; i++) {
+        const st = new THREE.Mesh(new THREE.DodecahedronGeometry(0.14 + (i % 3) * 0.05, 1), riverStoneMat);
+        st.scale.set(1.3, 0.55, 1.1);
+        st.position.set(
+          streamX + ((i * 17) % 10 - 5) * 0.21,
+          0.04,
+          -12.5 + (i / 65) * 26.0
+        );
+        scene.add(st);
+      }
+
+      // 2. Permukaan Air Sungai Jernih Kebiruan
+      streamWaterMesh = new THREE.Mesh(
+        new THREE.PlaneGeometry(streamWidth - 0.08, streamLength),
+        new THREE.MeshPhysicalMaterial({
+          color: 0x0ea5e9,
+          transparent: true,
+          opacity: 0.64,
+          roughness: 0.1,
+          metalness: 0.08
+        })
+      );
+      streamWaterMesh.rotation.x = -Math.PI / 2;
+      streamWaterMesh.position.set(streamX, 0.14, 0.5);
+      scene.add(streamWaterMesh);
+
+      // Riak gelombang air mengalir di sepanjang sungai
+      const rippleMat = new THREE.MeshBasicMaterial({
+        color: 0xe0f2fe,
+        transparent: true,
+        opacity: 0.45
+      });
+      for (let r = 0; r < 24; r++) {
+        const ripple = new THREE.Mesh(new THREE.PlaneGeometry(0.45 + (r % 3) * 0.2, 0.06), rippleMat);
+        ripple.rotation.x = -Math.PI / 2;
+        const rx = streamX + ((r % 3) - 1) * 0.58;
+        const rz = -12 + r * 1.1;
+        ripple.position.set(rx, 0.155, rz);
+        scene.add(ripple);
+        streamRipples.push({ mesh: ripple, speed: 0.9 + (r % 3) * 0.25 });
+      }
+
+      // Ikan Koi berenang menyusuri sungai kecil
+      const koiColors = [0xf97316, 0xffffff, 0xef4444, 0xfacc15];
+      for (let f = 0; f < 4; f++) {
+        const fishGroup = new THREE.Group();
+        const bodyMat = new THREE.MeshStandardMaterial({ color: koiColors[f], roughness: 0.3 });
+        const body = new THREE.Mesh(new THREE.SphereGeometry(0.10, 10, 8), bodyMat);
+        body.scale.set(0.65, 0.55, 1.85);
+        fishGroup.add(body);
+
+        const tail = new THREE.Mesh(new THREE.ConeGeometry(0.075, 0.16, 4), bodyMat);
+        tail.rotation.x = -Math.PI / 2;
+        tail.position.z = -0.20;
+        fishGroup.add(tail);
+
+        const laneX = streamX + (f % 2 === 0 ? -0.45 : 0.45);
+        fishGroup.position.set(laneX, 0.09, -8 + f * 4);
+        scene.add(fishGroup);
+
+        streamFishes.push({
+          mesh: fishGroup,
+          tail,
+          baseX: laneX,
+          speed: (f % 2 === 0 ? 1 : -1) * (0.85 + f * 0.15),
+          phase: f * 1.4
+        });
+      }
+
+      // 3. Tanggul Batu Taman di Kedua Tepi Sungai (Kiri & Kanan)
+      const bankRockMat = new THREE.MeshStandardMaterial({ color: 0x78716c, roughness: 0.85 });
+      const bankPositionsZ = [];
+      for (let z = -12.8; z <= 13.8; z += 0.55) {
+        // Sisakan bukaan di dekat jembatan (z sekitar -1.6)
+        if (Math.abs(z - (-1.6)) < 0.75) continue;
+        bankPositionsZ.push(z);
+      }
+
+      bankPositionsZ.forEach((bz, idx) => {
+        for (let side of [-1, 1]) {
+          const rSize = 0.24 + (idx % 3) * 0.07;
+          const rock = new THREE.Mesh(new THREE.DodecahedronGeometry(rSize, 1), bankRockMat);
+          rock.scale.set(1.25, 0.75, 1.1);
+          rock.position.set(streamX + side * (streamWidth / 2 + 0.12), 0.16, bz);
+          rock.rotation.y = idx * 0.8 + side;
+          rock.castShadow = true;
+          rock.receiveShadow = true;
+          scene.add(rock);
+        }
+      });
+
+      // Rumpun bambu & bunga iris di tepi sungai ala taman Jepang
+      const bambooMat = new THREE.MeshStandardMaterial({ color: 0x4d7c0f, roughness: 0.5 });
+      const bambooSpots = [
+        [streamX - 1.75, -5.8], [streamX - 1.85, 2.2], [streamX - 1.75, 6.5],
+        [streamX + 1.75, -6.2], [streamX + 1.85, 2.4], [streamX + 1.75, 5.8]
+      ];
+      bambooSpots.forEach(([bx, bz]) => {
+        const clump = new THREE.Group();
+        clump.position.set(bx, 0, bz);
+        for (let b = 0; b < 4; b++) {
+          const h = 1.6 + (b % 3) * 0.45;
+          const stalk = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.048, h, 8), bambooMat);
+          stalk.position.set((b - 1.5) * 0.11, h / 2, ((b % 2) - 0.5) * 0.12);
+          stalk.rotation.z = (b - 1.5) * 0.04;
+          stalk.castShadow = true;
+          clump.add(stalk);
+        }
+        scene.add(clump);
+      });
+
+      // 4. JEMBATAN LENGKUNG KAYU ALA JEPANG (TAIKO-BASHI) DI Z = -1.6
+      const bridgeGroup = new THREE.Group();
+      bridgeGroup.position.set(streamX, 0.12, -1.6);
+
+      const bridgeSpan = 3.85;
+      const bridgeWidth = 1.65;
+      const archHeight = 0.58;
+
+      const woodPlankMat = new THREE.MeshStandardMaterial({ color: 0x9a5b2c, roughness: 0.65 });
+      const vermilionMat = new THREE.MeshStandardMaterial({ color: 0xb91c1c, roughness: 0.45 }); // Merah khas kuil/taman Jepang
+      const darkCapMat = new THREE.MeshStandardMaterial({ color: 0x1e1b18, roughness: 0.4 });
+      const goldFinialMat = new THREE.MeshStandardMaterial({ color: 0xf59e0b, metalness: 0.6, roughness: 0.3 });
+
+      // Papan-papan lantai jembatan melengkung halus
+      const plankCount = 24;
+      for (let i = 0; i <= plankCount; i++) {
+        const u = (i / plankCount) * 2 - 1; // -1 s/d +1
+        const px = u * (bridgeSpan / 2);
+        const py = Math.cos(u * Math.PI * 0.5) * archHeight;
+        const slopeAngle = -Math.sin(u * Math.PI * 0.5) * (archHeight / (bridgeSpan / 2)) * 1.35;
+
+        const plank = new THREE.Mesh(
+          new THREE.BoxGeometry(bridgeSpan / plankCount + 0.04, 0.08, bridgeWidth),
+          woodPlankMat
+        );
+        plank.position.set(px, py, 0);
+        plank.rotation.z = slopeAngle;
+        plank.castShadow = true;
+        plank.receiveShadow = true;
+        bridgeGroup.add(plank);
+      }
+
+      // Balok lengkung samping & pagar pegangan merah (Ran-kan)
+      for (let side of [-1, 1]) {
+        const zRail = side * (bridgeWidth / 2 - 0.07);
+
+        // Balok struktur bawah melengkung
+        const segs = 18;
+        for (let s = 0; s < segs; s++) {
+          const u1 = (s / segs) * 2 - 1;
+          const u2 = ((s + 1) / segs) * 2 - 1;
+          const x1 = u1 * (bridgeSpan / 2);
+          const y1 = Math.cos(u1 * Math.PI * 0.5) * archHeight;
+          const x2 = u2 * (bridgeSpan / 2);
+          const y2 = Math.cos(u2 * Math.PI * 0.5) * archHeight;
+
+          const segLen = Math.hypot(x2 - x1, y2 - y1) + 0.03;
+          const segAng = Math.atan2(y2 - y1, x2 - x1);
+
+          // Balok penyangga bawah
+          const beam = new THREE.Mesh(new THREE.BoxGeometry(segLen, 0.14, 0.10), vermilionMat);
+          beam.position.set((x1 + x2) / 2, (y1 + y2) / 2 - 0.03, zRail);
+          beam.rotation.z = segAng;
+          beam.castShadow = true;
+          bridgeGroup.add(beam);
+
+          // Palang pegangan atas (Kasagi)
+          const topRail = new THREE.Mesh(new THREE.BoxGeometry(segLen, 0.09, 0.11), vermilionMat);
+          topRail.position.set((x1 + x2) / 2, (y1 + y2) / 2 + 0.62, zRail);
+          topRail.rotation.z = segAng;
+          topRail.castShadow = true;
+          bridgeGroup.add(topRail);
+
+          // Palang tengah (Nuki)
+          const midRail = new THREE.Mesh(new THREE.BoxGeometry(segLen, 0.06, 0.07), vermilionMat);
+          midRail.position.set((x1 + x2) / 2, (y1 + y2) / 2 + 0.34, zRail);
+          midRail.rotation.z = segAng;
+          bridgeGroup.add(midRail);
+        }
+
+        // Tiang-tiang vertikal (Tsuka) + mahkota Giboshi di ujung jembatan
+        [-1, -0.5, 0, 0.5, 1].forEach((uPos) => {
+          const tx = uPos * (bridgeSpan / 2);
+          const ty = Math.cos(uPos * Math.PI * 0.5) * archHeight;
+          const isEndPost = Math.abs(uPos) === 1;
+          const postH = isEndPost ? 0.78 : 0.64;
+
+          const post = new THREE.Mesh(
+            new THREE.BoxGeometry(isEndPost ? 0.13 : 0.09, postH, isEndPost ? 0.13 : 0.09),
+            vermilionMat
+          );
+          post.position.set(tx, ty + postH / 2 - 0.04, zRail);
+          post.castShadow = true;
+          bridgeGroup.add(post);
+
+          if (isEndPost) {
+            const cap = new THREE.Mesh(new THREE.CylinderGeometry(0.075, 0.085, 0.06, 12), darkCapMat);
+            cap.position.set(tx, ty + postH - 0.01, zRail);
+            const finial = new THREE.Mesh(new THREE.SphereGeometry(0.065, 10, 10), goldFinialMat);
+            finial.position.set(tx, ty + postH + 0.06, zRail);
+            bridgeGroup.add(cap, finial);
+          }
+        });
+      }
+
+      scene.add(bridgeGroup);
+
+      // Lentera Batu Jepang (Toro) di dekat ujung jembatan
+      const buildStoneLantern = (lx, lz) => {
+        const lantern = new THREE.Group();
+        lantern.position.set(lx, 0, lz);
+        const stoneMat = new THREE.MeshStandardMaterial({ color: 0x9ca3af, roughness: 0.85 });
+
+        const base = new THREE.Mesh(new THREE.CylinderGeometry(0.24, 0.30, 0.18, 6), stoneMat);
+        base.position.y = 0.09;
+        const shaft = new THREE.Mesh(new THREE.CylinderGeometry(0.11, 0.14, 0.52, 8), stoneMat);
+        shaft.position.y = 0.44;
+        const firebox = new THREE.Mesh(new THREE.BoxGeometry(0.28, 0.24, 0.28), stoneMat);
+        firebox.position.y = 0.80;
+        const glow = new THREE.Mesh(
+          new THREE.BoxGeometry(0.22, 0.16, 0.22),
+          new THREE.MeshBasicMaterial({ color: 0xfef08a })
+        );
+        glow.position.y = 0.80;
+        const roof = new THREE.Mesh(new THREE.ConeGeometry(0.38, 0.24, 6), stoneMat);
+        roof.position.y = 1.03;
+
+        lantern.add(base, shaft, firebox, glow, roof);
+        lantern.traverse(m => { if (m.isMesh) m.castShadow = true; });
+        scene.add(lantern);
+      };
+      buildStoneLantern(streamX - 1.95, -0.45);
+      buildStoneLantern(streamX + 1.95, -2.75);
+
+      // Batu pijakan jalan setapak dari Studio Utama -> Jembatan -> Paviliun Baru
+      const stepMat = new THREE.MeshStandardMaterial({ color: 0xd6d3d1, roughness: 0.85 });
+      [
+        [0.45, -1.6], [1.05, -1.6], // Sisi kiri jembatan menuju dek utama
+        [5.25, -1.6], [5.85, -1.6]  // Sisi kanan jembatan menuju dek paviliun baru
+      ].forEach(([sx, sz]) => {
+        const step = new THREE.Mesh(new THREE.CylinderGeometry(0.36, 0.40, 0.07, 12), stepMat);
+        step.position.set(sx, 0.035, sz);
+        step.receiveShadow = true;
+        scene.add(step);
+      });
     }
 
     // =========================================================================
@@ -720,7 +990,6 @@
       const ctx = c.getContext('2d');
       ctx.clearRect(0, 0, 256, 320);
 
-      // Tangkai daun
       ctx.strokeStyle = '#2d6a4f';
       ctx.lineWidth = 8;
       ctx.lineCap = 'round';
@@ -729,7 +998,6 @@
       ctx.quadraticCurveTo(124, 240, 128, 175);
       ctx.stroke();
 
-      // Helai daun hati lebar Monstera Deliciosa
       const grad = ctx.createLinearGradient(40, 30, 210, 230);
       grad.addColorStop(0, '#40916c');
       grad.addColorStop(0.5, '#2d6a4f');
@@ -745,7 +1013,6 @@
       ctx.closePath();
       ctx.fill();
 
-      // Tulang daun tengah & samping
       ctx.strokeStyle = '#74c69d';
       ctx.lineWidth = 4;
       ctx.beginPath();
@@ -753,20 +1020,16 @@
       ctx.lineTo(128, 215);
       ctx.stroke();
 
-      // Lubang-lubang khas daun Monstera (Fenestrations)
       ctx.globalCompositeOperation = 'destination-out';
       ctx.fillStyle = '#000000';
 
       const slits = [
-        // Celah pinggir kiri
         [44, 92, 52, 11, -0.25],
         [38, 132, 58, 12, -0.15],
         [46, 172, 50, 11, 0.05],
-        // Celah pinggir kanan
         [212, 92, 52, 11, 0.25],
         [218, 132, 58, 12, 0.15],
         [210, 172, 50, 11, -0.05],
-        // Lubang oval bagian dalam dekat tulang daun
         [98, 108, 13, 8, -0.2],
         [94, 145, 15, 9, -0.1],
         [158, 108, 13, 8, 0.2],
@@ -809,7 +1072,6 @@
         const h = 0.72 + (i % 3) * 0.26;
         const leafPlane = new THREE.Mesh(new THREE.PlaneGeometry(0.68, 0.85), leafMat);
 
-        // Posisikan pangkal tangkai di tengah rumpun & miringkan daun ke luar
         const leafPivot = new THREE.Group();
         leafPivot.rotation.y = angle;
         leafPivot.rotation.x = 0.38 + (i % 3) * 0.14;
@@ -856,7 +1118,6 @@
       pot.castShadow = true;
       group.add(pot);
 
-      // Tanah gelap dalam pot
       const soil = new THREE.Mesh(
         new THREE.CylinderGeometry(0.33, 0.33, 0.04, 14),
         new THREE.MeshStandardMaterial({ color: 0x2b1d14 })
@@ -884,87 +1145,42 @@
       scene.add(group);
     }
 
-    // Bedengan batu koral + Monstera & Pakis sepanjang dinding ala referensi gambar 1
-    function buildBiophilicWallPlanterBed() {
+    function buildBiophilicWallPlanterBed(offsetX = 0, deckWidth = 11.2) {
       const borderWoodMat = new THREE.MeshStandardMaterial({ color: 0x8d5b3c, roughness: 0.7 });
       const soilMat = new THREE.MeshStandardMaterial({ color: 0x291d16, roughness: 0.95 });
       const pebbleColors = [0xd6d3d1, 0xa8a29e, 0xe7e5e4, 0x78716c, 0xf5f5f4];
 
-      // 1. Jalur Bedengan Sepanjang Dinding Belakang (x: -4.0 s/d 6.8, z: -6.25)
-      const backSoil = new THREE.Mesh(new THREE.BoxGeometry(10.8, 0.09, 0.72), soilMat);
-      backSoil.position.set(1.4, 0.16, -6.28);
+      const backSoil = new THREE.Mesh(new THREE.BoxGeometry(deckWidth - 0.6, 0.09, 0.72), soilMat);
+      backSoil.position.set(offsetX, 0.16, -6.28);
       backSoil.receiveShadow = true;
       scene.add(backSoil);
 
-      const backTrim = new THREE.Mesh(new THREE.BoxGeometry(10.85, 0.12, 0.06), borderWoodMat);
-      backTrim.position.set(1.4, 0.18, -5.91);
+      const backTrim = new THREE.Mesh(new THREE.BoxGeometry(deckWidth - 0.55, 0.12, 0.06), borderWoodMat);
+      backTrim.position.set(offsetX, 0.18, -5.91);
       scene.add(backTrim);
 
-      // 2. Jalur Bedengan Sepanjang Dinding Kanan (x: 6.55, z: -5.9 s/d -1.7)
-      const rightSoil = new THREE.Mesh(new THREE.BoxGeometry(0.72, 0.09, 4.3), soilMat);
-      rightSoil.position.set(6.55, 0.16, -3.8);
-      rightSoil.receiveShadow = true;
-      scene.add(rightSoil);
-
-      const rightTrim = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.12, 4.35), borderWoodMat);
-      rightTrim.position.set(6.18, 0.18, -3.8);
-      scene.add(rightTrim);
-
-      // Taburan batu-batu koral bulat di atas tanah bedengan (persis referensi foto!)
-      for (let i = 0; i < 95; i++) {
+      for (let i = 0; i < 80; i++) {
         const pMat = new THREE.MeshStandardMaterial({
           color: pebbleColors[i % pebbleColors.length],
           roughness: 0.65
         });
         const pebble = new THREE.Mesh(new THREE.SphereGeometry(0.065 + (i % 3) * 0.02, 8, 6), pMat);
         pebble.scale.set(1.25, 0.65, 1.0);
-        const px = -3.8 + (i / 95) * 10.3;
+        const px = (offsetX - (deckWidth - 1.2) / 2) + (i / 80) * (deckWidth - 1.2);
         const pz = -6.48 + ((i * 7) % 10) * 0.048;
         pebble.position.set(px, 0.21, pz);
         pebble.receiveShadow = true;
         scene.add(pebble);
       }
 
-      for (let j = 0; j < 40; j++) {
-        const pMat = new THREE.MeshStandardMaterial({
-          color: pebbleColors[j % pebbleColors.length],
-          roughness: 0.65
-        });
-        const pebble = new THREE.Mesh(new THREE.SphereGeometry(0.065 + (j % 3) * 0.02, 8, 6), pMat);
-        pebble.scale.set(1.0, 0.65, 1.25);
-        const pz = -5.7 + (j / 40) * 3.9;
-        const px = 6.32 + ((j * 5) % 10) * 0.045;
-        pebble.position.set(px, 0.21, pz);
-        pebble.receiveShadow = true;
-        scene.add(pebble);
-      }
-
-      // Rumpun Monstera Rimbun & Pakis di sepanjang bedengan belakang & kanan
-      const monsteraSpots = [
-        [-3.4, -6.25, 1.25, 8],
-        [-2.3, -6.28, 0.95, 6],
-        [0.15, -6.25, 1.15, 7],
-        [2.85, -6.25, 1.10, 7],
-        [5.65, -6.22, 1.35, 9],
-        [6.52, -4.95, 1.15, 7],
-        [6.52, -2.55, 1.20, 8]
-      ];
-      monsteraSpots.forEach(([mx, mz, sc, cnt]) => {
-        scene.add(createMonsteraCluster(mx, 0.20, mz, sc, cnt));
-      });
-
-      const fernSpots = [
-        [-2.85, -6.12, 0.85],
-        [-0.45, -6.12, 0.90],
-        [0.85, -6.12, 0.85],
-        [2.15, -6.12, 0.90],
-        [4.95, -6.12, 0.85],
-        [6.38, -5.55, 0.85],
-        [6.38, -3.75, 0.95],
-        [6.38, -1.95, 0.85]
-      ];
-      fernSpots.forEach(([fx, fz, sc]) => {
-        scene.add(createFernCluster(fx, 0.20, fz, sc));
+      const relOffsets = [-0.42, -0.22, 0.0, 0.22, 0.42];
+      relOffsets.forEach((rel, idx) => {
+        const mx = offsetX + rel * (deckWidth - 1.4);
+        scene.add(createMonsteraCluster(mx, 0.20, -6.25, 1.1 + (idx % 2) * 0.15, 7 + (idx % 2)));
+        if (idx < relOffsets.length - 1) {
+          const fx = mx + 0.11 * (deckWidth - 1.4);
+          scene.add(createFernCluster(fx, 0.20, -6.12, 0.88));
+        }
       });
     }
 
@@ -1027,13 +1243,13 @@
       ctx.fillStyle = '#65a30d';
       ctx.fillRect(0, 0, 512, 512);
       const greens = ['#4d7c0f', '#84cc16', '#3f6212', '#a3e635'];
-      for (let i = 0; i < 3200; i++) {
+      for (let i = 0; i < 4200; i++) {
         ctx.fillStyle = greens[i % greens.length];
         ctx.fillRect(Math.random() * 512, Math.random() * 512, 3, 6);
       }
       const tex = new THREE.CanvasTexture(c);
       tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
-      tex.repeat.set(8, 8);
+      tex.repeat.set(12, 10);
       return tex;
     }
 
@@ -1044,7 +1260,7 @@
       ctx.fillStyle = '#f1f5f9';
       ctx.fillRect(0, 0, 512, 512);
       const shades = ['#ffffff', '#e2e8f0', '#cbd5e1', '#f8fafc'];
-      for (let i = 0; i < 2400; i++) {
+      for (let i = 0; i < 3200; i++) {
         ctx.fillStyle = shades[i % shades.length];
         ctx.beginPath();
         ctx.arc(Math.random() * 512, Math.random() * 512, 3 + Math.random() * 5, 0, Math.PI * 2);
@@ -1052,7 +1268,7 @@
       }
       const tex = new THREE.CanvasTexture(c);
       tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
-      tex.repeat.set(6, 6);
+      tex.repeat.set(10, 8);
       return tex;
     }
 
@@ -1077,23 +1293,69 @@
       return tex;
     }
 
-    function buildSemiOutdoorArchitecture() {
+    function createExpansionBannerCanvas() {
+      const c = document.createElement('canvas');
+      c.width = 512; c.height = 192;
+      const ctx = c.getContext('2d');
+      ctx.fillStyle = '#06182E';
+      ctx.fillRect(0, 0, 512, 192);
+      ctx.strokeStyle = '#10b981';
+      ctx.lineWidth = 8;
+      ctx.strokeRect(10, 10, 492, 172);
+
+      ctx.fillStyle = '#34d399';
+      ctx.font = 'bold 20px "Plus Jakarta Sans", sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('CREATIVE & MULTIMEDIA WING', 256, 58);
+
+      ctx.fillStyle = '#ffffff';
+      ctx.font = '800 28px "Plus Jakarta Sans", sans-serif';
+      ctx.fillText('ZONA EKSPANSI AGEN AI', 256, 105);
+
+      ctx.fillStyle = '#94a3b8';
+      ctx.font = '600 17px monospace';
+      ctx.fillText('Slot Siap: Content Creator & Reels Studio', 256, 146);
+
+      const tex = new THREE.CanvasTexture(c);
+      tex.encoding = THREE.sRGBEncoding;
+      return tex;
+    }
+
+    function buildExpandedCampusArchitecture() {
       summerGrassTex = createGrassTexture();
       winterSnowTex = createSnowGroundTexture();
 
+      // Lahan rumput kampus jauh lebih luas (38 x 28)
       grassFloorMesh = new THREE.Mesh(
-        new THREE.PlaneGeometry(24, 22),
+        new THREE.PlaneGeometry(38, 28),
         new THREE.MeshStandardMaterial({ map: summerGrassTex, roughness: 0.9 })
       );
       grassFloorMesh.rotation.x = -Math.PI / 2;
+      grassFloorMesh.position.set(1.5, 0, 0.5);
       grassFloorMesh.receiveShadow = true;
       scene.add(grassFloorMesh);
 
+      const woodTex = createWoodFloorTexture();
+      const wallMat = new THREE.MeshStandardMaterial({
+        map: createIndustrialConcreteTexture(),
+        color: 0xd1d5db,
+        roughness: 0.88,
+        metalness: 0.08
+      });
+      const pillarMat = new THREE.MeshStandardMaterial({ color: 0x78350f, roughness: 0.6 });
+      const slatMat = new THREE.MeshStandardMaterial({ color: 0xc28e5c, roughness: 0.65 });
+
+      // =======================================================================
+      // A. STUDIO UTAMA (SISI KIRI SUNGAI: X = -10.2 s/d +1.0)
+      // =======================================================================
+      const mainCenterX = -4.6;
+      const mainW = 11.2;
+
       const deckBase = new THREE.Mesh(
-        new THREE.BoxGeometry(11.5, 0.12, 8.8),
-        new THREE.MeshStandardMaterial({ map: createWoodFloorTexture(), roughness: 0.6 })
+        new THREE.BoxGeometry(mainW, 0.12, 8.8),
+        new THREE.MeshStandardMaterial({ map: woodTex, roughness: 0.6 })
       );
-      deckBase.position.set(1.4, 0.06, -2.5);
+      deckBase.position.set(mainCenterX, 0.06, -2.5);
       deckBase.receiveShadow = true;
       scene.add(deckBase);
 
@@ -1106,65 +1368,46 @@
         rug.receiveShadow = true;
         scene.add(rug);
       };
-      addRug(3.4, 3.0, 0xe0f2fe, -2.6, -2.5);
-      addRug(3.6, 3.0, 0xdcfce7, 1.5, -3.9);
-      addRug(3.6, 3.2, 0xfef3c7, 4.6, -0.3);
+      addRug(3.4, 3.0, 0xe0f2fe, -8.6, -2.5);
+      addRug(3.6, 3.0, 0xdcfce7, -4.5, -3.9);
+      addRug(3.6, 3.2, 0xfef3c7, -1.4, -0.3);
 
-      const wallMat = new THREE.MeshStandardMaterial({
-        map: createIndustrialConcreteTexture(),
-        color: 0xd1d5db,
-        roughness: 0.88,
-        metalness: 0.08
-      });
-
-      const backWall = new THREE.Mesh(new THREE.BoxGeometry(11.5, 4.2, 0.25), wallMat);
-      backWall.position.set(1.4, 2.1, -6.8);
+      const backWall = new THREE.Mesh(new THREE.BoxGeometry(mainW, 4.2, 0.25), wallMat);
+      backWall.position.set(mainCenterX, 2.1, -6.8);
       backWall.receiveShadow = true;
       scene.add(backWall);
 
-      const rightWall = new THREE.Mesh(new THREE.BoxGeometry(0.25, 4.2, 5.2), wallMat);
-      rightWall.position.set(7.05, 2.1, -4.2);
-      rightWall.receiveShadow = true;
-      scene.add(rightWall);
+      const leftWall = new THREE.Mesh(new THREE.BoxGeometry(0.25, 4.2, 5.2), wallMat);
+      leftWall.position.set(-10.1, 2.1, -4.2);
+      leftWall.receiveShadow = true;
+      scene.add(leftWall);
 
-      const pillarMat = new THREE.MeshStandardMaterial({ color: 0x78350f, roughness: 0.6 });
-      [[-4.2, -6.6], [-4.2, 1.7], [6.9, 1.7]].forEach(([px, pz]) => {
+      [[-10.0, -6.6], [-10.0, 1.7], [0.85, -6.6], [0.85, 1.7]].forEach(([px, pz]) => {
         const pillar = new THREE.Mesh(new THREE.BoxGeometry(0.20, 4.1, 0.20), pillarMat);
         pillar.position.set(px, 2.05, pz);
         pillar.castShadow = true;
         scene.add(pillar);
       });
 
-      // Kisi-kisi kayu pergola semi-outdoor di langit-langit (terinspirasi dari referensi foto!)
-      const slatMat = new THREE.MeshStandardMaterial({ color: 0xc28e5c, roughness: 0.65 });
-      for (let sx = -3.8; sx <= 6.6; sx += 0.65) {
+      for (let sx = -9.8; sx <= 0.6; sx += 0.65) {
         const slat = new THREE.Mesh(new THREE.BoxGeometry(0.11, 0.14, 8.45), slatMat);
         slat.position.set(sx, 4.05, -2.45);
         slat.castShadow = true;
         scene.add(slat);
       }
 
-      const glassRoof = new THREE.Mesh(
-        new THREE.BoxGeometry(11.35, 0.05, 8.55),
+      const glassRoof1 = new THREE.Mesh(
+        new THREE.BoxGeometry(mainW - 0.15, 0.05, 8.55),
         new THREE.MeshPhysicalMaterial({
           color: 0xe0f2fe,
           transparent: true,
           opacity: 0.18,
           roughness: 0.08,
-          metalness: 0.05,
           depthWrite: false
         })
       );
-      glassRoof.position.set(1.35, 4.14, -2.45);
-      scene.add(glassRoof);
-
-      const stoneMat = new THREE.MeshStandardMaterial({ color: 0xd6d3d1, roughness: 0.85 });
-      [[-2.2, 2.4], [-3.1, 3.0], [-4.1, 3.4]].forEach(([sx, sz]) => {
-        const step = new THREE.Mesh(new THREE.CylinderGeometry(0.45, 0.48, 0.08, 12), stoneMat);
-        step.position.set(sx, 0.04, sz);
-        step.receiveShadow = true;
-        scene.add(step);
-      });
+      glassRoof1.position.set(mainCenterX, 4.14, -2.45);
+      scene.add(glassRoof1);
 
       const addCustomPoster = (candidateFiles, xPos, fallbackTex) => {
         const frame = new THREE.Mesh(
@@ -1175,10 +1418,7 @@
         scene.add(frame);
 
         const posterMat = new THREE.MeshBasicMaterial({ map: fallbackTex });
-        const canvasMesh = new THREE.Mesh(
-          new THREE.PlaneGeometry(1.36, 1.90),
-          posterMat
-        );
+        const canvasMesh = new THREE.Mesh(new THREE.PlaneGeometry(1.36, 1.90), posterMat);
         canvasMesh.position.set(xPos, 2.65, -6.59);
         scene.add(canvasMesh);
 
@@ -1200,20 +1440,106 @@
 
       addCustomPoster(
         ['adtr_poster.webp', 'a Day To Remember.webp'],
-        -1.2,
+        -7.2,
         createFallbackBandPoster('A DAY TO', 'REMEMBER', 'WHAT SEPARATES ME FROM YOU', '#2dd4bf')
       );
 
       addCustomPoster(
         ['suicide_silence_poster.jpg', 'suicide_silence_poster.jpg.jpg'],
-        4.2,
+        -1.8,
         createFallbackBandPoster('SUICIDE', 'SILENCE', 'THE CLEANSING', '#a3a380')
       );
 
-      // Bedengan Green Office Monstera & Pakis Sepanjang Dinding + Pot Sudut
-      buildBiophilicWallPlanterBed();
-      createPottedPlant('monstera', -3.7, -5.2, 1.1);
-      createPottedPlant('monstera', 6.3, 1.2, 1.15);
+      buildBiophilicWallPlanterBed(mainCenterX, mainW);
+      createPottedPlant('monstera', -9.4, -1.2, 1.1);
+      createPottedPlant('monstera', 0.2, 1.1, 1.15);
+
+      // =======================================================================
+      // B. PAVILIUN EKSPANSI AGEN BARU (SISI KANAN SUNGAI: X = +6.3 s/d +16.5)
+      // =======================================================================
+      const expCenterX = 11.4;
+      const expW = 10.2;
+
+      const expDeck = new THREE.Mesh(
+        new THREE.BoxGeometry(expW, 0.12, 8.8),
+        new THREE.MeshStandardMaterial({ map: woodTex, roughness: 0.6 })
+      );
+      expDeck.position.set(expCenterX, 0.06, -2.5);
+      expDeck.receiveShadow = true;
+      scene.add(expDeck);
+
+      addRug(3.6, 3.0, 0xf3e8ff, 9.2, -3.4);
+      addRug(3.6, 3.0, 0xe0f2fe, 13.8, -2.2);
+
+      const expBackWall = new THREE.Mesh(new THREE.BoxGeometry(expW, 4.2, 0.25), wallMat);
+      expBackWall.position.set(expCenterX, 2.1, -6.8);
+      expBackWall.receiveShadow = true;
+      scene.add(expBackWall);
+
+      const expRightWall = new THREE.Mesh(new THREE.BoxGeometry(0.25, 4.2, 5.2), wallMat);
+      expRightWall.position.set(16.4, 2.1, -4.2);
+      expRightWall.receiveShadow = true;
+      scene.add(expRightWall);
+
+      [[6.45, -6.6], [6.45, 1.7], [16.3, -6.6], [16.3, 1.7]].forEach(([px, pz]) => {
+        const pillar = new THREE.Mesh(new THREE.BoxGeometry(0.20, 4.1, 0.20), pillarMat);
+        pillar.position.set(px, 2.05, pz);
+        pillar.castShadow = true;
+        scene.add(pillar);
+      });
+
+      for (let sx = 6.7; sx <= 16.0; sx += 0.65) {
+        const slat = new THREE.Mesh(new THREE.BoxGeometry(0.11, 0.14, 8.45), slatMat);
+        slat.position.set(sx, 4.05, -2.45);
+        slat.castShadow = true;
+        scene.add(slat);
+      }
+
+      const glassRoof2 = new THREE.Mesh(
+        new THREE.BoxGeometry(expW - 0.15, 0.05, 8.55),
+        new THREE.MeshPhysicalMaterial({
+          color: 0xe0f2fe,
+          transparent: true,
+          opacity: 0.18,
+          roughness: 0.08,
+          depthWrite: false
+        })
+      );
+      glassRoof2.position.set(expCenterX, 4.14, -2.45);
+      scene.add(glassRoof2);
+
+      // Papan nama "ZONA EKSPANSI AGEN AI" di dinding paviliun baru
+      const bannerFrame = new THREE.Mesh(
+        new THREE.BoxGeometry(3.4, 1.3, 0.08),
+        new THREE.MeshStandardMaterial({ color: 0x0f172a })
+      );
+      bannerFrame.position.set(expCenterX, 2.85, -6.63);
+      scene.add(bannerFrame);
+
+      const bannerScreen = new THREE.Mesh(
+        new THREE.PlaneGeometry(3.25, 1.18),
+        new THREE.MeshBasicMaterial({ map: createExpansionBannerCanvas() })
+      );
+      bannerScreen.position.set(expCenterX, 2.85, -6.58);
+      scene.add(bannerScreen);
+
+      // Bedengan Monstera & Pakis di Paviliun Baru
+      buildBiophilicWallPlanterBed(expCenterX, expW);
+      createPottedPlant('monstera', 7.1, 1.1, 1.1);
+      createPottedPlant('monstera', 15.6, 1.1, 1.15);
+
+      // 2 Workstation Siap Pakai di Paviliun Baru untuk Agen Mendatang
+      buildDeskSetup(9.2, -3.8, Math.PI / 8, 0xc084fc);
+      buildDeskSetup(13.8, -2.8, -Math.PI / 6, 0x38bdf8);
+
+      // Batu pijakan dari dek studio utama ke taman depan
+      const stoneMat = new THREE.MeshStandardMaterial({ color: 0xd6d3d1, roughness: 0.85 });
+      [[-8.2, 2.4], [-9.1, 3.0], [-10.1, 3.4]].forEach(([sx, sz]) => {
+        const step = new THREE.Mesh(new THREE.CylinderGeometry(0.45, 0.48, 0.08, 12), stoneMat);
+        step.position.set(sx, 0.04, sz);
+        step.receiveShadow = true;
+        scene.add(step);
+      });
     }
 
     function createGardenTree(x, z, scale = 1) {
@@ -1252,18 +1578,42 @@
     }
 
     function buildGardenTreesAndPond() {
-      createGardenTree(-8.5, -5.2, 1.25);
-      createGardenTree(-9.2, 0.5, 1.05);
-      createGardenTree(-8.4, 6.8, 1.3);
-      createGardenTree(-1.8, 7.8, 1.1);
-      createGardenTree(5.8, 7.2, 1.15);
+      // Pepohonan rimbun mengelilingi kampus yang luas
+      createGardenTree(-14.2, -5.2, 1.25);
+      createGardenTree(-14.8, 0.8, 1.1);
+      createGardenTree(-13.8, 7.2, 1.3);
+      createGardenTree(-6.5, 8.6, 1.15);
+      createGardenTree(-0.5, 8.2, 1.1);
+      createGardenTree(7.8, 8.2, 1.2);
+      createGardenTree(15.2, 7.2, 1.25);
+      createGardenTree(18.5, -3.5, 1.2);
+
+      // Pohon Sakura Merah Muda di dekat jembatan Jepang!
+      const sakura = new THREE.Group();
+      sakura.position.set(5.4, 0, -4.6);
+      const sTrunk = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.18, 0.28, 2.1, 10),
+        new THREE.MeshStandardMaterial({ color: 0x5c3a21 })
+      );
+      sTrunk.position.y = 1.05;
+      sTrunk.castShadow = true;
+      sakura.add(sTrunk);
+      [[0, 2.7, 0, 1.25], [-0.75, 2.35, 0.4, 0.9], [0.75, 2.4, -0.35, 0.95]].forEach(([px, py, pz, r]) => {
+        const blossomCrown = new THREE.Mesh(
+          new THREE.DodecahedronGeometry(r, 1),
+          new THREE.MeshStandardMaterial({ color: 0xf9a8d4, roughness: 0.7 })
+        );
+        blossomCrown.position.set(px, py, pz);
+        blossomCrown.castShadow = true;
+        sakura.add(blossomCrown);
+      });
+      scene.add(sakura);
 
       const flowerColors = [0xf43f5e, 0xfbbf24, 0xc084fc, 0xfb923c];
       const flowerCoords = [
-        [-7.8, -4.2], [-6.2, -4.6], [-5.1, -3.5], [-8.6, -2.8],
-        [-6.9, -2.4], [-5.3, -1.6], [-8.2, -1.0], [-6.4, -0.5],
-        [-5.2,  0.4], [-8.8,  1.2], [-7.4,  1.8], [-5.4,  1.7],
-        [-8.3,  3.2], [-8.5,  5.0], [-7.8,  6.2], [-3.2,  6.5]
+        [-13.2, -4.2], [-12.2, -2.6], [-13.6, -1.0], [-12.4, 1.2],
+        [-13.8, 3.2], [-13.5, 5.4], [-9.2, 6.8], [-3.2, 6.8],
+        [7.2, 5.2], [11.5, 5.8], [14.8, 4.6]
       ];
       flowerCoords.forEach(([fx, fz], i) => {
         const bush = new THREE.Mesh(
@@ -1283,7 +1633,8 @@
         scene.add(blossom);
       });
 
-      const pondX = -5.5, pondZ = 4.2, pondRadius = 2.15;
+      // Kolam Koi di taman barat
+      const pondX = -11.2, pondZ = 4.6, pondRadius = 2.15;
 
       const pondBed = new THREE.Mesh(
         new THREE.CircleGeometry(pondRadius, 32),
@@ -1325,14 +1676,6 @@
         scene.add(rock);
       }
 
-      const padMat = new THREE.MeshStandardMaterial({ color: 0x16a34a, side: THREE.DoubleSide });
-      [[-4.7, 3.6], [-6.1, 4.7], [-5.2, 5.1]].forEach(([lx, lz]) => {
-        const pad = new THREE.Mesh(new THREE.CircleGeometry(0.24, 14, 0, Math.PI * 1.75), padMat);
-        pad.rotation.x = -Math.PI / 2;
-        pad.position.set(lx, 0.19, lz);
-        scene.add(pad);
-      });
-
       const koiColors = [0xf97316, 0xffffff, 0xef4444, 0xfacc15, 0xfb923c];
       for (let i = 0; i < 5; i++) {
         const fishGroup = new THREE.Group();
@@ -1363,13 +1706,13 @@
     }
 
     function buildWeatherSystems() {
-      const rainCount = 1200;
+      const rainCount = 1600;
       const rainGeo = new THREE.BufferGeometry();
       const rainPositions = new Float32Array(rainCount * 3);
       for (let i = 0; i < rainCount; i++) {
-        rainPositions[i * 3] = (Math.random() - 0.5) * 24;
+        rainPositions[i * 3] = (Math.random() - 0.5) * 38 + 1.5;
         rainPositions[i * 3 + 1] = Math.random() * 14;
-        rainPositions[i * 3 + 2] = (Math.random() - 0.5) * 22;
+        rainPositions[i * 3 + 2] = (Math.random() - 0.5) * 28;
       }
       rainGeo.setAttribute('position', new THREE.BufferAttribute(rainPositions, 3));
       const rainMat = new THREE.PointsMaterial({
@@ -1382,13 +1725,13 @@
       rainParticles.visible = false;
       scene.add(rainParticles);
 
-      const snowCount = 950;
+      const snowCount = 1300;
       const snowGeo = new THREE.BufferGeometry();
       const snowPositions = new Float32Array(snowCount * 3);
       for (let i = 0; i < snowCount; i++) {
-        snowPositions[i * 3] = (Math.random() - 0.5) * 24;
+        snowPositions[i * 3] = (Math.random() - 0.5) * 38 + 1.5;
         snowPositions[i * 3 + 1] = Math.random() * 14;
-        snowPositions[i * 3 + 2] = (Math.random() - 0.5) * 22;
+        snowPositions[i * 3 + 2] = (Math.random() - 0.5) * 28;
       }
       snowGeo.setAttribute('position', new THREE.BufferAttribute(snowPositions, 3));
       const snowMat = new THREE.PointsMaterial({
@@ -1503,17 +1846,17 @@
     }
 
     function buildLivingAnimals() {
-      const r1 = createRabbit(-2.2, 4.8, 0xffffff);
-      rabbits.push({ mesh: r1, centerX: -2.2, centerZ: 4.8, radius: 1.15, speed: 0.75, angle: 0 });
+      const r1 = createRabbit(-7.8, 4.8, 0xffffff);
+      rabbits.push({ mesh: r1, centerX: -7.8, centerZ: 4.8, radius: 1.15, speed: 0.75, angle: 0 });
 
-      const r2 = createRabbit(-6.8, 1.2, 0xd6b899);
-      rabbits.push({ mesh: r2, centerX: -6.8, centerZ: 1.2, radius: 1.05, speed: -0.65, angle: 2.1 });
+      const r2 = createRabbit(9.5, 4.2, 0xd6b899);
+      rabbits.push({ mesh: r2, centerX: 9.5, centerZ: 4.2, radius: 1.25, speed: -0.65, angle: 2.1 });
 
-      const c1 = createCat(1.2, 3.2, 0xf97316, 0xc2410c);
-      cats.push({ ...c1, centerX: 1.2, centerZ: 3.4, radius: 1.5, speed: 0.42, angle: 0.5, baseY: 0 });
+      const c1 = createCat(-4.2, 3.4, 0xf97316, 0xc2410c);
+      cats.push({ ...c1, centerX: -4.2, centerZ: 3.4, radius: 1.5, speed: 0.42, angle: 0.5, baseY: 0 });
 
-      const c2 = createCat(3.2, 1.2, 0xf8fafc, 0x334155);
-      cats.push({ ...c2, centerX: 3.2, centerZ: 0.8, radius: 1.1, speed: -0.38, angle: 3.0, baseY: 0.12 });
+      const c2 = createCat(11.4, -0.4, 0xf8fafc, 0x334155);
+      cats.push({ ...c2, centerX: 11.4, centerZ: -0.4, radius: 1.3, speed: -0.38, angle: 3.0, baseY: 0.12 });
     }
 
     function buildDeskSetup(x, z, rotY, accentColor) {
@@ -1579,9 +1922,10 @@
     }
 
     function buildAllWorkstations() {
-      buildDeskSetup(-2.8, -3.1, Math.PI / 5, 0x38bdf8);
-      buildDeskSetup(1.5, -4.6, 0, 0x34d399);
-      buildDeskSetup(4.8, -0.8, -Math.PI / 4, 0xfbbf24);
+      // 3 Meja Utama di Studio Kiri
+      buildDeskSetup(-8.8, -3.1, Math.PI / 5, 0x38bdf8);
+      buildDeskSetup(-4.5, -4.6, 0, 0x34d399);
+      buildDeskSetup(-1.2, -0.8, -Math.PI / 4, 0xfbbf24);
     }
 
     // =========================================================================
@@ -2104,9 +2448,9 @@
     }
 
     function buildAllCartoonCharacters() {
-      createCartoonPaperAgent({ id: 'crawler', x: -2.2, z: -2.3 });
-      createCartoonPaperAgent({ id: 'drafter', x: 1.5, z: -3.6 });
-      createCartoonPaperAgent({ id: 'auditor', x: 4.1, z: -0.1 });
+      createCartoonPaperAgent({ id: 'crawler', x: -8.2, z: -2.3 });
+      createCartoonPaperAgent({ id: 'drafter', x: -4.5, z: -3.6 });
+      createCartoonPaperAgent({ id: 'auditor', x: -1.9, z: -0.1 });
     }
 
     const clock = new THREE.Clock();
@@ -2132,7 +2476,6 @@
       requestAnimationFrame(animate3D);
       const t = clock.getElapsedTime();
 
-      // Update gelombang shader Aurora Borealis
       if (auroraUniforms && auroraMesh && auroraMesh.visible) {
         auroraUniforms.uTime.value = t;
       }
@@ -2154,8 +2497,8 @@
         ['crawler', 'auditor']
       ];
       const activeChatters = chatPairs[chatPairIndex];
-      const chatSpotA = new THREE.Vector3(0.75, 0.12, -1.65);
-      const chatSpotB = new THREE.Vector3(1.65, 0.12, -1.65);
+      const chatSpotA = new THREE.Vector3(-5.25, 0.12, -1.65);
+      const chatSpotB = new THREE.Vector3(-4.35, 0.12, -1.65);
 
       let activeHandshakeVisitor = null;
       ['crawler', 'drafter'].forEach((id) => {
@@ -2170,7 +2513,7 @@
         }
       });
 
-      const auditorHandshakeSpot = new THREE.Vector3(3.95, 0.12, -0.35);
+      const auditorHandshakeSpot = new THREE.Vector3(-2.05, 0.12, -0.35);
 
       Object.keys(cartoonAgents).forEach((id) => {
         const av = cartoonAgents[id];
@@ -2270,6 +2613,7 @@
         }
       });
 
+      // Animasi ikan koi di kolam
       koiFishes.forEach((f, idx) => {
         const ang = t * f.speed + f.angle;
         const nextAng = ang + (f.speed > 0 ? 0.05 : -0.05);
@@ -2281,6 +2625,23 @@
         f.mesh.position.set(x, 0.10 + Math.sin(t * 2 + idx) * 0.015, z);
         f.mesh.lookAt(nx, f.mesh.position.y, nz);
         f.tail.rotation.y = Math.sin(t * 10 + idx) * 0.35;
+      });
+
+      // Animasi ikan koi & riak air mengalir di sungai kecil bawah jembatan Jepang
+      streamFishes.forEach((sf, idx) => {
+        sf.mesh.position.z += sf.speed * 0.018;
+        if (sf.mesh.position.z > 13.0) sf.mesh.position.z = -12.0;
+        if (sf.mesh.position.z < -12.0) sf.mesh.position.z = 13.0;
+        const swayX = sf.baseX + Math.sin(t * 1.8 + sf.phase) * 0.18;
+        const nextZ = sf.mesh.position.z + (sf.speed > 0 ? 0.2 : -0.2);
+        sf.mesh.position.x = swayX;
+        sf.mesh.lookAt(swayX, sf.mesh.position.y, nextZ);
+        sf.tail.rotation.y = Math.sin(t * 11 + idx) * 0.38;
+      });
+
+      streamRipples.forEach((sr) => {
+        sr.mesh.position.z += sr.speed * 0.022;
+        if (sr.mesh.position.z > 13.5) sr.mesh.position.z = -12.5;
       });
 
       rabbits.forEach((r, idx) => {
@@ -2315,7 +2676,7 @@
           pos[i] -= 0.04;
           pos[i + 1] -= 0.38;
           if (pos[i + 1] < 0) {
-            pos[i] = (Math.random() - 0.5) * 24;
+            pos[i] = (Math.random() - 0.5) * 38 + 1.5;
             pos[i + 1] = 13 + Math.random() * 2;
           }
         }
@@ -2328,7 +2689,7 @@
           pos[i] += Math.sin(t * 1.5 + i) * 0.012;
           pos[i + 1] -= 0.045;
           if (pos[i + 1] < 0) {
-            pos[i] = (Math.random() - 0.5) * 24;
+            pos[i] = (Math.random() - 0.5) * 38 + 1.5;
             pos[i + 1] = 13 + Math.random() * 2;
           }
         }
@@ -2356,6 +2717,7 @@
         grassFloorMesh.material.map = summerGrassTex;
         grassFloorMesh.material.needsUpdate = true;
         pondWaterMesh.material.color.setHex(0x0ea5e9);
+        if (streamWaterMesh) streamWaterMesh.material.color.setHex(0x0ea5e9);
 
         treeFoliageMeshes.forEach(item => {
           item.mesh.material.color.copy(item.summerColor);
@@ -2371,6 +2733,7 @@
         grassFloorMesh.material.map = summerGrassTex;
         grassFloorMesh.material.needsUpdate = true;
         pondWaterMesh.material.color.setHex(0x0284c7);
+        if (streamWaterMesh) streamWaterMesh.material.color.setHex(0x0284c7);
 
         treeFoliageMeshes.forEach(item => {
           item.mesh.material.color.copy(item.summerColor).multiplyScalar(0.82);
@@ -2386,6 +2749,7 @@
         grassFloorMesh.material.map = winterSnowTex;
         grassFloorMesh.material.needsUpdate = true;
         pondWaterMesh.material.color.setHex(0x7dd3fc);
+        if (streamWaterMesh) streamWaterMesh.material.color.setHex(0x7dd3fc);
 
         treeFoliageMeshes.forEach(item => {
           item.mesh.material.color.setHex(0xf1f5f9);
@@ -2417,7 +2781,7 @@
         btn.className = 'px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-emerald-300 border border-emerald-600/60 text-xs font-bold transition flex items-center gap-1.5';
         btnIcon.textContent = '🌌';
         btnText.textContent = 'Malam Aurora';
-        addLog('🌌 Langit Malam Kutub Utara aktif! Cahaya Aurora Borealis Norwegia menari di langit studio.', 'success');
+        addLog('🌌 Langit Malam Kutub Utara aktif! Cahaya Aurora Borealis menari di atas jembatan Jepang & studio.', 'success');
       }
       applyCurrentSkyAndLighting();
     }
@@ -2433,36 +2797,38 @@
         if (seasonModeIndex === 2) skyHex = 0xe0f2fe;
         scene.background = new THREE.Color(skyHex);
         scene.fog.color = new THREE.Color(skyHex);
-        scene.fog.density = 0.014;
+        scene.fog.density = 0.009;
         ambientLight.color.setHex(0xfffaf0);
         ambientLight.intensity = seasonModeIndex === 1 ? 0.68 : 0.85;
         sunLight.color.setHex(0xfff5e4);
         sunLight.intensity = seasonModeIndex === 1 ? 0.55 : 0.98;
         warmLampLight.intensity = seasonModeIndex === 1 ? 0.85 : 0.45;
-        pondLight.intensity = 0.35;
+        if (expansionLampLight) expansionLampLight.intensity = seasonModeIndex === 1 ? 0.85 : 0.45;
+        pondLight.intensity = 0.40;
       } else if (lightingModeIndex === 1) {
         let skyHex = 0xfde8d0;
         if (seasonModeIndex === 1) skyHex = 0x94a3b8;
         if (seasonModeIndex === 2) skyHex = 0xfce7f3;
         scene.background = new THREE.Color(skyHex);
         scene.fog.color = new THREE.Color(skyHex);
-        scene.fog.density = 0.014;
+        scene.fog.density = 0.009;
         ambientLight.color.setHex(0xfff0db);
         ambientLight.intensity = 0.72;
         sunLight.color.setHex(0xffb36b);
         sunLight.intensity = seasonModeIndex === 1 ? 0.55 : 1.05;
         warmLampLight.intensity = 0.95;
+        if (expansionLampLight) expansionLampLight.intensity = 0.95;
         pondLight.intensity = 0.55;
       } else {
-        // Langit Malam Norwegia / Kutub Utara dengan pantulan cahaya Aurora hijau-biru lembut
         scene.background = new THREE.Color(0x060d1f);
         scene.fog.color = new THREE.Color(0x060d1f);
-        scene.fog.density = 0.008;
+        scene.fog.density = 0.006;
         ambientLight.color.setHex(0x2dd4bf);
         ambientLight.intensity = 0.48;
         sunLight.color.setHex(0x34d399);
         sunLight.intensity = 0.42;
         warmLampLight.intensity = 1.65;
+        if (expansionLampLight) expansionLampLight.intensity = 1.65;
         pondLight.intensity = 1.35;
       }
     }
@@ -2477,12 +2843,16 @@
       }
 
       if (mode === 'overview') {
-        targetCamPos.set(9.5, 8.2, 11.8);
-        targetLookAt.set(-0.5, 0.9, 0.2);
+        targetCamPos.set(4.5, 11.8, 17.8);
+        targetLookAt.set(1.5, 0.8, -0.5);
         closeAgentOverlay();
-      } else if (mode === 'garden') {
-        targetCamPos.set(-1.5, 4.8, 9.8);
-        targetLookAt.set(-4.5, 0.4, 3.6);
+      } else if (mode === 'bridge') {
+        targetCamPos.set(3.2, 4.2, 6.2);
+        targetLookAt.set(3.15, 0.5, -1.6);
+        closeAgentOverlay();
+      } else if (mode === 'expansion') {
+        targetCamPos.set(11.4, 6.5, 7.8);
+        targetLookAt.set(11.4, 1.0, -2.5);
         closeAgentOverlay();
       } else if (AGENT_META[mode]) {
         const meta = AGENT_META[mode];
