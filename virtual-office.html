@@ -149,7 +149,7 @@
     <!-- MAIN CONTENT -->
     <main class="flex-1 max-w-7xl w-full mx-auto px-4 py-5 grid grid-cols-1 lg:grid-cols-12 gap-5">
 
-      <!-- LEFT: 3D SEMI-OUTDOOR STUDIO CANVAS (7 COLS) -->
+      <!-- LEFT: 3D SEMI-OUTDOOR STUDIO CANVAS + 2D PAPER-CUT AGENTS (7 COLS) -->
       <section class="lg:col-span-7 flex flex-col gap-4">
         <div class="bg-white border border-stone-200 rounded-3xl overflow-hidden shadow-xl shadow-stone-200/60">
           <div class="px-4 py-2.5 border-b border-stone-100 flex flex-wrap items-center justify-between gap-2 bg-stone-50/80">
@@ -166,7 +166,7 @@
 
           <div id="canvasContainer">
             <div class="absolute top-3 left-3 z-10 glass-panel px-3 py-1.5 rounded-xl text-[11px] font-semibold text-slate-700 shadow-sm pointer-events-none flex items-center gap-2">
-              <span>🖱️ Geser putar • Scroll zoom • Klik karakter untuk inspeksi</span>
+              <span>🖱️ Geser putar • Scroll zoom • Klik karakter 2D untuk inspeksi</span>
             </div>
 
             <div id="selectedAgentOverlay" class="hidden absolute bottom-3 left-3 right-3 sm:right-auto sm:w-80 z-10 glass-panel p-3.5 rounded-2xl shadow-lg border border-stone-200">
@@ -228,7 +228,7 @@
             <button onclick="clearLogs()" class="text-[11px] font-semibold text-slate-400 hover:text-slate-700">Bersihkan Log</button>
           </div>
           <div id="terminalLog" class="font-mono-code text-[11px] text-slate-700 space-y-1 max-h-32 overflow-y-auto bg-stone-50 p-2.5 rounded-xl border border-stone-200/80">
-            <div class="text-slate-500">[SYSTEM] Studio Industrial siap. Klik "Putar Metal Hardcore" untuk BGM Symphonic Metalcore.</div>
+            <div class="text-slate-500">[SYSTEM] Studio Industrial siap. Karakter 2D Paper-Cut (Cult of the Lamb Style) aktif!</div>
           </div>
         </div>
       </section>
@@ -471,14 +471,14 @@
     }
 
     // =========================================================================
-    // 3. THREE.JS 3D SEMI-OUTDOOR STUDIO, TAMAN, KOLAM, HEWAN & CUACA MUSIM
+    // 3. THREE.JS 3D SEMI-OUTDOOR STUDIO + 2D PAPER-CUT AGENTS (CULT OF THE LAMB STYLE)
     // =========================================================================
     let scene, camera, renderer, controls;
     let ambientLight, sunLight, warmLampLight, pondLight;
     let lightingModeIndex = 0;
     let seasonModeIndex = 0;
 
-    const robloxAvatars = {};
+    const cartoonAgents = {};
     const clickableObjects = [];
     const monitorScreens = [];
     const koiFishes = [];
@@ -557,7 +557,7 @@
       buildLivingAnimals();
       buildWeatherSystems();
       buildAllWorkstations();
-      buildAllRobloxCharacters();
+      buildAllCartoonCharacters();
 
       const raycaster = new THREE.Raycaster();
       const mouse = new THREE.Vector2();
@@ -684,44 +684,6 @@
       tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
       tex.repeat.set(6, 6);
       return tex;
-    }
-
-    function createTenunSweaterTexture() {
-      const c = document.createElement('canvas');
-      c.width = 256; c.height = 256;
-      const ctx = c.getContext('2d');
-      ctx.fillStyle = '#f8f6f0';
-      ctx.fillRect(0, 0, 256, 256);
-
-      ctx.fillStyle = 'rgba(203, 213, 225, 0.25)';
-      for (let y = 0; y < 256; y += 6) {
-        for (let x = 0; x < 256; x += 6) {
-          ctx.fillRect(x, y, 3, 2);
-        }
-      }
-
-      const drawWovenBand = (yStart, height) => {
-        ctx.fillStyle = '#991b1b';
-        ctx.fillRect(0, yStart, 256, height);
-        ctx.fillStyle = '#d97706';
-        ctx.fillRect(0, yStart + 3, 256, 3);
-        ctx.fillRect(0, yStart + height - 6, 256, 3);
-
-        ctx.fillStyle = '#fbbf24';
-        for (let x = 8; x < 256; x += 24) {
-          ctx.beginPath();
-          ctx.moveTo(x + 8, yStart + 8);
-          ctx.lineTo(x + 16, yStart + height / 2);
-          ctx.lineTo(x + 8, yStart + height - 8);
-          ctx.lineTo(x, yStart + height / 2);
-          ctx.closePath();
-          ctx.fill();
-        }
-      };
-
-      drawWovenBand(54, 34);
-      drawWovenBand(186, 28);
-      return new THREE.CanvasTexture(c);
     }
 
     function createFallbackBandPoster(title1, title2, subtitle, accentColor) {
@@ -1301,272 +1263,592 @@
       buildDeskSetup(4.8, -0.8, -Math.PI / 4, 0xfbbf24);
     }
 
-    function createRobloxCharacter(config) {
+    // =========================================================================
+    // 2D CARTOON PAPER-CUT CHARACTER GENERATOR (CULT OF THE LAMB STYLE)
+    // =========================================================================
+    function createRoundRectPath(ctx, x, y, w, h, r) {
+      ctx.beginPath();
+      ctx.moveTo(x + r, y);
+      ctx.lineTo(x + w - r, y);
+      ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+      ctx.lineTo(x + w, y + h - r);
+      ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+      ctx.lineTo(x + r, y + h);
+      ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+      ctx.lineTo(x, y + r);
+      ctx.quadraticCurveTo(x, y, x + r, y);
+      ctx.closePath();
+    }
+
+    function drawCultOfTheLambAgent(ctx, id, state) {
+      const W = 512, H = 640;
+      ctx.clearRect(0, 0, W, H);
+
+      const {
+        status = 'IDLE',
+        walkPhase = 0,
+        armWave = 0,
+        headTilt = 0,
+        isMoshing = false,
+        isChatting = false,
+        isHandshaking = false,
+        facingDir = 1
+      } = state;
+
+      const INK = '#161114';
+      ctx.save();
+
+      // Flip horizontal sesuai arah jalan jika sedang bergerak
+      if (facingDir < 0) {
+        ctx.translate(W, 0);
+        ctx.scale(-1, 1);
+      }
+
+      // Ground Contact Shadow (Bayangan oval pekat khas Paper-Cut 2D)
+      ctx.fillStyle = 'rgba(22, 17, 20, 0.28)';
+      ctx.beginPath();
+      ctx.ellipse(256, 610, 96, 22, 0, 0, Math.PI * 2);
+      ctx.fill();
+
+      // 1. KAKI (Chibi stubby legs ala Cult of the Lamb)
+      const leftFootY = 552 + Math.sin(walkPhase) * 14;
+      const rightFootY = 552 - Math.sin(walkPhase) * 14;
+
+      const drawFoot = (fx, fy) => {
+        ctx.fillStyle = INK;
+        ctx.beginPath();
+        ctx.ellipse(fx, fy, 26, 36, 0, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = '#33292e';
+        ctx.beginPath();
+        ctx.ellipse(fx - 4, fy - 4, 15, 22, 0, 0, Math.PI * 2);
+        ctx.fill();
+      };
+      drawFoot(214, leftFootY);
+      drawFoot(298, rightFootY);
+
+      // 2. RAMBUT BELAKANG (Layer terbelakang)
+      if (id === 'crawler') {
+        // Bob hitam bervolume di belakang
+        ctx.fillStyle = '#1f1b1e';
+        ctx.strokeStyle = INK;
+        ctx.lineWidth = 11;
+        ctx.beginPath();
+        ctx.roundRect(128, 175, 256, 225, 85);
+        ctx.fill();
+        ctx.stroke();
+      } else if (id === 'drafter') {
+        // Rambut panjang bergelombang cokelat tua
+        ctx.fillStyle = '#3b2319';
+        ctx.strokeStyle = INK;
+        ctx.lineWidth = 11;
+        ctx.beginPath();
+        ctx.moveTo(136, 180);
+        ctx.bezierCurveTo(102, 270, 112, 375, 134, 445);
+        ctx.quadraticCurveTo(256, 475, 378, 445);
+        ctx.bezierCurveTo(400, 375, 410, 270, 376, 180);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+      } else if (id === 'auditor') {
+        // Rambut panjang blonde dengan gradasi ujung teal
+        const hairGrad = ctx.createLinearGradient(0, 170, 0, 445);
+        hairGrad.addColorStop(0, '#f4e3b2');
+        hairGrad.addColorStop(0.62, '#e8d08e');
+        hairGrad.addColorStop(0.76, '#14b8a6');
+        hairGrad.addColorStop(1, '#0d9488');
+
+        ctx.fillStyle = hairGrad;
+        ctx.strokeStyle = INK;
+        ctx.lineWidth = 11;
+        ctx.beginPath();
+        ctx.moveTo(132, 175);
+        ctx.bezierCurveTo(96, 265, 108, 370, 130, 442);
+        ctx.quadraticCurveTo(256, 468, 382, 442);
+        ctx.bezierCurveTo(404, 370, 416, 265, 380, 175);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+      }
+
+      // 3. JUBAH / PAKAIAN CHIBI (A-line Poncho / Cloak silhouette khas Cult of the Lamb)
+      const drawCloakBody = () => {
+        ctx.beginPath();
+        ctx.moveTo(192, 370);
+        ctx.bezierCurveTo(156, 425, 142, 505, 148, 558);
+        ctx.quadraticCurveTo(256, 582, 364, 558);
+        ctx.bezierCurveTo(370, 505, 356, 425, 320, 370);
+        ctx.closePath();
+      };
+
+      drawCloakBody();
+      if (id === 'crawler') {
+        ctx.fillStyle = '#1e2430';
+      } else if (id === 'drafter') {
+        ctx.fillStyle = '#10b981';
+      } else {
+        ctx.fillStyle = '#faf6ee';
+      }
+      ctx.fill();
+
+      // Detail Motif Pakaian
+      ctx.save();
+      drawCloakBody();
+      ctx.clip();
+
+      if (id === 'crawler') {
+        // Kerah kemeja putih & dasi gelap
+        ctx.fillStyle = '#f8fafc';
+        ctx.beginPath();
+        ctx.moveTo(222, 370);
+        ctx.lineTo(256, 435);
+        ctx.lineTo(290, 370);
+        ctx.closePath();
+        ctx.fill();
+
+        ctx.fillStyle = '#090d16';
+        ctx.beginPath();
+        ctx.moveTo(246, 382);
+        ctx.lineTo(266, 382);
+        ctx.lineTo(272, 495);
+        ctx.lineTo(256, 516);
+        ctx.lineTo(240, 495);
+        ctx.closePath();
+        ctx.fill();
+
+        // Lipatan jubah
+        ctx.strokeStyle = 'rgba(0,0,0,0.35)';
+        ctx.lineWidth = 6;
+        ctx.beginPath();
+        ctx.moveTo(195, 435); ctx.lineTo(182, 555);
+        ctx.moveTo(317, 435); ctx.lineTo(330, 555);
+        ctx.stroke();
+      } else if (id === 'drafter') {
+        // Garis lipatan jubah hijau zamrud + Lanyard ID BPS
+        ctx.fillStyle = '#059669';
+        ctx.fillRect(140, 526, 232, 36);
+
+        ctx.strokeStyle = '#0f172a';
+        ctx.lineWidth = 7;
+        ctx.beginPath();
+        ctx.moveTo(214, 372);
+        ctx.lineTo(256, 456);
+        ctx.lineTo(298, 372);
+        ctx.stroke();
+
+        // Kartu ID Card
+        createRoundRectPath(ctx, 235, 452, 42, 54, 8);
+        ctx.fillStyle = '#ffffff';
+        ctx.fill();
+        ctx.lineWidth = 5;
+        ctx.strokeStyle = INK;
+        ctx.stroke();
+        ctx.fillStyle = '#008FD5';
+        ctx.fillRect(243, 462, 26, 10);
+      } else {
+        // Sweater Tenun Tapis Lampung (Band merah marun + emas geometris)
+        const drawTapisBand = (yTop, bandH) => {
+          ctx.fillStyle = '#991b1b';
+          ctx.fillRect(135, yTop, 242, bandH);
+          ctx.fillStyle = '#d97706';
+          ctx.fillRect(135, yTop, 242, 6);
+          ctx.fillRect(135, yTop + bandH - 6, 242, 6);
+
+          ctx.fillStyle = '#fbbf24';
+          for (let dx = 152; dx < 365; dx += 32) {
+            ctx.beginPath();
+            ctx.moveTo(dx + 12, yTop + 10);
+            ctx.lineTo(dx + 24, yTop + bandH / 2);
+            ctx.lineTo(dx + 12, yTop + bandH - 10);
+            ctx.lineTo(dx, yTop + bandH / 2);
+            ctx.closePath();
+            ctx.fill();
+          }
+        };
+        drawTapisBand(428, 38);
+        drawTapisBand(512, 36);
+      }
+      ctx.restore();
+
+      // Outline tinta hitam tebal pada jubah
+      drawCloakBody();
+      ctx.strokeStyle = INK;
+      ctx.lineWidth = 11;
+      ctx.lineJoin = 'round';
+      ctx.stroke();
+
+      // 4. LENGAN KARTUN (Bergerak sesuai status)
+      const drawArm = (isRight) => {
+        ctx.save();
+        const pivotX = isRight ? 332 : 180;
+        const pivotY = 408;
+        ctx.translate(pivotX, pivotY);
+
+        let angle = isRight ? -0.25 : 0.25;
+        if (status === 'WORKING') {
+          angle = (isRight ? -0.85 : 0.85) + Math.sin(armWave * 2.5 + (isRight ? 0 : Math.PI)) * 0.28;
+        } else if (status === 'DONE' || isMoshing) {
+          angle = (isRight ? -2.35 : 2.35) + Math.sin(armWave * 1.8) * 0.35;
+        } else if (isHandshaking && isRight) {
+          angle = -1.25 + Math.sin(armWave * 2) * 0.22;
+        } else if (isChatting && isRight) {
+          angle = -0.75 + Math.sin(armWave * 1.5) * 0.3;
+        } else {
+          angle += Math.sin(armWave + (isRight ? 0 : Math.PI)) * 0.12;
+        }
+        ctx.rotate(angle);
+
+        // Lengan baju
+        createRoundRectPath(ctx, -18, -10, 36, 74, 18);
+        ctx.fillStyle = id === 'crawler' ? '#1e2430' : (id === 'drafter' ? '#10b981' : '#faf6ee');
+        ctx.fill();
+        ctx.strokeStyle = INK;
+        ctx.lineWidth = 10;
+        ctx.stroke();
+
+        // Tangan bulat chibi
+        ctx.fillStyle = id === 'crawler' ? '#f3c6a8' : '#fde2cf';
+        ctx.beginPath();
+        ctx.arc(0, 72, 18, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+        ctx.restore();
+      };
+      drawArm(false);
+      drawArm(true);
+
+      // 5. KEPALA BESAR CHIBI & EKSPRESI CULT OF THE LAMB
+      ctx.save();
+      ctx.translate(256, 246);
+      ctx.rotate(headTilt);
+
+      // Bentuk kepala bulat lebar khas Cult of the Lamb
+      const drawHeadShape = () => {
+        ctx.beginPath();
+        ctx.ellipse(0, 0, 128, 108, 0, 0, Math.PI * 2);
+      };
+
+      drawHeadShape();
+      ctx.fillStyle = id === 'crawler' ? '#f5cfb6' : '#fde2cf';
+      ctx.fill();
+
+      // Shading pipi bawah halus
+      ctx.save();
+      drawHeadShape();
+      ctx.clip();
+      ctx.fillStyle = 'rgba(217, 119, 108, 0.14)';
+      ctx.beginPath();
+      ctx.ellipse(0, 78, 130, 52, 0, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Jenggot & kumis rapi untuk Agent Crawler
+      if (id === 'crawler') {
+        ctx.fillStyle = '#272326';
+        ctx.beginPath();
+        ctx.arc(0, 14, 118, 0.16 * Math.PI, 0.84 * Math.PI);
+        ctx.lineTo(-96, 62);
+        ctx.quadraticCurveTo(0, 94, 96, 62);
+        ctx.closePath();
+        ctx.fill();
+      }
+      ctx.restore();
+
+      // Outline kepala tebal
+      drawHeadShape();
+      ctx.strokeStyle = INK;
+      ctx.lineWidth = 11;
+      ctx.stroke();
+
+      // Blush pipi kemerahan
+      if (id !== 'crawler') {
+        ctx.fillStyle = 'rgba(244, 114, 182, 0.45)';
+        ctx.beginPath();
+        ctx.ellipse(-74, 30, 20, 11, 0, 0, Math.PI * 2);
+        ctx.ellipse(74, 30, 20, 11, 0, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      // MATA IKONIK CULT OF THE LAMB (Besar, ekspresif, pupil lebar dengan kilau putih)
+      const drawEye = (ex, ey) => {
+        ctx.save();
+        ctx.translate(ex, ey);
+
+        if (status === 'DONE' || isMoshing) {
+          // Mata bahagia melengkung (^ ^) atau berbinar besar
+          ctx.strokeStyle = INK;
+          ctx.lineWidth = 10;
+          ctx.lineCap = 'round';
+          ctx.beginPath();
+          ctx.arc(0, 6, 22, Math.PI * 1.12, Math.PI * 1.88);
+          ctx.stroke();
+        } else {
+          // Sklera putih besar dengan border hitam tebal
+          ctx.fillStyle = '#ffffff';
+          ctx.strokeStyle = INK;
+          ctx.lineWidth = 8;
+          ctx.beginPath();
+          ctx.ellipse(0, 0, 27, 30, 0, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.stroke();
+
+          // Pupil besar
+          ctx.fillStyle = id === 'auditor' ? '#0f766e' : '#181216';
+          ctx.beginPath();
+          ctx.ellipse(ex > 0 ? -2 : 2, 2, 18, 21, 0, 0, Math.PI * 2);
+          ctx.fill();
+
+          // Highlight kilau mata kartun
+          ctx.fillStyle = '#ffffff';
+          ctx.beginPath();
+          ctx.arc(ex > 0 ? -8 : -4, -7, 7.5, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.beginPath();
+          ctx.arc(ex > 0 ? 5 : 9, 7, 3.5, 0, Math.PI * 2);
+          ctx.fill();
+
+          // Kelopak mata fokus saat WORKING
+          if (status === 'WORKING') {
+            ctx.fillStyle = id === 'crawler' ? '#f5cfb6' : '#fde2cf';
+            ctx.beginPath();
+            ctx.rect(-30, -34, 60, 16);
+            ctx.fill();
+            ctx.strokeStyle = INK;
+            ctx.lineWidth = 7;
+            ctx.beginPath();
+            ctx.moveTo(-28, -18);
+            ctx.lineTo(28, -18);
+            ctx.stroke();
+          }
+        }
+        ctx.restore();
+      };
+      drawEye(-52, 4);
+      drawEye(52, 4);
+
+      // Alis ekspresif
+      ctx.strokeStyle = INK;
+      ctx.lineWidth = 7;
+      ctx.lineCap = 'round';
+      const browY = status === 'WORKING' ? -24 : -34;
+      const browAngle = status === 'WORKING' ? 0.18 : -0.06;
+      ctx.beginPath();
+      ctx.moveTo(-72, browY - browAngle * 25);
+      ctx.lineTo(-34, browY + browAngle * 25);
+      ctx.moveTo(34, browY + browAngle * 25);
+      ctx.lineTo(72, browY - browAngle * 25);
+      ctx.stroke();
+
+      // MULUT KARTUN (Berubah sesuai ekspresi!)
+      if (id === 'crawler') {
+        // Kumis tebal di atas mulut
+        ctx.fillStyle = '#1f1b1e';
+        ctx.strokeStyle = INK;
+        ctx.lineWidth = 5;
+        ctx.beginPath();
+        ctx.roundRect(-34, 30, 68, 14, 7);
+        ctx.fill();
+        ctx.stroke();
+      }
+
+      if (status === 'DONE' || isMoshing) {
+        // Mulut terbuka ceria / teriak metal!
+        ctx.fillStyle = '#9f1239';
+        ctx.strokeStyle = INK;
+        ctx.lineWidth = 7;
+        ctx.beginPath();
+        ctx.arc(0, 46, 20, 0, Math.PI, false);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+
+        // Lidah merah muda
+        ctx.fillStyle = '#fb7185';
+        ctx.beginPath();
+        ctx.arc(0, 56, 11, Math.PI, 0, false);
+        ctx.fill();
+      } else if (status === 'WORKING') {
+        // Mulut serius fokus / senyum tipis percaya diri
+        ctx.strokeStyle = INK;
+        ctx.lineWidth = 7;
+        ctx.lineCap = 'round';
+        ctx.beginPath();
+        ctx.moveTo(-16, 48);
+        ctx.quadraticCurveTo(0, 42, 16, 48);
+        ctx.stroke();
+      } else if (isChatting) {
+        // Mulut berbicara ('o' kecil)
+        ctx.fillStyle = '#be123c';
+        ctx.strokeStyle = INK;
+        ctx.lineWidth = 6;
+        ctx.beginPath();
+        ctx.ellipse(0, 48, 11, 13, 0, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+      } else {
+        // Senyum kucing/chibi manis khas Cult of the Lamb (w)
+        ctx.strokeStyle = INK;
+        ctx.lineWidth = 7;
+        ctx.lineCap = 'round';
+        ctx.beginPath();
+        ctx.arc(-10, 45, 10, 0.1 * Math.PI, 0.9 * Math.PI);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.arc(10, 45, 10, 0.1 * Math.PI, 0.9 * Math.PI);
+        ctx.stroke();
+      }
+
+      // 6. PONI RAMBUT DEPAN (Layer paling atas di dahi)
+      if (id === 'crawler') {
+        ctx.fillStyle = '#1f1b1e';
+        ctx.strokeStyle = INK;
+        ctx.lineWidth = 10;
+        ctx.beginPath();
+        ctx.moveTo(-124, -18);
+        ctx.bezierCurveTo(-132, -118, 132, -118, 124, -18);
+        ctx.lineTo(106, -42);
+        ctx.lineTo(54, -56);
+        ctx.lineTo(0, -44);
+        ctx.lineTo(-54, -56);
+        ctx.lineTo(-106, -42);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+      } else if (id === 'drafter') {
+        ctx.fillStyle = '#3b2319';
+        ctx.strokeStyle = INK;
+        ctx.lineWidth = 10;
+        ctx.beginPath();
+        ctx.moveTo(-126, -12);
+        ctx.bezierCurveTo(-134, -120, 134, -120, 126, -12);
+        ctx.quadraticCurveTo(65, -48, 14, -36);
+        ctx.lineTo(0, -24);
+        ctx.lineTo(-14, -36);
+        ctx.quadraticCurveTo(-65, -48, -126, -12);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+      } else {
+        // Poni blonde miring khas Auditor
+        ctx.fillStyle = '#f4e3b2';
+        ctx.strokeStyle = INK;
+        ctx.lineWidth = 10;
+        ctx.beginPath();
+        ctx.moveTo(-126, -10);
+        ctx.bezierCurveTo(-136, -122, 136, -122, 126, -10);
+        ctx.quadraticCurveTo(45, -52, -18, -24);
+        ctx.quadraticCurveTo(-78, -32, -126, -10);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+      }
+
+      ctx.restore(); // End Head
+
+      // 7. BADGE STATUS DI ATAS KEPALA (Saat WORKING atau DONE)
+      if (status === 'WORKING' || status === 'DONE') {
+        const pillText = status === 'WORKING' ? '⚡ WORKING' : '✨ DONE!';
+        const pillBg = status === 'WORKING' ? '#0284c7' : '#059669';
+
+        createRoundRectPath(ctx, 166, 28, 180, 44, 22);
+        ctx.fillStyle = pillBg;
+        ctx.fill();
+        ctx.strokeStyle = INK;
+        ctx.lineWidth = 6;
+        ctx.stroke();
+
+        ctx.fillStyle = '#ffffff';
+        ctx.font = '800 21px "Plus Jakarta Sans", sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(pillText, 256, 51);
+      }
+
+      ctx.restore();
+    }
+
+    function createCartoonPaperAgent(config) {
+      const canvas = document.createElement('canvas');
+      canvas.width = 512;
+      canvas.height = 640;
+      const ctx = canvas.getContext('2d');
+
+      const texture = new THREE.CanvasTexture(canvas);
+      texture.encoding = THREE.sRGBEncoding;
+      texture.minFilter = THREE.LinearFilter;
+
+      // Gambar frame awal
+      drawCultOfTheLambAgent(ctx, config.id, { status: 'IDLE' });
+      texture.needsUpdate = true;
+
+      // Billboard Plane 2D yang menghadap kamera secara dinamis
+      const material = new THREE.MeshBasicMaterial({
+        map: texture,
+        transparent: true,
+        alphaTest: 0.08,
+        side: THREE.DoubleSide
+      });
+
+      const geometry = new THREE.PlaneGeometry(1.75, 2.18);
+      const mesh = new THREE.Mesh(geometry, material);
+      mesh.position.set(0, 1.09, 0);
+      mesh.userData.agentId = config.id;
+
+      // Shadow caster disk tak terlihat agar tetap menjatuhkan bayangan di lantai 3D
+      const shadowProxy = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.32, 0.36, 1.5, 12),
+        new THREE.MeshBasicMaterial({ colorWrite: false, depthWrite: false })
+      );
+      shadowProxy.position.y = 0.75;
+      shadowProxy.castShadow = true;
+
       const root = new THREE.Group();
       root.position.set(config.x, 0.12, config.z);
-      root.rotation.y = config.rotY;
       root.userData.agentId = config.id;
+      root.add(mesh, shadowProxy);
 
-      const skinMat = new THREE.MeshStandardMaterial({ color: config.skinColor, roughness: 0.42 });
-      const pantsMat = new THREE.MeshStandardMaterial({ color: config.pantsColor, roughness: 0.65 });
-      const torsoMat = config.torsoTexture
-        ? new THREE.MeshStandardMaterial({ map: config.torsoTexture, roughness: 0.65 })
-        : new THREE.MeshStandardMaterial({ color: config.shirtColor, roughness: 0.58 });
-      const sleeveMat = new THREE.MeshStandardMaterial({ color: config.sleeveColor || config.shirtColor, roughness: 0.58 });
-
-      const leftLeg = new THREE.Group();
-      leftLeg.position.set(-0.14, 0.56, 0);
-      const lLegMesh = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.11, 0.52, 14), pantsMat);
-      lLegMesh.position.y = -0.26;
-      lLegMesh.castShadow = true;
-      const lShoe = new THREE.Mesh(new THREE.SphereGeometry(0.13, 12, 10), new THREE.MeshStandardMaterial({ color: 0x1e293b }));
-      lShoe.scale.set(1, 0.65, 1.35);
-      lShoe.position.set(0, -0.52, 0.04);
-      leftLeg.add(lLegMesh, lShoe);
-      root.add(leftLeg);
-
-      const rightLeg = new THREE.Group();
-      rightLeg.position.set(0.14, 0.56, 0);
-      const rLegMesh = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.11, 0.52, 14), pantsMat);
-      rLegMesh.position.y = -0.26;
-      rLegMesh.castShadow = true;
-      const rShoe = new THREE.Mesh(new THREE.SphereGeometry(0.13, 12, 10), new THREE.MeshStandardMaterial({ color: 0x1e293b }));
-      rShoe.scale.set(1, 0.65, 1.35);
-      rShoe.position.set(0, -0.52, 0.04);
-      rightLeg.add(rLegMesh, rShoe);
-      root.add(rightLeg);
-
-      const torso = new THREE.Mesh(new THREE.CylinderGeometry(0.26, 0.31, 0.64, 18), torsoMat);
-      torso.position.y = 0.88;
-      torso.castShadow = true;
-      root.add(torso);
-
-      if (config.hasDarkTie) {
-        const tie = new THREE.Mesh(
-          new THREE.BoxGeometry(0.08, 0.36, 0.04),
-          new THREE.MeshStandardMaterial({ color: 0x090d16, roughness: 0.4 })
-        );
-        tie.position.set(0, 0.94, 0.27);
-        root.add(tie);
-      }
-
-      if (config.hasLanyard) {
-        const card = new THREE.Mesh(
-          new THREE.BoxGeometry(0.14, 0.20, 0.03),
-          new THREE.MeshStandardMaterial({ color: 0xffffff })
-        );
-        card.position.set(0, 0.88, 0.29);
-        root.add(card);
-      }
-
-      const createArm = (xPos) => {
-        const armPivot = new THREE.Group();
-        armPivot.position.set(xPos, 1.14, 0);
-        const upper = new THREE.Mesh(new THREE.CylinderGeometry(0.095, 0.09, 0.34, 12), sleeveMat);
-        upper.position.y = -0.17;
-        upper.castShadow = true;
-        armPivot.add(upper);
-
-        const hand = new THREE.Mesh(new THREE.SphereGeometry(0.10, 12, 12), skinMat);
-        hand.position.y = -0.38;
-        hand.castShadow = true;
-        armPivot.add(hand);
-        root.add(armPivot);
-        return armPivot;
-      };
-      const leftArm = createArm(-0.36);
-      const rightArm = createArm(0.36);
-
-      const headGroup = new THREE.Group();
-      headGroup.position.y = 1.62;
-      const headMesh = new THREE.Mesh(new THREE.SphereGeometry(0.42, 24, 20), skinMat);
-      headMesh.scale.set(1.04, 0.96, 0.98);
-      headMesh.castShadow = true;
-      headGroup.add(headMesh);
-
-      const eyeWhiteMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
-      const pupilMat = new THREE.MeshBasicMaterial({ color: config.eyeColor || 0x1e1b18 });
-      const browMat = new THREE.MeshStandardMaterial({ color: config.browColor || config.hairColor });
-
-      for (let side of [-1, 1]) {
-        const eyeBase = new THREE.Mesh(new THREE.SphereGeometry(0.068, 12, 12), eyeWhiteMat);
-        eyeBase.scale.set(1, 1.15, 0.5);
-        eyeBase.position.set(side * 0.14, 0.02, 0.37);
-
-        const pupil = new THREE.Mesh(new THREE.SphereGeometry(0.048, 12, 12), pupilMat);
-        pupil.scale.set(1, 1.15, 0.5);
-        pupil.position.set(side * 0.14, 0.02, 0.395);
-
-        const highlight = new THREE.Mesh(new THREE.SphereGeometry(0.016, 8, 8), eyeWhiteMat);
-        highlight.position.set(side * 0.155, 0.045, 0.415);
-
-        const brow = new THREE.Mesh(new THREE.BoxGeometry(0.11, 0.022, 0.02), browMat);
-        brow.position.set(side * 0.14, 0.11, 0.38);
-        brow.rotation.z = side * -0.06;
-
-        headGroup.add(eyeBase, pupil, highlight, brow);
-      }
-
-      if (config.hasBlush) {
-        const blushMat = new THREE.MeshBasicMaterial({ color: 0xf472b6, transparent: true, opacity: 0.45 });
-        for (let side of [-1, 1]) {
-          const blush = new THREE.Mesh(new THREE.CircleGeometry(0.055, 12), blushMat);
-          blush.position.set(side * 0.22, -0.06, 0.36);
-          blush.rotation.y = side * 0.45;
-          headGroup.add(blush);
-        }
-      }
-
-      const smile = new THREE.Mesh(
-        new THREE.TorusGeometry(0.065, 0.014, 8, 16, Math.PI),
-        new THREE.MeshBasicMaterial({ color: config.lipColor || 0x9f1239 })
-      );
-      smile.rotation.z = Math.PI;
-      smile.position.set(0, -0.09, 0.39);
-      headGroup.add(smile);
-
-      const hairMat = new THREE.MeshStandardMaterial({ color: config.hairColor, roughness: 0.65 });
-
-      if (config.hairStyle === 'crawler-beard-bob') {
-        const hairCap = new THREE.Mesh(new THREE.SphereGeometry(0.445, 22, 18, 0, Math.PI * 2, 0, Math.PI * 0.62), hairMat);
-        hairCap.position.set(0, 0.03, -0.02);
-        headGroup.add(hairCap);
-
-        for (let side of [-1, 1]) {
-          const sideHair = new THREE.Mesh(new THREE.BoxGeometry(0.14, 0.68, 0.34), hairMat);
-          sideHair.position.set(side * 0.39, -0.18, -0.03);
-          sideHair.rotation.z = side * -0.08;
-          sideHair.castShadow = true;
-          headGroup.add(sideHair);
-        }
-        const backHair = new THREE.Mesh(new THREE.BoxGeometry(0.76, 0.66, 0.18), hairMat);
-        backHair.position.set(0, -0.18, -0.35);
-        headGroup.add(backHair);
-
-        const beardMat = new THREE.MeshStandardMaterial({ color: 0x1f242d, roughness: 0.85 });
-        const jawBeard = new THREE.Mesh(new THREE.CylinderGeometry(0.36, 0.32, 0.22, 18, 1, false, -Math.PI * 0.42, Math.PI * 0.84), beardMat);
-        jawBeard.position.set(0, -0.22, 0.06);
-        const mustache = new THREE.Mesh(new THREE.BoxGeometry(0.20, 0.045, 0.05), beardMat);
-        mustache.position.set(0, -0.05, 0.40);
-        headGroup.add(jawBeard, mustache);
-
-      } else if (config.hairStyle === 'drafter-long-wavy') {
-        const hairCap = new THREE.Mesh(new THREE.SphereGeometry(0.45, 22, 18, 0, Math.PI * 2, 0, Math.PI * 0.65), hairMat);
-        hairCap.position.set(0, 0.03, -0.02);
-        headGroup.add(hairCap);
-
-        for (let side of [-1, 1]) {
-          const waveStrand = new THREE.Mesh(new THREE.CylinderGeometry(0.11, 0.13, 0.85, 12), hairMat);
-          waveStrand.position.set(side * 0.39, -0.26, -0.04);
-          waveStrand.rotation.z = side * -0.07;
-          waveStrand.castShadow = true;
-          headGroup.add(waveStrand);
-        }
-        const longBack = new THREE.Mesh(new THREE.BoxGeometry(0.82, 0.88, 0.20), hairMat);
-        longBack.position.set(0, -0.28, -0.35);
-        longBack.castShadow = true;
-        headGroup.add(longBack);
-
-      } else if (config.hairStyle === 'auditor-blonde-teal') {
-        const tealMat = new THREE.MeshStandardMaterial({ color: 0x06b6d4, roughness: 0.55 });
-        const blondeCrown = new THREE.Mesh(new THREE.SphereGeometry(0.45, 22, 18, 0, Math.PI * 2, 0, Math.PI * 0.64), hairMat);
-        blondeCrown.position.set(0, 0.03, -0.02);
-        headGroup.add(blondeCrown);
-
-        const sideBangs = new THREE.Mesh(new THREE.BoxGeometry(0.42, 0.26, 0.14), hairMat);
-        sideBangs.position.set(-0.14, 0.24, 0.35);
-        sideBangs.rotation.z = 0.35;
-        headGroup.add(sideBangs);
-
-        for (let side of [-1, 1]) {
-          const upperBlonde = new THREE.Mesh(new THREE.CylinderGeometry(0.11, 0.12, 0.52, 12), hairMat);
-          upperBlonde.position.set(side * 0.39, -0.14, -0.04);
-          upperBlonde.castShadow = true;
-
-          const lowerTeal = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.10, 0.32, 12), tealMat);
-          lowerTeal.position.set(side * 0.40, -0.52, -0.04);
-          lowerTeal.castShadow = true;
-
-          headGroup.add(upperBlonde, lowerTeal);
-        }
-        const backBlonde = new THREE.Mesh(new THREE.BoxGeometry(0.80, 0.55, 0.18), hairMat);
-        backBlonde.position.set(0, -0.15, -0.35);
-        const backTeal = new THREE.Mesh(new THREE.BoxGeometry(0.80, 0.30, 0.18), tealMat);
-        backTeal.position.set(0, -0.55, -0.35);
-        headGroup.add(backBlonde, backTeal);
-      }
-
-      root.add(headGroup);
       scene.add(root);
       clickableObjects.push(root);
 
-      robloxAvatars[config.id] = {
+      cartoonAgents[config.id] = {
+        id: config.id,
         root,
-        leftLeg,
-        rightLeg,
-        leftArm,
-        rightArm,
-        headGroup,
+        mesh,
+        canvas,
+        ctx,
+        texture,
         basePos: new THREE.Vector3(config.x, 0.12, config.z),
-        baseRotY: config.rotY,
         phase: Math.random() * Math.PI * 2,
         workStartTime: 0,
-        lastStatus: 'IDLE'
+        lastStatus: 'IDLE',
+        facingDir: 1,
+        lastRedrawTime: 0
       };
     }
 
-    function buildAllRobloxCharacters() {
-      createRobloxCharacter({
+    function buildAllCartoonCharacters() {
+      createCartoonPaperAgent({
         id: 'crawler',
         x: -2.2,
-        z: -2.3,
-        rotY: Math.PI + Math.PI / 5,
-        skinColor: 0xf5d0b5,
-        shirtColor: 0x111827,
-        pantsColor: 0x0f172a,
-        hairColor: 0x141414,
-        browColor: 0x141414,
-        lipColor: 0x7f1d1d,
-        hairStyle: 'crawler-beard-bob',
-        hasDarkTie: true
+        z: -2.3
       });
 
-      createRobloxCharacter({
+      createCartoonPaperAgent({
         id: 'drafter',
         x: 1.5,
-        z: -3.6,
-        rotY: Math.PI,
-        skinColor: 0xfde2cf,
-        shirtColor: 0x10b981,
-        pantsColor: 0x334155,
-        hairColor: 0x2c1e16,
-        browColor: 0x3b281e,
-        lipColor: 0xe11d48,
-        hairStyle: 'drafter-long-wavy',
-        hasBlush: true,
-        hasLanyard: true
+        z: -3.6
       });
 
-      createRobloxCharacter({
+      createCartoonPaperAgent({
         id: 'auditor',
         x: 4.1,
-        z: -0.1,
-        rotY: Math.PI - Math.PI / 4,
-        skinColor: 0xfce7d6,
-        torsoTexture: createTenunSweaterTexture(),
-        sleeveColor: 0xf8f6f0,
-        pantsColor: 0x1e293b,
-        hairColor: 0xf3f4f6,
-        browColor: 0x9ca3af,
-        lipColor: 0xf43f5e,
-        hairStyle: 'auditor-blonde-teal',
-        hasBlush: true
+        z: -0.1
       });
     }
 
     const clock = new THREE.Clock();
 
-    function moveCharacterTo(av, targetVec, speed, t, walkFreq = 11) {
+    function moveCartoonAgentTo(av, targetVec, speed, t) {
       const dx = targetVec.x - av.root.position.x;
       const dz = targetVec.z - av.root.position.z;
       const dist = Math.hypot(dx, dz);
@@ -1575,32 +1857,13 @@
         const step = Math.min(dist, speed);
         av.root.position.x += (dx / dist) * step;
         av.root.position.z += (dz / dist) * step;
+        if (Math.abs(dx) > 0.01) av.facingDir = dx >= 0 ? 1 : -1;
 
-        const desiredRot = Math.atan2(dx, dz);
-        let diff = desiredRot - av.root.rotation.y;
-        while (diff > Math.PI) diff -= Math.PI * 2;
-        while (diff < -Math.PI) diff += Math.PI * 2;
-        av.root.rotation.y += diff * 0.15;
-
-        const swing = Math.sin(t * walkFreq) * 0.55;
-        av.leftLeg.rotation.x = swing;
-        av.rightLeg.rotation.x = -swing;
-        av.leftArm.rotation.x = -swing * 0.65;
-        av.rightArm.rotation.x = swing * 0.65;
-        av.rightArm.rotation.z = 0;
-        av.root.position.y = 0.12 + Math.abs(Math.cos(t * walkFreq)) * 0.035;
-        av.headGroup.rotation.set(0, 0, 0);
+        // Hopping walk khas Cult of the Lamb
+        av.root.position.y = 0.12 + Math.abs(Math.sin(t * 12)) * 0.11;
         return false;
       }
       return true;
-    }
-
-    function faceToward(av, targetVec) {
-      const desiredRot = Math.atan2(targetVec.x - av.root.position.x, targetVec.z - av.root.position.z);
-      let diff = desiredRot - av.root.rotation.y;
-      while (diff > Math.PI) diff -= Math.PI * 2;
-      while (diff < -Math.PI) diff += Math.PI * 2;
-      av.root.rotation.y += diff * 0.15;
     }
 
     function animate3D() {
@@ -1629,7 +1892,7 @@
 
       let activeHandshakeVisitor = null;
       ['crawler', 'drafter'].forEach((id) => {
-        const av = robloxAvatars[id];
+        const av = cartoonAgents[id];
         const st = (AGENT_META[id].status || 'IDLE').toUpperCase();
         if (st !== av.lastStatus) {
           av.lastStatus = st;
@@ -1643,100 +1906,104 @@
       const auditorHandshakeSpot = new THREE.Vector3(3.95, 0.12, -0.35);
       const visitorHandshakeSpot = new THREE.Vector3(3.15, 0.12, -0.35);
 
-      Object.keys(robloxAvatars).forEach((id) => {
-        const av = robloxAvatars[id];
+      Object.keys(cartoonAgents).forEach((id) => {
+        const av = cartoonAgents[id];
         const status = (AGENT_META[id].status || 'IDLE').toUpperCase();
         const p = t + av.phase;
 
+        // Billboard cylindrical rotation agar karakter 2D selalu menghadap kamera
+        const lookAngle = Math.atan2(
+          camera.position.x - av.root.position.x,
+          camera.position.z - av.root.position.z
+        );
+        av.root.rotation.y = lookAngle;
+
+        let animState = {
+          status,
+          walkPhase: 0,
+          armWave: p * 2.5,
+          headTilt: Math.sin(p * 1.6) * 0.04,
+          isMoshing: isMoshPitActive,
+          isChatting: false,
+          isHandshaking: false,
+          facingDir: av.facingDir
+        };
+
         if (id === 'auditor' && activeHandshakeVisitor) {
-          const arrived = moveCharacterTo(av, auditorHandshakeSpot, 0.04, t);
-          if (arrived) {
-            faceToward(av, visitorHandshakeSpot);
-            av.leftLeg.rotation.x = 0;
-            av.rightLeg.rotation.x = 0;
-            av.leftArm.rotation.x = 0;
-            av.rightArm.rotation.x = -1.15 - Math.sin(t * 9) * 0.18;
-            av.rightArm.rotation.z = -0.15;
-            av.headGroup.rotation.x = -Math.sin(t * 4) * 0.1;
+          const arrived = moveCartoonAgentTo(av, auditorHandshakeSpot, 0.04, t);
+          if (!arrived) {
+            animState.walkPhase = t * 12;
+          } else {
+            av.root.position.y = 0.12;
+            av.facingDir = -1;
+            animState.facingDir = -1;
+            animState.isHandshaking = true;
+            animState.armWave = t * 4;
           }
-          return;
-        }
-
-        if (status === 'WORKING') {
-          const arrived = moveCharacterTo(av, av.basePos, 0.05, t);
-          if (arrived) {
-            av.root.rotation.y += (av.baseRotY - av.root.rotation.y) * 0.15;
-            av.root.position.y = 0.12 + Math.abs(Math.sin(p * 8)) * 0.03;
-            av.leftArm.rotation.x = -0.95 + Math.sin(p * 18) * 0.22;
-            av.rightArm.rotation.x = -0.95 - Math.sin(p * 18) * 0.22;
-            av.rightArm.rotation.z = 0;
-            av.leftLeg.rotation.x = 0;
-            av.rightLeg.rotation.x = 0;
-            av.headGroup.rotation.y = Math.sin(p * 3) * 0.15;
-            av.headGroup.rotation.x = isMusicPlaying ? 0.12 + Math.sin(t * 14) * 0.16 : 0.12;
+        } else if (status === 'WORKING') {
+          const arrived = moveCartoonAgentTo(av, av.basePos, 0.05, t);
+          if (!arrived) {
+            animState.walkPhase = t * 12;
+          } else {
+            av.facingDir = 1;
+            animState.facingDir = 1;
+            av.root.position.y = 0.12 + Math.abs(Math.sin(p * 8)) * 0.04;
+            animState.armWave = p * 6;
+            animState.headTilt = isMusicPlaying ? Math.sin(t * 14) * 0.16 : Math.sin(p * 3) * 0.06;
           }
-          return;
-        }
-
-        if (status === 'DONE') {
-          const arrived = moveCharacterTo(av, av.basePos, 0.05, t);
-          if (arrived) {
-            av.root.rotation.y += (av.baseRotY - av.root.rotation.y) * 0.15;
-            av.root.position.y = 0.12 + Math.abs(Math.sin(p * 5)) * 0.18;
-            av.rightArm.rotation.x = -2.4 + Math.sin(p * 10) * 0.3;
-            av.rightArm.rotation.z = 0;
-            av.leftArm.rotation.x = Math.sin(p * 4) * 0.15;
-            av.leftLeg.rotation.x = 0;
-            av.rightLeg.rotation.x = 0;
-            av.headGroup.rotation.x = -0.05;
+        } else if (status === 'DONE') {
+          const arrived = moveCartoonAgentTo(av, av.basePos, 0.05, t);
+          if (!arrived) {
+            animState.walkPhase = t * 12;
+          } else {
+            av.facingDir = 1;
+            animState.facingDir = 1;
+            av.root.position.y = 0.12 + Math.abs(Math.sin(p * 5.5)) * 0.22;
+            animState.armWave = p * 5;
+            animState.headTilt = Math.sin(p * 6) * 0.08;
           }
-          return;
-        }
-
-        if (isMoshPitActive) {
-          const arrived = moveCharacterTo(av, av.basePos, 0.05, t);
-          if (arrived) {
-            av.headGroup.rotation.x = 0.35 + Math.sin(t * 18 + av.phase) * 0.45;
-            av.headGroup.rotation.y = Math.sin(t * 12 + av.phase) * 0.3;
-            av.leftArm.rotation.x = -1.2 + Math.sin(t * 16 + av.phase) * 0.5;
-            av.rightArm.rotation.x = -1.2 - Math.sin(t * 16 + av.phase) * 0.5;
-            av.leftLeg.rotation.x = 0;
-            av.rightLeg.rotation.x = 0;
-            av.root.position.y = av.basePos.y + Math.abs(Math.sin(t * 14 + av.phase)) * 0.18;
+        } else if (isMoshPitActive) {
+          const arrived = moveCartoonAgentTo(av, av.basePos, 0.05, t);
+          if (!arrived) {
+            animState.walkPhase = t * 12;
+          } else {
+            av.root.position.y = av.basePos.y + Math.abs(Math.sin(t * 14 + av.phase)) * 0.22;
+            animState.headTilt = Math.sin(t * 16 + av.phase) * 0.24;
+            animState.armWave = t * 8 + av.phase;
           }
-          return;
-        }
-
-        if (isChatTime && activeChatters.includes(id)) {
+        } else if (isChatTime && activeChatters.includes(id)) {
           const isFirst = activeChatters[0] === id;
           const myChatSpot = isFirst ? chatSpotA : chatSpotB;
-          const partnerSpot = isFirst ? chatSpotB : chatSpotA;
-
-          const arrived = moveCharacterTo(av, myChatSpot, 0.035, t, 9);
-          if (arrived) {
-            faceToward(av, partnerSpot);
-            av.leftLeg.rotation.x = 0;
-            av.rightLeg.rotation.x = 0;
-            av.rightArm.rotation.z = 0;
-            const talkWave = isFirst ? Math.sin(t * 4.5) : Math.cos(t * 4.5);
-            av.rightArm.rotation.x = -0.45 + Math.max(0, talkWave) * -0.45;
-            av.leftArm.rotation.x = Math.sin(p * 1.5) * 0.1;
-            av.headGroup.rotation.x = Math.sin(t * 5 + (isFirst ? 0 : 2)) * 0.12;
-            av.headGroup.rotation.y = Math.cos(t * 2.5) * 0.12;
+          const arrived = moveCartoonAgentTo(av, myChatSpot, 0.035, t);
+          if (!arrived) {
+            animState.walkPhase = t * 10;
+          } else {
+            av.root.position.y = 0.12 + Math.abs(Math.sin(p * 4)) * 0.03;
+            av.facingDir = isFirst ? 1 : -1;
+            animState.facingDir = av.facingDir;
+            animState.isChatting = true;
+            animState.armWave = t * 4 + (isFirst ? 0 : 2);
+            animState.headTilt = Math.sin(t * 5 + (isFirst ? 0 : 2)) * 0.08;
           }
         } else {
-          const arrived = moveCharacterTo(av, av.basePos, 0.035, t, 9);
-          if (arrived) {
-            av.root.rotation.y += (av.baseRotY - av.root.rotation.y) * 0.12;
-            av.root.position.y = 0.12 + Math.sin(p * 2) * 0.02;
-            av.leftArm.rotation.x = Math.sin(p * 1.8) * 0.08;
-            av.rightArm.rotation.x = -Math.sin(p * 1.8) * 0.08;
-            av.rightArm.rotation.z = 0;
-            av.leftLeg.rotation.x = 0;
-            av.rightLeg.rotation.x = 0;
-            av.headGroup.rotation.y = Math.sin(p * 1.1) * 0.25;
-            av.headGroup.rotation.x = 0;
+          const arrived = moveCartoonAgentTo(av, av.basePos, 0.035, t);
+          if (!arrived) {
+            animState.walkPhase = t * 10;
+          } else {
+            av.facingDir = 1;
+            animState.facingDir = 1;
+            // Squash & stretch bernapas lembut ala Cult of the Lamb
+            const breathe = Math.sin(p * 2.4);
+            av.root.position.y = 0.12;
+            av.mesh.scale.set(1 - breathe * 0.025, 1 + breathe * 0.03, 1);
           }
+        }
+
+        // Render ulang sprite 2D pada ~24 FPS agar halus namun tetap sangat ringan
+        if (t - av.lastRedrawTime > 0.04) {
+          av.lastRedrawTime = t;
+          drawCultOfTheLambAgent(av.ctx, av.id, animState);
+          av.texture.needsUpdate = true;
         }
       });
 
@@ -2104,11 +2371,9 @@
     function normalizeApiUrl(rawUrl) {
       let url = (rawUrl || '').trim();
       if (!url) return '';
-      // Jika URL adalah link editor (/edit) atau dokumen Apps Script, ubah ke /exec
       if (url.includes('/edit')) {
         url = url.replace(/\/edit(\?.*)?$/, '/exec');
       }
-      // Pastikan berakhiran /exec jika itu endpoint script.google.com/macros/s/...
       if (url.includes('script.google.com/macros/s/') && !url.includes('/exec')) {
         const [base, query] = url.split('?');
         url = base.replace(/\/+$/, '') + '/exec' + (query ? '?' + query : '');
@@ -2151,11 +2416,11 @@
 
     async function fetchAgentStateOnce(url) {
       if (!url || !sessionStorage.getItem(SESSION_AUTH_KEY)) return;
-      if (isFetchingAgentState) return; // Mencegah request tumpang tindih (concurrency overload)
+      if (isFetchingAgentState) return;
       isFetchingAgentState = true;
 
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 12000); // 12 detik batas timeout
+      const timeoutId = setTimeout(() => controller.abort(), 12000);
 
       try {
         const res = await fetch(url, { signal: controller.signal, cache: 'no-cache' });
@@ -2181,7 +2446,6 @@
           const nowStr = new Date().toLocaleTimeString('id-ID', { hour12: false });
           document.getElementById('lastSyncText').textContent = `Live Sync: ${nowStr} WIB`;
 
-          // Pastikan badge hijau aktif
           const badge = document.getElementById('connectionBadge');
           if (badge && !badge.innerHTML.includes('Live Apps Script')) {
             badge.className = 'inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300';
@@ -2204,12 +2468,10 @@
           badge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse"></span> Reconnecting...';
         }
 
-        // Catat ke terminal hanya pada kegagalan pertama atau setiap 5 kali agar tidak spam log
         if (consecutiveSyncErrors === 1 || consecutiveSyncErrors % 5 === 0) {
           addLog(`Gagal sinkronisasi API: ${errMsg} (Percobaan #${consecutiveSyncErrors})`, 'error');
         }
 
-        // Jika error berulang 3x pada URL custom localStorage, pulihkan otomatis ke DEFAULT_API_URL
         const defaultNormalized = normalizeApiUrl(DEFAULT_API_URL);
         if (consecutiveSyncErrors >= 3 && url !== defaultNormalized) {
           addLog('Mendeteksi kegagalan koneksi URL kustom. Memulihkan otomatis ke Default API Bridge resmi...', 'error');
