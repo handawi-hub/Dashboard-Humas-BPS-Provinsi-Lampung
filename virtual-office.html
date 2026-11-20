@@ -976,9 +976,13 @@
       createGardenTree(5.8, 7.2, 1.15);
 
       const flowerColors = [0xf43f5e, 0xfbbf24, 0xc084fc, 0xfb923c];
-      for (let i = 0; i < 16; i++) {
-        const fx = -7.8 + (i % 5) * 1.4 + Math.sin(i) * 0.4;
-        const fz = -3.8 + Math.floor(i / 5) * 2.2;
+      const flowerCoords = [
+        [-7.8, -4.2], [-6.2, -4.6], [-5.1, -3.5], [-8.6, -2.8],
+        [-6.9, -2.4], [-5.3, -1.6], [-8.2, -1.0], [-6.4, -0.5],
+        [-5.2,  0.4], [-8.8,  1.2], [-7.4,  1.8], [-5.4,  1.7],
+        [-8.3,  3.2], [-8.5,  5.0], [-7.8,  6.2], [-3.2,  6.5]
+      ];
+      flowerCoords.forEach(([fx, fz], i) => {
         const bush = new THREE.Mesh(
           new THREE.DodecahedronGeometry(0.32, 1),
           new THREE.MeshStandardMaterial({ color: 0x3f6212 })
@@ -994,7 +998,7 @@
         );
         blossom.position.set(fx, 0.48, fz);
         scene.add(blossom);
-      }
+      });
 
       const pondX = -5.5, pondZ = 4.2, pondRadius = 2.15;
 
