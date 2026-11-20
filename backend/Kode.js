@@ -2,7 +2,7 @@
  * ============================================================
  *   MEDIA MONITORING OTOMATIS & AI AGENT VIRTUAL OFFICE
  *   Organisasi: BPS Provinsi Lampung
- *   Versi: 6.7.0 (Clean Refactor — Bugfix, Auto-Provision, Guard)
+ *   Versi: 6.8.0 (Restored Telegram Alert + v6.7.0 Architecture)
  * ============================================================
  */
 
@@ -11,6 +11,8 @@
 // ============================================================
 const CONFIG = {
   API_KEY_PROPERTY: 'GEMINI_API_KEY',
+  TELEGRAM_TOKEN_PROPERTY: 'TELEGRAM_BOT_TOKEN',
+  TELEGRAM_CHAT_ID_PROPERTY: 'TELEGRAM_CHAT_ID', // Bisa 1 ID atau dipisah koma: "9067905076,-100123456789"
   MODEL: 'gemini-3.5-flash-lite',
   SEARCH_QUERY: [
     '"BPS Provinsi Lampung"',
@@ -297,7 +299,7 @@ function tarikBeritaOtomatis() {
       existingLinks = existingData.map(r => normalizeLink(r[3])).filter(Boolean);
     }
 
-   const newRows = [];
+    const newRows = [];
     const batasTanggal = new Date('2026-01-01T00:00:00+07:00');
 
     for (const query of queries) {
@@ -331,7 +333,6 @@ function tarikBeritaOtomatis() {
           const rawPub = item.getChildText('pubDate');
           const dateObj = rawPub ? new Date(rawPub) : new Date(0);
 
-          // Batasi hanya berita yang terbit mulai 1 November 2026
           if (isNaN(dateObj.getTime()) || dateObj < batasTanggal) {
             continue;
           }
@@ -342,6 +343,7 @@ function tarikBeritaOtomatis() {
           const analisis = panggilGemini(title, desc);
           newRows.push({
             dateObj,
+            rawPub,
             row: [formatPubDate(rawPub), title, media, link, analisis]
           });
 
@@ -363,6 +365,7 @@ function tarikBeritaOtomatis() {
     Logger.log(`✅ Crawling | dicek: ${totalDicek} | baru: ${newRows.length}`);
     if (newRows.length > 0) {
       updateAgentStatus('crawler', 'DONE', `Selesai: ${newRows.length} berita baru.`, ss.getUrl());
+      kirimNotifTelegram_(newRows, ss.getUrl());
     } else {
       updateAgentStatus('crawler', 'IDLE', `Pemindaian selesai (${totalDicek} item, belum ada baru).`, ss.getUrl());
     }
@@ -388,7 +391,88 @@ function parseDateCustom(dateStr) {
 }
 
 // ============================================================
-// 5. GEMINI — TEXT
+// 5. TELEGRAM NOTIFICATION MODULE
+// ============================================================
+function kirimNotifTelegram_(newRows, sheetUrl) {
+  if (!newRows || newRows.length === 0) return;
+
+  const props = PropertiesService.getScriptProperties();
+  const botToken = props.getProperty(CONFIG.TELEGRAM_TOKEN_PROPERTY);
+  const rawChatIds = props.getProperty(CONFIG.TELEGRAM_CHAT_ID_PROPERTY);
+
+  if (!botToken || !rawChatIds) {
+    Logger.log('⚠️ TELEGRAM_BOT_TOKEN atau TELEGRAM_CHAT_ID belum diatur di Script Properties.');
+    return;
+  }
+
+  let pesan = `📢 *Media Monitoring BPS Provinsi Lampung*\n`;
+  pesan += `Ditemukan *${newRows.length} berita baru*:\n\n`;
+
+  newRows.forEach((item, idx) => {
+    const r = item.row; // [Tanggal, Judul, Media, Link, Analisis]
+    const judulAman = escapeHtml_(r[1]);
+    const mediaAman = escapeHtml_(r[2]);
+    const linkAman = escapeHtml_(r[3]);
+    const sentimenMatch = String(r[4] || '').match(/SENTIMEN:\s*(.+)/i);
+    const sentimen = sentimenMatch ? sentimenMatch[1].trim() : '-';
+
+    pesan += `<b>${idx + 1}. <a href="${linkAman}">${judulAman}</a></b>\n`;
+    pesan += `📅 ${escapeHtml_(r[0])} | 🏢 ${mediaAman} | 📊 ${escapeHtml_(sentimen)}\n\n`;
+  });
+
+  if (sheetUrl) {
+    pesan += `🔗 <a href="${escapeHtml_(sheetUrl)}">Buka Database Monitoring</a> | `;
+  }
+  pesan += `🏛️ <a href="https://handawi-hub.github.io/SIGERHUB/">Dashboard SIGERHUB</a>`;
+
+  const chatIds = rawChatIds.split(',').map(id => id.trim()).filter(Boolean);
+  const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
+
+  chatIds.forEach(chatId => {
+    try {
+      const res = UrlFetchApp.fetch(url, {
+        method: 'post',
+        contentType: 'application/json',
+        payload: JSON.stringify({
+          chat_id: chatId,
+          text: pesan.replace(/\*/g, ''), // Bersihkan sisa tanda bintang Markdown untuk mode HTML
+          parse_mode: 'HTML',
+          disable_web_page_preview: true
+        }),
+        muteHttpExceptions: true
+      });
+      Logger.log(`📨 Telegram [${chatId}] HTTP ${res.getResponseCode()}: ${res.getContentText()}`);
+    } catch (err) {
+      Logger.log(`⚠️ Gagal kirim Telegram ke ${chatId}: ` + err.message);
+    }
+  });
+}
+
+function escapeHtml_(str) {
+  return String(str || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+// Fungsi tes manual untuk memastikan Bot Telegram aktif
+function tesKirimTelegram() {
+  const ss = getTargetSpreadsheet_();
+  const sample = [{
+    row: [
+      Utilities.formatDate(new Date(), CONFIG.TIMEZONE, 'dd/MM/yyyy'),
+      'Tes Koneksi Bot SIGERHUB BPS Provinsi Lampung v6.8.0',
+      'Sistem Monitoring Internal',
+      'https://handawi-hub.github.io/SIGERHUB/',
+      'SENTIMEN: Positif'
+    ]
+  }];
+  kirimNotifTelegram_(sample, ss ? ss.getUrl() : '');
+}
+
+// ============================================================
+// 6. GEMINI — TEXT
 // ============================================================
 function panggilGemini(judul, isi) {
   const prompt = `Bertindaklah sebagai Public Relations Analyst profesional di BPS Provinsi Lampung. Analisis artikel berita berikut:
@@ -432,7 +516,7 @@ function eksekusiFetchGemini(promptText) {
 }
 
 // ============================================================
-// 6. UTILITAS RSS
+// 7. UTILITAS RSS
 // ============================================================
 function buildRssUrl(query) {
   return `https://news.google.com/rss/search?q=${encodeURIComponent(query)}&hl=id&gl=ID&ceid=ID:id`;
@@ -464,7 +548,7 @@ function formatPubDate(pubDateStr) {
 }
 
 // ============================================================
-// 7. DO GET — API BRIDGE
+// 8. DO GET — API BRIDGE
 // ============================================================
 function doGet(e) {
   try {
@@ -560,7 +644,7 @@ function getLatestBrsFromSheet(ss) {
 }
 
 // ============================================================
-// 8. DO POST — UPLOAD BRS & AUTH
+// 9. DO POST — UPLOAD BRS & AUTH
 // ============================================================
 function doPost(e) {
   try {
@@ -647,7 +731,7 @@ function handleUploadBrs_(data, user) {
 }
 
 // ============================================================
-// 9. GEMINI — MULTIMODAL BRS
+// 10. GEMINI — MULTIMODAL BRS
 // ============================================================
 function callGeminiForPressRelease(fileBase64, mimeType, benchmarkText, isGabungan) {
   const apiKey = PropertiesService.getScriptProperties().getProperty(CONFIG.API_KEY_PROPERTY);
@@ -733,14 +817,8 @@ function callGeminiForPressRelease(fileBase64, mimeType, benchmarkText, isGabung
 }
 
 // ============================================================
-// 10. DOKUMEN BRS & STATUS AGEN
+// 11. DOKUMEN BRS & STATUS AGEN
 // ============================================================
-
-/**
- * Pembersih regex otomatis untuk menghapus baris kop surat (SIARAN PERS,
- * BPS PROVINSI LAMPUNG, Nomor Surat, dsb) di awal teks output AI sebelum
- * disuntikkan ke template dokumen Google Docs.
- */
 function cleanBrsHeaderLines_(rawText) {
   if (!rawText) return '';
   const lines = rawText.split('\n');
@@ -748,20 +826,12 @@ function cleanBrsHeaderLines_(rawText) {
   let pastHeader = false;
 
   const isHeaderLine = function(line) {
-    // Bersihkan karakter markdown pembungkus (#, *, _, >, -, kutip, spasi)
     const s = line.replace(/^[#*_\s>"-]+|[#*_\s<"-]+$/g, '').trim();
     if (!s) return false;
 
-    // 1. Baris Siaran Pers / Press Release
     if (/^(?:siaran\s+pers|press\s+release)(?:\s*[-–:]\s*(?:bps|badan\s+pusat\s+statistik).*)?$/i.test(s)) return true;
-
-    // 2. Baris Nama Lembaga BPS / BPS Lampung
     if (/^(?:bps|badan\s+pusat\s+statistik)(?:\s+provinsi\s+lampung)?\s*(?:[-–:]\s*siaran\s+pers)?$/i.test(s)) return true;
-
-    // 3. Baris Nomor Surat / No. Rilis (termasuk No :, No. :, Nomor :)
     if (/^(?:nomor|no|no\.)\s*[:.]\s*.+$/i.test(s)) return true;
-
-    // 4. Baris metadata kop lainnya
     if (/^(?:tanggal|rilis|embargo|untuk\s+diterbitkan(?:\s+segera)?)\s*[:.].*$/i.test(s)) return true;
 
     return false;
@@ -772,20 +842,14 @@ function cleanBrsHeaderLines_(rawText) {
     const stripped = rawLine.replace(/^[#*_\s>"-]+|[#*_\s<"-]+$/g, '').trim();
 
     if (!pastHeader) {
-      // Lewati baris kosong di awal teks
       if (!stripped) continue;
-
-      // Cek apakah baris ini adalah header kop surat
       if (isHeaderLine(rawLine)) {
         Logger.log('🧹 [cleanBrsHeaderLines] Menghapus header kop surat: ' + rawLine);
         continue;
       }
-
-      // Baris non-header pertama ditemukan -> ini adalah Judul Berita
       pastHeader = true;
     }
 
-    // Bersihkan prefix label judul seperti "Judul: " atau "Headline: " jika ada
     if (cleanedLines.length === 0) {
       const unPrefixed = rawLine.replace(/^([#*_\s>"-]*)(?:judul|headline)\s*:\s*/i, '$1');
       cleanedLines.push(unPrefixed);
@@ -806,7 +870,6 @@ function createFormattedBrsDoc(folder, content, releaseName) {
   const doc = DocumentApp.openById(copied.getId());
   const body = doc.getBody();
 
-  // Bersihkan teks dari kop surat berlebih sebelum dimasukkan ke {{KONTEN_UTAMA}}
   content = cleanBrsHeaderLines_(content);
 
   let targetParagraph = null;
@@ -857,7 +920,6 @@ function createFormattedBrsDoc(folder, content, releaseName) {
       insertIdx++;
     }
   } else {
-    // Fallback jika {{KONTEN_UTAMA}} berada dalam bentuk teks biasa
     body.replaceText('{{KONTEN_UTAMA}}', content);
     body.appendParagraph('\n' + content);
   }
