@@ -14,6 +14,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
+            darkMode: 'class',
             theme: {
                 extend: {
                     fontFamily: {
@@ -36,12 +37,23 @@
             }
         }
     </script>
+    <script>
+        // Terapkan tema tersimpan secepat mungkin sebelum render agar tidak berkedip
+        (function() {
+            const saved = localStorage.getItem('sigerhub_theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+            if (saved === 'dark' || (!saved && prefersDark)) {
+                document.documentElement.classList.add('dark');
+            }
+        })();
+    </script>
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; transition: background-color 0.25s ease, color 0.25s ease; }
         .clean-card {
             background: #FFFFFF;
             border: 1px solid #E2E8F0;
             box-shadow: 0 1px 3px 0 rgba(6, 24, 46, 0.04);
+            transition: background-color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
         }
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: #F1F5F9; }
@@ -64,7 +76,7 @@
                 inset 0 1px 0 0 rgba(255, 255, 255, 0.95),
                 inset 0 -1px 0 0 rgba(148, 163, 184, 0.22);
             overflow: hidden;
-            transition: background 0.3s ease, box-shadow 0.3s ease;
+            transition: background 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
         }
 
         /* Lapisan Bias Cahaya & Aura Halus Identitas BPS */
@@ -107,7 +119,7 @@
             box-shadow:
                 0 4px 14px rgba(6, 24, 46, 0.06),
                 inset 0 1px 1px rgba(255, 255, 255, 1);
-            transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.25s ease;
+            transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.25s ease, background 0.25s ease;
         }
         .glass-logo-pill:hover {
             transform: translateY(-1px) scale(1.02);
@@ -120,6 +132,7 @@
             -webkit-backdrop-filter: blur(12px);
             border: 1px solid rgba(203, 213, 225, 0.65);
             box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9);
+            transition: background 0.25s ease, border-color 0.25s ease, color 0.25s ease;
         }
 
         .glass-btn-action {
@@ -131,6 +144,82 @@
         .glass-btn-action:active {
             transform: translateY(0);
         }
+
+        /* ============================================================
+           DARK MODE THEME OVERRIDES (html.dark)
+           ============================================================ */
+        html.dark ::-webkit-scrollbar-track { background: #0B1120; }
+        html.dark ::-webkit-scrollbar-thumb { background: #334155; }
+        html.dark ::-webkit-scrollbar-thumb:hover { background: #475569; }
+
+        html.dark .liquid-glass-header {
+            background: rgba(11, 17, 32, 0.78);
+            border-bottom: 1px solid rgba(51, 65, 85, 0.65);
+            box-shadow:
+                0 10px 30px -10px rgba(0, 0, 0, 0.55),
+                inset 0 1px 0 0 rgba(255, 255, 255, 0.08),
+                inset 0 -1px 0 0 rgba(30, 41, 59, 0.8);
+        }
+        html.dark .liquid-glass-header::before {
+            background:
+                radial-gradient(circle at 12% 20%, rgba(0, 143, 213, 0.22) 0%, transparent 45%),
+                radial-gradient(circle at 52% 85%, rgba(104, 185, 46, 0.14) 0%, transparent 48%),
+                radial-gradient(circle at 88% 15%, rgba(235, 137, 27, 0.16) 0%, transparent 45%);
+        }
+        html.dark .liquid-glass-spotlight {
+            background: radial-gradient(
+                360px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+                rgba(56, 189, 248, 0.16),
+                rgba(15, 23, 42, 0.35) 45%,
+                transparent 75%
+            );
+        }
+        html.dark .glass-logo-pill {
+            background: rgba(15, 23, 42, 0.9);
+            border: 1px solid rgba(51, 65, 85, 0.85);
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.08);
+        }
+        html.dark .glass-pill-surface {
+            background: rgba(30, 41, 59, 0.75);
+            border: 1px solid rgba(51, 65, 85, 0.85);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+        }
+
+        html.dark .clean-card {
+            background: #111827;
+            border-color: #1E293B;
+            box-shadow: 0 4px 18px -2px rgba(0, 0, 0, 0.4);
+        }
+
+        html.dark .text-bps-navy { color: #F8FAFC !important; }
+        html.dark .text-slate-900 { color: #F8FAFC !important; }
+        html.dark .text-slate-800 { color: #F1F5F9 !important; }
+        html.dark .text-slate-700 { color: #E2E8F0 !important; }
+        html.dark .text-slate-600 { color: #94A3B8 !important; }
+        html.dark .text-slate-500 { color: #94A3B8 !important; }
+
+        html.dark .bg-white { background-color: #111827 !important; }
+        html.dark .bg-slate-50,
+        html.dark .bg-slate-50\/70 { background-color: #0F172A !important; }
+        html.dark .bg-slate-100 { background-color: #1E293B !important; }
+        html.dark .hover\:bg-slate-50:hover { background-color: #1E293B !important; }
+        html.dark .hover\:bg-slate-100:hover,
+        html.dark .hover\:bg-slate-200:hover,
+        html.dark .hover\:bg-slate-200\/70:hover { background-color: #334155 !important; }
+
+        html.dark .border-slate-100,
+        html.dark .border-slate-200,
+        html.dark .border-slate-200\/70,
+        html.dark .border-slate-300 { border-color: #1E293B !important; }
+        html.dark .divide-slate-200 > :not([hidden]) ~ :not([hidden]) { border-color: #1E293B !important; }
+
+        html.dark input,
+        html.dark select {
+            background-color: #0F172A !important;
+            border-color: #334155 !important;
+            color: #F1F5F9 !important;
+        }
+        html.dark input::placeholder { color: #64748B !important; }
 
         /* ============================================================
            MOBILE UI FIX (< 640px) — SIGERHUB INDEX.HTML
@@ -160,7 +249,7 @@
                 border-top: 1px solid rgba(148, 163, 184, 0.22) !important;
             }
             header > div > div > div:last-child a,
-            header > div > div > div:last-child button:first-of-type {
+            header > div > div > div:last-child button#syncBtn {
                 flex: 1 !important;
                 justify-content: center !important;
             }
@@ -190,7 +279,7 @@
         }
     </style>
 </head>
-<body class="bg-[#F4F7FB] text-slate-800 antialiased min-h-screen flex flex-col">
+<body class="bg-[#F4F7FB] dark:bg-[#0B1120] text-slate-800 dark:text-slate-100 antialiased min-h-screen flex flex-col">
 
     <!-- ===================================================================== -->
     <!-- LOGIN GATE OVERLAY (MUNCUL PERTAMA KALI SEBELUM PORTAL TERBUKA)       -->
@@ -281,7 +370,7 @@
                                 <h1 class="font-extrabold text-2xl sm:text-[28px] leading-none tracking-tight text-bps-navy">
                                     SIGERHUB
                                 </h1>
-                                <span class="hidden sm:inline-block h-4 w-[1.5px] bg-slate-300/90 rounded-full"></span>
+                                <span class="hidden sm:inline-block h-4 w-[1.5px] bg-slate-300/90 dark:bg-slate-700 rounded-full"></span>
                                 <span class="text-xs sm:text-[13px] font-semibold text-bps-blue tracking-tight">
                                     Portal Humas Terpadu
                                 </span>
@@ -302,6 +391,13 @@
                             <span class="text-slate-600">Database: <strong id="apiStatusText" class="text-amber-600 font-semibold">Menghubungkan...</strong></span>
                         </div>
 
+                        <!-- Tombol Switch Dark / Light Mode -->
+                        <button onclick="toggleTheme()" id="themeToggleBtn" type="button" title="Ganti Tema Gelap / Terang" aria-label="Ganti Tema"
+                            class="glass-btn-action glass-pill-surface inline-flex items-center justify-center w-9 h-9 rounded-xl text-slate-700 hover:text-bps-blue dark:text-amber-400 dark:hover:text-amber-300 shrink-0">
+                            <i data-lucide="moon" id="themeIconMoon" class="w-4 h-4"></i>
+                            <i data-lucide="sun" id="themeIconSun" class="w-4 h-4 hidden"></i>
+                        </button>
+
                         <a href="virtual-office.html" class="glass-btn-action inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-bps-orange hover:bg-bps-orangeDark text-white text-xs font-semibold whitespace-nowrap shadow-sm shadow-bps-orange/25">
                             <i data-lucide="monitor" class="w-3.5 h-3.5 shrink-0"></i>
                             <span class="hidden sm:inline">Virtual Office</span>
@@ -313,7 +409,7 @@
                             <span class="hidden sm:inline">Sinkron Data</span>
                         </button>
 
-                        <button onclick="logoutSession()" title="Keluar dari Sesi" class="glass-btn-action glass-pill-surface inline-flex items-center gap-1.5 hover:bg-rose-50 hover:border-rose-200 text-slate-700 hover:text-rose-600 text-xs font-semibold px-3 py-2 rounded-xl whitespace-nowrap">
+                        <button onclick="logoutSession()" title="Keluar dari Sesi" class="glass-btn-action glass-pill-surface inline-flex items-center gap-1.5 hover:bg-rose-50 dark:hover:bg-rose-950/50 hover:border-rose-200 text-slate-700 hover:text-rose-600 text-xs font-semibold px-3 py-2 rounded-xl whitespace-nowrap">
                             <i data-lucide="log-out" class="w-3.5 h-3.5 shrink-0"></i>
                             <span class="hidden md:inline">Keluar</span>
                         </button>
@@ -349,7 +445,7 @@
                 <div class="text-xs text-slate-500 flex items-center gap-2 bg-white px-3 py-1.5 rounded-lg border border-slate-200">
                     <i data-lucide="database" class="w-3.5 h-3.5 text-bps-blue"></i>
                     <span>Periode Data: <strong id="dateRangeText" class="text-slate-800 font-semibold">Memuat...</strong></span>
-                    <span class="text-slate-300">|</span>
+                    <span class="text-slate-300 dark:text-slate-700">|</span>
                     <span>Update: <strong id="lastUpdateText" class="text-slate-800 font-semibold">-</strong></span>
                 </div>
             </div>
@@ -395,7 +491,7 @@
                                 <p class="text-[11px] font-bold uppercase tracking-wider text-slate-500 group-hover:text-bps-navy transition">Indeks Reputasi PR</p>
                                 <h3 class="text-3xl font-extrabold text-bps-navy mt-1.5"><span id="kpiReputationScore">-</span><span class="text-sm text-slate-400 font-normal">/10</span></h3>
                             </div>
-                            <div class="p-2.5 bg-[#06182E]/10 text-bps-navy rounded-lg">
+                            <div class="p-2.5 bg-[#06182E]/10 dark:bg-sky-500/15 text-bps-navy rounded-lg">
                                 <i data-lucide="award" class="w-5 h-5"></i>
                             </div>
                         </div>
@@ -597,7 +693,7 @@
                             </div>
                             <div class="p-4 rounded-lg bg-slate-50 border border-slate-200/70">
                                 <div class="flex items-center gap-2 mb-1.5">
-                                    <span class="w-5 h-5 rounded bg-bps-navy text-white text-[11px] font-bold flex items-center justify-center">2</span>
+                                    <span class="w-5 h-5 rounded bg-bps-navy dark:bg-sky-600 text-white text-[11px] font-bold flex items-center justify-center">2</span>
                                     <span class="text-xs font-bold text-slate-800">Ekstraksi Indikator</span>
                                 </div>
                                 <p class="text-xs text-slate-500 leading-relaxed">Sistem menyusun narasi data storytelling dan kutipan resmi Kepala BPS.</p>
@@ -636,7 +732,7 @@
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-5 pt-5 border-t border-slate-200">
                         <div class="space-y-2 bg-slate-50 p-4 rounded-lg border border-slate-200">
                             <div class="flex items-center space-x-2 text-slate-900 font-bold text-xs sm:text-sm">
-                                <span class="w-5 h-5 rounded-full bg-slate-200 text-slate-800 flex items-center justify-center text-xs">1</span>
+                                <span class="w-5 h-5 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-800 flex items-center justify-center text-xs">1</span>
                                 <span>Spreadsheet Internal</span>
                             </div>
                             <p class="text-xs text-slate-500 leading-relaxed">Database monitoring dan status agent disimpan secara tertutup di Google Drive BPS Provinsi Lampung.</p>
@@ -759,6 +855,67 @@
         lucide.createIcons();
 
         // =========================================================================
+        // DARK / LIGHT THEME ENGINE (SINKRON DENGAN CHART.JS & LOCALSTORAGE)
+        // =========================================================================
+        function isDarkModeActive() {
+            return document.documentElement.classList.contains('dark');
+        }
+
+        function updateThemeToggleIcons() {
+            const isDark = isDarkModeActive();
+            const moonIcon = document.getElementById('themeIconMoon');
+            const sunIcon = document.getElementById('themeIconSun');
+            if (moonIcon && sunIcon) {
+                if (isDark) {
+                    moonIcon.classList.add('hidden');
+                    sunIcon.classList.remove('hidden');
+                } else {
+                    moonIcon.classList.remove('hidden');
+                    sunIcon.classList.add('hidden');
+                }
+            }
+        }
+
+        function syncChartsTheme() {
+            const isDark = isDarkModeActive();
+            const tickColor = isDark ? '#94A3B8' : '#64748B';
+            const legendColor = isDark ? '#CBD5E1' : '#334155';
+            const gridColor = isDark ? 'rgba(148, 163, 184, 0.12)' : '#F1F5F9';
+            const doughnutBorder = isDark ? '#111827' : '#ffffff';
+
+            if (sentimentChart) {
+                sentimentChart.options.plugins.legend.labels.color = legendColor;
+                sentimentChart.options.scales.y.ticks.color = tickColor;
+                sentimentChart.options.scales.y.grid.color = gridColor;
+                sentimentChart.options.scales.x.ticks.color = tickColor;
+                sentimentChart.update('none');
+            }
+            if (mediaChart) {
+                mediaChart.options.plugins.legend.labels.color = legendColor;
+                if (mediaChart.data?.datasets?.[0]) {
+                    mediaChart.data.datasets[0].borderColor = doughnutBorder;
+                }
+                mediaChart.update('none');
+            }
+            if (topicsChart) {
+                topicsChart.options.scales.y.ticks.color = tickColor;
+                topicsChart.options.scales.y.grid.color = gridColor;
+                topicsChart.options.scales.x.ticks.color = tickColor;
+                topicsChart.update('none');
+            }
+        }
+
+        function toggleTheme() {
+            const willBeDark = !isDarkModeActive();
+            document.documentElement.classList.toggle('dark', willBeDark);
+            localStorage.setItem('sigerhub_theme', willBeDark ? 'dark' : 'light');
+            updateThemeToggleIcons();
+            syncChartsTheme();
+        }
+
+        updateThemeToggleIcons();
+
+        // =========================================================================
         // INTERAKTIVITAS LIQUID GLASS HEADER (SPOTLIGHT CURSOR TRACKING)
         // =========================================================================
         (function initLiquidGlassHeader() {
@@ -863,6 +1020,7 @@
             initDropZoneDragEvents();
             fetchLiveMonitoringData(false);
             fetchAgentStates();
+            updateThemeToggleIcons();
             lucide.createIcons();
         }
 
@@ -1371,6 +1529,12 @@
             if (mediaChart) mediaChart.destroy();
             if (topicsChart) topicsChart.destroy();
 
+            const isDark = isDarkModeActive();
+            const tickColor = isDark ? '#94A3B8' : '#64748B';
+            const legendColor = isDark ? '#CBD5E1' : '#334155';
+            const gridColor = isDark ? 'rgba(148, 163, 184, 0.12)' : '#F1F5F9';
+            const doughnutBorder = isDark ? '#111827' : '#ffffff';
+
             const wrapper = document.getElementById('sentimentChartWrapper');
             const scrollContainer = document.getElementById('sentimentScrollContainer');
             if (wrapper && scrollContainer) {
@@ -1430,6 +1594,7 @@
                         legend: {
                             position: 'top',
                             labels: {
+                                color: legendColor,
                                 padding: 18,
                                 usePointStyle: true,
                                 boxWidth: 8,
@@ -1442,18 +1607,20 @@
                             beginAtZero: true,
                             suggestedMax: peakVal + 2,
                             ticks: {
+                                color: tickColor,
                                 stepSize: 1,
                                 precision: 0,
                                 padding: 10
                             },
                             grid: {
-                                color: '#F1F5F9'
+                                color: gridColor
                             }
                         },
                         x: {
                             offset: true,
                             grid: { display: false },
                             ticks: {
+                                color: tickColor,
                                 maxRotation: 0,
                                 padding: 10,
                                 font: { size: 11 }
@@ -1475,7 +1642,7 @@
                         data: mediaValues,
                         backgroundColor: ['#06182E', '#008FD5', '#68B92E', '#EB891B', '#38BDF8', '#CBD5E1'],
                         borderWidth: 2,
-                        borderColor: '#ffffff'
+                        borderColor: doughnutBorder
                     }]
                 },
                 options: {
@@ -1484,7 +1651,7 @@
                     plugins: {
                         legend: {
                             position: 'bottom',
-                            labels: { boxWidth: 10, padding: 12, font: { size: 11, weight: '500' } }
+                            labels: { color: legendColor, boxWidth: 10, padding: 12, font: { size: 11, weight: '500' } }
                         }
                     },
                     cutout: '64%'
@@ -1507,8 +1674,8 @@
                     maintainAspectRatio: false,
                     plugins: { legend: { display: false } },
                     scales: {
-                        y: { beginAtZero: true, ticks: { stepSize: 1 } },
-                        x: { grid: { display: false } }
+                        y: { beginAtZero: true, ticks: { color: tickColor, stepSize: 1 }, grid: { color: gridColor } },
+                        x: { grid: { display: false }, ticks: { color: tickColor } }
                     }
                 }
             });
