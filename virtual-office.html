@@ -128,7 +128,7 @@
             <span id="seasonIcon">🌤️</span> <span id="seasonText">Musim Panas</span>
           </button>
 
-          <!-- TOMBOL PENGATUR WAKTU -->
+          <!-- TOMBOL PENGATUR WAKTU (PAGI / SORE / MALAM AURORA) -->
           <button onclick="toggleLightingMode()" id="btnLighting" class="px-3 py-1.5 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 text-xs font-bold transition flex items-center gap-1.5">
             <span id="lightingIcon">☀️</span> <span id="lightingText">Pagi Cerah</span>
           </button>
@@ -149,7 +149,7 @@
     <!-- MAIN CONTENT -->
     <main class="flex-1 max-w-7xl w-full mx-auto px-4 py-5 grid grid-cols-1 lg:grid-cols-12 gap-5">
 
-      <!-- LEFT: 3D SEMI-OUTDOOR STUDIO CANVAS + 2D PAPER-CUT AGENTS (7 COLS) -->
+      <!-- LEFT: 3D GREEN STUDIO CANVAS + 2D PAPER-CUT AGENTS (7 COLS) -->
       <section class="lg:col-span-7 flex flex-col gap-4">
         <div class="bg-white border border-stone-200 rounded-3xl overflow-hidden shadow-xl shadow-stone-200/60">
           <div class="px-4 py-2.5 border-b border-stone-100 flex flex-wrap items-center justify-between gap-2 bg-stone-50/80">
@@ -228,7 +228,7 @@
             <button onclick="clearLogs()" class="text-[11px] font-semibold text-slate-400 hover:text-slate-700">Bersihkan Log</button>
           </div>
           <div id="terminalLog" class="font-mono-code text-[11px] text-slate-700 space-y-1 max-h-32 overflow-y-auto bg-stone-50 p-2.5 rounded-xl border border-stone-200/80">
-            <div class="text-slate-500">[SYSTEM] Studio Industrial siap. Karakter 2D Paper-Cut (Cult of the Lamb Style) aktif!</div>
+            <div class="text-slate-500">[SYSTEM] Green Office Biophilic & Aurora Borealis Sky siap!</div>
           </div>
         </div>
       </section>
@@ -471,11 +471,11 @@
     }
 
     // =========================================================================
-    // 3. THREE.JS 3D SEMI-OUTDOOR STUDIO + 2D PAPER-CUT AGENTS (CULT OF THE LAMB STYLE)
+    // 3. THREE.JS 3D GREEN OFFICE STUDIO + AURORA BOREALIS + 2D AGENTS
     // =========================================================================
     let scene, camera, renderer, controls;
     let ambientLight, sunLight, warmLampLight, pondLight;
-    let lightingModeIndex = 0;
+    let lightingModeIndex = 0; // 0: Pagi, 1: Golden Hour, 2: Malam Aurora Norwegia
     let seasonModeIndex = 0;
 
     const cartoonAgents = {};
@@ -493,6 +493,11 @@
     let rainParticles = null;
     let snowParticles = null;
 
+    // Aurora Borealis & Night Stars Objects
+    let auroraMesh = null;
+    let auroraUniforms = null;
+    let nightStars = null;
+
     let targetCamPos = new THREE.Vector3(9.5, 8.2, 11.8);
     let targetLookAt = new THREE.Vector3(-0.5, 0.9, 0.2);
     let isCameraTransitioning = false;
@@ -504,9 +509,9 @@
 
       scene = new THREE.Scene();
       scene.background = new THREE.Color(0xe6f2e8);
-      scene.fog = new THREE.FogExp2(0xe6f2e8, 0.015);
+      scene.fog = new THREE.FogExp2(0xe6f2e8, 0.014);
 
-      camera = new THREE.PerspectiveCamera(42, width / height, 0.1, 120);
+      camera = new THREE.PerspectiveCamera(42, width / height, 0.1, 140);
       camera.position.copy(targetCamPos);
 
       renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' });
@@ -553,6 +558,7 @@
       scene.add(pondLight);
 
       buildSemiOutdoorArchitecture();
+      buildAuroraBorealisSky();
       buildGardenTreesAndPond();
       buildLivingAnimals();
       buildWeatherSystems();
@@ -596,6 +602,370 @@
       camera.aspect = container.clientWidth / container.clientHeight;
       camera.updateProjectionMatrix();
       renderer.setSize(container.clientWidth, container.clientHeight);
+    }
+
+    // =========================================================================
+    // AURORA BOREALIS SHADER & NIGHT STARS (NORWAY / ARCTIC SKY)
+    // =========================================================================
+    function buildAuroraBorealisSky() {
+      // 1. Taburan Bintang Malam Kutub
+      const starCount = 650;
+      const starGeo = new THREE.BufferGeometry();
+      const starPos = new Float32Array(starCount * 3);
+      for (let i = 0; i < starCount; i++) {
+        const theta = Math.random() * Math.PI * 2;
+        const radius = 24 + Math.random() * 22;
+        starPos[i * 3] = Math.cos(theta) * radius;
+        starPos[i * 3 + 1] = 4.5 + Math.random() * 22;
+        starPos[i * 3 + 2] = Math.sin(theta) * radius;
+      }
+      starGeo.setAttribute('position', new THREE.BufferAttribute(starPos, 3));
+      const starMat = new THREE.PointsMaterial({
+        color: 0xf8fafc,
+        size: 0.24,
+        transparent: true,
+        opacity: 0.88,
+        fog: false
+      });
+      nightStars = new THREE.Points(starGeo, starMat);
+      nightStars.visible = false;
+      scene.add(nightStars);
+
+      // 2. Tirai Cahaya Aurora Borealis Melengkung di Langit Malam
+      auroraUniforms = {
+        uTime: { value: 0.0 },
+        uOpacity: { value: 0.92 }
+      };
+
+      const auroraMat = new THREE.ShaderMaterial({
+        uniforms: auroraUniforms,
+        transparent: true,
+        depthWrite: false,
+        side: THREE.DoubleSide,
+        blending: THREE.AdditiveBlending,
+        fog: false,
+        vertexShader: `
+          varying vec2 vUv;
+          uniform float uTime;
+          void main() {
+            vUv = uv;
+            vec3 pos = position;
+            // Gelombang tirai aurora bergoyang perlahan di udara
+            float wave1 = sin(uv.x * 16.0 + uTime * 0.65) * 1.4;
+            float wave2 = cos(uv.x * 28.0 - uTime * 0.45) * 0.75;
+            pos.z += (wave1 + wave2) * sin(uv.y * 3.14159);
+            pos.x += cos(uv.x * 12.0 + uTime * 0.4) * 0.8;
+            gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
+          }
+        `,
+        fragmentShader: `
+          varying vec2 vUv;
+          uniform float uTime;
+          uniform float uOpacity;
+
+          float hash(vec2 p) {
+            return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453123);
+          }
+
+          float noise(vec2 p) {
+            vec2 i = floor(p);
+            vec2 f = fract(p);
+            vec2 u = f * f * (3.0 - 2.0 * f);
+            return mix(
+              mix(hash(i + vec2(0.0, 0.0)), hash(i + vec2(1.0, 0.0)), u.x),
+              mix(hash(i + vec2(0.0, 1.0)), hash(i + vec2(1.0, 1.0)), u.x),
+              u.y
+            );
+          }
+
+          void main() {
+            // Garis-garis sinar vertikal khas aurora borealis Norwegia
+            float streaks = noise(vec2(vUv.x * 36.0 + uTime * 0.35, vUv.y * 2.2 - uTime * 0.15));
+            float fineRays = noise(vec2(vUv.x * 85.0 - uTime * 0.5, vUv.y * 3.5));
+            float curtain = smoothstep(0.24, 0.88, streaks * 0.68 + fineRays * 0.42);
+
+            // Fade halus di bagian bawah dan atas langit
+            float vFade = smoothstep(0.0, 0.28, vUv.y) * smoothstep(1.0, 0.35, vUv.y);
+            // Fade di kedua ujung cakrawala
+            float hFade = smoothstep(0.0, 0.12, vUv.x) * smoothstep(1.0, 0.88, vUv.x);
+
+            // Palet warna Aurora: Hijau Zamrud di bawah -> Cyan/Teal -> Violet/Magenta di puncak
+            vec3 emerald = vec3(0.08, 0.98, 0.52);
+            vec3 cyan = vec3(0.10, 0.85, 0.95);
+            vec3 violet = vec3(0.68, 0.25, 0.95);
+
+            vec3 col = mix(emerald, cyan, smoothstep(0.15, 0.55, vUv.y + sin(vUv.x * 10.0 + uTime) * 0.08));
+            col = mix(col, violet, smoothstep(0.55, 0.95, vUv.y));
+
+            float alpha = curtain * vFade * hFade * uOpacity;
+            gl_FragColor = vec4(col * 1.35, alpha);
+          }
+        `
+      });
+
+      // Silinder terbuka raksasa di cakrawala utara-barat-timur
+      const auroraGeo = new THREE.CylinderGeometry(36, 36, 15, 96, 16, true, Math.PI * 0.55, Math.PI * 1.45);
+      auroraMesh = new THREE.Mesh(auroraGeo, auroraMat);
+      auroraMesh.position.set(0, 11.5, -2);
+      auroraMesh.visible = false;
+      scene.add(auroraMesh);
+    }
+
+    // =========================================================================
+    // TEKSTUR DAUN MONSTERA & PAKIS (BIOPHILIC GREEN OFFICE)
+    // =========================================================================
+    function createMonsteraLeafTexture() {
+      const c = document.createElement('canvas');
+      c.width = 256; c.height = 320;
+      const ctx = c.getContext('2d');
+      ctx.clearRect(0, 0, 256, 320);
+
+      // Tangkai daun
+      ctx.strokeStyle = '#2d6a4f';
+      ctx.lineWidth = 8;
+      ctx.lineCap = 'round';
+      ctx.beginPath();
+      ctx.moveTo(128, 315);
+      ctx.quadraticCurveTo(124, 240, 128, 175);
+      ctx.stroke();
+
+      // Helai daun hati lebar Monstera Deliciosa
+      const grad = ctx.createLinearGradient(40, 30, 210, 230);
+      grad.addColorStop(0, '#40916c');
+      grad.addColorStop(0.5, '#2d6a4f');
+      grad.addColorStop(1, '#1b4332');
+
+      ctx.fillStyle = grad;
+      ctx.beginPath();
+      ctx.moveTo(128, 32);
+      ctx.bezierCurveTo(215, 36, 236, 130, 206, 205);
+      ctx.bezierCurveTo(185, 248, 145, 240, 128, 212);
+      ctx.bezierCurveTo(111, 240, 71, 248, 50, 205);
+      ctx.bezierCurveTo(20, 130, 41, 36, 128, 32);
+      ctx.closePath();
+      ctx.fill();
+
+      // Tulang daun tengah & samping
+      ctx.strokeStyle = '#74c69d';
+      ctx.lineWidth = 4;
+      ctx.beginPath();
+      ctx.moveTo(128, 45);
+      ctx.lineTo(128, 215);
+      ctx.stroke();
+
+      // Lubang-lubang khas daun Monstera (Fenestrations)
+      ctx.globalCompositeOperation = 'destination-out';
+      ctx.fillStyle = '#000000';
+
+      const slits = [
+        // Celah pinggir kiri
+        [44, 92, 52, 11, -0.25],
+        [38, 132, 58, 12, -0.15],
+        [46, 172, 50, 11, 0.05],
+        // Celah pinggir kanan
+        [212, 92, 52, 11, 0.25],
+        [218, 132, 58, 12, 0.15],
+        [210, 172, 50, 11, -0.05],
+        // Lubang oval bagian dalam dekat tulang daun
+        [98, 108, 13, 8, -0.2],
+        [94, 145, 15, 9, -0.1],
+        [158, 108, 13, 8, 0.2],
+        [162, 145, 15, 9, 0.1]
+      ];
+      slits.forEach(([sx, sy, rw, rh, rot]) => {
+        ctx.save();
+        ctx.translate(sx, sy);
+        ctx.rotate(rot);
+        ctx.beginPath();
+        ctx.ellipse(0, 0, rw / 2, rh / 2, 0, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      });
+
+      ctx.globalCompositeOperation = 'source-over';
+      const tex = new THREE.CanvasTexture(c);
+      tex.encoding = THREE.sRGBEncoding;
+      return tex;
+    }
+
+    let sharedMonsteraTex = null;
+
+    function createMonsteraCluster(x, yBase, z, scale = 1, leafCount = 7) {
+      if (!sharedMonsteraTex) sharedMonsteraTex = createMonsteraLeafTexture();
+      const cluster = new THREE.Group();
+      cluster.position.set(x, yBase, z);
+      cluster.scale.setScalar(scale);
+
+      const leafMat = new THREE.MeshStandardMaterial({
+        map: sharedMonsteraTex,
+        transparent: true,
+        alphaTest: 0.35,
+        side: THREE.DoubleSide,
+        roughness: 0.45
+      });
+
+      for (let i = 0; i < leafCount; i++) {
+        const angle = (i / leafCount) * Math.PI * 2 + (i % 2) * 0.25;
+        const h = 0.72 + (i % 3) * 0.26;
+        const leafPlane = new THREE.Mesh(new THREE.PlaneGeometry(0.68, 0.85), leafMat);
+
+        // Posisikan pangkal tangkai di tengah rumpun & miringkan daun ke luar
+        const leafPivot = new THREE.Group();
+        leafPivot.rotation.y = angle;
+        leafPivot.rotation.x = 0.38 + (i % 3) * 0.14;
+        leafPlane.position.set(0, h * 0.55, 0.18);
+        leafPlane.castShadow = true;
+
+        leafPivot.add(leafPlane);
+        cluster.add(leafPivot);
+      }
+
+      return cluster;
+    }
+
+    function createFernCluster(x, yBase, z, scale = 1) {
+      const group = new THREE.Group();
+      group.position.set(x, yBase, z);
+      group.scale.setScalar(scale);
+
+      const frondMat = new THREE.MeshStandardMaterial({ color: 0x388e3c, roughness: 0.6, side: THREE.DoubleSide });
+      for (let i = 0; i < 11; i++) {
+        const ang = (i / 11) * Math.PI * 2;
+        const frond = new THREE.Mesh(new THREE.ConeGeometry(0.11, 0.58, 4), frondMat);
+        frond.scale.set(1.2, 1, 0.22);
+        frond.position.set(Math.cos(ang) * 0.16, 0.24, Math.sin(ang) * 0.16);
+        frond.rotation.y = -ang;
+        frond.rotation.z = -0.58;
+        frond.castShadow = true;
+        group.add(frond);
+      }
+      return group;
+    }
+
+    function createPottedPlant(type, x, z, scale = 1) {
+      const group = new THREE.Group();
+      group.position.set(x, 0.12, z);
+      group.scale.setScalar(scale);
+
+      const potColor = type === 'monstera' ? 0xc86d51 : 0xf8fafc;
+      const pot = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.36, 0.26, 0.52, 16),
+        new THREE.MeshStandardMaterial({ color: potColor, roughness: 0.7 })
+      );
+      pot.position.y = 0.26;
+      pot.castShadow = true;
+      group.add(pot);
+
+      // Tanah gelap dalam pot
+      const soil = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.33, 0.33, 0.04, 14),
+        new THREE.MeshStandardMaterial({ color: 0x2b1d14 })
+      );
+      soil.position.y = 0.51;
+      group.add(soil);
+
+      if (type === 'monstera') {
+        const monsteraTop = createMonsteraCluster(0, 0.48, 0, 1.05, 8);
+        group.add(monsteraTop);
+      } else {
+        const bladeMat = new THREE.MeshStandardMaterial({ color: 0x52796f, roughness: 0.4 });
+        for (let i = 0; i < 9; i++) {
+          const angle = (i / 9) * Math.PI * 2;
+          const h = 0.65 + (i % 3) * 0.18;
+          const blade = new THREE.Mesh(new THREE.ConeGeometry(0.075, h, 5), bladeMat);
+          blade.scale.set(1, 1, 0.35);
+          blade.position.set(Math.cos(angle) * 0.12, 0.48 + h / 2, Math.sin(angle) * 0.12);
+          blade.rotation.y = -angle;
+          blade.rotation.z = -0.12;
+          blade.castShadow = true;
+          group.add(blade);
+        }
+      }
+      scene.add(group);
+    }
+
+    // Bedengan batu koral + Monstera & Pakis sepanjang dinding ala referensi gambar 1
+    function buildBiophilicWallPlanterBed() {
+      const borderWoodMat = new THREE.MeshStandardMaterial({ color: 0x8d5b3c, roughness: 0.7 });
+      const soilMat = new THREE.MeshStandardMaterial({ color: 0x291d16, roughness: 0.95 });
+      const pebbleColors = [0xd6d3d1, 0xa8a29e, 0xe7e5e4, 0x78716c, 0xf5f5f4];
+
+      // 1. Jalur Bedengan Sepanjang Dinding Belakang (x: -4.0 s/d 6.8, z: -6.25)
+      const backSoil = new THREE.Mesh(new THREE.BoxGeometry(10.8, 0.09, 0.72), soilMat);
+      backSoil.position.set(1.4, 0.16, -6.28);
+      backSoil.receiveShadow = true;
+      scene.add(backSoil);
+
+      const backTrim = new THREE.Mesh(new THREE.BoxGeometry(10.85, 0.12, 0.06), borderWoodMat);
+      backTrim.position.set(1.4, 0.18, -5.91);
+      scene.add(backTrim);
+
+      // 2. Jalur Bedengan Sepanjang Dinding Kanan (x: 6.55, z: -5.9 s/d -1.7)
+      const rightSoil = new THREE.Mesh(new THREE.BoxGeometry(0.72, 0.09, 4.3), soilMat);
+      rightSoil.position.set(6.55, 0.16, -3.8);
+      rightSoil.receiveShadow = true;
+      scene.add(rightSoil);
+
+      const rightTrim = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.12, 4.35), borderWoodMat);
+      rightTrim.position.set(6.18, 0.18, -3.8);
+      scene.add(rightTrim);
+
+      // Taburan batu-batu koral bulat di atas tanah bedengan (persis referensi foto!)
+      for (let i = 0; i < 95; i++) {
+        const pMat = new THREE.MeshStandardMaterial({
+          color: pebbleColors[i % pebbleColors.length],
+          roughness: 0.65
+        });
+        const pebble = new THREE.Mesh(new THREE.SphereGeometry(0.065 + (i % 3) * 0.02, 8, 6), pMat);
+        pebble.scale.set(1.25, 0.65, 1.0);
+        const px = -3.8 + (i / 95) * 10.3;
+        const pz = -6.48 + ((i * 7) % 10) * 0.048;
+        pebble.position.set(px, 0.21, pz);
+        pebble.receiveShadow = true;
+        scene.add(pebble);
+      }
+
+      for (let j = 0; j < 40; j++) {
+        const pMat = new THREE.MeshStandardMaterial({
+          color: pebbleColors[j % pebbleColors.length],
+          roughness: 0.65
+        });
+        const pebble = new THREE.Mesh(new THREE.SphereGeometry(0.065 + (j % 3) * 0.02, 8, 6), pMat);
+        pebble.scale.set(1.0, 0.65, 1.25);
+        const pz = -5.7 + (j / 40) * 3.9;
+        const px = 6.32 + ((j * 5) % 10) * 0.045;
+        pebble.position.set(px, 0.21, pz);
+        pebble.receiveShadow = true;
+        scene.add(pebble);
+      }
+
+      // Rumpun Monstera Rimbun & Pakis di sepanjang bedengan belakang & kanan
+      const monsteraSpots = [
+        [-3.4, -6.25, 1.25, 8],
+        [-2.3, -6.28, 0.95, 6],
+        [0.15, -6.25, 1.15, 7],
+        [2.85, -6.25, 1.10, 7],
+        [5.65, -6.22, 1.35, 9],
+        [6.52, -4.95, 1.15, 7],
+        [6.52, -2.55, 1.20, 8]
+      ];
+      monsteraSpots.forEach(([mx, mz, sc, cnt]) => {
+        scene.add(createMonsteraCluster(mx, 0.20, mz, sc, cnt));
+      });
+
+      const fernSpots = [
+        [-2.85, -6.12, 0.85],
+        [-0.45, -6.12, 0.90],
+        [0.85, -6.12, 0.85],
+        [2.15, -6.12, 0.90],
+        [4.95, -6.12, 0.85],
+        [6.38, -5.55, 0.85],
+        [6.38, -3.75, 0.95],
+        [6.38, -1.95, 0.85]
+      ];
+      fernSpots.forEach(([fx, fz, sc]) => {
+        scene.add(createFernCluster(fx, 0.20, fz, sc));
+      });
     }
 
     function createWoodFloorTexture() {
@@ -707,57 +1077,6 @@
       return tex;
     }
 
-    function createPottedPlant(type, x, z, scale = 1) {
-      const group = new THREE.Group();
-      group.position.set(x, 0.06, z);
-      group.scale.setScalar(scale);
-
-      const potColor = type === 'monstera' ? 0xc86d51 : 0xf8fafc;
-      const pot = new THREE.Mesh(
-        new THREE.CylinderGeometry(0.36, 0.26, 0.52, 16),
-        new THREE.MeshStandardMaterial({ color: potColor, roughness: 0.7 })
-      );
-      pot.position.y = 0.26;
-      pot.castShadow = true;
-      group.add(pot);
-
-      if (type === 'monstera') {
-        const leafMat = new THREE.MeshStandardMaterial({ color: 0x2d6a4f, roughness: 0.45 });
-        const stemMat = new THREE.MeshStandardMaterial({ color: 0x40916c });
-        for (let i = 0; i < 7; i++) {
-          const angle = (i / 7) * Math.PI * 2;
-          const height = 0.75 + (i % 3) * 0.22;
-          const stem = new THREE.Mesh(new THREE.CylinderGeometry(0.02, 0.025, height, 6), stemMat);
-          stem.position.set(Math.cos(angle) * 0.12, 0.45 + height / 2, Math.sin(angle) * 0.12);
-          stem.rotation.z = -Math.cos(angle) * 0.32;
-          stem.rotation.x = Math.sin(angle) * 0.32;
-          group.add(stem);
-
-          const leaf = new THREE.Mesh(new THREE.SphereGeometry(0.28, 10, 8), leafMat);
-          leaf.scale.set(1.2, 0.12, 0.9);
-          leaf.position.set(Math.cos(angle) * 0.34, 0.45 + height, Math.sin(angle) * 0.34);
-          leaf.rotation.y = -angle;
-          leaf.rotation.z = -0.35;
-          leaf.castShadow = true;
-          group.add(leaf);
-        }
-      } else {
-        const bladeMat = new THREE.MeshStandardMaterial({ color: 0x52796f, roughness: 0.4 });
-        for (let i = 0; i < 9; i++) {
-          const angle = (i / 9) * Math.PI * 2;
-          const h = 0.65 + (i % 3) * 0.18;
-          const blade = new THREE.Mesh(new THREE.ConeGeometry(0.075, h, 5), bladeMat);
-          blade.scale.set(1, 1, 0.35);
-          blade.position.set(Math.cos(angle) * 0.12, 0.48 + h / 2, Math.sin(angle) * 0.12);
-          blade.rotation.y = -angle;
-          blade.rotation.z = -0.12;
-          blade.castShadow = true;
-          group.add(blade);
-        }
-      }
-      scene.add(group);
-    }
-
     function buildSemiOutdoorArchitecture() {
       summerGrassTex = createGrassTexture();
       winterSnowTex = createSnowGroundTexture();
@@ -816,27 +1135,28 @@
         scene.add(pillar);
       });
 
+      // Kisi-kisi kayu pergola semi-outdoor di langit-langit (terinspirasi dari referensi foto!)
+      const slatMat = new THREE.MeshStandardMaterial({ color: 0xc28e5c, roughness: 0.65 });
+      for (let sx = -3.8; sx <= 6.6; sx += 0.65) {
+        const slat = new THREE.Mesh(new THREE.BoxGeometry(0.11, 0.14, 8.45), slatMat);
+        slat.position.set(sx, 4.05, -2.45);
+        slat.castShadow = true;
+        scene.add(slat);
+      }
+
       const glassRoof = new THREE.Mesh(
         new THREE.BoxGeometry(11.35, 0.05, 8.55),
         new THREE.MeshPhysicalMaterial({
           color: 0xe0f2fe,
           transparent: true,
-          opacity: 0.20,
+          opacity: 0.18,
           roughness: 0.08,
           metalness: 0.05,
           depthWrite: false
         })
       );
-      glassRoof.position.set(1.35, 4.12, -2.45);
+      glassRoof.position.set(1.35, 4.14, -2.45);
       scene.add(glassRoof);
-
-      const roofRimGeo = new THREE.EdgesGeometry(new THREE.BoxGeometry(11.35, 0.05, 8.55));
-      const roofRim = new THREE.LineSegments(
-        roofRimGeo,
-        new THREE.LineBasicMaterial({ color: 0x94a3b8, transparent: true, opacity: 0.45 })
-      );
-      roofRim.position.copy(glassRoof.position);
-      scene.add(roofRim);
 
       const stoneMat = new THREE.MeshStandardMaterial({ color: 0xd6d3d1, roughness: 0.85 });
       [[-2.2, 2.4], [-3.1, 3.0], [-4.1, 3.4]].forEach(([sx, sz]) => {
@@ -851,7 +1171,7 @@
           new THREE.BoxGeometry(1.48, 2.02, 0.06),
           new THREE.MeshStandardMaterial({ color: 0x0f1115, roughness: 0.7 })
         );
-        frame.position.set(xPos, 2.55, -6.64);
+        frame.position.set(xPos, 2.65, -6.64);
         scene.add(frame);
 
         const posterMat = new THREE.MeshBasicMaterial({ map: fallbackTex });
@@ -859,7 +1179,7 @@
           new THREE.PlaneGeometry(1.36, 1.90),
           posterMat
         );
-        canvasMesh.position.set(xPos, 2.55, -6.59);
+        canvasMesh.position.set(xPos, 2.65, -6.59);
         scene.add(canvasMesh);
 
         const tryLoad = (idx) => {
@@ -890,9 +1210,10 @@
         createFallbackBandPoster('SUICIDE', 'SILENCE', 'THE CLEANSING', '#a3a380')
       );
 
-      createPottedPlant('monstera', -3.7, -6.0, 1.1);
-      createPottedPlant('sansevieria', 6.3, -6.0, 1.0);
-      createPottedPlant('monstera', 6.4, 1.2, 1.05);
+      // Bedengan Green Office Monstera & Pakis Sepanjang Dinding + Pot Sudut
+      buildBiophilicWallPlanterBed();
+      createPottedPlant('monstera', -3.7, -5.2, 1.1);
+      createPottedPlant('monstera', 6.3, 1.2, 1.15);
     }
 
     function createGardenTree(x, z, scale = 1) {
@@ -1298,19 +1619,16 @@
       const INK = '#161114';
       ctx.save();
 
-      // Flip horizontal sesuai arah jalan jika sedang bergerak
       if (facingDir < 0) {
         ctx.translate(W, 0);
         ctx.scale(-1, 1);
       }
 
-      // Ground Contact Shadow (Bayangan oval pekat khas Paper-Cut 2D)
       ctx.fillStyle = 'rgba(22, 17, 20, 0.28)';
       ctx.beginPath();
       ctx.ellipse(256, 610, 96, 22, 0, 0, Math.PI * 2);
       ctx.fill();
 
-      // 1. KAKI (Chibi stubby legs ala Cult of the Lamb)
       const leftFootY = 552 + Math.sin(walkPhase) * 14;
       const rightFootY = 552 - Math.sin(walkPhase) * 14;
 
@@ -1328,9 +1646,7 @@
       drawFoot(214, leftFootY);
       drawFoot(298, rightFootY);
 
-      // 2. RAMBUT BELAKANG (Layer terbelakang)
       if (id === 'crawler') {
-        // Bob hitam bervolume di belakang
         ctx.fillStyle = '#1f1b1e';
         ctx.strokeStyle = INK;
         ctx.lineWidth = 11;
@@ -1339,7 +1655,6 @@
         ctx.fill();
         ctx.stroke();
       } else if (id === 'drafter') {
-        // Rambut panjang bergelombang cokelat tua
         ctx.fillStyle = '#3b2319';
         ctx.strokeStyle = INK;
         ctx.lineWidth = 11;
@@ -1352,7 +1667,6 @@
         ctx.fill();
         ctx.stroke();
       } else if (id === 'auditor') {
-        // Rambut panjang blonde dengan gradasi ujung teal
         const hairGrad = ctx.createLinearGradient(0, 170, 0, 445);
         hairGrad.addColorStop(0, '#f4e3b2');
         hairGrad.addColorStop(0.62, '#e8d08e');
@@ -1372,7 +1686,6 @@
         ctx.stroke();
       }
 
-      // 3. JUBAH / PAKAIAN CHIBI (A-line Poncho / Cloak silhouette khas Cult of the Lamb)
       const drawCloakBody = () => {
         ctx.beginPath();
         ctx.moveTo(192, 370);
@@ -1392,13 +1705,11 @@
       }
       ctx.fill();
 
-      // Detail Motif Pakaian
       ctx.save();
       drawCloakBody();
       ctx.clip();
 
       if (id === 'crawler') {
-        // Kerah kemeja putih & dasi gelap
         ctx.fillStyle = '#f8fafc';
         ctx.beginPath();
         ctx.moveTo(222, 370);
@@ -1417,7 +1728,6 @@
         ctx.closePath();
         ctx.fill();
 
-        // Lipatan jubah
         ctx.strokeStyle = 'rgba(0,0,0,0.35)';
         ctx.lineWidth = 6;
         ctx.beginPath();
@@ -1425,7 +1735,6 @@
         ctx.moveTo(317, 435); ctx.lineTo(330, 555);
         ctx.stroke();
       } else if (id === 'drafter') {
-        // Garis lipatan jubah hijau zamrud + Lanyard ID BPS
         ctx.fillStyle = '#059669';
         ctx.fillRect(140, 526, 232, 36);
 
@@ -1437,7 +1746,6 @@
         ctx.lineTo(298, 372);
         ctx.stroke();
 
-        // Kartu ID Card
         createRoundRectPath(ctx, 235, 452, 42, 54, 8);
         ctx.fillStyle = '#ffffff';
         ctx.fill();
@@ -1447,7 +1755,6 @@
         ctx.fillStyle = '#008FD5';
         ctx.fillRect(243, 462, 26, 10);
       } else {
-        // Sweater Tenun Tapis Lampung (Band merah marun + emas geometris)
         const drawTapisBand = (yTop, bandH) => {
           ctx.fillStyle = '#991b1b';
           ctx.fillRect(135, yTop, 242, bandH);
@@ -1471,14 +1778,12 @@
       }
       ctx.restore();
 
-      // Outline tinta hitam tebal pada jubah
       drawCloakBody();
       ctx.strokeStyle = INK;
       ctx.lineWidth = 11;
       ctx.lineJoin = 'round';
       ctx.stroke();
 
-      // 4. LENGAN KARTUN (Bergerak sesuai status)
       const drawArm = (isRight) => {
         ctx.save();
         const pivotX = isRight ? 332 : 180;
@@ -1499,7 +1804,6 @@
         }
         ctx.rotate(angle);
 
-        // Lengan baju
         createRoundRectPath(ctx, -18, -10, 36, 74, 18);
         ctx.fillStyle = id === 'crawler' ? '#1e2430' : (id === 'drafter' ? '#10b981' : '#faf6ee');
         ctx.fill();
@@ -1507,7 +1811,6 @@
         ctx.lineWidth = 10;
         ctx.stroke();
 
-        // Tangan bulat chibi
         ctx.fillStyle = id === 'crawler' ? '#f3c6a8' : '#fde2cf';
         ctx.beginPath();
         ctx.arc(0, 72, 18, 0, Math.PI * 2);
@@ -1518,12 +1821,10 @@
       drawArm(false);
       drawArm(true);
 
-      // 5. KEPALA BESAR CHIBI & EKSPRESI CULT OF THE LAMB
       ctx.save();
       ctx.translate(256, 246);
       ctx.rotate(headTilt);
 
-      // Bentuk kepala bulat lebar khas Cult of the Lamb
       const drawHeadShape = () => {
         ctx.beginPath();
         ctx.ellipse(0, 0, 128, 108, 0, 0, Math.PI * 2);
@@ -1533,7 +1834,6 @@
       ctx.fillStyle = id === 'crawler' ? '#f5cfb6' : '#fde2cf';
       ctx.fill();
 
-      // Shading pipi bawah halus
       ctx.save();
       drawHeadShape();
       ctx.clip();
@@ -1542,7 +1842,6 @@
       ctx.ellipse(0, 78, 130, 52, 0, 0, Math.PI * 2);
       ctx.fill();
 
-      // Jenggot & kumis rapi untuk Agent Crawler
       if (id === 'crawler') {
         ctx.fillStyle = '#272326';
         ctx.beginPath();
@@ -1554,13 +1853,11 @@
       }
       ctx.restore();
 
-      // Outline kepala tebal
       drawHeadShape();
       ctx.strokeStyle = INK;
       ctx.lineWidth = 11;
       ctx.stroke();
 
-      // Blush pipi kemerahan
       if (id !== 'crawler') {
         ctx.fillStyle = 'rgba(244, 114, 182, 0.45)';
         ctx.beginPath();
@@ -1569,13 +1866,11 @@
         ctx.fill();
       }
 
-      // MATA IKONIK CULT OF THE LAMB (Besar, ekspresif, pupil lebar dengan kilau putih)
       const drawEye = (ex, ey) => {
         ctx.save();
         ctx.translate(ex, ey);
 
         if (status === 'DONE' || isMoshing) {
-          // Mata bahagia melengkung (^ ^) atau berbinar besar
           ctx.strokeStyle = INK;
           ctx.lineWidth = 10;
           ctx.lineCap = 'round';
@@ -1583,7 +1878,6 @@
           ctx.arc(0, 6, 22, Math.PI * 1.12, Math.PI * 1.88);
           ctx.stroke();
         } else {
-          // Sklera putih besar dengan border hitam tebal
           ctx.fillStyle = '#ffffff';
           ctx.strokeStyle = INK;
           ctx.lineWidth = 8;
@@ -1592,13 +1886,11 @@
           ctx.fill();
           ctx.stroke();
 
-          // Pupil besar
           ctx.fillStyle = id === 'auditor' ? '#0f766e' : '#181216';
           ctx.beginPath();
           ctx.ellipse(ex > 0 ? -2 : 2, 2, 18, 21, 0, 0, Math.PI * 2);
           ctx.fill();
 
-          // Highlight kilau mata kartun
           ctx.fillStyle = '#ffffff';
           ctx.beginPath();
           ctx.arc(ex > 0 ? -8 : -4, -7, 7.5, 0, Math.PI * 2);
@@ -1607,7 +1899,6 @@
           ctx.arc(ex > 0 ? 5 : 9, 7, 3.5, 0, Math.PI * 2);
           ctx.fill();
 
-          // Kelopak mata fokus saat WORKING
           if (status === 'WORKING') {
             ctx.fillStyle = id === 'crawler' ? '#f5cfb6' : '#fde2cf';
             ctx.beginPath();
@@ -1626,7 +1917,6 @@
       drawEye(-52, 4);
       drawEye(52, 4);
 
-      // Alis ekspresif
       ctx.strokeStyle = INK;
       ctx.lineWidth = 7;
       ctx.lineCap = 'round';
@@ -1639,9 +1929,7 @@
       ctx.lineTo(72, browY - browAngle * 25);
       ctx.stroke();
 
-      // MULUT KARTUN (Berubah sesuai ekspresi!)
       if (id === 'crawler') {
-        // Kumis tebal di atas mulut
         ctx.fillStyle = '#1f1b1e';
         ctx.strokeStyle = INK;
         ctx.lineWidth = 5;
@@ -1652,7 +1940,6 @@
       }
 
       if (status === 'DONE' || isMoshing) {
-        // Mulut terbuka ceria / teriak metal!
         ctx.fillStyle = '#9f1239';
         ctx.strokeStyle = INK;
         ctx.lineWidth = 7;
@@ -1662,13 +1949,11 @@
         ctx.fill();
         ctx.stroke();
 
-        // Lidah merah muda
         ctx.fillStyle = '#fb7185';
         ctx.beginPath();
         ctx.arc(0, 56, 11, Math.PI, 0, false);
         ctx.fill();
       } else if (status === 'WORKING') {
-        // Mulut serius fokus / senyum tipis percaya diri
         ctx.strokeStyle = INK;
         ctx.lineWidth = 7;
         ctx.lineCap = 'round';
@@ -1677,7 +1962,6 @@
         ctx.quadraticCurveTo(0, 42, 16, 48);
         ctx.stroke();
       } else if (isChatting) {
-        // Mulut berbicara ('o' kecil)
         ctx.fillStyle = '#be123c';
         ctx.strokeStyle = INK;
         ctx.lineWidth = 6;
@@ -1686,7 +1970,6 @@
         ctx.fill();
         ctx.stroke();
       } else {
-        // Senyum kucing/chibi manis khas Cult of the Lamb (w)
         ctx.strokeStyle = INK;
         ctx.lineWidth = 7;
         ctx.lineCap = 'round';
@@ -1698,7 +1981,6 @@
         ctx.stroke();
       }
 
-      // 6. PONI RAMBUT DEPAN (Layer paling atas di dahi)
       if (id === 'crawler') {
         ctx.fillStyle = '#1f1b1e';
         ctx.strokeStyle = INK;
@@ -1729,7 +2011,6 @@
         ctx.fill();
         ctx.stroke();
       } else {
-        // Poni blonde miring khas Auditor
         ctx.fillStyle = '#f4e3b2';
         ctx.strokeStyle = INK;
         ctx.lineWidth = 10;
@@ -1743,9 +2024,8 @@
         ctx.stroke();
       }
 
-      ctx.restore(); // End Head
+      ctx.restore();
 
-      // 7. BADGE STATUS DI ATAS KEPALA (Saat WORKING atau DONE)
       if (status === 'WORKING' || status === 'DONE') {
         const pillText = status === 'WORKING' ? '⚡ WORKING' : '✨ DONE!';
         const pillBg = status === 'WORKING' ? '#0284c7' : '#059669';
@@ -1777,11 +2057,9 @@
       texture.encoding = THREE.sRGBEncoding;
       texture.minFilter = THREE.LinearFilter;
 
-      // Gambar frame awal
       drawCultOfTheLambAgent(ctx, config.id, { status: 'IDLE' });
       texture.needsUpdate = true;
 
-      // Billboard Plane 2D yang menghadap kamera secara dinamis
       const material = new THREE.MeshBasicMaterial({
         map: texture,
         transparent: true,
@@ -1794,7 +2072,6 @@
       mesh.position.set(0, 1.09, 0);
       mesh.userData.agentId = config.id;
 
-      // Shadow caster disk tak terlihat agar tetap menjatuhkan bayangan di lantai 3D
       const shadowProxy = new THREE.Mesh(
         new THREE.CylinderGeometry(0.32, 0.36, 1.5, 12),
         new THREE.MeshBasicMaterial({ colorWrite: false, depthWrite: false })
@@ -1827,23 +2104,9 @@
     }
 
     function buildAllCartoonCharacters() {
-      createCartoonPaperAgent({
-        id: 'crawler',
-        x: -2.2,
-        z: -2.3
-      });
-
-      createCartoonPaperAgent({
-        id: 'drafter',
-        x: 1.5,
-        z: -3.6
-      });
-
-      createCartoonPaperAgent({
-        id: 'auditor',
-        x: 4.1,
-        z: -0.1
-      });
+      createCartoonPaperAgent({ id: 'crawler', x: -2.2, z: -2.3 });
+      createCartoonPaperAgent({ id: 'drafter', x: 1.5, z: -3.6 });
+      createCartoonPaperAgent({ id: 'auditor', x: 4.1, z: -0.1 });
     }
 
     const clock = new THREE.Clock();
@@ -1859,7 +2122,6 @@
         av.root.position.z += (dz / dist) * step;
         if (Math.abs(dx) > 0.01) av.facingDir = dx >= 0 ? 1 : -1;
 
-        // Hopping walk khas Cult of the Lamb
         av.root.position.y = 0.12 + Math.abs(Math.sin(t * 12)) * 0.11;
         return false;
       }
@@ -1869,6 +2131,11 @@
     function animate3D() {
       requestAnimationFrame(animate3D);
       const t = clock.getElapsedTime();
+
+      // Update gelombang shader Aurora Borealis
+      if (auroraUniforms && auroraMesh && auroraMesh.visible) {
+        auroraUniforms.uTime.value = t;
+      }
 
       if (isCameraTransitioning) {
         camera.position.lerp(targetCamPos, 0.06);
@@ -1904,14 +2171,12 @@
       });
 
       const auditorHandshakeSpot = new THREE.Vector3(3.95, 0.12, -0.35);
-      const visitorHandshakeSpot = new THREE.Vector3(3.15, 0.12, -0.35);
 
       Object.keys(cartoonAgents).forEach((id) => {
         const av = cartoonAgents[id];
         const status = (AGENT_META[id].status || 'IDLE').toUpperCase();
         const p = t + av.phase;
 
-        // Billboard cylindrical rotation agar karakter 2D selalu menghadap kamera
         const lookAngle = Math.atan2(
           camera.position.x - av.root.position.x,
           camera.position.z - av.root.position.z
@@ -1992,14 +2257,12 @@
           } else {
             av.facingDir = 1;
             animState.facingDir = 1;
-            // Squash & stretch bernapas lembut ala Cult of the Lamb
             const breathe = Math.sin(p * 2.4);
             av.root.position.y = 0.12;
             av.mesh.scale.set(1 - breathe * 0.025, 1 + breathe * 0.03, 1);
           }
         }
 
-        // Render ulang sprite 2D pada ~24 FPS agar halus namun tetap sangat ringan
         if (t - av.lastRedrawTime > 0.04) {
           av.lastRedrawTime = t;
           drawCultOfTheLambAgent(av.ctx, av.id, animState);
@@ -2151,20 +2414,26 @@
         btnIcon.textContent = '🌇';
         btnText.textContent = 'Golden Hour Sore';
       } else {
-        btn.className = 'px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-amber-300 border border-slate-700 text-xs font-bold transition flex items-center gap-1.5';
-        btnIcon.textContent = '🌙';
-        btnText.textContent = 'Malam Studio';
+        btn.className = 'px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-emerald-300 border border-emerald-600/60 text-xs font-bold transition flex items-center gap-1.5';
+        btnIcon.textContent = '🌌';
+        btnText.textContent = 'Malam Aurora';
+        addLog('🌌 Langit Malam Kutub Utara aktif! Cahaya Aurora Borealis Norwegia menari di langit studio.', 'success');
       }
       applyCurrentSkyAndLighting();
     }
 
     function applyCurrentSkyAndLighting() {
+      const isNight = lightingModeIndex === 2;
+      if (auroraMesh) auroraMesh.visible = isNight;
+      if (nightStars) nightStars.visible = isNight;
+
       if (lightingModeIndex === 0) {
         let skyHex = 0xe6f2e8;
         if (seasonModeIndex === 1) skyHex = 0xcbd5e1;
         if (seasonModeIndex === 2) skyHex = 0xe0f2fe;
         scene.background = new THREE.Color(skyHex);
         scene.fog.color = new THREE.Color(skyHex);
+        scene.fog.density = 0.014;
         ambientLight.color.setHex(0xfffaf0);
         ambientLight.intensity = seasonModeIndex === 1 ? 0.68 : 0.85;
         sunLight.color.setHex(0xfff5e4);
@@ -2177,6 +2446,7 @@
         if (seasonModeIndex === 2) skyHex = 0xfce7f3;
         scene.background = new THREE.Color(skyHex);
         scene.fog.color = new THREE.Color(skyHex);
+        scene.fog.density = 0.014;
         ambientLight.color.setHex(0xfff0db);
         ambientLight.intensity = 0.72;
         sunLight.color.setHex(0xffb36b);
@@ -2184,13 +2454,15 @@
         warmLampLight.intensity = 0.95;
         pondLight.intensity = 0.55;
       } else {
-        scene.background = new THREE.Color(0x0f172a);
-        scene.fog.color = new THREE.Color(0x0f172a);
-        ambientLight.color.setHex(0x334155);
-        ambientLight.intensity = 0.46;
-        sunLight.color.setHex(0x60a5fa);
-        sunLight.intensity = 0.35;
-        warmLampLight.intensity = 1.75;
+        // Langit Malam Norwegia / Kutub Utara dengan pantulan cahaya Aurora hijau-biru lembut
+        scene.background = new THREE.Color(0x060d1f);
+        scene.fog.color = new THREE.Color(0x060d1f);
+        scene.fog.density = 0.008;
+        ambientLight.color.setHex(0x2dd4bf);
+        ambientLight.intensity = 0.48;
+        sunLight.color.setHex(0x34d399);
+        sunLight.intensity = 0.42;
+        warmLampLight.intensity = 1.65;
         pondLight.intensity = 1.35;
       }
     }
