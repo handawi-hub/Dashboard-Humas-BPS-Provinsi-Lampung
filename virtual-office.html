@@ -159,8 +159,8 @@
               <button onclick="focusCamera('crawler')" id="cam-crawler" class="cam-btn px-2.5 py-1 rounded-lg text-[11px] font-bold bg-white text-slate-600 border border-stone-200 hover:bg-sky-50 transition">Crawler</button>
               <button onclick="focusCamera('drafter')" id="cam-drafter" class="cam-btn px-2.5 py-1 rounded-lg text-[11px] font-bold bg-white text-slate-600 border border-stone-200 hover:bg-emerald-50 transition">Penulis BRS</button>
               <button onclick="focusCamera('auditor')" id="cam-auditor" class="cam-btn px-2.5 py-1 rounded-lg text-[11px] font-bold bg-white text-slate-600 border border-stone-200 hover:bg-purple-50 transition">Auditor</button>
-              <button onclick="focusCamera('bridge')" id="cam-bridge" class="cam-btn px-2.5 py-1 rounded-lg text-[11px] font-bold bg-white text-rose-700 border border-rose-200 hover:bg-rose-50 transition">⛩️ Jembatan & Sungai</button>
-              <button onclick="focusCamera('expansion')" id="cam-expansion" class="cam-btn px-2.5 py-1 rounded-lg text-[11px] font-bold bg-white text-amber-800 border border-amber-200 hover:bg-amber-50 transition">🌿 Paviliun Agen Baru</button>
+              <button onclick="focusCamera('bridge')" id="cam-bridge" class="cam-btn px-2.5 py-1 rounded-lg text-[11px] font-bold bg-white text-rose-700 border border-rose-200 hover:bg-rose-50 transition">🦢 Jembatan & Angsa</button>
+              <button onclick="focusCamera('expansion')" id="cam-expansion" class="cam-btn px-2.5 py-1 rounded-lg text-[11px] font-bold bg-white text-emerald-800 border border-emerald-200 hover:bg-emerald-50 transition">🌿 Rumah Kaca</button>
             </div>
             <span id="lastSyncText" class="text-[11px] text-slate-500 font-mono-code font-semibold">Polling: Siap</span>
           </div>
@@ -229,7 +229,7 @@
             <button onclick="clearLogs()" class="text-[11px] font-semibold text-slate-400 hover:text-slate-700">Bersihkan Log</button>
           </div>
           <div id="terminalLog" class="font-mono-code text-[11px] text-slate-700 space-y-1 max-h-32 overflow-y-auto bg-stone-50 p-2.5 rounded-xl border border-stone-200/80">
-            <div class="text-slate-500">[SYSTEM] Lahan Green Office diperluas: Jembatan Jepang, Sungai Koi, & Paviliun Agen Baru siap!</div>
+            <div class="text-slate-500">[SYSTEM] Rumah Kaca Tropical Forest (1 Agen), Sofa & Beanbag, serta Angsa di Sungai siap!</div>
           </div>
         </div>
       </section>
@@ -403,7 +403,6 @@
     let isMoshPitActive = false;
     let lastRenderedBrsTitle = '';
 
-    // Koordinat kamera yang menyesuaikan perluasan area kampus
     const AGENT_META = {
       crawler: {
         name: 'Agent Media Crawler',
@@ -473,10 +472,10 @@
     }
 
     // =========================================================================
-    // 3. THREE.JS EXPANDED GREEN CAMPUS + JAPANESE BRIDGE + STREAM + AURORA
+    // 3. THREE.JS EXPANDED CAMPUS + FULL GLASS HOUSE + SWAN STREAM + AURORA
     // =========================================================================
     let scene, camera, renderer, controls;
-    let ambientLight, sunLight, warmLampLight, pondLight, expansionLampLight;
+    let ambientLight, sunLight, warmLampLight, pondLight, glassHouseLampLight;
     let lightingModeIndex = 0; // 0: Pagi, 1: Golden Hour, 2: Malam Aurora Norwegia
     let seasonModeIndex = 0;
 
@@ -485,6 +484,7 @@
     const monitorScreens = [];
     const koiFishes = [];
     const streamFishes = [];
+    const streamSwans = [];
     const streamRipples = [];
     const rabbits = [];
     const cats = [];
@@ -498,14 +498,12 @@
     let rainParticles = null;
     let snowParticles = null;
 
-    // Aurora Borealis & Night Stars Objects
     let auroraMesh = null;
     let auroraUniforms = null;
     let nightStars = null;
 
-    // Kamera overview yang lebih luas agar mencakup studio utama, sungai, jembatan Jepang & paviliun baru
-    let targetCamPos = new THREE.Vector3(4.5, 11.8, 17.8);
-    let targetLookAt = new THREE.Vector3(1.5, 0.8, -0.5);
+    let targetCamPos = new THREE.Vector3(3.2, 11.2, 16.8);
+    let targetLookAt = new THREE.Vector3(0.5, 0.8, -0.8);
     let isCameraTransitioning = false;
 
     function init3DOffice() {
@@ -559,15 +557,16 @@
       warmLampLight.position.set(-4.5, 4.2, -1.5);
       scene.add(warmLampLight);
 
-      expansionLampLight = new THREE.PointLight(0xffb74d, 0.45, 18);
-      expansionLampLight.position.set(11.5, 4.2, -1.5);
-      scene.add(expansionLampLight);
+      glassHouseLampLight = new THREE.PointLight(0xfef08a, 0.4, 14);
+      glassHouseLampLight.position.set(9.2, 3.3, -1.8);
+      scene.add(glassHouseLampLight);
 
       pondLight = new THREE.PointLight(0x38bdf8, 0.4, 12);
       pondLight.position.set(3.2, 0.9, -1.0);
       scene.add(pondLight);
 
-      buildExpandedCampusArchitecture();
+      buildMainStudioArchitecture();
+      buildTropicalGlassConservatory();
       buildJapaneseStreamAndBridge();
       buildAuroraBorealisSky();
       buildGardenTreesAndPond();
@@ -715,14 +714,92 @@
     }
 
     // =========================================================================
-    // SUNGAI KECIL ZEN & JEMBATAN LENGKUNG KAYU ALA JEPANG (TAIKO-BASHI)
+    // SUNGAI KECIL ZEN + ANGSA BERENANG + JEMBATAN JEPANG (TAIKO-BASHI)
     // =========================================================================
+    function createSwanMesh() {
+      const swanGroup = new THREE.Group();
+
+      const whiteMat = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.35 });
+      const beakMat = new THREE.MeshStandardMaterial({ color: 0xf97316, roughness: 0.4 });
+      const blackMat = new THREE.MeshBasicMaterial({ color: 0x0f172a });
+
+      // Badan angsa oval lembut
+      const body = new THREE.Mesh(new THREE.SphereGeometry(0.16, 14, 12), whiteMat);
+      body.scale.set(0.85, 0.72, 1.45);
+      body.position.y = 0.08;
+      body.castShadow = true;
+      swanGroup.add(body);
+
+      // Sayap terlipat di kiri & kanan
+      for (let side of [-1, 1]) {
+        const wing = new THREE.Mesh(new THREE.SphereGeometry(0.12, 10, 8), whiteMat);
+        wing.scale.set(0.35, 0.65, 1.35);
+        wing.position.set(side * 0.11, 0.12, -0.02);
+        wing.rotation.z = side * -0.18;
+        wing.castShadow = true;
+        swanGroup.add(wing);
+      }
+
+      // Ekor meruncing ke atas
+      const tail = new THREE.Mesh(new THREE.ConeGeometry(0.075, 0.18, 6), whiteMat);
+      tail.rotation.x = -Math.PI / 2 - 0.35;
+      tail.position.set(0, 0.14, -0.23);
+      swanGroup.add(tail);
+
+      // Leher melengkung huruf 'S' yang anggun
+      const neckCurve = new THREE.CatmullRomCurve3([
+        new THREE.Vector3(0, 0.14, 0.16),
+        new THREE.Vector3(0, 0.28, 0.22),
+        new THREE.Vector3(0, 0.43, 0.14),
+        new THREE.Vector3(0, 0.50, 0.21)
+      ]);
+      const neckGeo = new THREE.TubeGeometry(neckCurve, 14, 0.036, 8, false);
+      const neck = new THREE.Mesh(neckGeo, whiteMat);
+      neck.castShadow = true;
+      swanGroup.add(neck);
+
+      // Kepala angsa
+      const head = new THREE.Mesh(new THREE.SphereGeometry(0.052, 10, 10), whiteMat);
+      head.scale.set(0.9, 0.9, 1.25);
+      head.position.set(0, 0.50, 0.23);
+      head.castShadow = true;
+      swanGroup.add(head);
+
+      // Pangkal paruh hitam & paruh jingga
+      const knob = new THREE.Mesh(new THREE.SphereGeometry(0.024, 8, 8), blackMat);
+      knob.position.set(0, 0.505, 0.285);
+      swanGroup.add(knob);
+
+      const beak = new THREE.Mesh(new THREE.ConeGeometry(0.024, 0.085, 8), beakMat);
+      beak.rotation.x = Math.PI / 2 + 0.12;
+      beak.position.set(0, 0.49, 0.32);
+      swanGroup.add(beak);
+
+      // Mata kecil hitam
+      for (let side of [-1, 1]) {
+        const eye = new THREE.Mesh(new THREE.SphereGeometry(0.011, 6, 6), blackMat);
+        eye.position.set(side * 0.038, 0.515, 0.255);
+        swanGroup.add(eye);
+      }
+
+      // Riak cincin air di sekeliling tubuh angsa
+      const wakeRing = new THREE.Mesh(
+        new THREE.RingGeometry(0.18, 0.23, 20),
+        new THREE.MeshBasicMaterial({ color: 0xe0f2fe, transparent: true, opacity: 0.55, side: THREE.DoubleSide })
+      );
+      wakeRing.rotation.x = -Math.PI / 2;
+      wakeRing.position.y = 0.01;
+      swanGroup.add(wakeRing);
+
+      return { group: swanGroup, wakeRing };
+    }
+
     function buildJapaneseStreamAndBridge() {
       const streamX = 3.15;
-      const streamWidth = 2.65;
+      const streamWidth = 2.75;
       const streamLength = 28.0;
 
-      // 1. Dasar Sungai Berpasir & Batu Kali
+      // 1. Dasar Sungai
       const streamBed = new THREE.Mesh(
         new THREE.PlaneGeometry(streamWidth, streamLength),
         new THREE.MeshStandardMaterial({ color: 0x16384a, roughness: 0.9 })
@@ -731,7 +808,6 @@
       streamBed.position.set(streamX, 0.02, 0.5);
       scene.add(streamBed);
 
-      // Batu-batu kali di dasar sungai
       const riverStoneMat = new THREE.MeshStandardMaterial({ color: 0x64748b, roughness: 0.8 });
       for (let i = 0; i < 65; i++) {
         const st = new THREE.Mesh(new THREE.DodecahedronGeometry(0.14 + (i % 3) * 0.05, 1), riverStoneMat);
@@ -744,7 +820,7 @@
         scene.add(st);
       }
 
-      // 2. Permukaan Air Sungai Jernih Kebiruan
+      // 2. Permukaan Air Sungai
       streamWaterMesh = new THREE.Mesh(
         new THREE.PlaneGeometry(streamWidth - 0.08, streamLength),
         new THREE.MeshPhysicalMaterial({
@@ -759,7 +835,7 @@
       streamWaterMesh.position.set(streamX, 0.14, 0.5);
       scene.add(streamWaterMesh);
 
-      // Riak gelombang air mengalir di sepanjang sungai
+      // Riak gelombang air
       const rippleMat = new THREE.MeshBasicMaterial({
         color: 0xe0f2fe,
         transparent: true,
@@ -775,7 +851,7 @@
         streamRipples.push({ mesh: ripple, speed: 0.9 + (r % 3) * 0.25 });
       }
 
-      // Ikan Koi berenang menyusuri sungai kecil
+      // Ikan Koi di bawah permukaan sungai
       const koiColors = [0xf97316, 0xffffff, 0xef4444, 0xfacc15];
       for (let f = 0; f < 4; f++) {
         const fishGroup = new THREE.Group();
@@ -802,11 +878,29 @@
         });
       }
 
-      // 3. Tanggul Batu Taman di Kedua Tepi Sungai (Kiri & Kanan)
+      // 3. Kawanan Angsa Putih Berenang Anggun di Sungai!
+      const swanConfigs = [
+        { laneX: streamX - 0.35, startZ: 2.2, speed: 0.42, phase: 0.0, scale: 1.05 },
+        { laneX: streamX + 0.42, startZ: 3.1, speed: 0.38, phase: 1.8, scale: 0.98 },
+        { laneX: streamX - 0.15, startZ: -5.4, speed: -0.35, phase: 3.4, scale: 1.0 }
+      ];
+      swanConfigs.forEach((cfg) => {
+        const swanObj = createSwanMesh();
+        swanObj.group.scale.setScalar(cfg.scale);
+        swanObj.group.position.set(cfg.laneX, 0.145, cfg.startZ);
+        scene.add(swanObj.group);
+        streamSwans.push({
+          ...swanObj,
+          baseX: cfg.laneX,
+          speed: cfg.speed,
+          phase: cfg.phase
+        });
+      });
+
+      // 4. Tanggul Batu Taman di Kedua Tepi Sungai
       const bankRockMat = new THREE.MeshStandardMaterial({ color: 0x78716c, roughness: 0.85 });
       const bankPositionsZ = [];
       for (let z = -12.8; z <= 13.8; z += 0.55) {
-        // Sisakan bukaan di dekat jembatan (z sekitar -1.6)
         if (Math.abs(z - (-1.6)) < 0.75) continue;
         bankPositionsZ.push(z);
       }
@@ -824,11 +918,11 @@
         }
       });
 
-      // Rumpun bambu & bunga iris di tepi sungai ala taman Jepang
+      // Rumpun bambu di tepi sungai
       const bambooMat = new THREE.MeshStandardMaterial({ color: 0x4d7c0f, roughness: 0.5 });
       const bambooSpots = [
-        [streamX - 1.75, -5.8], [streamX - 1.85, 2.2], [streamX - 1.75, 6.5],
-        [streamX + 1.75, -6.2], [streamX + 1.85, 2.4], [streamX + 1.75, 5.8]
+        [streamX - 1.8, -5.8], [streamX - 1.9, 2.2], [streamX - 1.8, 6.5],
+        [streamX + 1.8, -6.2], [streamX + 1.9, 2.4], [streamX + 1.8, 5.8]
       ];
       bambooSpots.forEach(([bx, bz]) => {
         const clump = new THREE.Group();
@@ -844,23 +938,22 @@
         scene.add(clump);
       });
 
-      // 4. JEMBATAN LENGKUNG KAYU ALA JEPANG (TAIKO-BASHI) DI Z = -1.6
+      // 5. JEMBATAN LENGKUNG KAYU ALA JEPANG (TAIKO-BASHI) DI Z = -1.6
       const bridgeGroup = new THREE.Group();
       bridgeGroup.position.set(streamX, 0.12, -1.6);
 
-      const bridgeSpan = 3.85;
+      const bridgeSpan = 3.95;
       const bridgeWidth = 1.65;
       const archHeight = 0.58;
 
       const woodPlankMat = new THREE.MeshStandardMaterial({ color: 0x9a5b2c, roughness: 0.65 });
-      const vermilionMat = new THREE.MeshStandardMaterial({ color: 0xb91c1c, roughness: 0.45 }); // Merah khas kuil/taman Jepang
+      const vermilionMat = new THREE.MeshStandardMaterial({ color: 0xb91c1c, roughness: 0.45 });
       const darkCapMat = new THREE.MeshStandardMaterial({ color: 0x1e1b18, roughness: 0.4 });
       const goldFinialMat = new THREE.MeshStandardMaterial({ color: 0xf59e0b, metalness: 0.6, roughness: 0.3 });
 
-      // Papan-papan lantai jembatan melengkung halus
       const plankCount = 24;
       for (let i = 0; i <= plankCount; i++) {
-        const u = (i / plankCount) * 2 - 1; // -1 s/d +1
+        const u = (i / plankCount) * 2 - 1;
         const px = u * (bridgeSpan / 2);
         const py = Math.cos(u * Math.PI * 0.5) * archHeight;
         const slopeAngle = -Math.sin(u * Math.PI * 0.5) * (archHeight / (bridgeSpan / 2)) * 1.35;
@@ -876,11 +969,8 @@
         bridgeGroup.add(plank);
       }
 
-      // Balok lengkung samping & pagar pegangan merah (Ran-kan)
       for (let side of [-1, 1]) {
         const zRail = side * (bridgeWidth / 2 - 0.07);
-
-        // Balok struktur bawah melengkung
         const segs = 18;
         for (let s = 0; s < segs; s++) {
           const u1 = (s / segs) * 2 - 1;
@@ -893,28 +983,24 @@
           const segLen = Math.hypot(x2 - x1, y2 - y1) + 0.03;
           const segAng = Math.atan2(y2 - y1, x2 - x1);
 
-          // Balok penyangga bawah
           const beam = new THREE.Mesh(new THREE.BoxGeometry(segLen, 0.14, 0.10), vermilionMat);
           beam.position.set((x1 + x2) / 2, (y1 + y2) / 2 - 0.03, zRail);
           beam.rotation.z = segAng;
           beam.castShadow = true;
           bridgeGroup.add(beam);
 
-          // Palang pegangan atas (Kasagi)
           const topRail = new THREE.Mesh(new THREE.BoxGeometry(segLen, 0.09, 0.11), vermilionMat);
           topRail.position.set((x1 + x2) / 2, (y1 + y2) / 2 + 0.62, zRail);
           topRail.rotation.z = segAng;
           topRail.castShadow = true;
           bridgeGroup.add(topRail);
 
-          // Palang tengah (Nuki)
           const midRail = new THREE.Mesh(new THREE.BoxGeometry(segLen, 0.06, 0.07), vermilionMat);
           midRail.position.set((x1 + x2) / 2, (y1 + y2) / 2 + 0.34, zRail);
           midRail.rotation.z = segAng;
           bridgeGroup.add(midRail);
         }
 
-        // Tiang-tiang vertikal (Tsuka) + mahkota Giboshi di ujung jembatan
         [-1, -0.5, 0, 0.5, 1].forEach((uPos) => {
           const tx = uPos * (bridgeSpan / 2);
           const ty = Math.cos(uPos * Math.PI * 0.5) * archHeight;
@@ -941,7 +1027,7 @@
 
       scene.add(bridgeGroup);
 
-      // Lentera Batu Jepang (Toro) di dekat ujung jembatan
+      // Lentera Batu Jepang (Toro)
       const buildStoneLantern = (lx, lz) => {
         const lantern = new THREE.Group();
         lantern.position.set(lx, 0, lz);
@@ -965,14 +1051,14 @@
         lantern.traverse(m => { if (m.isMesh) m.castShadow = true; });
         scene.add(lantern);
       };
-      buildStoneLantern(streamX - 1.95, -0.45);
-      buildStoneLantern(streamX + 1.95, -2.75);
+      buildStoneLantern(streamX - 1.98, -0.45);
+      buildStoneLantern(streamX + 1.98, -2.75);
 
-      // Batu pijakan jalan setapak dari Studio Utama -> Jembatan -> Paviliun Baru
+      // Batu pijakan jalan setapak dari Studio Utama -> Jembatan -> Rumah Kaca
       const stepMat = new THREE.MeshStandardMaterial({ color: 0xd6d3d1, roughness: 0.85 });
       [
-        [0.45, -1.6], [1.05, -1.6], // Sisi kiri jembatan menuju dek utama
-        [5.25, -1.6], [5.85, -1.6]  // Sisi kanan jembatan menuju dek paviliun baru
+        [0.45, -1.6], [1.05, -1.6],
+        [5.25, -1.6], [5.85, -1.6]
       ].forEach(([sx, sz]) => {
         const step = new THREE.Mesh(new THREE.CylinderGeometry(0.36, 0.40, 0.07, 12), stepMat);
         step.position.set(sx, 0.035, sz);
@@ -1293,45 +1379,19 @@
       return tex;
     }
 
-    function createExpansionBannerCanvas() {
-      const c = document.createElement('canvas');
-      c.width = 512; c.height = 192;
-      const ctx = c.getContext('2d');
-      ctx.fillStyle = '#06182E';
-      ctx.fillRect(0, 0, 512, 192);
-      ctx.strokeStyle = '#10b981';
-      ctx.lineWidth = 8;
-      ctx.strokeRect(10, 10, 492, 172);
-
-      ctx.fillStyle = '#34d399';
-      ctx.font = 'bold 20px "Plus Jakarta Sans", sans-serif';
-      ctx.textAlign = 'center';
-      ctx.fillText('CREATIVE & MULTIMEDIA WING', 256, 58);
-
-      ctx.fillStyle = '#ffffff';
-      ctx.font = '800 28px "Plus Jakarta Sans", sans-serif';
-      ctx.fillText('ZONA EKSPANSI AGEN AI', 256, 105);
-
-      ctx.fillStyle = '#94a3b8';
-      ctx.font = '600 17px monospace';
-      ctx.fillText('Slot Siap: Content Creator & Reels Studio', 256, 146);
-
-      const tex = new THREE.CanvasTexture(c);
-      tex.encoding = THREE.sRGBEncoding;
-      return tex;
-    }
-
-    function buildExpandedCampusArchitecture() {
+    // =========================================================================
+    // A. STUDIO UTAMA (SISI KIRI SUNGAI)
+    // =========================================================================
+    function buildMainStudioArchitecture() {
       summerGrassTex = createGrassTexture();
       winterSnowTex = createSnowGroundTexture();
 
-      // Lahan rumput kampus jauh lebih luas (38 x 28)
       grassFloorMesh = new THREE.Mesh(
-        new THREE.PlaneGeometry(38, 28),
+        new THREE.PlaneGeometry(36, 28),
         new THREE.MeshStandardMaterial({ map: summerGrassTex, roughness: 0.9 })
       );
       grassFloorMesh.rotation.x = -Math.PI / 2;
-      grassFloorMesh.position.set(1.5, 0, 0.5);
+      grassFloorMesh.position.set(0.5, 0, 0.5);
       grassFloorMesh.receiveShadow = true;
       scene.add(grassFloorMesh);
 
@@ -1345,9 +1405,6 @@
       const pillarMat = new THREE.MeshStandardMaterial({ color: 0x78350f, roughness: 0.6 });
       const slatMat = new THREE.MeshStandardMaterial({ color: 0xc28e5c, roughness: 0.65 });
 
-      // =======================================================================
-      // A. STUDIO UTAMA (SISI KIRI SUNGAI: X = -10.2 s/d +1.0)
-      // =======================================================================
       const mainCenterX = -4.6;
       const mainW = 11.2;
 
@@ -1454,85 +1511,6 @@
       createPottedPlant('monstera', -9.4, -1.2, 1.1);
       createPottedPlant('monstera', 0.2, 1.1, 1.15);
 
-      // =======================================================================
-      // B. PAVILIUN EKSPANSI AGEN BARU (SISI KANAN SUNGAI: X = +6.3 s/d +16.5)
-      // =======================================================================
-      const expCenterX = 11.4;
-      const expW = 10.2;
-
-      const expDeck = new THREE.Mesh(
-        new THREE.BoxGeometry(expW, 0.12, 8.8),
-        new THREE.MeshStandardMaterial({ map: woodTex, roughness: 0.6 })
-      );
-      expDeck.position.set(expCenterX, 0.06, -2.5);
-      expDeck.receiveShadow = true;
-      scene.add(expDeck);
-
-      addRug(3.6, 3.0, 0xf3e8ff, 9.2, -3.4);
-      addRug(3.6, 3.0, 0xe0f2fe, 13.8, -2.2);
-
-      const expBackWall = new THREE.Mesh(new THREE.BoxGeometry(expW, 4.2, 0.25), wallMat);
-      expBackWall.position.set(expCenterX, 2.1, -6.8);
-      expBackWall.receiveShadow = true;
-      scene.add(expBackWall);
-
-      const expRightWall = new THREE.Mesh(new THREE.BoxGeometry(0.25, 4.2, 5.2), wallMat);
-      expRightWall.position.set(16.4, 2.1, -4.2);
-      expRightWall.receiveShadow = true;
-      scene.add(expRightWall);
-
-      [[6.45, -6.6], [6.45, 1.7], [16.3, -6.6], [16.3, 1.7]].forEach(([px, pz]) => {
-        const pillar = new THREE.Mesh(new THREE.BoxGeometry(0.20, 4.1, 0.20), pillarMat);
-        pillar.position.set(px, 2.05, pz);
-        pillar.castShadow = true;
-        scene.add(pillar);
-      });
-
-      for (let sx = 6.7; sx <= 16.0; sx += 0.65) {
-        const slat = new THREE.Mesh(new THREE.BoxGeometry(0.11, 0.14, 8.45), slatMat);
-        slat.position.set(sx, 4.05, -2.45);
-        slat.castShadow = true;
-        scene.add(slat);
-      }
-
-      const glassRoof2 = new THREE.Mesh(
-        new THREE.BoxGeometry(expW - 0.15, 0.05, 8.55),
-        new THREE.MeshPhysicalMaterial({
-          color: 0xe0f2fe,
-          transparent: true,
-          opacity: 0.18,
-          roughness: 0.08,
-          depthWrite: false
-        })
-      );
-      glassRoof2.position.set(expCenterX, 4.14, -2.45);
-      scene.add(glassRoof2);
-
-      // Papan nama "ZONA EKSPANSI AGEN AI" di dinding paviliun baru
-      const bannerFrame = new THREE.Mesh(
-        new THREE.BoxGeometry(3.4, 1.3, 0.08),
-        new THREE.MeshStandardMaterial({ color: 0x0f172a })
-      );
-      bannerFrame.position.set(expCenterX, 2.85, -6.63);
-      scene.add(bannerFrame);
-
-      const bannerScreen = new THREE.Mesh(
-        new THREE.PlaneGeometry(3.25, 1.18),
-        new THREE.MeshBasicMaterial({ map: createExpansionBannerCanvas() })
-      );
-      bannerScreen.position.set(expCenterX, 2.85, -6.58);
-      scene.add(bannerScreen);
-
-      // Bedengan Monstera & Pakis di Paviliun Baru
-      buildBiophilicWallPlanterBed(expCenterX, expW);
-      createPottedPlant('monstera', 7.1, 1.1, 1.1);
-      createPottedPlant('monstera', 15.6, 1.1, 1.15);
-
-      // 2 Workstation Siap Pakai di Paviliun Baru untuk Agen Mendatang
-      buildDeskSetup(9.2, -3.8, Math.PI / 8, 0xc084fc);
-      buildDeskSetup(13.8, -2.8, -Math.PI / 6, 0x38bdf8);
-
-      // Batu pijakan dari dek studio utama ke taman depan
       const stoneMat = new THREE.MeshStandardMaterial({ color: 0xd6d3d1, roughness: 0.85 });
       [[-8.2, 2.4], [-9.1, 3.0], [-10.1, 3.4]].forEach(([sx, sz]) => {
         const step = new THREE.Mesh(new THREE.CylinderGeometry(0.45, 0.48, 0.08, 12), stoneMat);
@@ -1540,6 +1518,232 @@
         step.receiveShadow = true;
         scene.add(step);
       });
+    }
+
+    // =========================================================================
+    // B. RUMAH KACA MINIMALIS (1 AGEN) — TROPICAL FOREST LOUNGE, SOFA & BEANBAG
+    // =========================================================================
+    function buildTropicalGlassConservatory() {
+      const ghCenterX = 9.2;
+      const ghCenterZ = -2.2;
+      const ghW = 5.6;
+      const ghD = 5.4;
+      const ghH = 3.55;
+
+      const woodTex = createWoodFloorTexture();
+      const aluFrameMat = new THREE.MeshStandardMaterial({
+        color: 0x262b33,
+        metalness: 0.55,
+        roughness: 0.35
+      });
+
+      const fullGlassMat = new THREE.MeshPhysicalMaterial({
+        color: 0xdbeafe,
+        transparent: true,
+        opacity: 0.20,
+        roughness: 0.05,
+        metalness: 0.05,
+        side: THREE.DoubleSide,
+        depthWrite: false
+      });
+
+      // 1. Lantai Dek Kayu Hangat
+      const ghDeck = new THREE.Mesh(
+        new THREE.BoxGeometry(ghW, 0.12, ghD),
+        new THREE.MeshStandardMaterial({ map: woodTex, roughness: 0.6 })
+      );
+      ghDeck.position.set(ghCenterX, 0.06, ghCenterZ);
+      ghDeck.receiveShadow = true;
+      scene.add(ghDeck);
+
+      // Karpet anyaman bulat hangat di tengah area lounge
+      const wovenRug = new THREE.Mesh(
+        new THREE.CylinderGeometry(1.55, 1.55, 0.02, 28),
+        new THREE.MeshStandardMaterial({ color: 0xf3e8d2, roughness: 0.92 })
+      );
+      wovenRug.position.set(ghCenterX - 0.15, 0.13, ghCenterZ + 0.35);
+      wovenRug.receiveShadow = true;
+      scene.add(wovenRug);
+
+      // 2. Dinding Belakang Tropical Forest (Tanpa Poster/Tulisan, Full Tanaman Rambatan & Akar!)
+      const forestWall = new THREE.Mesh(
+        new THREE.BoxGeometry(ghW, ghH, 0.18),
+        new THREE.MeshStandardMaterial({ color: 0x374151, roughness: 0.9 })
+      );
+      forestWall.position.set(ghCenterX, ghH / 2 + 0.12, ghCenterZ - ghD / 2);
+      forestWall.receiveShadow = true;
+      scene.add(forestWall);
+
+      // Sulur tanaman rambatan lebat & akar-akar menjuntai menutupi dinding belakang
+      const vineLeafColors = [0x15803d, 0x166534, 0x22c55e, 0x14532d, 0x4d7c0f];
+      const vineZ = ghCenterZ - ghD / 2 + 0.12;
+      for (let i = 0; i < 140; i++) {
+        const vx = (ghCenterX - ghW / 2 + 0.25) + ((i * 37) % 100) / 100 * (ghW - 0.5);
+        const vy = 0.45 + ((i * 53) % 100) / 100 * (ghH - 0.55);
+        const leafMat = new THREE.MeshStandardMaterial({
+          color: vineLeafColors[i % vineLeafColors.length],
+          roughness: 0.65
+        });
+        const leafCluster = new THREE.Mesh(
+          new THREE.DodecahedronGeometry(0.14 + (i % 4) * 0.045, 1),
+          leafMat
+        );
+        leafCluster.scale.set(1.2, 0.9, 0.45);
+        leafCluster.position.set(vx, vy, vineZ + ((i % 3) * 0.02));
+        leafCluster.castShadow = true;
+        scene.add(leafCluster);
+      }
+
+      // Akar-akar udara menjuntai dari atas dinding seperti hutan hujan tropis
+      const rootMat = new THREE.MeshStandardMaterial({ color: 0x4a3525, roughness: 0.9 });
+      for (let r = 0; r < 18; r++) {
+        const rx = (ghCenterX - ghW / 2 + 0.35) + (r / 17) * (ghW - 0.7);
+        const rootLen = 1.2 + (r % 4) * 0.48;
+        const curve = new THREE.CatmullRomCurve3([
+          new THREE.Vector3(rx, ghH + 0.05, vineZ + 0.03),
+          new THREE.Vector3(rx + Math.sin(r) * 0.12, ghH - rootLen * 0.5, vineZ + 0.06),
+          new THREE.Vector3(rx - Math.cos(r) * 0.10, ghH - rootLen, vineZ + 0.04)
+        ]);
+        const rootTube = new THREE.Mesh(new THREE.TubeGeometry(curve, 8, 0.018, 5, false), rootMat);
+        scene.add(rootTube);
+      }
+
+      // 3. Rangka Aluminium Dark Charcoal & Panel Full Kaca di Sekeliling + Atap Kaca
+      const xMin = ghCenterX - ghW / 2;
+      const xMax = ghCenterX + ghW / 2;
+      const zMin = ghCenterZ - ghD / 2;
+      const zMax = ghCenterZ + ghD / 2;
+
+      // 4 Tiang Sudut & Tiang Tengah Mullion
+      [
+        [xMin, zMin], [xMax, zMin],
+        [xMin, zMax], [xMax, zMax],
+        [xMin, ghCenterZ], [xMax, ghCenterZ],
+        [ghCenterX - 0.9, zMax], [ghCenterX + 0.9, zMax]
+      ].forEach(([px, pz]) => {
+        const post = new THREE.Mesh(new THREE.BoxGeometry(0.09, ghH, 0.09), aluFrameMat);
+        post.position.set(px, ghH / 2 + 0.12, pz);
+        post.castShadow = true;
+        scene.add(post);
+      });
+
+      // Balok Bingkai Atap Keliling + Palang Kaca Atap (Conservatory Roof)
+      const topFrontBeam = new THREE.Mesh(new THREE.BoxGeometry(ghW + 0.1, 0.11, 0.11), aluFrameMat);
+      topFrontBeam.position.set(ghCenterX, ghH + 0.12, zMax);
+      const topBackBeam = new THREE.Mesh(new THREE.BoxGeometry(ghW + 0.1, 0.11, 0.11), aluFrameMat);
+      topBackBeam.position.set(ghCenterX, ghH + 0.12, zMin);
+      const topLeftBeam = new THREE.Mesh(new THREE.BoxGeometry(0.11, 0.11, ghD + 0.1), aluFrameMat);
+      topLeftBeam.position.set(xMin, ghH + 0.12, ghCenterZ);
+      const topRightBeam = new THREE.Mesh(new THREE.BoxGeometry(0.11, 0.11, ghD + 0.1), aluFrameMat);
+      topRightBeam.position.set(xMax, ghH + 0.12, ghCenterZ);
+      scene.add(topFrontBeam, topBackBeam, topLeftBeam, topRightBeam);
+
+      // Palang Rafter Atap Kaca
+      [-1.4, 0, 1.4].forEach((rx) => {
+        const rafter = new THREE.Mesh(new THREE.BoxGeometry(0.07, 0.09, ghD), aluFrameMat);
+        rafter.position.set(ghCenterX + rx, ghH + 0.14, ghCenterZ);
+        scene.add(rafter);
+      });
+
+      // Lembaran Atap Full Kaca
+      const roofGlass = new THREE.Mesh(new THREE.PlaneGeometry(ghW, ghD), fullGlassMat);
+      roofGlass.rotation.x = -Math.PI / 2;
+      roofGlass.position.set(ghCenterX, ghH + 0.16, ghCenterZ);
+      scene.add(roofGlass);
+
+      // Dinding Kaca Kanan Full
+      const rightGlass = new THREE.Mesh(new THREE.PlaneGeometry(ghD, ghH), fullGlassMat);
+      rightGlass.rotation.y = Math.PI / 2;
+      rightGlass.position.set(xMax, ghH / 2 + 0.12, ghCenterZ);
+      scene.add(rightGlass);
+
+      // Dinding Kaca Kiri (dengan bukaan pintu menghadap jembatan Jepang di z = -1.6)
+      const leftGlassBack = new THREE.Mesh(new THREE.PlaneGeometry(2.5, ghH), fullGlassMat);
+      leftGlassBack.rotation.y = Math.PI / 2;
+      leftGlassBack.position.set(xMin, ghH / 2 + 0.12, -3.65);
+      const leftGlassFront = new THREE.Mesh(new THREE.PlaneGeometry(1.4, ghH), fullGlassMat);
+      leftGlassFront.rotation.y = Math.PI / 2;
+      leftGlassFront.position.set(xMin, ghH / 2 + 0.12, -0.2);
+      scene.add(leftGlassBack, leftGlassFront);
+
+      // Dinding Kaca Depan Full
+      const frontGlass = new THREE.Mesh(new THREE.PlaneGeometry(ghW, ghH), fullGlassMat);
+      frontGlass.position.set(ghCenterX, ghH / 2 + 0.12, zMax);
+      scene.add(frontGlass);
+
+      // 4. Furnitur Lounge: Sofa Rotan Empuk + Bantal & Beanbag Nyaman!
+      // A) Sofa Lounge di sisi kanan rumah kaca (menghadap ke dalam)
+      const sofaGroup = new THREE.Group();
+      sofaGroup.position.set(ghCenterX + 1.55, 0.12, ghCenterZ + 0.35);
+      sofaGroup.rotation.y = -Math.PI / 2;
+
+      const rattanMat = new THREE.MeshStandardMaterial({ color: 0x78553a, roughness: 0.75 });
+      const cushionMat = new THREE.MeshStandardMaterial({ color: 0xe7e5e4, roughness: 0.85 });
+      const pillowAccent1 = new THREE.MeshStandardMaterial({ color: 0xd97706, roughness: 0.8 });
+      const pillowAccent2 = new THREE.MeshStandardMaterial({ color: 0x059669, roughness: 0.8 });
+
+      const sofaBase = new THREE.Mesh(new THREE.BoxGeometry(1.75, 0.28, 0.78), rattanMat);
+      sofaBase.position.y = 0.16;
+      sofaBase.castShadow = true;
+      const sofaBack = new THREE.Mesh(new THREE.BoxGeometry(1.75, 0.62, 0.14), rattanMat);
+      sofaBack.position.set(0, 0.44, -0.32);
+      sofaBack.castShadow = true;
+      for (let armSide of [-1, 1]) {
+        const arm = new THREE.Mesh(new THREE.BoxGeometry(0.14, 0.48, 0.78), rattanMat);
+        arm.position.set(armSide * 0.82, 0.36, 0);
+        arm.castShadow = true;
+        sofaGroup.add(arm);
+      }
+
+      const seatCushion = new THREE.Mesh(new THREE.BoxGeometry(1.52, 0.14, 0.66), cushionMat);
+      seatCushion.position.set(0, 0.35, 0.04);
+      seatCushion.castShadow = true;
+
+      for (let bSide of [-1, 1]) {
+        const backCushion = new THREE.Mesh(new THREE.BoxGeometry(0.72, 0.38, 0.14), cushionMat);
+        backCushion.position.set(bSide * 0.38, 0.56, -0.18);
+        backCushion.rotation.x = -0.15;
+        sofaGroup.add(backCushion);
+      }
+
+      const throwPillow1 = new THREE.Mesh(new THREE.BoxGeometry(0.28, 0.26, 0.10), pillowAccent1);
+      throwPillow1.position.set(-0.56, 0.52, -0.06);
+      throwPillow1.rotation.set(-0.2, 0.3, 0.15);
+
+      const throwPillow2 = new THREE.Mesh(new THREE.BoxGeometry(0.26, 0.24, 0.10), pillowAccent2);
+      throwPillow2.position.set(0.56, 0.52, -0.06);
+      throwPillow2.rotation.set(-0.2, -0.3, -0.15);
+
+      sofaGroup.add(sofaBase, sofaBack, seatCushion, throwPillow1, throwPillow2);
+      scene.add(sofaGroup);
+
+      // B) Beanbag Empuk Warna Terracotta / Mustard di sudut depan kiri lounge
+      const beanbagGroup = new THREE.Group();
+      beanbagGroup.position.set(ghCenterX - 1.15, 0.12, ghCenterZ + 1.15);
+
+      const beanMat = new THREE.MeshStandardMaterial({ color: 0xd97757, roughness: 0.88 });
+      const beanBase = new THREE.Mesh(new THREE.SphereGeometry(0.54, 18, 14), beanMat);
+      beanBase.scale.set(1.12, 0.65, 1.08);
+      beanBase.position.y = 0.28;
+      beanBase.castShadow = true;
+
+      const beanBackRest = new THREE.Mesh(new THREE.SphereGeometry(0.38, 14, 12), beanMat);
+      beanBackRest.scale.set(1.0, 1.15, 0.72);
+      beanBackRest.position.set(-0.15, 0.52, 0.18);
+      beanBackRest.rotation.x = -0.25;
+      beanBackRest.castShadow = true;
+
+      beanbagGroup.add(beanBase, beanBackRest);
+      scene.add(beanbagGroup);
+
+      // 5. Tanaman Monstera Rimbun di Sudut-Sudut Dalam Rumah Kaca
+      createPottedPlant('monstera', xMin + 0.55, zMin + 0.65, 1.05);
+      createPottedPlant('monstera', xMax - 0.55, zMin + 0.65, 1.15);
+      createPottedPlant('monstera', xMax - 0.55, zMax - 0.55, 0.95);
+      scene.add(createFernCluster(ghCenterX - 0.1, 0.14, zMin + 0.45, 0.95));
+
+      // 6. Hanya 1 Workstation Khusus untuk 1 Agen Baru
+      buildDeskSetup(ghCenterX - 0.35, ghCenterZ - 1.25, 0, 0x34d399);
     }
 
     function createGardenTree(x, z, scale = 1) {
@@ -1578,17 +1782,16 @@
     }
 
     function buildGardenTreesAndPond() {
-      // Pepohonan rimbun mengelilingi kampus yang luas
       createGardenTree(-14.2, -5.2, 1.25);
       createGardenTree(-14.8, 0.8, 1.1);
       createGardenTree(-13.8, 7.2, 1.3);
       createGardenTree(-6.5, 8.6, 1.15);
       createGardenTree(-0.5, 8.2, 1.1);
-      createGardenTree(7.8, 8.2, 1.2);
-      createGardenTree(15.2, 7.2, 1.25);
-      createGardenTree(18.5, -3.5, 1.2);
+      createGardenTree(7.4, 7.8, 1.15);
+      createGardenTree(14.6, 4.8, 1.2);
+      createGardenTree(14.8, -4.5, 1.25);
 
-      // Pohon Sakura Merah Muda di dekat jembatan Jepang!
+      // Pohon Sakura Merah Muda di dekat jembatan Jepang
       const sakura = new THREE.Group();
       sakura.position.set(5.4, 0, -4.6);
       const sTrunk = new THREE.Mesh(
@@ -1613,7 +1816,7 @@
       const flowerCoords = [
         [-13.2, -4.2], [-12.2, -2.6], [-13.6, -1.0], [-12.4, 1.2],
         [-13.8, 3.2], [-13.5, 5.4], [-9.2, 6.8], [-3.2, 6.8],
-        [7.2, 5.2], [11.5, 5.8], [14.8, 4.6]
+        [7.2, 3.2], [10.8, 3.6], [13.2, 2.2]
       ];
       flowerCoords.forEach(([fx, fz], i) => {
         const bush = new THREE.Mesh(
@@ -1633,7 +1836,6 @@
         scene.add(blossom);
       });
 
-      // Kolam Koi di taman barat
       const pondX = -11.2, pondZ = 4.6, pondRadius = 2.15;
 
       const pondBed = new THREE.Mesh(
@@ -1710,7 +1912,7 @@
       const rainGeo = new THREE.BufferGeometry();
       const rainPositions = new Float32Array(rainCount * 3);
       for (let i = 0; i < rainCount; i++) {
-        rainPositions[i * 3] = (Math.random() - 0.5) * 38 + 1.5;
+        rainPositions[i * 3] = (Math.random() - 0.5) * 36 + 0.5;
         rainPositions[i * 3 + 1] = Math.random() * 14;
         rainPositions[i * 3 + 2] = (Math.random() - 0.5) * 28;
       }
@@ -1729,7 +1931,7 @@
       const snowGeo = new THREE.BufferGeometry();
       const snowPositions = new Float32Array(snowCount * 3);
       for (let i = 0; i < snowCount; i++) {
-        snowPositions[i * 3] = (Math.random() - 0.5) * 38 + 1.5;
+        snowPositions[i * 3] = (Math.random() - 0.5) * 36 + 0.5;
         snowPositions[i * 3 + 1] = Math.random() * 14;
         snowPositions[i * 3 + 2] = (Math.random() - 0.5) * 28;
       }
@@ -1760,1465 +1962,4 @@
 
       const head = new THREE.Mesh(new THREE.SphereGeometry(0.15, 14, 12), furMat);
       head.position.set(0, 0.34, 0.18);
-      head.castShadow = true;
-      group.add(head);
-
-      for (let side of [-1, 1]) {
-        const ear = new THREE.Mesh(new THREE.CylinderGeometry(0.032, 0.04, 0.24, 8), furMat);
-        ear.position.set(side * 0.055, 0.51, 0.15);
-        ear.rotation.z = side * -0.14;
-        ear.rotation.x = -0.1;
-        ear.castShadow = true;
-
-        const inner = new THREE.Mesh(new THREE.PlaneGeometry(0.035, 0.17), innerEarMat);
-        inner.position.set(side * 0.055, 0.51, 0.188);
-        inner.rotation.z = side * -0.14;
-        group.add(ear, inner);
-      }
-
-      const tail = new THREE.Mesh(new THREE.SphereGeometry(0.065, 8, 8), new THREE.MeshStandardMaterial({ color: 0xffffff }));
-      tail.position.set(0, 0.20, -0.24);
-      group.add(tail);
-
-      const eyeMat = new THREE.MeshBasicMaterial({ color: 0x0f172a });
-      for (let side of [-1, 1]) {
-        const eye = new THREE.Mesh(new THREE.SphereGeometry(0.022, 8, 8), eyeMat);
-        eye.position.set(side * 0.09, 0.36, 0.29);
-        group.add(eye);
-      }
-
-      scene.add(group);
-      return group;
-    }
-
-    function createCat(x, z, furColor, stripeColor) {
-      const group = new THREE.Group();
-      group.position.set(x, 0, z);
-
-      const furMat = new THREE.MeshStandardMaterial({ color: furColor, roughness: 0.7 });
-      const accentMat = new THREE.MeshStandardMaterial({ color: stripeColor, roughness: 0.7 });
-
-      const body = new THREE.Mesh(new THREE.CylinderGeometry(0.14, 0.15, 0.44, 12), furMat);
-      body.rotation.x = Math.PI / 2;
-      body.position.y = 0.24;
-      body.castShadow = true;
-      group.add(body);
-
-      [[-0.08, 0.14], [0.08, 0.14], [-0.08, -0.14], [0.08, -0.14]].forEach(([lx, lz]) => {
-        const leg = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.03, 0.18, 8), furMat);
-        leg.position.set(lx, 0.09, lz);
-        leg.castShadow = true;
-        group.add(leg);
-      });
-
-      const head = new THREE.Mesh(new THREE.SphereGeometry(0.16, 14, 12), furMat);
-      head.position.set(0, 0.36, 0.24);
-      head.castShadow = true;
-      group.add(head);
-
-      for (let side of [-1, 1]) {
-        const ear = new THREE.Mesh(new THREE.ConeGeometry(0.055, 0.11, 4), accentMat);
-        ear.position.set(side * 0.09, 0.50, 0.23);
-        ear.rotation.z = side * -0.2;
-        group.add(ear);
-      }
-
-      const eyeMat = new THREE.MeshBasicMaterial({ color: 0x10b981 });
-      for (let side of [-1, 1]) {
-        const eye = new THREE.Mesh(new THREE.SphereGeometry(0.024, 8, 8), eyeMat);
-        eye.position.set(side * 0.075, 0.38, 0.37);
-        group.add(eye);
-      }
-      const nose = new THREE.Mesh(new THREE.SphereGeometry(0.02, 6, 6), new THREE.MeshBasicMaterial({ color: 0xf472b6 }));
-      nose.position.set(0, 0.34, 0.395);
-      group.add(nose);
-
-      const tailPivot = new THREE.Group();
-      tailPivot.position.set(0, 0.28, -0.20);
-      const tailMesh = new THREE.Mesh(new THREE.CylinderGeometry(0.025, 0.032, 0.34, 8), accentMat);
-      tailMesh.position.set(0, 0.15, -0.06);
-      tailMesh.rotation.x = -0.45;
-      tailPivot.add(tailMesh);
-      group.add(tailPivot);
-
-      scene.add(group);
-      return { group, tailPivot };
-    }
-
-    function buildLivingAnimals() {
-      const r1 = createRabbit(-7.8, 4.8, 0xffffff);
-      rabbits.push({ mesh: r1, centerX: -7.8, centerZ: 4.8, radius: 1.15, speed: 0.75, angle: 0 });
-
-      const r2 = createRabbit(9.5, 4.2, 0xd6b899);
-      rabbits.push({ mesh: r2, centerX: 9.5, centerZ: 4.2, radius: 1.25, speed: -0.65, angle: 2.1 });
-
-      const c1 = createCat(-4.2, 3.4, 0xf97316, 0xc2410c);
-      cats.push({ ...c1, centerX: -4.2, centerZ: 3.4, radius: 1.5, speed: 0.42, angle: 0.5, baseY: 0 });
-
-      const c2 = createCat(11.4, -0.4, 0xf8fafc, 0x334155);
-      cats.push({ ...c2, centerX: 11.4, centerZ: -0.4, radius: 1.3, speed: -0.38, angle: 3.0, baseY: 0.12 });
-    }
-
-    function buildDeskSetup(x, z, rotY, accentColor) {
-      const desk = new THREE.Group();
-      desk.position.set(x, 0.12, z);
-      desk.rotation.y = rotY;
-
-      const topMat = new THREE.MeshStandardMaterial({ color: 0xe6ccb2, roughness: 0.5 });
-      const legMat = new THREE.MeshStandardMaterial({ color: 0x334155, metalness: 0.4, roughness: 0.5 });
-
-      const tableTop = new THREE.Mesh(new THREE.BoxGeometry(2.1, 0.08, 1.05), topMat);
-      tableTop.position.y = 0.88;
-      tableTop.castShadow = true;
-      tableTop.receiveShadow = true;
-      desk.add(tableTop);
-
-      for (let lx of [-0.92, 0.92]) {
-        for (let lz of [-0.42, 0.42]) {
-          const leg = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.035, 0.88, 8), legMat);
-          leg.position.set(lx, 0.44, lz);
-          leg.castShadow = true;
-          desk.add(leg);
-        }
-      }
-
-      const stand = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.25, 0.1), legMat);
-      stand.position.set(0, 1.02, -0.25);
-      desk.add(stand);
-
-      const frame = new THREE.Mesh(new THREE.BoxGeometry(1.15, 0.58, 0.05), new THREE.MeshStandardMaterial({ color: 0x1e293b }));
-      frame.position.set(0, 1.32, -0.24);
-      frame.castShadow = true;
-      desk.add(frame);
-
-      const screenMat = new THREE.MeshBasicMaterial({ color: accentColor });
-      const screen = new THREE.Mesh(new THREE.PlaneGeometry(1.07, 0.50), screenMat);
-      screen.position.set(0, 1.32, -0.21);
-      desk.add(screen);
-      monitorScreens.push({ mesh: screen, baseColor: new THREE.Color(accentColor) });
-
-      const miniPot = new THREE.Mesh(
-        new THREE.CylinderGeometry(0.08, 0.06, 0.11, 10),
-        new THREE.MeshStandardMaterial({ color: 0xd97757 })
-      );
-      miniPot.position.set(0.78, 0.97, 0.18);
-      desk.add(miniPot);
-
-      const succulent = new THREE.Mesh(
-        new THREE.DodecahedronGeometry(0.085),
-        new THREE.MeshStandardMaterial({ color: 0x40916c })
-      );
-      succulent.position.set(0.78, 1.06, 0.18);
-      desk.add(succulent);
-
-      const mug = new THREE.Mesh(
-        new THREE.CylinderGeometry(0.055, 0.055, 0.11, 12),
-        new THREE.MeshStandardMaterial({ color: 0xffffff })
-      );
-      mug.position.set(-0.75, 0.97, 0.22);
-      desk.add(mug);
-
-      scene.add(desk);
-    }
-
-    function buildAllWorkstations() {
-      // 3 Meja Utama di Studio Kiri
-      buildDeskSetup(-8.8, -3.1, Math.PI / 5, 0x38bdf8);
-      buildDeskSetup(-4.5, -4.6, 0, 0x34d399);
-      buildDeskSetup(-1.2, -0.8, -Math.PI / 4, 0xfbbf24);
-    }
-
-    // =========================================================================
-    // 2D CARTOON PAPER-CUT CHARACTER GENERATOR (CULT OF THE LAMB STYLE)
-    // =========================================================================
-    function createRoundRectPath(ctx, x, y, w, h, r) {
-      ctx.beginPath();
-      ctx.moveTo(x + r, y);
-      ctx.lineTo(x + w - r, y);
-      ctx.quadraticCurveTo(x + w, y, x + w, y + r);
-      ctx.lineTo(x + w, y + h - r);
-      ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
-      ctx.lineTo(x + r, y + h);
-      ctx.quadraticCurveTo(x, y + h, x, y + h - r);
-      ctx.lineTo(x, y + r);
-      ctx.quadraticCurveTo(x, y, x + r, y);
-      ctx.closePath();
-    }
-
-    function drawCultOfTheLambAgent(ctx, id, state) {
-      const W = 512, H = 640;
-      ctx.clearRect(0, 0, W, H);
-
-      const {
-        status = 'IDLE',
-        walkPhase = 0,
-        armWave = 0,
-        headTilt = 0,
-        isMoshing = false,
-        isChatting = false,
-        isHandshaking = false,
-        facingDir = 1
-      } = state;
-
-      const INK = '#161114';
-      ctx.save();
-
-      if (facingDir < 0) {
-        ctx.translate(W, 0);
-        ctx.scale(-1, 1);
-      }
-
-      ctx.fillStyle = 'rgba(22, 17, 20, 0.28)';
-      ctx.beginPath();
-      ctx.ellipse(256, 610, 96, 22, 0, 0, Math.PI * 2);
-      ctx.fill();
-
-      const leftFootY = 552 + Math.sin(walkPhase) * 14;
-      const rightFootY = 552 - Math.sin(walkPhase) * 14;
-
-      const drawFoot = (fx, fy) => {
-        ctx.fillStyle = INK;
-        ctx.beginPath();
-        ctx.ellipse(fx, fy, 26, 36, 0, 0, Math.PI * 2);
-        ctx.fill();
-
-        ctx.fillStyle = '#33292e';
-        ctx.beginPath();
-        ctx.ellipse(fx - 4, fy - 4, 15, 22, 0, 0, Math.PI * 2);
-        ctx.fill();
-      };
-      drawFoot(214, leftFootY);
-      drawFoot(298, rightFootY);
-
-      if (id === 'crawler') {
-        ctx.fillStyle = '#1f1b1e';
-        ctx.strokeStyle = INK;
-        ctx.lineWidth = 11;
-        ctx.beginPath();
-        ctx.roundRect(128, 175, 256, 225, 85);
-        ctx.fill();
-        ctx.stroke();
-      } else if (id === 'drafter') {
-        ctx.fillStyle = '#3b2319';
-        ctx.strokeStyle = INK;
-        ctx.lineWidth = 11;
-        ctx.beginPath();
-        ctx.moveTo(136, 180);
-        ctx.bezierCurveTo(102, 270, 112, 375, 134, 445);
-        ctx.quadraticCurveTo(256, 475, 378, 445);
-        ctx.bezierCurveTo(400, 375, 410, 270, 376, 180);
-        ctx.closePath();
-        ctx.fill();
-        ctx.stroke();
-      } else if (id === 'auditor') {
-        const hairGrad = ctx.createLinearGradient(0, 170, 0, 445);
-        hairGrad.addColorStop(0, '#f4e3b2');
-        hairGrad.addColorStop(0.62, '#e8d08e');
-        hairGrad.addColorStop(0.76, '#14b8a6');
-        hairGrad.addColorStop(1, '#0d9488');
-
-        ctx.fillStyle = hairGrad;
-        ctx.strokeStyle = INK;
-        ctx.lineWidth = 11;
-        ctx.beginPath();
-        ctx.moveTo(132, 175);
-        ctx.bezierCurveTo(96, 265, 108, 370, 130, 442);
-        ctx.quadraticCurveTo(256, 468, 382, 442);
-        ctx.bezierCurveTo(404, 370, 416, 265, 380, 175);
-        ctx.closePath();
-        ctx.fill();
-        ctx.stroke();
-      }
-
-      const drawCloakBody = () => {
-        ctx.beginPath();
-        ctx.moveTo(192, 370);
-        ctx.bezierCurveTo(156, 425, 142, 505, 148, 558);
-        ctx.quadraticCurveTo(256, 582, 364, 558);
-        ctx.bezierCurveTo(370, 505, 356, 425, 320, 370);
-        ctx.closePath();
-      };
-
-      drawCloakBody();
-      if (id === 'crawler') {
-        ctx.fillStyle = '#1e2430';
-      } else if (id === 'drafter') {
-        ctx.fillStyle = '#10b981';
-      } else {
-        ctx.fillStyle = '#faf6ee';
-      }
-      ctx.fill();
-
-      ctx.save();
-      drawCloakBody();
-      ctx.clip();
-
-      if (id === 'crawler') {
-        ctx.fillStyle = '#f8fafc';
-        ctx.beginPath();
-        ctx.moveTo(222, 370);
-        ctx.lineTo(256, 435);
-        ctx.lineTo(290, 370);
-        ctx.closePath();
-        ctx.fill();
-
-        ctx.fillStyle = '#090d16';
-        ctx.beginPath();
-        ctx.moveTo(246, 382);
-        ctx.lineTo(266, 382);
-        ctx.lineTo(272, 495);
-        ctx.lineTo(256, 516);
-        ctx.lineTo(240, 495);
-        ctx.closePath();
-        ctx.fill();
-
-        ctx.strokeStyle = 'rgba(0,0,0,0.35)';
-        ctx.lineWidth = 6;
-        ctx.beginPath();
-        ctx.moveTo(195, 435); ctx.lineTo(182, 555);
-        ctx.moveTo(317, 435); ctx.lineTo(330, 555);
-        ctx.stroke();
-      } else if (id === 'drafter') {
-        ctx.fillStyle = '#059669';
-        ctx.fillRect(140, 526, 232, 36);
-
-        ctx.strokeStyle = '#0f172a';
-        ctx.lineWidth = 7;
-        ctx.beginPath();
-        ctx.moveTo(214, 372);
-        ctx.lineTo(256, 456);
-        ctx.lineTo(298, 372);
-        ctx.stroke();
-
-        createRoundRectPath(ctx, 235, 452, 42, 54, 8);
-        ctx.fillStyle = '#ffffff';
-        ctx.fill();
-        ctx.lineWidth = 5;
-        ctx.strokeStyle = INK;
-        ctx.stroke();
-        ctx.fillStyle = '#008FD5';
-        ctx.fillRect(243, 462, 26, 10);
-      } else {
-        const drawTapisBand = (yTop, bandH) => {
-          ctx.fillStyle = '#991b1b';
-          ctx.fillRect(135, yTop, 242, bandH);
-          ctx.fillStyle = '#d97706';
-          ctx.fillRect(135, yTop, 242, 6);
-          ctx.fillRect(135, yTop + bandH - 6, 242, 6);
-
-          ctx.fillStyle = '#fbbf24';
-          for (let dx = 152; dx < 365; dx += 32) {
-            ctx.beginPath();
-            ctx.moveTo(dx + 12, yTop + 10);
-            ctx.lineTo(dx + 24, yTop + bandH / 2);
-            ctx.lineTo(dx + 12, yTop + bandH - 10);
-            ctx.lineTo(dx, yTop + bandH / 2);
-            ctx.closePath();
-            ctx.fill();
-          }
-        };
-        drawTapisBand(428, 38);
-        drawTapisBand(512, 36);
-      }
-      ctx.restore();
-
-      drawCloakBody();
-      ctx.strokeStyle = INK;
-      ctx.lineWidth = 11;
-      ctx.lineJoin = 'round';
-      ctx.stroke();
-
-      const drawArm = (isRight) => {
-        ctx.save();
-        const pivotX = isRight ? 332 : 180;
-        const pivotY = 408;
-        ctx.translate(pivotX, pivotY);
-
-        let angle = isRight ? -0.25 : 0.25;
-        if (status === 'WORKING') {
-          angle = (isRight ? -0.85 : 0.85) + Math.sin(armWave * 2.5 + (isRight ? 0 : Math.PI)) * 0.28;
-        } else if (status === 'DONE' || isMoshing) {
-          angle = (isRight ? -2.35 : 2.35) + Math.sin(armWave * 1.8) * 0.35;
-        } else if (isHandshaking && isRight) {
-          angle = -1.25 + Math.sin(armWave * 2) * 0.22;
-        } else if (isChatting && isRight) {
-          angle = -0.75 + Math.sin(armWave * 1.5) * 0.3;
-        } else {
-          angle += Math.sin(armWave + (isRight ? 0 : Math.PI)) * 0.12;
-        }
-        ctx.rotate(angle);
-
-        createRoundRectPath(ctx, -18, -10, 36, 74, 18);
-        ctx.fillStyle = id === 'crawler' ? '#1e2430' : (id === 'drafter' ? '#10b981' : '#faf6ee');
-        ctx.fill();
-        ctx.strokeStyle = INK;
-        ctx.lineWidth = 10;
-        ctx.stroke();
-
-        ctx.fillStyle = id === 'crawler' ? '#f3c6a8' : '#fde2cf';
-        ctx.beginPath();
-        ctx.arc(0, 72, 18, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.stroke();
-        ctx.restore();
-      };
-      drawArm(false);
-      drawArm(true);
-
-      ctx.save();
-      ctx.translate(256, 246);
-      ctx.rotate(headTilt);
-
-      const drawHeadShape = () => {
-        ctx.beginPath();
-        ctx.ellipse(0, 0, 128, 108, 0, 0, Math.PI * 2);
-      };
-
-      drawHeadShape();
-      ctx.fillStyle = id === 'crawler' ? '#f5cfb6' : '#fde2cf';
-      ctx.fill();
-
-      ctx.save();
-      drawHeadShape();
-      ctx.clip();
-      ctx.fillStyle = 'rgba(217, 119, 108, 0.14)';
-      ctx.beginPath();
-      ctx.ellipse(0, 78, 130, 52, 0, 0, Math.PI * 2);
-      ctx.fill();
-
-      if (id === 'crawler') {
-        ctx.fillStyle = '#272326';
-        ctx.beginPath();
-        ctx.arc(0, 14, 118, 0.16 * Math.PI, 0.84 * Math.PI);
-        ctx.lineTo(-96, 62);
-        ctx.quadraticCurveTo(0, 94, 96, 62);
-        ctx.closePath();
-        ctx.fill();
-      }
-      ctx.restore();
-
-      drawHeadShape();
-      ctx.strokeStyle = INK;
-      ctx.lineWidth = 11;
-      ctx.stroke();
-
-      if (id !== 'crawler') {
-        ctx.fillStyle = 'rgba(244, 114, 182, 0.45)';
-        ctx.beginPath();
-        ctx.ellipse(-74, 30, 20, 11, 0, 0, Math.PI * 2);
-        ctx.ellipse(74, 30, 20, 11, 0, 0, Math.PI * 2);
-        ctx.fill();
-      }
-
-      const drawEye = (ex, ey) => {
-        ctx.save();
-        ctx.translate(ex, ey);
-
-        if (status === 'DONE' || isMoshing) {
-          ctx.strokeStyle = INK;
-          ctx.lineWidth = 10;
-          ctx.lineCap = 'round';
-          ctx.beginPath();
-          ctx.arc(0, 6, 22, Math.PI * 1.12, Math.PI * 1.88);
-          ctx.stroke();
-        } else {
-          ctx.fillStyle = '#ffffff';
-          ctx.strokeStyle = INK;
-          ctx.lineWidth = 8;
-          ctx.beginPath();
-          ctx.ellipse(0, 0, 27, 30, 0, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.stroke();
-
-          ctx.fillStyle = id === 'auditor' ? '#0f766e' : '#181216';
-          ctx.beginPath();
-          ctx.ellipse(ex > 0 ? -2 : 2, 2, 18, 21, 0, 0, Math.PI * 2);
-          ctx.fill();
-
-          ctx.fillStyle = '#ffffff';
-          ctx.beginPath();
-          ctx.arc(ex > 0 ? -8 : -4, -7, 7.5, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.beginPath();
-          ctx.arc(ex > 0 ? 5 : 9, 7, 3.5, 0, Math.PI * 2);
-          ctx.fill();
-
-          if (status === 'WORKING') {
-            ctx.fillStyle = id === 'crawler' ? '#f5cfb6' : '#fde2cf';
-            ctx.beginPath();
-            ctx.rect(-30, -34, 60, 16);
-            ctx.fill();
-            ctx.strokeStyle = INK;
-            ctx.lineWidth = 7;
-            ctx.beginPath();
-            ctx.moveTo(-28, -18);
-            ctx.lineTo(28, -18);
-            ctx.stroke();
-          }
-        }
-        ctx.restore();
-      };
-      drawEye(-52, 4);
-      drawEye(52, 4);
-
-      ctx.strokeStyle = INK;
-      ctx.lineWidth = 7;
-      ctx.lineCap = 'round';
-      const browY = status === 'WORKING' ? -24 : -34;
-      const browAngle = status === 'WORKING' ? 0.18 : -0.06;
-      ctx.beginPath();
-      ctx.moveTo(-72, browY - browAngle * 25);
-      ctx.lineTo(-34, browY + browAngle * 25);
-      ctx.moveTo(34, browY + browAngle * 25);
-      ctx.lineTo(72, browY - browAngle * 25);
-      ctx.stroke();
-
-      if (id === 'crawler') {
-        ctx.fillStyle = '#1f1b1e';
-        ctx.strokeStyle = INK;
-        ctx.lineWidth = 5;
-        ctx.beginPath();
-        ctx.roundRect(-34, 30, 68, 14, 7);
-        ctx.fill();
-        ctx.stroke();
-      }
-
-      if (status === 'DONE' || isMoshing) {
-        ctx.fillStyle = '#9f1239';
-        ctx.strokeStyle = INK;
-        ctx.lineWidth = 7;
-        ctx.beginPath();
-        ctx.arc(0, 46, 20, 0, Math.PI, false);
-        ctx.closePath();
-        ctx.fill();
-        ctx.stroke();
-
-        ctx.fillStyle = '#fb7185';
-        ctx.beginPath();
-        ctx.arc(0, 56, 11, Math.PI, 0, false);
-        ctx.fill();
-      } else if (status === 'WORKING') {
-        ctx.strokeStyle = INK;
-        ctx.lineWidth = 7;
-        ctx.lineCap = 'round';
-        ctx.beginPath();
-        ctx.moveTo(-16, 48);
-        ctx.quadraticCurveTo(0, 42, 16, 48);
-        ctx.stroke();
-      } else if (isChatting) {
-        ctx.fillStyle = '#be123c';
-        ctx.strokeStyle = INK;
-        ctx.lineWidth = 6;
-        ctx.beginPath();
-        ctx.ellipse(0, 48, 11, 13, 0, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.stroke();
-      } else {
-        ctx.strokeStyle = INK;
-        ctx.lineWidth = 7;
-        ctx.lineCap = 'round';
-        ctx.beginPath();
-        ctx.arc(-10, 45, 10, 0.1 * Math.PI, 0.9 * Math.PI);
-        ctx.stroke();
-        ctx.beginPath();
-        ctx.arc(10, 45, 10, 0.1 * Math.PI, 0.9 * Math.PI);
-        ctx.stroke();
-      }
-
-      if (id === 'crawler') {
-        ctx.fillStyle = '#1f1b1e';
-        ctx.strokeStyle = INK;
-        ctx.lineWidth = 10;
-        ctx.beginPath();
-        ctx.moveTo(-124, -18);
-        ctx.bezierCurveTo(-132, -118, 132, -118, 124, -18);
-        ctx.lineTo(106, -42);
-        ctx.lineTo(54, -56);
-        ctx.lineTo(0, -44);
-        ctx.lineTo(-54, -56);
-        ctx.lineTo(-106, -42);
-        ctx.closePath();
-        ctx.fill();
-        ctx.stroke();
-      } else if (id === 'drafter') {
-        ctx.fillStyle = '#3b2319';
-        ctx.strokeStyle = INK;
-        ctx.lineWidth = 10;
-        ctx.beginPath();
-        ctx.moveTo(-126, -12);
-        ctx.bezierCurveTo(-134, -120, 134, -120, 126, -12);
-        ctx.quadraticCurveTo(65, -48, 14, -36);
-        ctx.lineTo(0, -24);
-        ctx.lineTo(-14, -36);
-        ctx.quadraticCurveTo(-65, -48, -126, -12);
-        ctx.closePath();
-        ctx.fill();
-        ctx.stroke();
-      } else {
-        ctx.fillStyle = '#f4e3b2';
-        ctx.strokeStyle = INK;
-        ctx.lineWidth = 10;
-        ctx.beginPath();
-        ctx.moveTo(-126, -10);
-        ctx.bezierCurveTo(-136, -122, 136, -122, 126, -10);
-        ctx.quadraticCurveTo(45, -52, -18, -24);
-        ctx.quadraticCurveTo(-78, -32, -126, -10);
-        ctx.closePath();
-        ctx.fill();
-        ctx.stroke();
-      }
-
-      ctx.restore();
-
-      if (status === 'WORKING' || status === 'DONE') {
-        const pillText = status === 'WORKING' ? '⚡ WORKING' : '✨ DONE!';
-        const pillBg = status === 'WORKING' ? '#0284c7' : '#059669';
-
-        createRoundRectPath(ctx, 166, 28, 180, 44, 22);
-        ctx.fillStyle = pillBg;
-        ctx.fill();
-        ctx.strokeStyle = INK;
-        ctx.lineWidth = 6;
-        ctx.stroke();
-
-        ctx.fillStyle = '#ffffff';
-        ctx.font = '800 21px "Plus Jakarta Sans", sans-serif';
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillText(pillText, 256, 51);
-      }
-
-      ctx.restore();
-    }
-
-    function createCartoonPaperAgent(config) {
-      const canvas = document.createElement('canvas');
-      canvas.width = 512;
-      canvas.height = 640;
-      const ctx = canvas.getContext('2d');
-
-      const texture = new THREE.CanvasTexture(canvas);
-      texture.encoding = THREE.sRGBEncoding;
-      texture.minFilter = THREE.LinearFilter;
-
-      drawCultOfTheLambAgent(ctx, config.id, { status: 'IDLE' });
-      texture.needsUpdate = true;
-
-      const material = new THREE.MeshBasicMaterial({
-        map: texture,
-        transparent: true,
-        alphaTest: 0.08,
-        side: THREE.DoubleSide
-      });
-
-      const geometry = new THREE.PlaneGeometry(1.75, 2.18);
-      const mesh = new THREE.Mesh(geometry, material);
-      mesh.position.set(0, 1.09, 0);
-      mesh.userData.agentId = config.id;
-
-      const shadowProxy = new THREE.Mesh(
-        new THREE.CylinderGeometry(0.32, 0.36, 1.5, 12),
-        new THREE.MeshBasicMaterial({ colorWrite: false, depthWrite: false })
-      );
-      shadowProxy.position.y = 0.75;
-      shadowProxy.castShadow = true;
-
-      const root = new THREE.Group();
-      root.position.set(config.x, 0.12, config.z);
-      root.userData.agentId = config.id;
-      root.add(mesh, shadowProxy);
-
-      scene.add(root);
-      clickableObjects.push(root);
-
-      cartoonAgents[config.id] = {
-        id: config.id,
-        root,
-        mesh,
-        canvas,
-        ctx,
-        texture,
-        basePos: new THREE.Vector3(config.x, 0.12, config.z),
-        phase: Math.random() * Math.PI * 2,
-        workStartTime: 0,
-        lastStatus: 'IDLE',
-        facingDir: 1,
-        lastRedrawTime: 0
-      };
-    }
-
-    function buildAllCartoonCharacters() {
-      createCartoonPaperAgent({ id: 'crawler', x: -8.2, z: -2.3 });
-      createCartoonPaperAgent({ id: 'drafter', x: -4.5, z: -3.6 });
-      createCartoonPaperAgent({ id: 'auditor', x: -1.9, z: -0.1 });
-    }
-
-    const clock = new THREE.Clock();
-
-    function moveCartoonAgentTo(av, targetVec, speed, t) {
-      const dx = targetVec.x - av.root.position.x;
-      const dz = targetVec.z - av.root.position.z;
-      const dist = Math.hypot(dx, dz);
-
-      if (dist > 0.08) {
-        const step = Math.min(dist, speed);
-        av.root.position.x += (dx / dist) * step;
-        av.root.position.z += (dz / dist) * step;
-        if (Math.abs(dx) > 0.01) av.facingDir = dx >= 0 ? 1 : -1;
-
-        av.root.position.y = 0.12 + Math.abs(Math.sin(t * 12)) * 0.11;
-        return false;
-      }
-      return true;
-    }
-
-    function animate3D() {
-      requestAnimationFrame(animate3D);
-      const t = clock.getElapsedTime();
-
-      if (auroraUniforms && auroraMesh && auroraMesh.visible) {
-        auroraUniforms.uTime.value = t;
-      }
-
-      if (isCameraTransitioning) {
-        camera.position.lerp(targetCamPos, 0.06);
-        controls.target.lerp(targetLookAt, 0.06);
-        if (camera.position.distanceTo(targetCamPos) < 0.05) {
-          isCameraTransitioning = false;
-        }
-      }
-
-      const chatCycle = t % 22;
-      const isChatTime = chatCycle > 9 && chatCycle < 16.5;
-      const chatPairIndex = Math.floor(t / 22) % 3;
-      const chatPairs = [
-        ['crawler', 'drafter'],
-        ['drafter', 'auditor'],
-        ['crawler', 'auditor']
-      ];
-      const activeChatters = chatPairs[chatPairIndex];
-      const chatSpotA = new THREE.Vector3(-5.25, 0.12, -1.65);
-      const chatSpotB = new THREE.Vector3(-4.35, 0.12, -1.65);
-
-      let activeHandshakeVisitor = null;
-      ['crawler', 'drafter'].forEach((id) => {
-        const av = cartoonAgents[id];
-        const st = (AGENT_META[id].status || 'IDLE').toUpperCase();
-        if (st !== av.lastStatus) {
-          av.lastStatus = st;
-          if (st === 'WORKING') av.workStartTime = t;
-        }
-        if (st === 'WORKING' && (t - av.workStartTime) > 2.2 && !activeHandshakeVisitor) {
-          activeHandshakeVisitor = id;
-        }
-      });
-
-      const auditorHandshakeSpot = new THREE.Vector3(-2.05, 0.12, -0.35);
-
-      Object.keys(cartoonAgents).forEach((id) => {
-        const av = cartoonAgents[id];
-        const status = (AGENT_META[id].status || 'IDLE').toUpperCase();
-        const p = t + av.phase;
-
-        const lookAngle = Math.atan2(
-          camera.position.x - av.root.position.x,
-          camera.position.z - av.root.position.z
-        );
-        av.root.rotation.y = lookAngle;
-
-        let animState = {
-          status,
-          walkPhase: 0,
-          armWave: p * 2.5,
-          headTilt: Math.sin(p * 1.6) * 0.04,
-          isMoshing: isMoshPitActive,
-          isChatting: false,
-          isHandshaking: false,
-          facingDir: av.facingDir
-        };
-
-        if (id === 'auditor' && activeHandshakeVisitor) {
-          const arrived = moveCartoonAgentTo(av, auditorHandshakeSpot, 0.04, t);
-          if (!arrived) {
-            animState.walkPhase = t * 12;
-          } else {
-            av.root.position.y = 0.12;
-            av.facingDir = -1;
-            animState.facingDir = -1;
-            animState.isHandshaking = true;
-            animState.armWave = t * 4;
-          }
-        } else if (status === 'WORKING') {
-          const arrived = moveCartoonAgentTo(av, av.basePos, 0.05, t);
-          if (!arrived) {
-            animState.walkPhase = t * 12;
-          } else {
-            av.facingDir = 1;
-            animState.facingDir = 1;
-            av.root.position.y = 0.12 + Math.abs(Math.sin(p * 8)) * 0.04;
-            animState.armWave = p * 6;
-            animState.headTilt = isMusicPlaying ? Math.sin(t * 14) * 0.16 : Math.sin(p * 3) * 0.06;
-          }
-        } else if (status === 'DONE') {
-          const arrived = moveCartoonAgentTo(av, av.basePos, 0.05, t);
-          if (!arrived) {
-            animState.walkPhase = t * 12;
-          } else {
-            av.facingDir = 1;
-            animState.facingDir = 1;
-            av.root.position.y = 0.12 + Math.abs(Math.sin(p * 5.5)) * 0.22;
-            animState.armWave = p * 5;
-            animState.headTilt = Math.sin(p * 6) * 0.08;
-          }
-        } else if (isMoshPitActive) {
-          const arrived = moveCartoonAgentTo(av, av.basePos, 0.05, t);
-          if (!arrived) {
-            animState.walkPhase = t * 12;
-          } else {
-            av.root.position.y = av.basePos.y + Math.abs(Math.sin(t * 14 + av.phase)) * 0.22;
-            animState.headTilt = Math.sin(t * 16 + av.phase) * 0.24;
-            animState.armWave = t * 8 + av.phase;
-          }
-        } else if (isChatTime && activeChatters.includes(id)) {
-          const isFirst = activeChatters[0] === id;
-          const myChatSpot = isFirst ? chatSpotA : chatSpotB;
-          const arrived = moveCartoonAgentTo(av, myChatSpot, 0.035, t);
-          if (!arrived) {
-            animState.walkPhase = t * 10;
-          } else {
-            av.root.position.y = 0.12 + Math.abs(Math.sin(p * 4)) * 0.03;
-            av.facingDir = isFirst ? 1 : -1;
-            animState.facingDir = av.facingDir;
-            animState.isChatting = true;
-            animState.armWave = t * 4 + (isFirst ? 0 : 2);
-            animState.headTilt = Math.sin(t * 5 + (isFirst ? 0 : 2)) * 0.08;
-          }
-        } else {
-          const arrived = moveCartoonAgentTo(av, av.basePos, 0.035, t);
-          if (!arrived) {
-            animState.walkPhase = t * 10;
-          } else {
-            av.facingDir = 1;
-            animState.facingDir = 1;
-            const breathe = Math.sin(p * 2.4);
-            av.root.position.y = 0.12;
-            av.mesh.scale.set(1 - breathe * 0.025, 1 + breathe * 0.03, 1);
-          }
-        }
-
-        if (t - av.lastRedrawTime > 0.04) {
-          av.lastRedrawTime = t;
-          drawCultOfTheLambAgent(av.ctx, av.id, animState);
-          av.texture.needsUpdate = true;
-        }
-      });
-
-      // Animasi ikan koi di kolam
-      koiFishes.forEach((f, idx) => {
-        const ang = t * f.speed + f.angle;
-        const nextAng = ang + (f.speed > 0 ? 0.05 : -0.05);
-        const x = f.centerX + Math.cos(ang) * f.orbitRadius;
-        const z = f.centerZ + Math.sin(ang) * (f.orbitRadius * 0.85);
-        const nx = f.centerX + Math.cos(nextAng) * f.orbitRadius;
-        const nz = f.centerZ + Math.sin(nextAng) * (f.orbitRadius * 0.85);
-
-        f.mesh.position.set(x, 0.10 + Math.sin(t * 2 + idx) * 0.015, z);
-        f.mesh.lookAt(nx, f.mesh.position.y, nz);
-        f.tail.rotation.y = Math.sin(t * 10 + idx) * 0.35;
-      });
-
-      // Animasi ikan koi & riak air mengalir di sungai kecil bawah jembatan Jepang
-      streamFishes.forEach((sf, idx) => {
-        sf.mesh.position.z += sf.speed * 0.018;
-        if (sf.mesh.position.z > 13.0) sf.mesh.position.z = -12.0;
-        if (sf.mesh.position.z < -12.0) sf.mesh.position.z = 13.0;
-        const swayX = sf.baseX + Math.sin(t * 1.8 + sf.phase) * 0.18;
-        const nextZ = sf.mesh.position.z + (sf.speed > 0 ? 0.2 : -0.2);
-        sf.mesh.position.x = swayX;
-        sf.mesh.lookAt(swayX, sf.mesh.position.y, nextZ);
-        sf.tail.rotation.y = Math.sin(t * 11 + idx) * 0.38;
-      });
-
-      streamRipples.forEach((sr) => {
-        sr.mesh.position.z += sr.speed * 0.022;
-        if (sr.mesh.position.z > 13.5) sr.mesh.position.z = -12.5;
-      });
-
-      rabbits.forEach((r, idx) => {
-        const ang = t * r.speed + r.angle;
-        const nextAng = ang + (r.speed > 0 ? 0.05 : -0.05);
-        const x = r.centerX + Math.cos(ang) * r.radius;
-        const z = r.centerZ + Math.sin(ang) * r.radius;
-        const nx = r.centerX + Math.cos(nextAng) * r.radius;
-        const nz = r.centerZ + Math.sin(nextAng) * r.radius;
-
-        const hop = Math.abs(Math.sin(t * 4.5 + idx * 1.7)) * 0.16;
-        r.mesh.position.set(x, hop, z);
-        r.mesh.lookAt(nx, hop, nz);
-      });
-
-      cats.forEach((c, idx) => {
-        const ang = t * c.speed + c.angle;
-        const nextAng = ang + (c.speed > 0 ? 0.05 : -0.05);
-        const x = c.centerX + Math.cos(ang) * c.radius;
-        const z = c.centerZ + Math.sin(ang) * c.radius;
-        const nx = c.centerX + Math.cos(nextAng) * c.radius;
-        const nz = c.centerZ + Math.sin(nextAng) * c.radius;
-
-        c.group.position.set(x, c.baseY + Math.abs(Math.sin(t * 5 + idx)) * 0.02, z);
-        c.group.lookAt(nx, c.group.position.y, nz);
-        c.tailPivot.rotation.z = Math.sin(t * 3.5 + idx) * 0.35;
-      });
-
-      if (rainParticles && rainParticles.visible) {
-        const pos = rainParticles.geometry.attributes.position.array;
-        for (let i = 0; i < pos.length; i += 3) {
-          pos[i] -= 0.04;
-          pos[i + 1] -= 0.38;
-          if (pos[i + 1] < 0) {
-            pos[i] = (Math.random() - 0.5) * 38 + 1.5;
-            pos[i + 1] = 13 + Math.random() * 2;
-          }
-        }
-        rainParticles.geometry.attributes.position.needsUpdate = true;
-      }
-
-      if (snowParticles && snowParticles.visible) {
-        const pos = snowParticles.geometry.attributes.position.array;
-        for (let i = 0; i < pos.length; i += 3) {
-          pos[i] += Math.sin(t * 1.5 + i) * 0.012;
-          pos[i + 1] -= 0.045;
-          if (pos[i + 1] < 0) {
-            pos[i] = (Math.random() - 0.5) * 38 + 1.5;
-            pos[i + 1] = 13 + Math.random() * 2;
-          }
-        }
-        snowParticles.geometry.attributes.position.needsUpdate = true;
-      }
-
-      monitorScreens.forEach((m, idx) => {
-        const pulse = 0.85 + Math.sin(t * 3 + idx) * 0.15;
-        m.mesh.material.color.copy(m.baseColor).multiplyScalar(pulse);
-      });
-
-      controls.update();
-      renderer.render(scene, camera);
-    }
-
-    function toggleSeasonMode() {
-      seasonModeIndex = (seasonModeIndex + 1) % 3;
-      const btn = document.getElementById('btnSeason');
-      const icon = document.getElementById('seasonIcon');
-      const text = document.getElementById('seasonText');
-
-      if (seasonModeIndex === 0) {
-        rainParticles.visible = false;
-        snowParticles.visible = false;
-        grassFloorMesh.material.map = summerGrassTex;
-        grassFloorMesh.material.needsUpdate = true;
-        pondWaterMesh.material.color.setHex(0x0ea5e9);
-        if (streamWaterMesh) streamWaterMesh.material.color.setHex(0x0ea5e9);
-
-        treeFoliageMeshes.forEach(item => {
-          item.mesh.material.color.copy(item.summerColor);
-        });
-
-        btn.className = 'px-3 py-1.5 rounded-xl bg-lime-50 hover:bg-lime-100 text-lime-800 border border-lime-300 text-xs font-bold transition flex items-center gap-1.5';
-        icon.textContent = '🌤️';
-        text.textContent = 'Musim Panas';
-        addLog('Cuaca diubah ke Musim Panas: Taman hijau cerah & langit hangat.', 'info');
-      } else if (seasonModeIndex === 1) {
-        rainParticles.visible = true;
-        snowParticles.visible = false;
-        grassFloorMesh.material.map = summerGrassTex;
-        grassFloorMesh.material.needsUpdate = true;
-        pondWaterMesh.material.color.setHex(0x0284c7);
-        if (streamWaterMesh) streamWaterMesh.material.color.setHex(0x0284c7);
-
-        treeFoliageMeshes.forEach(item => {
-          item.mesh.material.color.copy(item.summerColor).multiplyScalar(0.82);
-        });
-
-        btn.className = 'px-3 py-1.5 rounded-xl bg-sky-100 hover:bg-sky-200 text-sky-900 border border-sky-300 text-xs font-bold transition flex items-center gap-1.5';
-        icon.textContent = '🌧️';
-        text.textContent = 'Musim Hujan';
-        addLog('Cuaca diubah ke Musim Hujan: Rintik hujan turun di taman studio.', 'work');
-      } else {
-        rainParticles.visible = false;
-        snowParticles.visible = true;
-        grassFloorMesh.material.map = winterSnowTex;
-        grassFloorMesh.material.needsUpdate = true;
-        pondWaterMesh.material.color.setHex(0x7dd3fc);
-        if (streamWaterMesh) streamWaterMesh.material.color.setHex(0x7dd3fc);
-
-        treeFoliageMeshes.forEach(item => {
-          item.mesh.material.color.setHex(0xf1f5f9);
-        });
-
-        btn.className = 'px-3 py-1.5 rounded-xl bg-cyan-50 hover:bg-cyan-100 text-cyan-900 border border-cyan-300 text-xs font-bold transition flex items-center gap-1.5';
-        icon.textContent = '❄️';
-        text.textContent = 'Musim Salju';
-        addLog('Cuaca diubah ke Musim Salju: Salju turun menyelimuti taman & pepohonan.', 'info');
-      }
-      applyCurrentSkyAndLighting();
-    }
-
-    function toggleLightingMode() {
-      lightingModeIndex = (lightingModeIndex + 1) % 3;
-      const btn = document.getElementById('btnLighting');
-      const btnIcon = document.getElementById('lightingIcon');
-      const btnText = document.getElementById('lightingText');
-
-      if (lightingModeIndex === 0) {
-        btn.className = 'px-3 py-1.5 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 text-xs font-bold transition flex items-center gap-1.5';
-        btnIcon.textContent = '☀️';
-        btnText.textContent = 'Pagi Cerah';
-      } else if (lightingModeIndex === 1) {
-        btn.className = 'px-3 py-1.5 rounded-xl bg-orange-100 hover:bg-orange-200 text-orange-900 border border-orange-300 text-xs font-bold transition flex items-center gap-1.5';
-        btnIcon.textContent = '🌇';
-        btnText.textContent = 'Golden Hour Sore';
-      } else {
-        btn.className = 'px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-emerald-300 border border-emerald-600/60 text-xs font-bold transition flex items-center gap-1.5';
-        btnIcon.textContent = '🌌';
-        btnText.textContent = 'Malam Aurora';
-        addLog('🌌 Langit Malam Kutub Utara aktif! Cahaya Aurora Borealis menari di atas jembatan Jepang & studio.', 'success');
-      }
-      applyCurrentSkyAndLighting();
-    }
-
-    function applyCurrentSkyAndLighting() {
-      const isNight = lightingModeIndex === 2;
-      if (auroraMesh) auroraMesh.visible = isNight;
-      if (nightStars) nightStars.visible = isNight;
-
-      if (lightingModeIndex === 0) {
-        let skyHex = 0xe6f2e8;
-        if (seasonModeIndex === 1) skyHex = 0xcbd5e1;
-        if (seasonModeIndex === 2) skyHex = 0xe0f2fe;
-        scene.background = new THREE.Color(skyHex);
-        scene.fog.color = new THREE.Color(skyHex);
-        scene.fog.density = 0.009;
-        ambientLight.color.setHex(0xfffaf0);
-        ambientLight.intensity = seasonModeIndex === 1 ? 0.68 : 0.85;
-        sunLight.color.setHex(0xfff5e4);
-        sunLight.intensity = seasonModeIndex === 1 ? 0.55 : 0.98;
-        warmLampLight.intensity = seasonModeIndex === 1 ? 0.85 : 0.45;
-        if (expansionLampLight) expansionLampLight.intensity = seasonModeIndex === 1 ? 0.85 : 0.45;
-        pondLight.intensity = 0.40;
-      } else if (lightingModeIndex === 1) {
-        let skyHex = 0xfde8d0;
-        if (seasonModeIndex === 1) skyHex = 0x94a3b8;
-        if (seasonModeIndex === 2) skyHex = 0xfce7f3;
-        scene.background = new THREE.Color(skyHex);
-        scene.fog.color = new THREE.Color(skyHex);
-        scene.fog.density = 0.009;
-        ambientLight.color.setHex(0xfff0db);
-        ambientLight.intensity = 0.72;
-        sunLight.color.setHex(0xffb36b);
-        sunLight.intensity = seasonModeIndex === 1 ? 0.55 : 1.05;
-        warmLampLight.intensity = 0.95;
-        if (expansionLampLight) expansionLampLight.intensity = 0.95;
-        pondLight.intensity = 0.55;
-      } else {
-        scene.background = new THREE.Color(0x060d1f);
-        scene.fog.color = new THREE.Color(0x060d1f);
-        scene.fog.density = 0.006;
-        ambientLight.color.setHex(0x2dd4bf);
-        ambientLight.intensity = 0.48;
-        sunLight.color.setHex(0x34d399);
-        sunLight.intensity = 0.42;
-        warmLampLight.intensity = 1.65;
-        if (expansionLampLight) expansionLampLight.intensity = 1.65;
-        pondLight.intensity = 1.35;
-      }
-    }
-
-    function focusCamera(mode) {
-      document.querySelectorAll('.cam-btn').forEach(btn => {
-        btn.className = 'cam-btn px-2.5 py-1 rounded-lg text-[11px] font-bold bg-white text-slate-600 border border-stone-200 hover:bg-stone-100 transition';
-      });
-      const activeBtn = document.getElementById(`cam-${mode}`);
-      if (activeBtn) {
-        activeBtn.className = 'cam-btn px-2.5 py-1 rounded-lg text-[11px] font-bold bg-slate-900 text-white transition';
-      }
-
-      if (mode === 'overview') {
-        targetCamPos.set(4.5, 11.8, 17.8);
-        targetLookAt.set(1.5, 0.8, -0.5);
-        closeAgentOverlay();
-      } else if (mode === 'bridge') {
-        targetCamPos.set(3.2, 4.2, 6.2);
-        targetLookAt.set(3.15, 0.5, -1.6);
-        closeAgentOverlay();
-      } else if (mode === 'expansion') {
-        targetCamPos.set(11.4, 6.5, 7.8);
-        targetLookAt.set(11.4, 1.0, -2.5);
-        closeAgentOverlay();
-      } else if (AGENT_META[mode]) {
-        const meta = AGENT_META[mode];
-        targetCamPos.set(meta.camPos.x, meta.camPos.y, meta.camPos.z);
-        targetLookAt.set(meta.targetPos.x, meta.targetPos.y, meta.targetPos.z);
-        selectAgentCard(mode);
-      }
-      isCameraTransitioning = true;
-    }
-
-    function selectAgentCard(agentId) {
-      const meta = AGENT_META[agentId];
-      if (!meta) return;
-      document.getElementById('selectedAgentOverlay').classList.remove('hidden');
-      document.getElementById('selRoleBadge').textContent = `${meta.role} • ${meta.status}`;
-      document.getElementById('selAgentName').textContent = meta.name;
-      document.getElementById('selAgentDesc').textContent = meta.desc;
-      document.getElementById('selAgentStatusMsg').textContent = meta.pesan;
-    }
-
-    function closeAgentOverlay() {
-      document.getElementById('selectedAgentOverlay').classList.add('hidden');
-    }
-
-    window.addEventListener('DOMContentLoaded', () => {
-      const rawSession = sessionStorage.getItem(SESSION_AUTH_KEY);
-      if (rawSession) {
-        try {
-          const parsed = JSON.parse(rawSession);
-          if (parsed && parsed.username) {
-            unlockVirtualOffice(parsed);
-            return;
-          }
-        } catch (e) {
-          sessionStorage.removeItem(SESSION_AUTH_KEY);
-        }
-      }
-      const userField = document.getElementById('voUsername');
-      if (userField) userField.focus();
-    });
-
-    function addLog(message, type = 'info') {
-      const logBox = document.getElementById('terminalLog');
-      const now = new Date().toLocaleTimeString('id-ID', { hour12: false });
-      const colorMap = {
-        info: 'text-slate-600',
-        work: 'text-sky-700 font-semibold',
-        success: 'text-emerald-700 font-semibold',
-        error: 'text-rose-600 font-semibold'
-      };
-      const line = document.createElement('div');
-      line.className = colorMap[type] || 'text-slate-600';
-      line.textContent = `[${now}] ${message}`;
-      logBox.appendChild(line);
-      logBox.scrollTop = logBox.scrollHeight;
-    }
-
-    function clearLogs() {
-      document.getElementById('terminalLog').innerHTML = '';
-    }
-
-    function updateAgentUI(agentId, status, pesan, updatedAt, outputUrl) {
-      const cleanId = String(agentId || '').toLowerCase();
-      const cleanStatus = (status || 'IDLE').toUpperCase();
-      if (AGENT_META[cleanId]) {
-        AGENT_META[cleanId].status = cleanStatus;
-        if (pesan) AGENT_META[cleanId].pesan = pesan;
-      }
-
-      const badge = document.getElementById(`badge-${cleanId}`);
-      const msgEl = document.getElementById(`msg-${cleanId}`);
-      const timeEl = document.getElementById(`time-${cleanId}`);
-
-      if (msgEl && pesan) msgEl.textContent = pesan;
-      if (timeEl && updatedAt) timeEl.textContent = `Update: ${updatedAt}`;
-
-      if (badge) {
-        badge.textContent = cleanStatus;
-        badge.className = 'px-2 py-0.5 rounded-md text-[10px] font-extrabold ';
-        if (cleanStatus === 'WORKING') {
-          badge.className += 'bg-sky-100 text-sky-800 border border-sky-300 animate-pulse';
-        } else if (cleanStatus === 'DONE') {
-          badge.className += 'bg-emerald-100 text-emerald-800 border border-emerald-300';
-        } else if (cleanStatus === 'ERROR') {
-          badge.className += 'bg-rose-100 text-rose-800 border border-rose-300';
-        } else {
-          badge.className += 'bg-stone-100 text-slate-600';
-        }
-      }
-
-      if (outputUrl && outputUrl.startsWith('http')) {
-        const btnOut = document.getElementById('btnOpenOutputDoc');
-        btnOut.href = outputUrl;
-        btnOut.classList.remove('hidden');
-      }
-    }
-
-    function updateLatestBrsPreview(latestBrs) {
-      if (!latestBrs || !latestBrs.judul) return;
-
-      const numEl = document.getElementById('brsNumber');
-      const titleEl = document.getElementById('brsTitle');
-      const bodyEl = document.getElementById('brsContent');
-      const statusBadge = document.getElementById('brsStatusBadge');
-      const btnOut = document.getElementById('btnOpenOutputDoc');
-
-      if (numEl && latestBrs.nomor) {
-        numEl.textContent = `Nomor : ${latestBrs.nomor}`;
-      }
-      if (titleEl) {
-        titleEl.textContent = latestBrs.judul;
-      }
-      if (bodyEl && latestBrs.isi) {
-        bodyEl.textContent = latestBrs.isi;
-      }
-      if (statusBadge && latestBrs.updated_at) {
-        statusBadge.textContent = `Live • ${latestBrs.updated_at}`;
-      }
-      if (btnOut && latestBrs.doc_url && latestBrs.doc_url.startsWith('http')) {
-        btnOut.href = latestBrs.doc_url;
-        btnOut.classList.remove('hidden');
-      }
-
-      if (lastRenderedBrsTitle !== latestBrs.judul) {
-        lastRenderedBrsTitle = latestBrs.judul;
-        addLog(`[WALL BOARD] Draf BRS terbaru dimuat: "${latestBrs.judul}"`, 'success');
-      }
-    }
-
-    function runDemoSimulation() {
-      const btn = document.getElementById('btnSimulasi');
-      btn.disabled = true;
-      btn.classList.add('opacity-50');
-      addLog('Memulai simulasi kerja 3 AI Agent (termasuk salaman dengan Auditor)...', 'work');
-
-      updateAgentUI('crawler', 'WORKING', 'Memindai Google News RSS ("BPS Provinsi Lampung")...', 'Baru saja');
-      updateAgentUI('drafter', 'WORKING', 'Mengekstrak bahan tayang PPTX & menyusun narasi BRS...', 'Baru saja');
-
-      setTimeout(() => {
-        addLog('[CRAWLER] 4 berita baru terklasifikasi sentimennya & dilaporkan ke Auditor.', 'work');
-        updateAgentUI('crawler', 'DONE', 'Selesai: 4 berita baru terklasifikasi.', 'Baru saja');
-      }, 4500);
-
-      setTimeout(() => {
-        addLog('[DRAFTER] Draf Siaran Pers selesai disusun & diserahkan ke Auditor.', 'work');
-        updateAgentUI('drafter', 'DONE', 'Draf siaran pers selesai disusun.', 'Baru saja');
-        updateAgentUI('auditor', 'WORKING', 'Auditor memeriksa presisi angka y-on-y & q-to-q...', 'Baru saja');
-      }, 8200);
-
-      setTimeout(() => {
-        addLog('[AUDITOR] Validasi angka lulus (zero margin of error). Siap rilis!', 'success');
-        updateAgentUI('auditor', 'DONE', 'Lolos audit angka & siap publikasi.', 'Baru saja');
-        btn.disabled = false;
-        btn.classList.remove('opacity-50');
-      }, 11500);
-    }
-
-    function normalizeApiUrl(rawUrl) {
-      let url = (rawUrl || '').trim();
-      if (!url) return '';
-      if (url.includes('/edit')) {
-        url = url.replace(/\/edit(\?.*)?$/, '/exec');
-      }
-      if (url.includes('script.google.com/macros/s/') && !url.includes('/exec')) {
-        const [base, query] = url.split('?');
-        url = base.replace(/\/+$/, '') + '/exec' + (query ? '?' + query : '');
-      }
-      if (!url.includes('mode=agents')) {
-        url += (url.includes('?') ? '&' : '?') + 'mode=agents';
-      }
-      if (!url.includes('token=')) {
-        url += (url.includes('?') ? '&' : '?') + 'token=' + encodeURIComponent(getClientToken());
-      }
-      return url;
-    }
-
-    function openApiModal() { document.getElementById('apiModal').classList.remove('hidden'); }
-    function closeApiModal() { document.getElementById('apiModal').classList.add('hidden'); }
-
-    function saveApiUrl() {
-      const rawInput = document.getElementById('apiUrlInput').value.trim();
-      const finalUrl = normalizeApiUrl(rawInput);
-      if (!finalUrl) return;
-      localStorage.setItem(STORAGE_KEY, rawInput);
-      closeApiModal();
-      startLivePolling(finalUrl);
-    }
-
-    function disconnectApi() {
-      localStorage.removeItem(STORAGE_KEY);
-      if (pollingInterval) clearInterval(pollingInterval);
-      activePollingUrl = '';
-      const badge = document.getElementById('connectionBadge');
-      badge.className = 'inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-100 text-amber-800 border border-amber-300';
-      badge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span> Mode Simulasi';
-      document.getElementById('lastSyncText').textContent = 'Polling: Nonaktif';
-      addLog('Koneksi API diputus. Kembali ke Mode Simulasi.', 'info');
-      closeApiModal();
-    }
-
-    let isFetchingAgentState = false;
-    let consecutiveSyncErrors = 0;
-
-    async function fetchAgentStateOnce(url) {
-      if (!url || !sessionStorage.getItem(SESSION_AUTH_KEY)) return;
-      if (isFetchingAgentState) return;
-      isFetchingAgentState = true;
-
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 12000);
-
-      try {
-        const res = await fetch(url, { signal: controller.signal, cache: 'no-cache' });
-        clearTimeout(timeoutId);
-
-        if (!res.ok) {
-          throw new Error(`HTTP ${res.status} (${res.statusText || 'Error'})`);
-        }
-
-        const data = await res.json();
-        if (data.status === 'ok' && Array.isArray(data.agents)) {
-          consecutiveSyncErrors = 0;
-          data.agents.forEach(ag => {
-            updateAgentUI(ag.id, ag.status, ag.pesan, ag.updated_at, ag.output_url);
-          });
-          const newsList = data.recentNews || data.news;
-          if (Array.isArray(newsList) && newsList.length > 0) {
-            renderNewsList(newsList);
-          }
-          if (data.latestBrs) {
-            updateLatestBrsPreview(data.latestBrs);
-          }
-          const nowStr = new Date().toLocaleTimeString('id-ID', { hour12: false });
-          document.getElementById('lastSyncText').textContent = `Live Sync: ${nowStr} WIB`;
-
-          const badge = document.getElementById('connectionBadge');
-          if (badge && !badge.innerHTML.includes('Live Apps Script')) {
-            badge.className = 'inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300';
-            badge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping"></span> Live Apps Script';
-          }
-        } else if (data.error) {
-          addLog('Respon API Bridge: ' + data.error, 'error');
-        }
-      } catch (err) {
-        clearTimeout(timeoutId);
-        consecutiveSyncErrors++;
-
-        const isAbort = err.name === 'AbortError';
-        const errMsg = isAbort ? 'Request Timeout (12s)' : (err.message || 'Network Error');
-
-        document.getElementById('lastSyncText').textContent = `Sync Tertunda (${errMsg})`;
-        const badge = document.getElementById('connectionBadge');
-        if (badge) {
-          badge.className = 'inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-rose-100 text-rose-800 border border-rose-300';
-          badge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse"></span> Reconnecting...';
-        }
-
-        if (consecutiveSyncErrors === 1 || consecutiveSyncErrors % 5 === 0) {
-          addLog(`Gagal sinkronisasi API: ${errMsg} (Percobaan #${consecutiveSyncErrors})`, 'error');
-        }
-
-        const defaultNormalized = normalizeApiUrl(DEFAULT_API_URL);
-        if (consecutiveSyncErrors >= 3 && url !== defaultNormalized) {
-          addLog('Mendeteksi kegagalan koneksi URL kustom. Memulihkan otomatis ke Default API Bridge resmi...', 'error');
-          localStorage.removeItem(STORAGE_KEY);
-          consecutiveSyncErrors = 0;
-          startLivePolling(defaultNormalized);
-        }
-      } finally {
-        isFetchingAgentState = false;
-      }
-    }
-
-    function manualRefreshBoard() {
-      if (!activePollingUrl) {
-        addLog('Mode Simulasi aktif. Hubungkan API Bridge untuk menarik data live.', 'info');
-        return;
-      }
-      addLog('Menyegarkan Wall Preview Board & status agen secara manual...', 'work');
-      fetchAgentStateOnce(activePollingUrl);
-    }
-
-    function startLivePolling(url) {
-      if (pollingInterval) clearInterval(pollingInterval);
-      activePollingUrl = url;
-      consecutiveSyncErrors = 0;
-      const badge = document.getElementById('connectionBadge');
-      badge.className = 'inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300';
-      badge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping"></span> Live Agent Workspace';
-      addLog('Terhubung ke Apps Script API Bridge (Secured Token)...', 'work');
-
-      fetchAgentStateOnce(url);
-      pollingInterval = setInterval(() => fetchAgentStateOnce(url), 6000);
-    }
-
-    function formatTanggalID(rawDate) {
-      if (!rawDate || rawDate === '-') return '-';
-      const str = String(rawDate).trim();
-      if (/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(str)) {
-        const [dd, mm, yyyy] = str.split('/');
-        const d = new Date(Number(yyyy), Number(mm) - 1, Number(dd));
-        return d.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
-      }
-      const parsed = new Date(str);
-      if (!isNaN(parsed.getTime())) {
-        return parsed.toLocaleDateString('id-ID', {
-          timeZone: 'Asia/Jakarta',
-          day: 'numeric',
-          month: 'long',
-          year: 'numeric'
-        });
-      }
-      return str;
-    }
-
-    function renderNewsList(newsItems) {
-      const container = document.getElementById('newsListContainer');
-      container.innerHTML = newsItems.map(item => {
-        const analisisText = String(item.analisis || '');
-        let sentimen = 'Netral';
-        let badgeStyle = 'bg-stone-100 text-slate-700';
-        if (/SENTIMEN:\s*Positif/i.test(analisisText) || /positif/i.test(analisisText)) {
-          sentimen = 'Positif';
-          badgeStyle = 'bg-emerald-100 text-emerald-800';
-        } else if (/SENTIMEN:\s*Negatif/i.test(analisisText) || /negatif/i.test(analisisText)) {
-          sentimen = 'Negatif';
-          badgeStyle = 'bg-rose-100 text-rose-800';
-        }
-        const tanggalRapi = formatTanggalID(item.tanggal);
-        return `
-          <div class="bg-stone-50 border border-stone-200 rounded-2xl p-3 space-y-1.5 hover:border-sky-300 transition">
-            <div class="flex items-center justify-between gap-2">
-              <span class="text-[10px] font-mono-code text-slate-500">${tanggalRapi} • ${item.media || 'Media'}</span>
-              <span class="px-2 py-0.5 rounded-md text-[10px] font-bold ${badgeStyle}">${sentimen}</span>
-            </div>
-            <a href="${item.link || '#'}" target="_blank" rel="noopener noreferrer" class="block text-xs font-extrabold text-slate-900 hover:text-sky-600 leading-snug transition">
-              ${item.judul || '(Tanpa Judul)'} ↗
-            </a>
-            <p class="text-[11px] text-slate-600 whitespace-pre-line leading-relaxed">${analisisText}</p>
-          </div>
-        `;
-      }).join('');
-    }
-
-    function switchTab(tab) {
-      const isBrs = tab === 'brs';
-      document.getElementById('panel-brs').classList.toggle('hidden', !isBrs);
-      document.getElementById('panel-news').classList.toggle('hidden', isBrs);
-
-      document.getElementById('tab-brs').className = isBrs
-        ? 'py-2.5 text-center border-b-2 border-emerald-600 text-emerald-700 bg-white'
-        : 'py-2.5 text-center border-b-2 border-transparent text-slate-500 hover:text-slate-800';
-
-      document.getElementById('tab-news').className = !isBrs
-        ? 'py-2.5 text-center border-b-2 border-sky-600 text-sky-700 bg-white'
-        : 'py-2.5 text-center border-b-2 border-transparent text-slate-500 hover:text-slate-800';
-    }
-
-    function copyPressRelease() {
-      const title = document.getElementById('brsTitle').innerText;
-      const body = document.getElementById('brsContent').innerText;
-      navigator.clipboard.writeText(`${title}\n\n${body}`);
-      const btnText = document.getElementById('copyBtnText');
-      btnText.textContent = 'Naskah Tersalin ke Clipboard!';
-      setTimeout(() => { btnText.textContent = 'Salin Naskah Siaran Pers'; }, 2500);
-    }
-  </script>
-</body>
-</html>
+      head.castShadow = true
