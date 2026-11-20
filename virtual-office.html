@@ -9,25 +9,11 @@
   <!-- Three.js & OrbitControls untuk 3D Creative Studio Semi-Outdoor -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
-  <script>
-    tailwind.config = {
-      darkMode: 'class'
-    };
-    // Sinkronkan preferensi tema dari index.html (sigerhub_theme) sebelum render
-    (function() {
-      const saved = localStorage.getItem('sigerhub_theme');
-      const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-      if (saved === 'dark' || (!saved && prefersDark)) {
-        document.documentElement.classList.add('dark');
-      }
-    })();
-  </script>
   <style>
     body {
       font-family: 'Plus Jakarta Sans', sans-serif;
       background-color: #faf8f5;
       color: #1e293b;
-      transition: background-color 0.25s ease, color 0.25s ease;
     }
     .font-mono-code {
       font-family: 'JetBrains Mono', monospace;
@@ -52,85 +38,10 @@
       background: rgba(255, 255, 255, 0.88);
       backdrop-filter: blur(12px);
       border: 1px solid rgba(226, 232, 240, 0.9);
-      transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease;
     }
     ::-webkit-scrollbar { width: 6px; height: 6px; }
     ::-webkit-scrollbar-track { background: #f1f5f9; }
     ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 999px; }
-
-    /* ============================================================
-       DARK MODE OVERRIDES — VIRTUAL OFFICE UI (html.dark)
-       ============================================================ */
-    html.dark body {
-      background-color: #0b1120;
-      color: #e2e8f0;
-    }
-    html.dark ::-webkit-scrollbar-track { background: #0f172a; }
-    html.dark ::-webkit-scrollbar-thumb { background: #334155; }
-
-    html.dark header {
-      background-color: rgba(15, 23, 42, 0.88) !important;
-      border-bottom-color: #1e293b !important;
-    }
-    html.dark header a[href="index.html"] {
-      background-color: #1e293b !important;
-      border-color: #334155 !important;
-      color: #e2e8f0 !important;
-    }
-    html.dark header a[href="index.html"]:hover {
-      background-color: #334155 !important;
-    }
-
-    html.dark .bg-white,
-    html.dark .bg-\[\#fdfcfa\] {
-      background-color: #111827 !important;
-    }
-    html.dark .bg-stone-50,
-    html.dark .bg-stone-50\/80,
-    html.dark .bg-stone-50\/70 {
-      background-color: #0f172a !important;
-    }
-    html.dark .bg-stone-100 {
-      background-color: #1e293b !important;
-    }
-    html.dark .hover\:bg-stone-100:hover,
-    html.dark .hover\:bg-stone-200:hover {
-      background-color: #334155 !important;
-    }
-
-    html.dark .border-stone-100,
-    html.dark .border-stone-200,
-    html.dark .border-stone-200\/80,
-    html.dark .border-stone-300 {
-      border-color: #1e293b !important;
-    }
-
-    html.dark .shadow-stone-200\/60 {
-      --tw-shadow-color: rgba(0, 0, 0, 0.45) !important;
-    }
-
-    html.dark .text-slate-900 { color: #f8fafc !important; }
-    html.dark .text-slate-800 { color: #f1f5f9 !important; }
-    html.dark .text-slate-700 { color: #e2e8f0 !important; }
-    html.dark .text-slate-600 { color: #94a3b8 !important; }
-    html.dark .text-slate-500 { color: #94a3b8 !important; }
-
-    html.dark .glass-panel {
-      background: rgba(15, 23, 42, 0.86);
-      border-color: rgba(51, 65, 85, 0.85);
-      color: #f1f5f9;
-    }
-
-    html.dark blockquote {
-      background-color: rgba(245, 158, 11, 0.12) !important;
-      color: #fde68a !important;
-    }
-
-    html.dark #apiModal input {
-      background-color: #0f172a !important;
-      border-color: #334155 !important;
-      color: #f8fafc !important;
-    }
   </style>
 </head>
 <body class="min-h-screen flex flex-col selection:bg-amber-200 selection:text-slate-900">
@@ -207,11 +118,6 @@
         </div>
 
         <div class="flex flex-wrap items-center gap-2">
-          <!-- TOMBOL SWITCH DARK / LIGHT MODE UI -->
-          <button onclick="toggleVoTheme()" id="btnThemeVo" title="Ganti Mode Gelap / Terang UI" class="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-amber-300 border border-slate-300 dark:border-slate-700 text-xs font-bold transition flex items-center gap-1.5">
-            <span id="voThemeIcon">🌙</span> <span id="voThemeText" class="hidden sm:inline">Mode Gelap</span>
-          </button>
-
           <!-- TOMBOL MUSIK LATAR -->
           <button onclick="toggleMusic()" id="btnMusic" class="px-3 py-1.5 rounded-xl bg-red-50 hover:bg-red-100 text-red-800 border border-red-300 text-xs font-bold transition flex items-center gap-1.5">
             <span id="musicIcon">🤘</span> <span id="musicText">Musik Latar</span>
@@ -282,7 +188,7 @@
           <div class="p-3.5 bg-stone-50/70 border-t border-stone-100 grid grid-cols-1 sm:grid-cols-3 gap-2.5">
             <div onclick="focusCamera('crawler')" id="card-crawler" class="cursor-pointer bg-white hover:border-sky-400 border border-stone-200 rounded-2xl p-3 shadow-sm transition group">
               <div class="flex items-center justify-between mb-1">
-                <span class="text-xs font-extrabold text-sky-700 dark:text-sky-400 group-hover:text-sky-600">1. News Crawler & PR Specialist</span>
+                <span class="text-xs font-extrabold text-sky-700 group-hover:text-sky-600">1. News Crawler & PR Specialist</span>
                 <span id="badge-crawler" class="px-2 py-0.5 rounded-md text-[10px] font-extrabold bg-stone-100 text-slate-600">IDLE</span>
               </div>
               <p class="text-[10px] text-slate-400 font-semibold mb-1">Media Monitoring & Intelligence Unit</p>
@@ -292,7 +198,7 @@
 
             <div onclick="focusCamera('drafter')" id="card-drafter" class="cursor-pointer bg-white hover:border-emerald-400 border border-stone-200 rounded-2xl p-3 shadow-sm transition group">
               <div class="flex items-center justify-between mb-1">
-                <span class="text-xs font-extrabold text-emerald-700 dark:text-emerald-400 group-hover:text-emerald-600">2. Press Release Drafter</span>
+                <span class="text-xs font-extrabold text-emerald-700 group-hover:text-emerald-600">2. Press Release Drafter</span>
                 <span id="badge-drafter" class="px-2 py-0.5 rounded-md text-[10px] font-extrabold bg-stone-100 text-slate-600">IDLE</span>
               </div>
               <p class="text-[10px] text-slate-400 font-semibold mb-1">Statistical Data Storyteller & Benchmark Stylist</p>
@@ -302,7 +208,7 @@
 
             <div onclick="focusCamera('auditor')" id="card-auditor" class="cursor-pointer bg-white hover:border-amber-500 border border-stone-200 rounded-2xl p-3 shadow-sm transition group">
               <div class="flex items-center justify-between mb-1">
-                <span class="text-xs font-extrabold text-amber-800 dark:text-amber-400 group-hover:text-amber-700">3. Auditor & PR Strategy Advisor</span>
+                <span class="text-xs font-extrabold text-amber-800 group-hover:text-amber-700">3. Auditor & PR Strategy Advisor</span>
                 <span id="badge-auditor" class="px-2 py-0.5 rounded-md text-[10px] font-extrabold bg-stone-100 text-slate-600">IDLE</span>
               </div>
               <p class="text-[10px] text-slate-400 font-semibold mb-1">Editorial Validation & Content Quality Control</p>
@@ -358,7 +264,7 @@
           <div class="bg-[#fdfcfa] border border-stone-200 rounded-2xl p-4 space-y-3 text-xs leading-relaxed text-slate-700 shadow-inner">
             <div class="border-b border-stone-200 pb-2.5 flex items-center justify-between gap-2">
               <div>
-                <span class="text-[10px] uppercase tracking-wider text-emerald-700 dark:text-emerald-400 font-extrabold">Template Resmi BPS Provinsi Lampung</span>
+                <span class="text-[10px] uppercase tracking-wider text-emerald-700 font-extrabold">Template Resmi BPS Provinsi Lampung</span>
                 <p id="brsNumber" class="font-mono-code text-[11px] text-slate-500">Nomor : B-2611/18000/HM.240/2026</p>
               </div>
               <span id="brsStatusBadge" class="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-bold shrink-0">Terverifikasi Auditor</span>
@@ -381,7 +287,7 @@
             </div>
           </div>
 
-          <button onclick="copyPressRelease()" class="w-full py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 dark:bg-sky-600 dark:hover:bg-sky-500 text-white text-xs font-bold shadow-md transition flex items-center justify-center gap-2">
+          <button onclick="copyPressRelease()" class="w-full py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold shadow-md transition flex items-center justify-center gap-2">
             <span>📋</span> <span id="copyBtnText">Salin Naskah Siaran Pers</span>
           </button>
         </div>
@@ -433,26 +339,6 @@
 
   <script>
     // =========================================================================
-    // 0. DARK / LIGHT UI THEME SYNC (SINKRON DENGAN INDEX.HTML: sigerhub_theme)
-    // =========================================================================
-    function updateVoThemeButton() {
-      const isDark = document.documentElement.classList.contains('dark');
-      const iconEl = document.getElementById('voThemeIcon');
-      const textEl = document.getElementById('voThemeText');
-      if (iconEl) iconEl.textContent = isDark ? '☀️' : '🌙';
-      if (textEl) textEl.textContent = isDark ? 'Mode Terang' : 'Mode Gelap';
-    }
-
-    function toggleVoTheme() {
-      const willBeDark = !document.documentElement.classList.contains('dark');
-      document.documentElement.classList.toggle('dark', willBeDark);
-      localStorage.setItem('sigerhub_theme', willBeDark ? 'dark' : 'light');
-      updateVoThemeButton();
-    }
-
-    updateVoThemeButton();
-
-    // =========================================================================
     // 1. GATE AUTENTIKASI SINKRON DENGAN INDEX.HTML
     // =========================================================================
     const SESSION_AUTH_KEY = 'sigerhub_bps_lampung_session';
@@ -479,7 +365,6 @@
     function unlockVirtualOffice(sessionData) {
       document.getElementById('voLoginGate').classList.add('hidden');
       document.getElementById('voProtectedContent').classList.remove('hidden');
-      updateVoThemeButton();
 
       if (sessionData.isAdmin || localStorage.getItem('bps_lampung_admin_mode') === 'true') {
         document.querySelectorAll('.admin-only').forEach(el => el.classList.remove('hidden'));
@@ -2080,7 +1965,6 @@
     }
 
     window.addEventListener('DOMContentLoaded', () => {
-      updateVoThemeButton();
       const rawSession = sessionStorage.getItem(SESSION_AUTH_KEY);
       if (rawSession) {
         try {
@@ -2216,9 +2100,11 @@
     function normalizeApiUrl(rawUrl) {
       let url = (rawUrl || '').trim();
       if (!url) return '';
+      // Jika URL adalah link editor (/edit) atau dokumen Apps Script, ubah ke /exec
       if (url.includes('/edit')) {
         url = url.replace(/\/edit(\?.*)?$/, '/exec');
       }
+      // Pastikan berakhiran /exec jika itu endpoint script.google.com/macros/s/...
       if (url.includes('script.google.com/macros/s/') && !url.includes('/exec')) {
         const [base, query] = url.split('?');
         url = base.replace(/\/+$/, '') + '/exec' + (query ? '?' + query : '');
@@ -2261,11 +2147,11 @@
 
     async function fetchAgentStateOnce(url) {
       if (!url || !sessionStorage.getItem(SESSION_AUTH_KEY)) return;
-      if (isFetchingAgentState) return;
+      if (isFetchingAgentState) return; // Mencegah request tumpang tindih (concurrency overload)
       isFetchingAgentState = true;
 
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 12000);
+      const timeoutId = setTimeout(() => controller.abort(), 12000); // 12 detik batas timeout
 
       try {
         const res = await fetch(url, { signal: controller.signal, cache: 'no-cache' });
@@ -2291,6 +2177,7 @@
           const nowStr = new Date().toLocaleTimeString('id-ID', { hour12: false });
           document.getElementById('lastSyncText').textContent = `Live Sync: ${nowStr} WIB`;
 
+          // Pastikan badge hijau aktif
           const badge = document.getElementById('connectionBadge');
           if (badge && !badge.innerHTML.includes('Live Apps Script')) {
             badge.className = 'inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300';
@@ -2313,10 +2200,12 @@
           badge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse"></span> Reconnecting...';
         }
 
+        // Catat ke terminal hanya pada kegagalan pertama atau setiap 5 kali agar tidak spam log
         if (consecutiveSyncErrors === 1 || consecutiveSyncErrors % 5 === 0) {
           addLog(`Gagal sinkronisasi API: ${errMsg} (Percobaan #${consecutiveSyncErrors})`, 'error');
         }
 
+        // Jika error berulang 3x pada URL custom localStorage, pulihkan otomatis ke DEFAULT_API_URL
         const defaultNormalized = normalizeApiUrl(DEFAULT_API_URL);
         if (consecutiveSyncErrors >= 3 && url !== defaultNormalized) {
           addLog('Mendeteksi kegagalan koneksi URL kustom. Memulihkan otomatis ke Default API Bridge resmi...', 'error');
